@@ -6,15 +6,18 @@ import { channel, buffers } from 'redux-saga'
 import { StartupActions } from '../Redux/StartupRedux'
 import { GUIActions } from '../Redux/GUIRedux'
 import { MessageActions } from '../Redux/MessageRedux'
+import { DashboardMessageActions } from '../Redux/DashboardMessageRedux'
 import { SettingsActions } from '../Redux/SettingsRedux'
 
 /* ------------- Sagas ------------- */
 
 import { initializeGiftedChat, loadEarlierMessages } from './GiftedChatMessageSaga'
-import { sendMessage, sendInvisibleMessage, sendIntention, sendVariableValue, disableMessage, executeCommand, watchMessageUpdateChannel } from './MessageSagas'
+import { sendMessage, sendInvisibleMessage, sendIntention, sendVariableValue, sendChangedSyncedSetting, disableMessage, executeCommand, watchMessageUpdateChannel } from './MessageSagas'
+import { sendDashboardMessage } from './DashboardMessageSagas'
 import { setChannels, initializeServerSync, handleCommands, handleNewClientCreatedMessages, watchConnectionStateChannel, watchIncomingMessageChannel, watchOutgoingMessageChannel } from './ServerSyncSagas'
 import { updateLanguage } from './SettingsSagas'
 import { watchCommandToExecute } from './FoodDiarySaga'
+import { watchAddDashboardMessages } from './StoryProgressSagas'
 
 /* ------------- API ------------- */
 
@@ -40,7 +43,9 @@ export default function * root () {
     takeEvery(SettingsActions.CHANGE_LANGUAGE, updateLanguage),
 
     // FoodDiary Saga
-    yield fork(watchCommandToExecute),
+    fork(watchCommandToExecute),
+    // StoryProgress Saga
+    takeEvery(DashboardMessageActions.ADD_OR_UPDATE_DASHBOARD_MESSAGE, watchAddDashboardMessages),
 
     // GiftedChat (top layer)
     takeEvery(StartupActions.STARTUP, initializeGiftedChat, {buffer, newOrUpdatedMessagesChannel}),
@@ -51,8 +56,11 @@ export default function * root () {
     takeEvery(MessageActions.SEND_INVISIBLE_MESSAGE, sendInvisibleMessage),
     takeEvery(MessageActions.SEND_INTENTION, sendIntention),
     takeEvery(MessageActions.SEND_VARIABLE_VALUE, sendVariableValue),
+    takeEvery(SettingsActions.CHANGE_SYNCED_SETTING, sendChangedSyncedSetting),
     takeEvery(MessageActions.DISABLE_MESSAGE, disableMessage),
     takeEvery(MessageActions.EXECUTE_COMMAND, executeCommand),
+
+    takeEvery(DashboardMessageActions.SEND_DASHBOARD_MESSAGE, sendDashboardMessage),
 
     yield fork(watchMessageUpdateChannel),
 
@@ -61,6 +69,7 @@ export default function * root () {
     takeEvery(StartupActions.MANUALLY_CONNECT, initializeServerSync),
     takeEvery(MessageActions.COMMAND_TO_EXECUTE, handleCommands),
     takeEvery(MessageActions.ADD_OR_UPDATE_MESSAGE, handleNewClientCreatedMessages),
+    takeEvery(DashboardMessageActions.ADD_OR_UPDATE_DASHBOARD_MESSAGE, handleNewClientCreatedMessages),
 
     yield fork(watchConnectionStateChannel),
     yield fork(watchIncomingMessageChannel),

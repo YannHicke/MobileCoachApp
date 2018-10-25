@@ -29,12 +29,13 @@ class NewMessagesBadge extends Component {
   }
 
   render () {
-    if (this.props.unreadMessages > 0) {
+    const allUnreadMessages = this.props.unreadMessages + this.props.unreadDashboardMessages
+    if (allUnreadMessages > 0) {
       return (
         <TouchableWithoutFeedback onPress={this.props.onPress} >
           <Animatable.View style={this.props.containerStyle} animation='strongPulse' iterationDelay={1000} iterationCount='infinite' useNativeDriver>
             <Animatable.View animation='bounceIn' duration={600} useNativeDriver>
-              <Badge value={this.props.unreadMessages <= 99 ? this.props.unreadMessages : '99+'} containerStyle={badgeStyles.containerStyle} textStyle={badgeStyles.textStyle} />
+              <Badge value={allUnreadMessages <= 99 ? allUnreadMessages : '99+'} containerStyle={badgeStyles.containerStyle} textStyle={badgeStyles.textStyle} />
             </Animatable.View>
           </Animatable.View>
         </TouchableWithoutFeedback>
@@ -57,7 +58,8 @@ export const badgeStyles = {
 
 const mapStateToProps = (state) => {
   return {
-    unreadMessages: state.guistate.unreadMessages
+    unreadMessages: state.guistate.unreadMessages,
+    unreadDashboardMessages: state.storyProgress.unreadDashboardMessages
   }
 }
 

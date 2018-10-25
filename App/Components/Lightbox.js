@@ -9,14 +9,12 @@ import {
   Animated,
   Platform,
   ActivityIndicator,
-  View,
-  Text
+  View
 } from 'react-native'
 import * as Animatable from 'react-native-animatable'
-import {ifIphoneX} from 'react-native-iphone-x-helper'
-import Icon from 'react-native-vector-icons/Ionicons'
 import I18n from '../I18n/I18n'
 
+import CloseButton from './CloseButton'
 import ResponsiveImage from './ResponsiveImage'
 import { Metrics } from '../Themes/'
 
@@ -335,7 +333,7 @@ export default class Lightbox extends Component {
                 cached
                 // the Lightbox has it's own activity-Indicator, so we dont want
                 // the indicator from responsive-image to be displayed as well
-                activityIndicatorProps={{color: 'transparent'}}
+                activityIndicatorColor='transparent'
                 ref={img => { this.img = img }}
                 source={source}
                 width={INIT_IMAGE_WIDTH}
@@ -346,12 +344,7 @@ export default class Lightbox extends Component {
             </TouchableOpacity>
           </Animatable.View>
         </View>
-        <TouchableOpacity
-          style={styles.closeButtonContainer}
-          onPress={() => this.closeLightbox()}>
-          <Text style={styles.closeButton}>{I18n.t('Common.close')}</Text>
-          <Icon name='md-close' type='ionicon' style={{paddingLeft: 10, fontSize: 30, color: '#fff'}} />
-        </TouchableOpacity>
+        <CloseButton onPress={() => this.closeLightbox()} title={I18n.t('Common.close')} />
       </Animatable.View>
     )
   }
@@ -367,24 +360,5 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.9)',
     alignItems: 'center',
     justifyContent: 'center'
-  },
-  closeButtonContainer: {
-    position: 'absolute',
-    top: 30,
-    right: 20,
-    ...ifIphoneX({
-      top: 55
-    }),
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 5,
-    paddingHorizontal: 10,
-    borderRadius: 6,
-    backgroundColor: 'rgba(255,255,255,0.1)'
-  },
-  closeButton: {
-    fontSize: 20,
-    color: '#fff'
   }
 })

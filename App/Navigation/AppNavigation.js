@@ -4,10 +4,12 @@ import {Animated, Easing} from 'react-native'
 
 // import all screens here
 import Chat from '../Containers/Chat/Chat'
+import DashboardChat from '../Containers/Chat/DashboardChat'
 import OnboardingNav from '../Containers/Onboarding/OnboardingNav'
 import LoadingContainer from '../Containers/LoadingContainer'
 import Tour from '../Containers/Tour/Tour'
 import Backpack from '../Containers/Backpack/Backpack'
+import MediaLibrary from '../Containers/MediaLibrary/MediaLibrary'
 import Recipes from '../Containers/Recipes/Recipes'
 import Settings from '../Containers/Settings/Settings'
 import FoodDiary from '../Containers/FoodDiary/FoodDiary'
@@ -36,6 +38,11 @@ const PrimaryNav = DrawerNavigator({
     screen: Chat,
     test: 'test'
   },
+  DashboardChat: {
+    path: '/dashboardChat',
+    screen: DashboardChat,
+    test: 'test'
+  },
   Tour: {
     path: '/tour',
     screen: Tour
@@ -43,6 +50,10 @@ const PrimaryNav = DrawerNavigator({
   Backpack: {
     path: '/backpack',
     screen: Backpack
+  },
+  MediaLibrary: {
+    path: '/medialibrary',
+    screen: MediaLibrary
   },
   Settings: {
     path: '/settings',

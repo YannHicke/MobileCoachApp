@@ -6,6 +6,9 @@ import {Colors} from '../../Themes/'
 import { Icon } from 'react-native-elements'
 import * as Animatable from 'react-native-animatable'
 
+import AppConfig from './../../Config/AppConfig'
+import CommonUtils from './../../Utils/Common'
+
 export default class OpenComponent extends Component {
   static propTypes = {
     currentMessage: PropTypes.object,
@@ -18,6 +21,8 @@ export default class OpenComponent extends Component {
   constructor (props) {
     super(props)
     this.shouldAnimate = this.props.currentMessage.custom.shouldAnimate
+
+    this.userCanEdit = CommonUtils.userCanEdit(AppConfig.config.serverSync.role)
   }
 
   render () {
@@ -33,7 +38,7 @@ export default class OpenComponent extends Component {
         <Button
           containerStyle={styles.buttonContainer}
           disabledContainerStyle={[styles.buttonDisabled]}
-          disabled={currentMessage.custom.disabled}
+          disabled={currentMessage.custom.disabled || !this.userCanEdit}
           style={[styles.button, icon ? {paddingLeft: 30} : null]}
           onPress={() => {
             onPress(currentMessage.custom.component)

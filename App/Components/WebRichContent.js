@@ -1,41 +1,156 @@
 import React, { Component } from 'react'
 import { View, WebView, StyleSheet, Platform } from 'react-native'
 import KeyboardSpacer from 'react-native-keyboard-spacer'
+import {connect} from 'react-redux'
 
 import HeaderBar from './HeaderBar'
+import ServerMessageActions from '../Redux/MessageRedux'
 
-const websiteStart = '<html><head><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"><link href="css/normalize.css" rel="stylesheet" media="all"><link href="css/styles.css" rel="stylesheet" media="all"></head><body>'
-const websiteEnd = '</body></html>'
+// HTML Templates
+import PlainTextTemplate from './../../WebTemplates/PlainTextTemplate'
+import SliderPageTemplate from './../../WebTemplates/SliderPageTemplate'
 
-// const REL_IMAGE_DEBUG = '<img class="fill" src="images/voll-fett.png"/>'
-const REL_IMAGE_DEBUG = ''
-let baseUrl = null
+import Log from '../Utils/Log'
+const log = new Log('Components/WebRichContent')
 
-export default class WebRichContent extends Component {
-  componentWillMount () {
+/*
+ * Supported commands:
+ *  window.postMessage('{"variable":"$result", "value": 20}');
+ *  window.postMessage('close');
+ *  window.postMessage('complete');
+ */
+
+class WebRichContent extends Component {
+  constructor (props) {
+    super(props)
+    this.initialState = {
+      contentType: null
+    }
+    this.state = this.initialState
+    this.baseUrl = null
+    this.templateContent = null
     if (Platform.OS === 'ios') {
-      baseUrl = 'Web/'
+      this.baseUrl = 'Web/'
     } else if (Platform.OS === 'android') {
-      baseUrl = 'file:///android_asset/web/'
+      this.baseUrl = 'file:///android_asset/web/'
     }
   }
 
+  componentDidMount () {
+    // Get Template-Content as JSON-Object
+    this.templateContent = this.getTemplateContent()
+  }
+
+  /**
+  * This function defines the contentType of the WebView
+  * TODO: Type should be defined by the server and inside of the message-object
+  */
+  getTemplateContent () {
+    const page = {}
+    const html = this.props.children
+
+    if (html.includes('<head id="force">')) {
+      // Page with own additional headers
+      page.pageHeader = html.substr(html.indexOf('<head id="force">') + 17, html.indexOf('</head>') - html.indexOf('<head id="force">') - 17)
+    } else {
+      // Page without additional header
+      page.pageHeader = ''
+    }
+
+    if (html.includes('<page>')) {
+      // Page with slider pages
+      this.setState({contentType: 'slider-page'})
+
+      let cleanedPages = html.split('<page>')
+
+      // After split first element of the array is the meta-tag
+      // We don't need this tag so we take it out of the array
+      cleanedPages.shift()
+
+      //  runs through each page-element and creates the object which will be used inside of the template
+      cleanedPages = cleanedPages.map((element) => {
+        const newElement = element.substr(0, element.indexOf('</page>'))
+
+        const elementObject = {
+          content: newElement
+        }
+        return elementObject
+      })
+
+      page.pages = cleanedPages
+    } else if (html.includes('<body>')) {
+      // Regular page
+      this.setState({contentType: 'plain'})
+
+      page.pageContent = html.substr(html.indexOf('<body>') + 6, html.indexOf('</body>') - html.indexOf('<body>') - 6)
+    } else {
+      // Regular page content (without body)
+      this.setState({contentType: 'plain'})
+
+      page.pageContent = html
+    }
+
+    return page
+  }
+
+  // Templates will be generated with ES6 template-strings
+  // Each Template is a single file which will be imported. It receives the templateContent
+  generateHtmlContent () {
+    let htmlContent = ''
+    switch (this.state.contentType) {
+      case 'plain':
+        htmlContent = PlainTextTemplate(this.templateContent)
+        break
+      case 'slider-page':
+        htmlContent = SliderPageTemplate(this.templateContent)
+        break
+    }
+
+    return htmlContent
+  }
+
   render () {
-    return (
-      <View style={styles.container}>
-        <HeaderBar title='Information' onClose={this.props.onClose} />
-        <View style={styles.webViewContainer}>
-          <WebView
-            source={{html: websiteStart + REL_IMAGE_DEBUG + this.props.children + websiteEnd, baseUrl}}
-            style={styles.webView}
-            scalesPageToFit={!(Platform.OS === 'ios')}
-            javaScriptEnabled={false}
-            domStorageEnabled={false}
-            />
-          {Platform.OS === 'android' ? <KeyboardSpacer /> : null}
+    const htmlContent = this.generateHtmlContent()
+    // When the contentType is not null it means that there is html-content that will be displayed inside of the webView
+    if (this.state.contentType !== null) {
+      return (
+        <View style={styles.container}>
+          <HeaderBar title='Information' onClose={this.props.onClose} />
+          <View style={styles.webViewContainer}>
+            <WebView
+              source={{html: htmlContent, baseUrl: this.baseUrl}}
+              style={styles.webView}
+              scalesPageToFit={!(Platform.OS === 'ios')}
+              javaScriptEnabled
+              domStorageEnabled={false}
+              onMessage={this.onEvent.bind(this)}
+              />
+            {Platform.OS === 'android' ? <KeyboardSpacer /> : null}
+          </View>
         </View>
-      </View>
-    )
+      )
+    } else {
+      return null
+    }
+  }
+
+  onEvent = (event) => {
+    const { data } = event.nativeEvent
+    log.debug('Event:', data)
+
+    switch (data) {
+      case 'close':
+        this.props.onClose(false)
+        break
+      case 'complete':
+        this.props.onClose(true)
+        break
+      default:
+        const jsonData = JSON.parse(data)
+        log.debug('Communicating value change to server:', jsonData)
+        this.props.sendVariableValue(jsonData.variable, jsonData.value)
+        break
+    }
   }
 }
 
@@ -58,3 +173,14 @@ const styles = StyleSheet.create({
     right: 0
   }
 })
+
+const mapStateToProps = (state) => {
+  return {
+  }
+}
+
+const mapStateToDispatch = dispatch => ({
+  sendVariableValue: (variable, value) => dispatch(ServerMessageActions.sendVariableValue(variable, value))
+})
+
+export default connect(mapStateToProps, mapStateToDispatch)(WebRichContent)

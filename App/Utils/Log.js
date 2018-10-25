@@ -9,6 +9,11 @@ const LEVEL_VALUES = { DEBUG: 0, INFO: 1, WARN: 2, ERROR: 3, OFF: 4, CRASHLYTICS
 
 const loggerLength = 20
 
+const loggingCache = []
+const loggingCacheSize = 500
+let loggingCacheIndex = 0
+let loggingCacheCount = 0
+
 const defaultLevel = LEVEL_VALUES[AppConfig.config.logger.defaultLevel === undefined ? 'OFF' : AppConfig.config.logger.defaultLevel]
 const loggerLevels = AppConfig.config.logger.loggerLevels === undefined ? {} : AppConfig.config.logger.loggerLevels
 
@@ -28,7 +33,8 @@ export default class Log {
     }
   }
 
-  setUser (userId) {
+  setUser (userRole, userId) {
+    Log.userRole = userRole
     Log.userId = userId
   }
 
@@ -56,12 +62,17 @@ export default class Log {
     Log.writeLog(this.loggerName, LEVEL_VALUES.ERROR, arguments)
   }
 
+  getCache () {
+    return loggingCache
+  }
+
   // Example: ProblemState, JSON...[, 0]
   problem (action = 'UNKNOWN', label = 'UNKNOWN', value = 0) {
     if (trackActivities) {
       if (!userIdSharedWithUserTracking && Log.userId !== undefined) {
         userIdSharedWithUserTracking = true
         this.action('User', 'Identifier', Log.userId)
+        this.action('User', 'Role', Log.userRole)
       }
 
       if (logTrackingEvents) {
@@ -80,6 +91,7 @@ export default class Log {
       if (!userIdSharedWithUserTracking && Log.userId !== undefined) {
         userIdSharedWithUserTracking = true
         this.action('User', 'Identifier', Log.userId)
+        this.action('User', 'Role', Log.userRole)
       }
 
       if (logTrackingEvents) {
@@ -121,7 +133,7 @@ export default class Log {
     if (defaultLevel === LEVEL_VALUES.CRASHLYTICS) {
       if (!userIdSharedWithCrashlytics && Log.userId !== undefined) {
         userIdSharedWithCrashlytics = true
-        Crashlytics.setUserIdentifier(Log.userId)
+        Crashlytics.setUserIdentifier(Log.userRole + '-' + Log.userId)
       }
       let messages = Array.prototype.slice.call(messageArguments)
       const loggingMessage = Log.formatMessage(logger, Object.keys(LEVEL_TEXTS)[level], method, messages)
@@ -136,6 +148,14 @@ export default class Log {
           Crashlytics.logException('Exception - triggered by logger')
         }
       }
+
+      loggingCache[loggingCacheIndex] = loggingCacheCount + ': ' + loggingMessage
+      loggingCacheIndex++
+      loggingCacheCount++
+      if (loggingCacheIndex === loggingCacheSize) {
+        loggingCacheIndex = 0
+      }
+
       return
     }
 
@@ -183,11 +203,15 @@ export default class Log {
             break
           case 'other':
             try {
-              const messageToDisplay = JSON.stringify(message)
-              if (messageToDisplay === undefined) {
-                messagePart = '[Other] ' + message.toString()
+              if (typeof message === 'undefined') {
+                messagePart = '[undefined]'
               } else {
-                messagePart = '[Other] ' + messageToDisplay
+                const messageToDisplay = JSON.stringify(message)
+                if (messageToDisplay === undefined) {
+                  messagePart = '[Other] ' + message.toString()
+                } else {
+                  messagePart = '[Other] ' + messageToDisplay
+                }
               }
             } catch (error) {
               if (message !== undefined && message !== null && (message.toString !== undefined || message.toString !== null)) {

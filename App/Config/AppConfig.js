@@ -5,15 +5,23 @@ export default {
   allowTextFontScaling: true,
   // Server URL
 
-  // Current instantiation of white label app for project
+  // Current instantiation of whitelabel app for project. Should be adjusted in
+  // camelCase name of app, e.g., demoXyz
+  // (CAUTION 1: MUST be adjusted for encrypted apps!!!!)
+  // (CAUTION 2: Parameter AppConfig.whitelabel must be changed to the same name)
   project: 'whitelabel',
+  // Encryption secret for instance of whitelabel app project.
+  projectSecret: 'whitelabel-top-secret',
 
   // Configuration of the project
   config: {
     dev: {
       purgeStoreAtStartup: true,
       fakeDeviceAlwaysOnlineForOfflineDev: false,
-      allowDebugKeyboard: false
+      fakeQRCodeScanWithURL: null,
+      allowDebugKeyboard: false,
+      deepstreamUserForDebugging: null,
+      deepstreamSecretForDebugging: null
     },
     storage: {
       encryptedReduxStorage: false,
@@ -25,22 +33,25 @@ export default {
       trackingURL: 'https://---/piwik/piwik.php',
       trackingId: 0,
       loggerLevels: {
-        'Redux/MessageRedux': 'INFO',
-        'Redux/ServerSyncRedux': 'INFO',
-        'Sagas/MessageSagas': 'INFO',
-        'Sagas/ServerSyncSagas': 'INFO',
-        'Sagas/GiftedChatMessageSaga': 'INFO',
-        'Utils/PushNotifications': 'INFO',
-        'FoodDiary/DiaryView': 'INFO',
         'AddMealModule/AddMealPreStep': 'INFO',
         'AddMealModule/AddFoodStep': 'INFO',
         'AddMealModule/AddMealContainer': 'INFO',
-        'Redux/StoryProgressRedux': 'INFO',
         'AddMealModule/SelectableFoodList': 'INFO',
         'AddMealModule/FoodMetrics': 'INFO',
-        'Sagas/FoodDiarySaga': 'INFO',
+        'Components/CameraComponent': 'INFO',
+        'Components/RecordAudioComponent': 'INFO',
+        'Components/CustomMessages/MediaInput': 'INFO',
+        'Containers/AddMealModule/FoodMetrics': 'WARN',
+        'FoodDiary/DiaryView': 'INFO',
         'Navigation/ReduxNavigation': 'INFO',
-        'Containers/AddMealModule/FoodMetrics': 'WARN'
+        'Redux/MessageRedux': 'INFO',
+        'Redux/ServerSyncRedux': 'INFO',
+        'Redux/StoryProgressRedux': 'INFO',
+        'Sagas/FoodDiarySaga': 'INFO',
+        'Sagas/GiftedChatMessageSaga': 'INFO',
+        'Sagas/MessageSagas': 'INFO',
+        'Sagas/ServerSyncSagas': 'INFO',
+        'Utils/PushNotifications': 'INFO'
       }
     },
     typingIndicator: {
@@ -56,26 +67,41 @@ export default {
       initialNumberOfMinimalShownMessages: 10,
       incrementShownMessagesBy: 25,
       // Show message instead if loading-indicator if chat is empty
-      showEmptyChatMessage: false
+      showEmptyChatMessage: false,
+      // true: expired answer-buttons are switched to an 'answer expired'-message
+      // false: expired answers are being greyed out
+      showAnswerExpiredMessage: false,
+      // if true, alert text is displayed when user taps on expired message (text defined in i18n json)
+      showExpiryAlert: true
     },
     startup: {
       automaticallyRequestPushPermissions: false,
       automaticallyConnectOnFirstStartup: true,
+      automaticallyShareObserverAccessToken: false,
+      automaticallyShareParticipantAccessToken: false,
       backButtonInOnboardingEnabled: false,
       onboardingURL: '---'
     },
     serverSync: {
       useLocalServer: false,
+      userChatEnabled: true,
+      dashboardChatEnabled: true,
+      // null or varible name if record length shall be automatically communicated to server
+      sendRecordedMediaLengthValues: 'lastRecordLength',
       clientVersion: 1,
-      role: 'participant',
-      defaultNickname: 'Whitelabel App User',
+      role: 'participant', // Can be: participant, supervisor, observer, or team-manager
+      defaultNickname: 'MobileCoach Client User',
       interventionPattern: '----',
       interventionPassword: '----',
       androidSenderId: '123456789012',
       localDeepstreamURL: 'ws://127.0.0.1:6020/deepstream',
-      localRestURL: 'http://127.0.0.1:8080/PMCP/api/v02/',
+      localRestURL: 'http://127.0.0.1:8080/MC/api/v02/',
+      localMediaURL: 'http://127.0.0.1/MC/files/',
       remoteDeepstreamURL: 'wss://---:8443/deepstream',
-      remoteRestURL: 'https://---/PMCP/api/v02/'
+      remoteRestURL: 'https://---/MC/api/v02/',
+      remoteMediaURL: 'https://---/MC/files/',
+      // Whether or not user uploads are protected with auth-tokens
+      mediaUploadsWithAuthenticiation: true
     },
     whitelabel: {
       shareUrl: {

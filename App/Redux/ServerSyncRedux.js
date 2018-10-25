@@ -1,6 +1,8 @@
 import { createReducer, createActions } from 'reduxsauce'
 import Immutable from 'seamless-immutable'
 
+import AppConfig from '../Config/AppConfig'
+
 import Log from '../Utils/Log'
 const log = new Log('Redux/ServerSyncRedux')
 
@@ -12,7 +14,8 @@ const { Types, Creators } = createActions({
   rememberRegistration: ['deepstreamUser', 'deepstreamSecret'],
   rememberPushTokenRequested: [],
   rememberPushTokenShared: [],
-  rememberLatestTimestamp: ['timestamp'],
+  rememberLatestUserTimestamp: ['timestamp'],
+  rememberLatestDashboardTimestamp: ['timestamp'],
   rememberPushToken: ['platform', 'token'],
   connectionStateChange: ['connectionState', 'deepstreamUser', 'deepstreamSecret']
 })
@@ -27,11 +30,11 @@ export default Creators
 // Settings (stored, long-term)
 export const SETTINGS_INITIAL_STATE = Immutable({
   timestamp: 0,
-  registered: false,
-  deepstreamUser: null,
-  deepstreamSecret: null,
+  timestampDashboard: 0,
+  registered: AppConfig.config.serverSync.role === 'observer' || AppConfig.config.serverSync.role === 'team-manager',
+  deepstreamUser: ((AppConfig.config.serverSync.role === 'observer' || AppConfig.config.serverSync.role === 'team-manager') && AppConfig.config.dev.deepstreamUserForDebugging !== null) ? AppConfig.config.dev.deepstreamUserForDebugging : null,
+  deepstreamSecret: ((AppConfig.config.serverSync.role === 'observer' || AppConfig.config.serverSync.role === 'team-manager') && AppConfig.config.dev.deepstreamSecretForDebugging !== null) ? AppConfig.config.dev.deepstreamSecretForDebugging.substring(0, 64) : null,
   restUser: null, // Must be "ds:"+user
-  restToken: null,
   pushPlatform: null,
   pushToken: null,
   pushRequested: false,
@@ -53,12 +56,23 @@ export const rememberRegistration = (state, action) => {
   return state.merge({ registered: true, deepstreamUser, deepstreamSecret, restUser: 'ds:' + deepstreamUser })
 }
 
-export const rememberLatestTimestamp = (state, action) => {
-  log.debug('Remember latest timestamp:', action)
+export const rememberLatestUserTimestamp = (state, action) => {
+  log.debug('Remember latest user timestamp:', action)
 
   const { timestamp } = action
   if (state.timestamp < timestamp) {
     return state.merge({ timestamp })
+  } else {
+    return state
+  }
+}
+
+export const rememberLatestDashboardTimestamp = (state, action) => {
+  log.debug('Remember latest dashboard timestamp:', action)
+
+  const { timestamp } = action
+  if (state.timestampDashboard < timestamp) {
+    return state.merge({ timestampDashboard: timestamp })
   } else {
     return state
   }
@@ -104,7 +118,8 @@ export const settingsReducer = createReducer(SETTINGS_INITIAL_STATE, {
   [Types.REMEMBER_REGISTRATION]: rememberRegistration,
   [Types.REMEMBER_PUSH_TOKEN_REQUESTED]: rememberPushTokenRequested,
   [Types.REMEMBER_PUSH_TOKEN_SHARED]: rememberPushTokenShared,
-  [Types.REMEMBER_LATEST_TIMESTAMP]: rememberLatestTimestamp,
+  [Types.REMEMBER_LATEST_USER_TIMESTAMP]: rememberLatestUserTimestamp,
+  [Types.REMEMBER_LATEST_DASHBOARD_TIMESTAMP]: rememberLatestDashboardTimestamp,
   [Types.REMEMBER_PUSH_TOKEN]: rememberPushToken
 })
 

@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   addButtonDisabled: {
-    backgroundColor: Colors.buttons.common.disabled
+    backgroundColor: Colors.buttons.common.skipAnswer
   },
   container: {
     flex: 1,

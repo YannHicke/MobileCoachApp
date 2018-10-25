@@ -7,6 +7,7 @@ import PropTypes from 'prop-types'
 import * as Animatable from 'react-native-animatable'
 import I18n from '../../I18n/I18n'
 
+import CommonUtils, {tapBlockingHandlers} from './../../Utils/Common'
 import {Colors, Fonts} from '../../Themes/'
 import {inputMessageStyles} from './Styles/CommonStyles'
 
@@ -77,22 +78,25 @@ export default class LikertSlider extends Component {
     }
   }
   render () {
-    const {answers} = this.props.currentMessage.custom.options
+    const {currentMessage} = this.props
+    const editable = CommonUtils.userCanEdit(currentMessage)
+    const {answers} = currentMessage.custom.options
     return (
-      <Animatable.View useNativeDriver animation={this.shouldAnimate ? this.props.fadeInAnimation : null} duration={this.props.duration} style={[inputMessageStyles.container, {alignItems: 'stretch'}]} onAnimationEnd={() => { this.shouldAnimate = false }} >
-        <View style={styles.inputBubble}>
+      <Animatable.View {...editable ? null : tapBlockingHandlers} useNativeDriver animation={this.shouldAnimate ? this.props.fadeInAnimation : null} duration={this.props.duration} style={[inputMessageStyles.container, {alignItems: 'stretch'}]} onAnimationEnd={() => { this.shouldAnimate = false }} >
+        <View style={[styles.inputBubble, editable ? null : styles.buttonContainerDisabled]}>
           <View style={{flex: 1, flexDirection: 'column'}}>
             {this.renderValues()}
             <Slider
               step={1}
+              disabled={!editable}
               style={styles.slider}
               value={this.initialIndex}
               animateTransitions
               maximumValue={this.max}
               minimumValue={this.min}
-              minimumTrackTintColor={Colors.buttons.likertSlider.minTint}
-              maximumTrackTintColor={Colors.buttons.likertSlider.maxTint}
-              thumbTintColor={Colors.buttons.likertSlider.thumb}
+              minimumTrackTintColor={editable ? Colors.buttons.likertSlider.minTint : Colors.buttons.common.cancel}
+              maximumTrackTintColor={editable ? Colors.buttons.likertSlider.maxTint : Colors.buttons.common.cancel}
+              thumbTintColor={editable ? Colors.buttons.likertSlider.thumb : Colors.buttons.common.cancel}
               onSlidingComplete={(value) => this.setState({value})}
             />
             <View style={{flexDirection: 'row', paddingBottom: 5}}>
@@ -107,9 +111,9 @@ export default class LikertSlider extends Component {
         </View>
         <Button // {value}
           containerStyle={styles.buttonContainer}
-          disabledContainerStyle={[styles.disabled]}
+          disabledContainerStyle={[styles.buttonContainerDisabled]}
           style={styles.button}
-          disabled={this.state.disabled}
+          disabled={!editable}
           onPress={() => this.onSubmitHandler()}
           >
           {/* <Icon name='ios-checkmark-circle' type='ionicon' color={Colors.buttons.common.text} size={30} /> */}
@@ -141,6 +145,9 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     backgroundColor: Colors.buttons.likertSlider.button.background,
     marginBottom: 4
+  },
+  buttonContainerDisabled: {
+    backgroundColor: Colors.buttons.likertSlider.button.disabled
   },
   button: {
     fontSize: Fonts.size.regular,

@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import { Icon } from 'react-native-elements'
 import * as Animatable from 'react-native-animatable'
 
+import CommonUtils, {tapBlockingHandlers} from './../../Utils/Common'
 import {Colors, Fonts} from '../../Themes/'
 import {inputMessageStyles} from './Styles/CommonStyles'
 
@@ -136,9 +137,10 @@ export default class TextOrNumberInputBubble extends Component {
       textAlign = 'left'
       paddingLeft = padding
     }
+    const editable = CommonUtils.userCanEdit(currentMessage)
     return (
       <Animatable.View useNativeDriver animation={this.shouldAnimate ? this.props.fadeInAnimation : null} duration={this.props.duration} style={[inputMessageStyles.container]} onAnimationEnd={() => { this.shouldAnimate = false }} >
-        <View style={styles.inputBubble}>
+        <View {...editable ? null : tapBlockingHandlers} style={[styles.inputBubble, {backgroundColor: editable ? Colors.buttons.freeText.background : Colors.buttons.freeText.disabled}]}>
           {/* To adjust the width of the Input-Field dynamically by it's content,
           we need to create a hidden Text view with the same content and measure it using onLayout.
           This is quiet dirty, but until now, it seems to be the only working way.
@@ -150,6 +152,7 @@ export default class TextOrNumberInputBubble extends Component {
             <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
               {this.renderWrapperText(currentMessage.custom.textBefore)}
               <TextInput
+                editable={editable}
                 autoFocus
                 onChangeText={(text) => this.onChange(text)}
                 value={this.state.text}
@@ -171,15 +174,19 @@ export default class TextOrNumberInputBubble extends Component {
           </View>
           {/* The mask view is just a little fix to keep the left padding of the input bubble visible,
             even when the TextInput overflows the container. */}
-          <View style={styles.mask} />
+          <View style={[styles.mask, {backgroundColor: editable ? Colors.buttons.freeText.background : Colors.buttons.freeText.disabled}]} />
           <Button
             containerStyle={styles.button}
-            onPress={() => this.onCancel()}>
-            <Icon name='ios-close-circle' type='ionicon' color={Colors.buttons.freeText.disabled} size={30} />
+            onPress={() => {
+              return editable ? this.onCancel() : false
+            }}>
+            <Icon name='ios-close-circle' type='ionicon' color={Colors.buttons.freeText.skipAnswer} size={30} />
           </Button>
           <Button
             containerStyle={styles.button}
-            onPress={() => this.onSubmitHandler()}>
+            onPress={() => {
+              return editable ? this.onSubmitHandler() : false
+            }}>
             <Icon name='ios-checkmark-circle' type='ionicon' color={Colors.buttons.freeText.text} size={30} />
           </Button>
         </View>
@@ -197,7 +204,6 @@ export default class TextOrNumberInputBubble extends Component {
 }
 const styles = StyleSheet.create({
   mask: {
-    backgroundColor: Colors.buttons.freeText.background,
     width: 15,
     height: 35,
     position: 'absolute',

@@ -3,7 +3,7 @@ SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
 cd "$SCRIPTPATH"
 echo "Working in \"$SCRIPTPATH\"..."
 
-PROJECT="BLV DietCoach"
+PROJECT="MobileCoach Client"
 brew install gitstats
 brew install gnuplot
 brew install gource

@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
-import { View, Text, TouchableOpacity } from 'react-native'
 import PropTypes from 'prop-types'
+import { View, Text, TouchableOpacity } from 'react-native'
+import * as Animatable from 'react-native-animatable'
+
+import CommonUtils, {tapBlockingHandlers} from './../../Utils/Common'
 import {Colors, Metrics} from '../../Themes/'
 import {inputMessageStyles} from './Styles/CommonStyles'
-import * as Animatable from 'react-native-animatable'
 
 export default class Likert extends Component {
   static propTypes = {
@@ -18,6 +20,7 @@ export default class Likert extends Component {
   }
 
   renderItem (option, itemSize, onPress, index, length) {
+    const {currentMessage} = this.props
     let alternativeLayout = false
     // Special layout for large likerts
     const minWidth = 35
@@ -28,11 +31,12 @@ export default class Likert extends Component {
       itemSize = 32
     }
     const itemStyle = {
-      width: circleSize, height: circleSize, backgroundColor: Colors.buttons.common.background, borderRadius: circleSize / 2, justifyContent: 'center', alignItems: 'center'
+      width: circleSize, height: circleSize, backgroundColor: CommonUtils.userCanEdit(currentMessage) ? Colors.buttons.common.background : Colors.buttons.common.disabled, borderRadius: circleSize / 2, justifyContent: 'center', alignItems: 'center'
     }
-
+    const editable = CommonUtils.userCanEdit(currentMessage)
     return (
       <Animatable.View
+        {...editable ? null : tapBlockingHandlers}
         useNativeDriver
         key={index}
         animation={this.shouldAnimate ? this.props.fadeInAnimation : null}
@@ -41,7 +45,10 @@ export default class Likert extends Component {
         onAnimationEnd={() => { this.shouldAnimate = false }}
       >
         <TouchableOpacity
-          onPress={() => this.onPressHandler(this.props.currentMessage, option.label, option.value)}
+          disabled={!editable}
+          onPress={() => {
+            return editable ? this.onPressHandler(currentMessage, option.label, option.value) : false
+          }}
           style={{
             width: itemSize,
             alignItems: 'center'
@@ -104,6 +111,7 @@ export default class Likert extends Component {
 
   renderLabel (option, itemSize, index, length, alternativeLayout) {
     if (this.shouldRenderLabel(index, length, alternativeLayout)) {
+      const {currentMessage} = this.props
       return (
         <View style={{
           alignItems: 'center',
@@ -111,7 +119,7 @@ export default class Likert extends Component {
           marginTop: 10
         }}>
           <Text style={{
-            color: Colors.buttons.common.background,
+            color: CommonUtils.userCanEdit(currentMessage) ? Colors.buttons.common.background : Colors.buttons.common.disabled,
             fontSize: 10
           }}>
             {option.label}

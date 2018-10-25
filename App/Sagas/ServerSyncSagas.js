@@ -2,12 +2,15 @@ import { NetInfo, Platform } from 'react-native'
 import { call, select, put, take } from 'redux-saga/effects'
 import { delay } from 'redux-saga'
 import createDeepstream from 'deepstream.io-client-js'
+import axios from 'axios'
+import mime from 'react-native-mime-types'
 
 import Common from '../Utils/Common'
 import AppConfig from '../Config/AppConfig'
 import { StartupActions } from '../Redux/StartupRedux'
 import { ServerSyncActions, ConnectionStates } from '../Redux/ServerSyncRedux'
 import { MessageStates, MessageActions } from '../Redux/MessageRedux'
+import { MessageStates as DashboardMessageStates, DashboardMessageActions } from '../Redux/DashboardMessageRedux'
 import { MessageTypes } from '../Sagas/MessageSagas'
 import PushNotifications from '../Utils/PushNotifications'
 
@@ -16,8 +19,10 @@ const log = new Log('Sagas/ServerSyncSagas')
 
 const selectServerSyncSettings = (state) => state.serverSyncSettings
 const selectMessages = (state) => state.messages
+const selectDashboardMessages = (state) => state.dashboardMessages
 
 const serverSyncConfig = AppConfig.config.serverSync
+const startupConfig = AppConfig.config.startup
 
 const fakeDeviceAlwaysOnlineForOfflineDev = AppConfig.config.dev.fakeDeviceAlwaysOnlineForOfflineDev
 
@@ -30,14 +35,22 @@ let syncClient = null
 let online = false
 
 let firstConnectSuccessful = false
-let listenersRegistered = false
+let listenerOneRegistered = false
+let listenerTwoRegistered = false
 let inSync = false
 
 let serverSyncUser = null
+let restUser = null
+let restToken = null
 
 let connectionStateChannel = null
 let incomingMessageChannel = null
 let outgoingMessageChannel = null
+
+let hasUserChatSendingPermission = false
+let hasDashboardChatSendingPermission = false
+
+const wait = ms => new Promise((resolve, reject) => setTimeout(resolve, ms))
 
 /* --- Set channels from outside --- */
 export function setChannels (newConnectionStateChannel, newIncomingMessageChannel, newOutgoingMessageChannel) {
@@ -58,13 +71,40 @@ export function * initializeServerSync (action) {
   if (initialized) {
     return
   }
+
   log.info('Initializing server sync...')
   initialized = true
 
-  log.debug('Care for prepared messages...')
-  const allMessages = yield select(selectMessages)
+  switch (serverSyncConfig.role) {
+    case 'participant':
+      hasUserChatSendingPermission = true
+      hasDashboardChatSendingPermission = true
+      break
+    case 'supervisor': // not implemented yet
+      hasUserChatSendingPermission = false
+      hasDashboardChatSendingPermission = false
+      break
+    case 'observer':
+      hasUserChatSendingPermission = false
+      hasDashboardChatSendingPermission = false
+      break
+    case 'team-manager':
+      hasUserChatSendingPermission = false
+      hasDashboardChatSendingPermission = true
+      break
+  }
 
-  yield call(sendPreparedMessages, allMessages)
+  log.debug('Care for prepared messages...')
+
+  if (serverSyncConfig.userChatEnabled) {
+    const allUserMessages = yield select(selectMessages)
+    yield call(sendPreparedMessages, allUserMessages, true)
+  }
+
+  if (serverSyncConfig.dashboardChatEnabled) {
+    const allDashboardMessages = yield select(selectDashboardMessages)
+    yield call(sendPreparedMessages, allDashboardMessages, false)
+  }
 
   log.debug('Care for connection status of device...')
 
@@ -97,8 +137,9 @@ export function * initializeServerSync (action) {
   if (settings.registered === true) {
     log.debug('User already registered.')
     serverSyncUser = settings.deepstreamUser
+    restUser = settings.restUser
     PushNotifications.getInstance().setEncryptionKey(('ds:' + serverSyncUser).substring(0, 16), serverSyncUser.substring(serverSyncUser.length - 16))
-    log.setUser(serverSyncUser)
+    log.setUser(serverSyncConfig.role, serverSyncUser)
   } else {
     log.debug('User not registered, so it will be done implicitely on connect')
   }
@@ -127,11 +168,14 @@ export function * handleCommands (action) {
 
 /* --- Handle messages created on the client --- */
 export function * handleNewClientCreatedMessages (action) {
-  const {message, status} = action
+  const {type, message, status} = action
 
-  if (status === MessageStates.PREPARED_FOR_SENDING) {
-    log.debug('Adding new message to outgoing message channel:', message)
+  if (type === MessageActions.ADD_OR_UPDATE_MESSAGE && status === MessageStates.PREPARED_FOR_SENDING) {
+    log.debug('Adding new user message to outgoing message channel:', message)
     outgoingMessageChannel.put({type: MessageActions.ADD_OR_UPDATE_MESSAGE, message, status: MessageStates.SENT})
+  } else if (type === DashboardMessageActions.ADD_OR_UPDATE_DASHBOARD_MESSAGE && status === DashboardMessageStates.PREPARED_FOR_SENDING) {
+    log.debug('Adding new dashboard message to outgoing message channel:', message)
+    outgoingMessageChannel.put({type: DashboardMessageActions.ADD_OR_UPDATE_DASHBOARD_MESSAGE, message, status: DashboardMessageStates.SENT})
   }
 }
 
@@ -158,8 +202,10 @@ export function * watchIncomingMessageChannel () {
       yield call(checkServerPushNotificationRegistration)
     } else if (action.type === ServerSyncActions.REMEMBER_REGISTRATION) {
       yield put(action)
+    } else if (action.type === DashboardMessageActions.ADD_OR_UPDATE_DASHBOARD_MESSAGE) {
+      yield call(handleIncomingDashboardMessage, action)
     } else {
-      yield call(handleIncomingMessage, action)
+      yield call(handleIncomingUserMessage, action)
     }
   }
 }
@@ -177,6 +223,11 @@ export function * watchOutgoingMessageChannel () {
       log.debug('Waiting for sync to send messages...')
       yield delay(2000)
       syncStatus = inSync
+    }
+
+    if ((action.type === MessageActions.ADD_OR_UPDATE_MESSAGE && !hasUserChatSendingPermission) || (action.type === DashboardMessageActions.ADD_OR_UPDATE_DASHBOARD_MESSAGE && !hasDashboardChatSendingPermission)) {
+      log.debug('The current role cannot send such a message, so skip this one')
+      continue
     }
 
     let sendingResult = false
@@ -202,10 +253,17 @@ export function * watchOutgoingMessageChannel () {
 }
 
 /* --- Handle incoming message --- */
-function * handleIncomingMessage (action) {
-  log.debug('Handle incoming message...')
+function * handleIncomingUserMessage (action) {
+  log.debug('Handle incoming user message...')
   yield put(action)
-  yield put({type: ServerSyncActions.REMEMBER_LATEST_TIMESTAMP, timestamp: action.message['last-modified']})
+  yield put({type: ServerSyncActions.REMEMBER_LATEST_USER_TIMESTAMP, timestamp: action.message['last-modified']})
+}
+
+/* --- Handle incoming dashboard message --- */
+function * handleIncomingDashboardMessage (action) {
+  log.debug('Handle incoming dashboard message...')
+  yield put(action)
+  yield put({type: ServerSyncActions.REMEMBER_LATEST_DASHBOARD_TIMESTAMP, timestamp: action.message['server-timestamp']})
 }
 
 /* --- Handle outgoinng message --- */
@@ -216,48 +274,64 @@ function * handleOutgoingMessage (action) {
 
   let method = null
   let messageObject = null
-  switch (message['type']) {
-    case MessageTypes.PLAIN:
-      method = 'user-message'
-      messageObject = {
-        'user': serverSyncUser,
-        'user-message': message['user-value'] !== undefined ? message['user-value'] : '',
-        'user-timestamp': message['user-timestamp'],
-        'client-id': 'c-' + message['user-timestamp']
-      }
-      break
-    case MessageTypes.INTENTION:
-      method = 'user-intention'
-      messageObject = {
-        'user': serverSyncUser,
-        'user-intention': message['user-intention'],
-        'user-timestamp': message['user-timestamp'],
-        'client-id': 'c-' + message['user-timestamp']
-      }
-      break
-    case MessageTypes.VARIABLE:
-      method = 'user-variable'
-      messageObject = {
-        'user': serverSyncUser,
-        'variable': message['variable'],
-        'value': message['value']
-      }
-      break
-  }
 
-  // Add optional message fields if necessary
-  if (message['type'] === MessageTypes.PLAIN) {
-    if (message['related-message-id'] !== undefined) {
-      messageObject['related-message-id'] = message['related-message-id'].substring(2)
+  if (action.type === DashboardMessageActions.ADD_OR_UPDATE_DASHBOARD_MESSAGE) {
+    method = 'dashboard-message'
+    messageObject = {
+      'user': serverSyncUser,
+      'user-message': message['user-message'],
+      'role': message['role'],
+      'client-id': message['client-id']
     }
-  }
-  // Add optional intention fields if necessary
-  if (message['type'] === MessageTypes.INTENTION) {
-    if (message['user-message'] !== null) {
-      messageObject['user-message'] = message['user-message']
-    }
-    if (message['user-content'] !== null) {
-      messageObject['user-content'] = message['user-content']
+  } else {
+    switch (message['type']) {
+      case MessageTypes.PLAIN:
+        method = 'user-message'
+        messageObject = {
+          'user': serverSyncUser,
+          'user-message': (message['user-value'] !== undefined) ? message['user-value'] : '',
+          'user-timestamp': message['user-timestamp'],
+          'client-id': 'c-' + message['user-timestamp']
+        }
+
+        // Optional fields
+        if (message['related-message-id'] !== undefined) {
+          messageObject['related-message-id'] = message['related-message-id'].substring(2)
+        }
+        if (message['user-message'] !== undefined) {
+          messageObject['user-text'] = message['user-message']
+        }
+        if (message['contains-media'] !== undefined && message['media-type'] !== undefined) {
+          messageObject['contains-media'] = message['contains-media']
+          messageObject['media-type'] = message['media-type']
+        }
+
+        break
+      case MessageTypes.INTENTION:
+        method = 'user-intention'
+        messageObject = {
+          'user': serverSyncUser,
+          'user-intention': message['user-intention'],
+          'user-timestamp': message['user-timestamp'],
+          'client-id': 'c-' + message['user-timestamp']
+        }
+
+        // Optional fields
+        if (message['user-message'] !== undefined) {
+          messageObject['user-text'] = message['user-message']
+        }
+        if (message['user-content'] !== undefined) {
+          messageObject['user-content'] = message['user-content']
+        }
+        break
+      case MessageTypes.VARIABLE:
+        method = 'user-variable'
+        messageObject = {
+          'user': serverSyncUser,
+          'variable': message['variable'],
+          'value': message['value']
+        }
+        break
     }
   }
 
@@ -304,9 +378,17 @@ function * reactBasedOnConnectionState (action) {
 
         yield put({type: ServerSyncActions.REMEMBER_REGISTRATION, deepstreamUser, deepstreamSecret})
 
+        if (startupConfig.automaticallyShareObserverAccessToken) {
+          yield put({type: MessageActions.SEND_INTENTION, text: null, intention: 'access-token-observer', content: deepstreamSecret.substring(0, 64)})
+        }
+        if (startupConfig.automaticallyShareParticipantAccessToken) {
+          yield put({type: MessageActions.SEND_INTENTION, text: null, intention: 'access-token-participant', content: deepstreamSecret})
+        }
+
         serverSyncUser = deepstreamUser
+        restUser = 'ds:' + deepstreamUser
         PushNotifications.getInstance().setEncryptionKey(('ds:' + serverSyncUser).substring(0, 16), serverSyncUser.substring(serverSyncUser.length - 16))
-        log.setUser(serverSyncUser)
+        log.setUser(serverSyncConfig.role, serverSyncUser)
         settings = yield select(selectServerSyncSettings)
       }
 
@@ -368,25 +450,59 @@ function * doSynchronization (settings) {
   }
 
   try {
-    const result = yield call(rpcPromise, 'message-diff', {
-      'user': settings.deepstreamUser,
-      'server-timestamp': settings.timestamp
-    })
-    if (result !== null) {
-      log.debug('Update result:')
-      let timestamp = result['latest-timestamp']
-      log.debug('Latest timestamp:' + timestamp)
+    let resultOne = null
+    let resultTwo = null
 
-      log.debug('Adding new messsages to channel...')
-      for (let i in result['list']) {
-        incomingMessageChannel.put({type: MessageActions.ADD_OR_UPDATE_MESSAGE, message: result['list'][i], status: MessageStates.RECEIVED})
-      }
-      log.debug('New messages added to channel.')
+    if (serverSyncConfig.userChatEnabled) {
+      resultOne = yield call(rpcPromise, 'message-diff', {
+        'user': settings.deepstreamUser,
+        'server-timestamp': settings.timestamp
+      })
+    }
 
-      connectionStateChannel.put({type: ServerSyncActions.CONNECTION_STATE_CHANGE, connectionState: ConnectionStates.SYNCHRONIZED})
-    } else {
+    if (serverSyncConfig.dashboardChatEnabled) {
+      resultTwo = yield call(rpcPromise, 'dashboard-diff', {
+        'user': settings.deepstreamUser,
+        'server-timestamp': settings.timestampDashboard
+      })
+    }
+
+    if ((serverSyncConfig.userChatEnabled && resultOne === null) || (serverSyncConfig.dashboardChatEnabled && resultTwo === null)) {
       log.warn('Error when retrieving old messages: result is null')
       connectionStateChannel.put({type: ServerSyncActions.CONNECTION_STATE_CHANGE, connectionState: ConnectionStates.CONNECTED})
+    } else {
+      if (serverSyncConfig.userChatEnabled) {
+        log.debug('Update user message result:')
+        const timestamp = resultOne['latest-timestamp']
+        log.debug('Latest timestamp:' + timestamp)
+
+        log.debug('Adding new user messsages to channel...')
+        for (let i in resultOne['list']) {
+          incomingMessageChannel.put({type: MessageActions.ADD_OR_UPDATE_MESSAGE, message: resultOne['list'][i], status: MessageStates.RECEIVED})
+        }
+        log.debug('New user messages added to channel.')
+      }
+
+      if (serverSyncConfig.dashboardChatEnabled) {
+        log.debug('Update dashboard message result:')
+        const timestamp = resultTwo['latest-timestamp']
+        log.debug('Latest timestamp:' + timestamp)
+
+        log.debug('Adding new dashboard messsages to channel...')
+        for (let i in resultTwo['list']) {
+          const message = resultTwo['list'][i]
+          let status = null
+          if (serverSyncConfig.role === message.role) {
+            status = MessageStates.SENT
+          } else {
+            status = MessageStates.RECEIVED
+          }
+          incomingMessageChannel.put({type: DashboardMessageActions.ADD_OR_UPDATE_DASHBOARD_MESSAGE, message, status})
+        }
+        log.debug('New dashboard messages added to channel.')
+      }
+
+      connectionStateChannel.put({type: ServerSyncActions.CONNECTION_STATE_CHANGE, connectionState: ConnectionStates.SYNCHRONIZED})
     }
   } catch (error) {
     log.warn('Error when retrieving old messages:', error)
@@ -414,14 +530,24 @@ async function connectAndLogin (settings) {
   syncClient.on('connectionStateChanged', handleConnectionStateChange)
   syncClient.on('error', handleError)
 
-  if (serverSyncUser === null) {
-    await syncClient.login({
-      'client-version': clientVersion,
-      'role': role,
-      'nickname': defaultNickname,
-      'intervention-pattern': interventionPattern,
-      'intervention-password': interventionPassword
-    }, handleConnectionAttempt)
+  if (serverSyncUser === null && role !== 'observer') {
+    if (role === 'supervisor') {
+      await syncClient.login({
+        'client-version': clientVersion,
+        'role': role,
+        'participant': '', // TODO: Implementation for supervisors not finalized. Would require appropriate user ID here
+        'intervention-pattern': interventionPattern,
+        'intervention-password': interventionPassword
+      }, handleConnectionAttempt)
+    } else {
+      await syncClient.login({
+        'client-version': clientVersion,
+        'role': role,
+        'nickname': defaultNickname,
+        'intervention-pattern': interventionPattern,
+        'intervention-password': interventionPassword
+      }, handleConnectionAttempt)
+    }
   } else {
     await syncClient.login({
       'client-version': clientVersion,
@@ -435,33 +561,73 @@ async function connectAndLogin (settings) {
 
 /* --- Register listeners on the server to be updated about new incoming messages --- */
 async function registerListeners (settings) {
-  if (!listenersRegistered) {
-    log.info('Registering listener...')
-    try {
-      await syncClient.event.subscribe('message-update/' + settings.deepstreamUser, function (message) {
-        log.debug('Adding new message to channel')
-        incomingMessageChannel.put({type: MessageActions.ADD_OR_UPDATE_MESSAGE, message, status: MessageStates.RECEIVED})
-      })
-      listenersRegistered = true
-      log.info('Listener registered.')
-      return true
-    } catch (error) {
-      log.warn('Error during listener registration:', error)
-      return false
-    }
-  } else {
+  if (listenerOneRegistered && listenerTwoRegistered) {
     log.debug('Listeners already registered.')
     return true
   }
+
+  if (!listenerOneRegistered) {
+    if (!serverSyncConfig.userChatEnabled) {
+      listenerOneRegistered = true
+    } else {
+      log.info('Registering user listener...')
+      try {
+        await syncClient.event.subscribe('message-update/' + settings.deepstreamUser, function (message) {
+          log.debug('Adding new user message to channel')
+          incomingMessageChannel.put({type: MessageActions.ADD_OR_UPDATE_MESSAGE, message, status: MessageStates.RECEIVED})
+        })
+        listenerOneRegistered = true
+        log.info('User listener registered.')
+      } catch (error) {
+        log.warn('Error during user listener registration:', error)
+        return false
+      }
+    }
+  }
+
+  if (!listenerTwoRegistered) {
+    if (!serverSyncConfig.dashboardChatEnabled) {
+      listenerTwoRegistered = true
+    } else {
+      log.info('Registering dashboard listener...')
+      try {
+        await syncClient.event.subscribe('dashboard-update/' + settings.deepstreamUser, function (message) {
+          log.debug('Adding new dashboard message to channel')
+          let status = null
+          if (serverSyncConfig.role === message.role) {
+            status = DashboardMessageStates.SENT
+          } else {
+            status = DashboardMessageStates.RECEIVED
+          }
+          incomingMessageChannel.put({type: DashboardMessageActions.ADD_OR_UPDATE_DASHBOARD_MESSAGE, message, status})
+        })
+        listenerTwoRegistered = true
+        log.info('Dashboard listener registered.')
+      } catch (error) {
+        log.warn('Error during dashboard listener registration:', error)
+        return false
+      }
+    }
+  }
+
+  return true
 }
 
 /* --- Add messages prepared for sending to the channel --- */
-async function sendPreparedMessages (allMessages) {
+async function sendPreparedMessages (allMessages, userMessages) {
   for (const i in allMessages) {
     const message = allMessages[i]
 
-    if (message['client-status'] === MessageStates.PREPARED_FOR_SENDING) {
-      outgoingMessageChannel.put({type: MessageActions.ADD_OR_UPDATE_MESSAGE, message, status: MessageStates.SENT})
+    if (userMessages) {
+      // Care for user messages
+      if (message['client-status'] === MessageStates.PREPARED_FOR_SENDING) {
+        outgoingMessageChannel.put({type: MessageActions.ADD_OR_UPDATE_MESSAGE, message, status: MessageStates.SENT})
+      }
+    } else {
+      // Care for dashboard messages
+      if (message['status'] === MessageStates.PREPARED_FOR_SENDING) {
+        outgoingMessageChannel.put({type: DashboardMessageActions.ADD_OR_UPDATE_DASHBOARD_MESSAGE, message, status: DashboardMessageStates.SENT})
+      }
     }
   }
 }
@@ -675,4 +841,89 @@ function * checkServerPushNotificationRegistration () {
   } while (!settings.pushShared)
 
   log.debug('Push token registration finished for client and server')
+}
+
+async function retrieveRestToken (forceRenew) {
+  log.debug('Retrieve REST token...')
+  if (!forceRenew && restToken !== null) {
+    log.debug('Using existing token:', restToken)
+    return restToken
+  }
+
+  try {
+    const result = await rpcPromise('rest-token', {
+      'user': serverSyncUser
+    }, true)
+    if (result !== undefined && result !== null) {
+      log.debug('Retrieval of REST token successful:', result)
+      restToken = result
+      return result
+    } else {
+      log.warn('Error at retrieving REST token. Result is:', result)
+    }
+  } catch (error) {
+    log.warn('Error at retrieving REST token.')
+  }
+
+  return null
+}
+
+export async function uploadMediaInput (mediaType, variable, file, successCallback, progressCallback, errorCallback, forceNewToken = false) {
+  log.debug('Performing upload of', mediaType, 'from file', file, 'to variable', variable)
+
+  progressCallback(0)
+
+  let token
+  let renew = forceNewToken
+  while ((token = await retrieveRestToken(renew)) === null) {
+    renew = true
+    await wait(2000)
+  }
+
+  let mediaReference = null
+  try {
+    log.debug('Performing upload with token', token)
+
+    const { useLocalServer, localRestURL, remoteRestURL } = serverSyncConfig
+    const restURL = useLocalServer ? localRestURL : remoteRestURL
+
+    const config = {
+      baseURL: restURL,
+      headers: {'user': restUser, 'token': restToken, 'Content-Type': 'multipart/form-data'},
+      contentType: false,
+      onUploadProgress: function (progressEvent) {
+        progressCallback(Math.floor((progressEvent.loaded * 100) / progressEvent.total))
+      }
+    }
+
+    const formData = new FormData()
+    formData.append('file', {uri: file, name: file.substring(file.lastIndexOf('/') + 1), type: mime.lookup(file)})
+
+    const response = await axios.post('media/upload/' + mediaType.toUpperCase() + '/' + variable, formData, config)
+
+    if (response.status === 200) {
+      progressCallback(100)
+      log.debug('Upload successful')
+      mediaReference = response.data.mediaReference
+    } else {
+      log.debug('Upload not successful:', response)
+    }
+  } catch (exception) {
+    if (typeof exception.response !== 'undefined' && typeof exception.response.status !== 'undefined' && exception.response.status === 401) {
+      log.debug('Upload failed due to outtimed token', exception)
+
+      log.debug('Retrying upload')
+      uploadMediaInput(mediaType, variable, file, successCallback, progressCallback, errorCallback, true)
+      return
+    } else {
+      log.debug('Upload failed:', exception)
+    }
+  }
+
+  if (mediaReference !== null) {
+    const { useLocalServer, localMediaURL, remoteMediaURL } = serverSyncConfig
+    successCallback((useLocalServer ? localMediaURL : remoteMediaURL) + mediaReference)
+  } else {
+    errorCallback()
+  }
 }

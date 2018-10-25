@@ -37,6 +37,8 @@ const metrics = {
   lastBackgroundTimestamp: new Date()
 }
 
+metrics.aspectRatio = metrics.screenWidth / metrics.screenHeight
+
 // Care about app state changes
 AppState.addEventListener('change', function (newAppState) {
   log.debug('New app state:', newAppState)

@@ -8,6 +8,7 @@ import DatePicker from 'react-native-datepicker'
 import I18n from '../../I18n/I18n'
 import moment from 'moment'
 
+import CommonUtils, {tapBlockingHandlers} from './../../Utils/Common'
 import {Colors} from '../../Themes/'
 import {inputMessageStyles} from './Styles/CommonStyles'
 
@@ -107,7 +108,8 @@ export default class DateInput extends Component {
     switch (currentMessage.custom.mode) {
       case 'time': {
         const momentDate = moment(date)
-        return momentDate.format('HH') + '.' + Math.floor(momentDate.format('mm') / 60 * 100)
+        const minutes = '0' + Math.floor(momentDate.format('mm') / 60 * 100)
+        return momentDate.format('HH') + '.' + minutes.substr(minutes.length - 2)
       }
       case 'date': {
         return moment(date).format('DD.MM.YYYY')
@@ -115,7 +117,8 @@ export default class DateInput extends Component {
       case 'datetime':
       default: {
         const momentDate = moment(date)
-        return moment(date).format('DD.MM.YYYY') + ',' + momentDate.format('HH') + '.' + Math.floor(momentDate.format('mm') / 60 * 100)
+        const minutes = '0' + Math.floor(momentDate.format('mm') / 60 * 100)
+        return moment(date).format('DD.MM.YYYY') + ',' + momentDate.format('HH') + '.' + minutes.substr(minutes.length - 2)
       }
     }
   }
@@ -161,10 +164,11 @@ export default class DateInput extends Component {
     let icon = 'calendar-blank'
     if (currentMessage.custom.mode === 'datetime') icon = 'calendar-clock'
     if (currentMessage.custom.mode === 'time') icon = 'clock'
+    const editable = CommonUtils.userCanEdit(currentMessage)
     // <Text onLayout={(event) => this.measureView(event)} style={[{}, styles.dateText]}>{this.state.date ? moment(this.state.date).format(this.formatDateForClient()) : currentMessage.custom.placeholder}</Text>
     return (
       <Animatable.View useNativeDriver animation={this.shouldAnimate ? this.props.fadeInAnimation : null} duration={this.props.duration} style={[inputMessageStyles.container]} onAnimationEnd={() => { this.shouldAnimate = false }} >
-        <View style={styles.inputBubble}>
+        <View {...editable ? null : tapBlockingHandlers} style={[styles.inputBubble, {backgroundColor: editable ? Colors.buttons.common.background : Colors.buttons.common.disabled}]}>
           {/* To adjust the width of the Input-Field dynamically by it's content,
           we need to create a hidden Text view with the same content and measure it using onLayout.
           This is quiet dirty, but until now, it seems to be the only working way.
@@ -173,6 +177,7 @@ export default class DateInput extends Component {
             <Text onLayout={(event) => this.measureView(event)} style={[styles.dateText, {position: 'absolute', color: 'transparent', top: -30}]}>{this.state.date ? moment(this.state.date).format(this.formatDateForClient()) : currentMessage.custom.placeholder}</Text>
           </View>
           <DatePicker
+            disabled={!editable}
             onLayout={(event) => this.measureContainer(event)}
             style={{width: null}}
             date={this.state.date}
@@ -193,7 +198,8 @@ export default class DateInput extends Component {
             customStyles={{
               dateInput: [styles.dateInput, {flex: 0, width: this.state.inputWidth}],
               dateText: [styles.dateText],
-              placeholderText: [styles.dateText]
+              placeholderText: [styles.dateText],
+              disabled: {backgroundColor: Colors.buttons.common.disabled}
             // ... You can check the source to find the other keys.
             }}
             onDateChange={(string, date) => {
@@ -205,12 +211,16 @@ export default class DateInput extends Component {
            />
           <Button
             containerStyle={styles.button}
-            onPress={() => this.onCancel()}>
-            <Icon name='ios-close-circle' type='ionicon' color={Colors.buttons.common.disabled} size={30} />
+            onPress={() => {
+              return editable ? this.onCancel() : false
+            }}>
+            <Icon name='ios-close-circle' type='ionicon' color={Colors.buttons.common.skipAnswer} size={30} />
           </Button>
           <Button
             containerStyle={styles.button}
-            onPress={() => this.onSubmitHandler()}>
+            onPress={() => {
+              return editable ? this.onSubmitHandler() : false
+            }}>
             <Icon name='ios-checkmark-circle' type='ionicon' color={Colors.buttons.common.text} size={30} />
           </Button>
         </View>
@@ -242,7 +252,6 @@ const styles = StyleSheet.create({
     minHeight: 35,
     borderRadius: 16,
     borderTopRightRadius: 3,
-    backgroundColor: Colors.buttons.common.background,
     marginBottom: 4
   },
   dateInput: {

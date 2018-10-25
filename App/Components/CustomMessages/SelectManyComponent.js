@@ -6,6 +6,7 @@ import CustomMultiPicker from './CustomMultiPicker'
 import I18n from '../../I18n/I18n'
 import * as Animatable from 'react-native-animatable'
 
+import CommonUtils, {tapBlockingHandlers} from './../../Utils/Common'
 import {inputMessageStyles} from './Styles/CommonStyles'
 
 import Log from '../../Utils/Log'
@@ -16,8 +17,8 @@ export default class SelectManyComponent extends Component {
     super(props)
     this.state = {
       res: [],
-      selectedKeys: [],
-      disabled: props.disabled || false
+      selectedKeys: []
+      // disabled: props.disabled || false
     }
     this.tapped = false
     this.shouldAnimate = this.props.currentMessage.custom.shouldAnimate
@@ -44,6 +45,7 @@ export default class SelectManyComponent extends Component {
         })
         log.debug('returning multiples value', this.state.res)
         let relatedMessageId = currentMessage._id.substring(0, currentMessage._id.lastIndexOf('-'))
+        this.tapped = true
         this.props.onPress(currentMessage.custom.intention, resultMessage, result.toString(), relatedMessageId)
         return
       }
@@ -55,7 +57,6 @@ export default class SelectManyComponent extends Component {
         ]
       )
     }
-    this.tapped = true
   }
 
   checkAtLeastOneSelected () {
@@ -70,17 +71,19 @@ export default class SelectManyComponent extends Component {
 
   render () {
     const multipleSelect = true
-    const { options } = this.props.currentMessage.custom
+    const { currentMessage } = this.props
+    const { options } = currentMessage.custom
     const selectedItems = [] // ['C', 'E']
     // const message = currentMessage.text // 'Bitte auswählen. Könnte auch ein längerer Text sein!'
     const confirmText = I18n.t('Common.confirm')
-
+    const editable = CommonUtils.userCanEdit(currentMessage)
     return (
-      <Animatable.View useNativeDriver animation={this.shouldAnimate ? this.props.fadeInAnimation : null} duration={this.props.duration} style={[inputMessageStyles.container, {alignItems: 'stretch'}]} onAnimationEnd={() => { this.shouldAnimate = false }} >
+      <Animatable.View {...editable ? null : tapBlockingHandlers} useNativeDriver animation={this.shouldAnimate ? this.props.fadeInAnimation : null} duration={this.props.duration} style={[inputMessageStyles.container, {alignItems: 'stretch'}, this.props.containerStyle]} onAnimationEnd={() => { this.shouldAnimate = false }} >
         {/* <Text style={{marginBottom: 10}}>{message}</Text> */}
         <CustomMultiPicker
+          slim={options.length > 4 && !(currentMessage.custom.component === 'select-many-modal')}
           options={options}
-          disabled={this.state.disabled}
+          disabled={!editable}
           multiple={multipleSelect}
           returnValue={'value'} // label or value or index
           callback={(res, selectedKeys) => { this.setState({res, selectedKeys}) }} // callback, array of selected items
@@ -102,9 +105,9 @@ export default class SelectManyComponent extends Component {
         />
         <Button value={5} // {value} TODO: why value 5 ?
           containerStyle={styles.buttonContainer}
-          disabledContainerStyle={[styles.disabled]}
+          disabledContainerStyle={styles.disabled}
           style={styles.button}
-          disabled={this.state.disabled}
+          disabled={!CommonUtils.userCanEdit(currentMessage)}
           onPress={() => { this.onPressHandler() }}
           >
           {confirmText}
@@ -139,6 +142,6 @@ const styles = StyleSheet.create({
     color: Colors.buttons.selectMany.submitButton.text
   },
   disabled: {
-    backgroundColor: Colors.buttons.selectMany.disabled
+    backgroundColor: Colors.buttons.selectMany.submitButton.disabled
   }
 })

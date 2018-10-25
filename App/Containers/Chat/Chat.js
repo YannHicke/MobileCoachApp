@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import { View, Alert, Platform } from 'react-native'
-import { GiftedChat, LoadEarlier, Message } from 'react-native-gifted-chat'
+import { GiftedChat, LoadEarlier, Message, Day } from 'react-native-gifted-chat'
 import PMNavigationBar from '../../Components/Navbar'
 import ConnectionStateButton from '../../Components/ConnectionStateButton'
 import { addNavigationHelpers } from 'react-navigation'
 import { ImageCacheProvider } from 'react-native-cached-image'
+// import {Icon} from 'react-native-elements'
 // Actions
 import ServerMessageActions from './../../Redux/MessageRedux'
 import StoryProgressActions from '../../Redux/StoryProgressRedux'
@@ -23,6 +24,7 @@ import PMMessageText from '../../Components/CustomMessages/PMMessageText'
 import AddMealActionButton from '../AddMealModule/AddMealActionButton'
 import OpenComponent from '../../Components/CustomMessages/OpenComponent'
 import TextOrNumberInputBubble from '../../Components/CustomMessages/TextOrNumberInputBubble'
+import MediaInput from '../../Components/CustomMessages/MediaInput'
 import DateInput from '../../Components/CustomMessages/DateInput'
 import Likert from '../../Components/CustomMessages/Likert'
 import LikertSlider from '../../Components/CustomMessages/LikertSlider'
@@ -38,14 +40,14 @@ import BlankBubble from '../../Components/CustomMessages/BlankBubble'
 import AppConfig from '../../Config/AppConfig'
 // Styles & Themes
 import Styles, { TextBubbleStyle } from './Styles'
-import {Images} from '../../Themes'
+import {Images, Colors} from '../../Themes'
 // Redux
 import {ConnectionStates} from '../../Redux/ServerSyncRedux'
 // Bug: This is needed for localizing the dates. See https://github.com/FaridSafi/react-native-gifted-chat/issues/614
 import 'moment/locale/de'
 
 import Log from '../../Utils/Log'
-const log = new Log('Chat')
+const log = new Log('Containers/Chat/Chat')
 
 const getVisibleMessages = (messages) => {
   const messagesArray = Object.values(messages).reverse()
@@ -108,6 +110,8 @@ class Chat extends Component {
       renderMessageText: this.renderMessageText,
       // 4. Custom Views: Custom Messages, e.g. OpenComponent (determined by 'currentMessage.type')
       renderCustomView: this.renderCustomView,
+      // 5. Render Date-Display
+      renderDay: this.renderDay,
       // Render-Methods for various other components
       loadEarlier: this.props.guistate.showLoadEarlier,
       onLoadEarlier: this.props.loadEarlier,
@@ -141,19 +145,39 @@ class Chat extends Component {
     const {currentMessage} = props
     // render unanswered questions as textbubble
     if (currentMessage.custom && currentMessage.custom.unanswered) {
-      let unansweredMessage = {
-        ...currentMessage,
-        type: 'text',
-        text: I18n.t('Common.answerExpired'),
-        user: {...currentMessage.user, _id: 1}
+      if (AppConfig.config.messages.showAnswerExpiredMessage) {
+        let unansweredMessage = {
+          ...currentMessage,
+          type: 'text',
+          text: I18n.t('Common.answerExpired'),
+          user: {...currentMessage.user, _id: 1}
+        }
+        return <Message {...props} currentMessage={unansweredMessage} />
       }
-      return <Message {...props} currentMessage={unansweredMessage} />
+      // Alternative layout
+      // else if (AppConfig.config.messages.showExpiryAlert) {
+      //   // const {showExpiryAlert} = CommonUtils
+      //   return (
+      //     <View style={{paddingBottom: 30, borderTopWidth: 1.5, borderBottomWidth: 1.5, borderTopColor: 'rgba(181,181,181,0.1)', borderBottomColor: 'rgba(181,181,181,0.3)'}}>
+      //       <BlankMessage {...props} />
+      //       <View style={{position: 'absolute', top: 0, left: 0, bottom: 0, right: 0, backgroundColor: 'rgba(181,181,181,0.2)'}}>
+      //         <TouchableOpacity>
+      //           <View style={{flex: 1, backgroundColor: 'green'}} />
+      //         </TouchableOpacity>
+      //         <View style={{position: 'absolute', flexDirection: 'row', justifyContent: 'center', bottom: 10, left: 0, right: 0}}>
+      //           <Icon color={Colors.main.grey2} size={12} name='timer-sand-empty' type='material-community' /><Text style={{marginLeft: 3, color: Colors.main.grey2}}>Der Antwortzeitraum ist abgelaufen</Text>
+      //         </View>
+      //       </View>
+      //     </View>
+      //   )
+      // }
     }
 
     switch (currentMessage.type) {
       case 'select-one-button':
       case 'open-component':
       case 'select-many':
+      case 'select-many-modal':
       case 'likert':
       case 'likert-silent':
       case 'likert-slider':
@@ -178,7 +202,7 @@ class Chat extends Component {
     currentMessage.user['avatar'] = avatar
 
     // render unanswered questions as textbubble
-    if (currentMessage.custom && currentMessage.custom.unanswered) {
+    if (currentMessage.custom && currentMessage.custom.unanswered && AppConfig.config.messages.showAnswerExpiredMessage) {
       let unansweredMessage = {
         ...currentMessage,
         type: 'text',
@@ -202,6 +226,7 @@ class Chat extends Component {
       case 'select-one-button':
       case 'open-component':
       case 'select-many':
+      case 'select-many-modal':
       case 'likert':
       case 'likert-silent':
       case 'likert-slider':
@@ -209,6 +234,9 @@ class Chat extends Component {
       case 'free-text':
       case 'free-numbers':
       case 'date-input':
+      case 'audio':
+      case 'image':
+      case 'video':
         return this.renderBlankBubble(props)
       default:
         return null
@@ -242,6 +270,7 @@ class Chat extends Component {
       case 'select-many':
         return this.renderSelectManyButton(props)
       case 'open-component':
+      case 'select-many-modal':
         return this.renderOpenComponent(props)
       case 'likert':
       case 'likert-silent':
@@ -252,6 +281,10 @@ class Chat extends Component {
       case 'free-text':
       case 'free-numbers':
         return this.renderTextOrNumberInputBubble(props)
+      case 'image':
+      case 'audio':
+      case 'video':
+        return this.renderMediaInput(props)
       case 'date-input':
         return this.renderDateInput(props)
       default:
@@ -305,6 +338,20 @@ class Chat extends Component {
     )
   }
 
+  renderMediaInput (props) {
+    return (
+      <MediaInput
+        {...props}
+        type={props.currentMessage.type}
+        onSubmit={(intention, text, value, relatedMessageId, containsMedia) => this.answerAction(intention, text, value, relatedMessageId, containsMedia)}
+        currentMessage={props.currentMessage}
+        fadeInAnimation='fadeInRight'
+        duration={350}
+        setAnimationShown={(id) => this.props.markAnimationAsShown(id)}
+      />
+    )
+  }
+
   renderDateInput (props) {
     return (
       <DateInput
@@ -350,8 +397,8 @@ class Chat extends Component {
         fadeInAnimation='flipInX'
         duration={350}
         setAnimationShown={(id) => this.props.markAnimationAsShown(id)}
-        icon={props.currentMessage.text.startsWith('show-backpack-info') ? 'info-with-circle' : undefined}
-        iconType={props.currentMessage.text.startsWith('show-backpack-info') ? 'entypo' : undefined}
+        icon={props.currentMessage.text && props.currentMessage.text.startsWith('show-backpack-info') ? 'info-with-circle' : undefined}
+        iconType={props.currentMessage.text && props.currentMessage.text.startsWith('show-backpack-info') ? 'entypo' : undefined}
       />
     )
   }
@@ -371,6 +418,9 @@ class Chat extends Component {
     return <Ticks currentMessage={currentMessage} />
   }
 
+/*
+ * The Camera Button is just for Debugging
+ */
   renderNavigationbar (props) {
     const {coach, connectionState} = props
     let title = I18n.t('Chat.title', {coach: I18n.t('Coaches.' + coach)})
@@ -378,10 +428,13 @@ class Chat extends Component {
       <PMNavigationBar
         title={title}
         rightButton={
-          <ConnectionStateButton
-            onPress={() => { this.showConnectionStateMessage(connectionState) }}
-            connectionState={connectionState}
-            />}
+          <View>
+            <ConnectionStateButton
+              onPress={() => { this.showConnectionStateMessage(connectionState) }}
+              connectionState={connectionState}
+            />
+          </View>
+      }
         props={props} />
     )
   }
@@ -398,7 +451,7 @@ class Chat extends Component {
    *            (in most cases this will be to send a answer message to the server)
    * payload:   Object which contains any kind of data we might need from our original message object
    */
-  answerAction (intention, text, value, relatedMessageId) {
+  answerAction (intention, text, value, relatedMessageId, containsMedia = false) {
     switch (intention) {
       case 'answer-to-server-invisible': {
         // Send the textmessage to server
@@ -407,7 +460,7 @@ class Chat extends Component {
       }
       case 'answer-to-server-visible': {
         // Send the textmessage to server
-        this.props.sendMessageToServer(text, value, relatedMessageId)
+        this.props.sendMessageToServer(text, value, relatedMessageId, containsMedia)
         break
       }
       default: {
@@ -419,11 +472,31 @@ class Chat extends Component {
 
   notifyServer (component, currentMessage = null) {
     switch (component) {
-      case 'rich-text': {
+      case 'rich-text-closed': {
+        log.debug('Rich text closed sent')
         if (currentMessage.custom.infoId) {
           let intention = 'info-' + currentMessage.custom.infoId + '-closed'
           this.props.sendIntention(null, intention, null)
-        } else log.warn('Cannot send info-openend-notification for message: ' + currentMessage.text + ', because info-id is undefined.')
+        } else log.warn('Cannot send info-closed-notification for message: ' + currentMessage.text + ', because "info-id" is undefined.')
+        break
+      }
+      case 'rich-text-completed': {
+        let relatedMessageId = currentMessage._id.substring(0, currentMessage._id.lastIndexOf('-'))
+        log.debug('Rich text closed and completed sent for message', relatedMessageId)
+        this.props.markMessageAsDisabled(relatedMessageId)
+        if (currentMessage.custom.infoId) {
+          let intention = 'info-' + currentMessage.custom.infoId + '-closed'
+          this.props.sendIntention(null, intention, null)
+          intention = 'info-' + currentMessage.custom.infoId + '-completed'
+          this.props.sendIntention(null, intention, null)
+        } else log.warn('Cannot send info-closed-notification for message: ' + currentMessage.text + ', because "info-id" is undefined.')
+        break
+      }
+      case 'backpack-info': {
+        if (currentMessage.custom.content) {
+          let intention = 'info-' + currentMessage.custom.content + '-closed'
+          this.props.sendIntention(null, intention, null)
+        } else log.warn('Cannot send backpack info-closed-notification for message: ' + currentMessage.text + ', because "content" is undefined.')
         break
       }
       case 'web-closed': {
@@ -433,11 +506,14 @@ class Chat extends Component {
       }
       case 'web-completed': {
         let relatedMessageId = currentMessage._id.substring(0, currentMessage._id.lastIndexOf('-'))
-        // this.props.sendIntention(null, 'web-closed', null)
         log.debug('Web closed and completed sent for message', relatedMessageId)
         this.props.markMessageAsDisabled(relatedMessageId)
         this.props.sendIntention(null, 'web-closed', null)
         this.props.sendIntention(null, 'web-completed', null)
+        break
+      }
+      case 'select-many-modal': {
+        this.props.sendIntention(null, 'select-many-modal-closed', null)
         break
       }
     }
@@ -455,8 +531,16 @@ class Chat extends Component {
     // Component specific Logic (e.g. show Modal)
     switch (component) {
       case 'rich-text': {
-        let onClose = () => { this.notifyServer(component, currentMessage) }
+        let onClose = (completed) => {
+          if (completed) this.notifyServer('rich-text-completed', currentMessage)
+          else this.notifyServer('rich-text-closed', currentMessage)
+        }
         showModal(component, {htmlMarkup: content}, onClose)
+        break
+      }
+      case 'backpack-info': {
+        let onClose = () => { this.notifyServer(component, currentMessage) }
+        showModal('rich-text', {htmlMarkup: this.props.storyProgress.backpackInfo[content].content}, onClose)
         break
       }
       case 'web': {
@@ -499,6 +583,16 @@ class Chat extends Component {
         this.props.visitScreen('pyramid')
         break
       }
+      case 'select-many-modal': {
+        let onClose = (submitted) => {
+          // if no answer was selected, notify server to enable serverside reactions
+          if (!submitted) {
+            this.notifyServer(component, currentMessage)
+          }
+        }
+        showModal(component, {answerAction: this.answerAction.bind(this), currentMessage}, onClose)
+        break
+      }
       default: break
     }
   }
@@ -519,6 +613,22 @@ class Chat extends Component {
       let value = !this.state.renderInputBar
       this.setState({renderInputBar: value})
     }
+  }
+
+  openModalCameraWindow () {
+    Alert.alert(
+      'Auswahl der Komponente',
+      '',
+      [
+        {text: 'Foto', onPress: () => this.showModal('take-photo')},
+        {text: 'Video', onPress: () => this.showModal('take-video')},
+        {text: 'Scan QR', onPress: () => this.showModal('scan-qr')}
+      ]
+    )
+  }
+
+  openModalRecordAudioWindow () {
+    this.showModal('record-audio')
   }
 
   showConnectionStateMessage=(connectionState) => {
@@ -591,7 +701,6 @@ class Chat extends Component {
         return <Message {...this.getChatProperties()} key={message._id} currentMessage={message} />
       })}
       <OfflineStatusIndicator active={showOfflineIndicator} />
-      {Platform.OS === 'android' ? <KeyboardSpacer /> : null}
     </View>)
   }
 
@@ -613,6 +722,10 @@ class Chat extends Component {
     )
   }
 
+  renderDay (props) {
+    return <Day {...props} textStyle={{color: Colors.modules.chat.date}} />
+  }
+
   render () {
     return (
       <View style={Styles.chatContainer}>
@@ -622,6 +735,7 @@ class Chat extends Component {
           <GiftedChat {...this.getChatProperties()}>
             <ImageCacheProvider />
           </GiftedChat>
+          {Platform.OS === 'android' ? <KeyboardSpacer /> : null}
           {this.renderActionButton()}
         </RepeatingBackgroundImage>
       </View>
@@ -643,7 +757,7 @@ const mapStateToProps = (state) => {
 
 // TODO: Do we still need messageAnsweredByGiftedChat?
 const mapStateToDispatch = dispatch => ({
-  sendMessageToServer: (text, value, relatedMessageId = null) => dispatch(ServerMessageActions.sendMessage(text, value, relatedMessageId)),
+  sendMessageToServer: (text, value, relatedMessageId = null, containsMedia) => dispatch(ServerMessageActions.sendMessage(text, value, relatedMessageId, containsMedia)),
   sendInvisibleMessageToServer: (value, relatedMessageId = null) => dispatch(ServerMessageActions.sendInvisibleMessage(value, relatedMessageId)),
   sendIntention: (text, intention, content) => dispatch(ServerMessageActions.sendIntention(text, intention, content)),
   loadEarlier: () => dispatch(GUIActions.loadEarlier()),

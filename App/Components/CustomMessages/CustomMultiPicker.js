@@ -76,7 +76,7 @@ export default class CustomMultiPicker extends Component {
   }
 
   render () {
-    const { options } = this.props
+    const { options, slim } = this.props
     // const labels = Object.keys(options).map(i => options[i])
     // const values = Object.keys(options)
     return (
@@ -93,11 +93,14 @@ export default class CustomMultiPicker extends Component {
               disabled={this.props.disabled}
               style={[{
                 opacity: this.props.disabled ? 0.5 : 1,
-                padding: 7,
+                paddingLeft: 7,
+                paddingRight: 7,
+                paddingTop: slim ? 4 : 7,
+                paddingBottom: slim ? 4 : 7,
                 marginTop: 0,
                 marginLeft: 2,
                 marginRight: 2,
-                marginBottom: 6,
+                marginBottom: slim ? 2 : 6,
                 backgroundColor: this.props.rowBackgroundColor,
                 // height: this.props.rowHeight,
                 flexDirection: 'row',

@@ -13,6 +13,7 @@ export default (encryptionKey) => {
     startup: resettable(require('./StartupRedux').reducer),
     settings: resettable(require('./SettingsRedux').reducer),
     messages: resettable(require('./MessageRedux').reducer),
+    dashboardMessages: resettable(require('./DashboardMessageRedux').reducer),
     storyProgress: resettable(require('./StoryProgressRedux').reducer),
     serverSyncSettings: resettable(require('./ServerSyncRedux').settingsReducer),
 
