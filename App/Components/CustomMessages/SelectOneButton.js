@@ -4,6 +4,7 @@ import Button from 'react-native-button'
 import PropTypes from 'prop-types'
 import * as Animatable from 'react-native-animatable'
 
+import CommonUtils, {tapBlockingHandlers} from './../../Utils/Common'
 import {Colors} from '../../Themes/'
 import {inputMessageStyles} from './Styles/CommonStyles'
 
@@ -25,12 +26,14 @@ class Option extends Component {
   }
 
   render () {
-    const { title, value } = this.props
-    // disabledContainerStyle={[styles.disabled, (currentMessage.custom.selected === value) && styles.selected]}
+    const { title, value, currentMessage } = this.props
+    const disabled = !CommonUtils.userCanEdit(currentMessage)
     return (
-      <Animatable.View ref='view' useNativeDriver animation={this.shouldAnimate ? this.props.fadeInAnimation : null} delay={this.props.delay} duration={this.props.duration} onAnimationEnd={() => { this.shouldAnimate = false }}>
+      <Animatable.View {...disabled ? tapBlockingHandlers : null} ref='view' useNativeDriver animation={this.shouldAnimate ? this.props.fadeInAnimation : null} delay={this.props.delay} duration={this.props.duration} onAnimationEnd={() => { this.shouldAnimate = false }}>
         <Button value={value}
           containerStyle={styles.buttonContainer}
+          disabledContainerStyle={styles.buttonContainerDisabled}
+          disabled={!CommonUtils.userCanEdit(currentMessage)}
           style={styles.button}
           title={title}
           onPress={() => this.props.onPress(this.props.optionKey)}>
@@ -149,6 +152,9 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     backgroundColor: Colors.buttons.selectOne.background,
     marginBottom: 2
+  },
+  buttonContainerDisabled: {
+    backgroundColor: Colors.buttons.selectOne.disabled
   },
   button: {
     fontSize: 16,

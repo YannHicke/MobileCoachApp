@@ -14,6 +14,7 @@ import RNFS from 'react-native-fs'
 
 import HeaderBar from './HeaderBar'
 import {Colors} from './../Themes'
+import I18n from '../I18n/I18n'
 
 import Log from './../Utils/Log'
 const log = new Log('RecordAudioComponent')
@@ -26,6 +27,7 @@ class RecordAudioComponent extends Component {
       audioPermissionsGranted: false,
       audioPath: AudioUtils.DocumentDirectoryPath + '/',
       currentTime: 0.0,
+      recordingLength: 0.0,
       recordingFinished: false,
       isRecording: false,
       isPlaying: false,
@@ -36,6 +38,9 @@ class RecordAudioComponent extends Component {
 
     // Define path to audio-file
     this.audioFilePath = this.generateFileNameBasedOnTime()
+
+    // Length of recording
+    this.recordingLength = 0.0
 
     // Define recording and timer interval
     this.recording = null
@@ -112,7 +117,7 @@ class RecordAudioComponent extends Component {
   }
 
   finishRecording (recordingFinished, filePath) {
-    this.setState({recordingFinished, currentTime: 0.0})
+    this.setState({recordingFinished, currentTime: 0.0, recordingLength: this.state.currentTime})
 
     if (recordingFinished) {
       log.debug('Successfully stoped system from recording audio file.')
@@ -130,7 +135,7 @@ class RecordAudioComponent extends Component {
       } catch (err) {
         log.debug('Error while trying to prepare audio-file for playing', err)
       }
-      log.info(`Finished recording of duration ${this.state.currentTime} seconds at path: ${filePath}`)
+      log.info(`Finished recording of duration ${this.state.recordingLength} seconds at path: ${filePath}`)
     }
   }
 
@@ -259,7 +264,7 @@ class RecordAudioComponent extends Component {
               </View>
             </View>
             <View style={{alignSelf: 'center'}}>
-              <Text style={{fontWeight: 'bold', fontSize: 14, color: 'white'}}> Press to record </Text>
+              <Text style={{fontWeight: 'bold', fontSize: 14, color: 'white'}}> {I18n.t('Common.pressToRecord')} </Text>
             </View>
           </View>
         </TouchableWithoutFeedback>
@@ -284,7 +289,7 @@ class RecordAudioComponent extends Component {
               </View>
             </View>
             <View style={{alignSelf: 'center'}}>
-              <Text style={{fontWeight: 'bold', fontSize: 14, color: 'white'}}> Press to stop </Text>
+              <Text style={{fontWeight: 'bold', fontSize: 14, color: 'white'}}> {I18n.t('Common.pressToStop')} </Text>
             </View>
           </View>
         </TouchableWithoutFeedback>
@@ -341,7 +346,7 @@ class RecordAudioComponent extends Component {
   }
 
   submitRecord () {
-    this.props.onSubmitMedia(this.audioFilePath)
+    this.props.onSubmitMedia('file://' + this.audioFilePath, this.state.recordingLength)
     this.props.onClose()
   }
 
@@ -350,7 +355,7 @@ class RecordAudioComponent extends Component {
       return (
         <View style={{flex: 1, backgroundColor: Colors.main.grey1}}>
           <HeaderBar
-            title='Record Audio'
+            title={I18n.t('Common.recordAudio')}
             onBack={async () => {
               await this.eraseRecord()
               this.props.onClose()
@@ -370,11 +375,11 @@ class RecordAudioComponent extends Component {
     return (
       <View style={{flex: 1, backgroundColor: 'black'}}>
         <HeaderBar
-          title='Record Audio'
+          title={I18n.t('Common.recordAudio')}
           onBack={this.props.onClose}
         />
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <Text style={{ fontSize: 18, color: 'white', fontWeight: 'bold', textAlign: 'center' }}> You need to give permissions to access your microphone </Text>
+          <Text style={{ fontSize: 18, color: 'white', fontWeight: 'bold', textAlign: 'center' }}> {I18n.t('Common.permissionsAudio')} </Text>
         </View>
       </View>
     )

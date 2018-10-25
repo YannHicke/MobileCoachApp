@@ -5,7 +5,8 @@ import Brand from './Brand'
 const button = {
   background: Brand.colors.buttonBackground,
   text: Brand.colors.buttonText,
-  disabled: '#E2E2E2',
+  disabled: Brand.colors.grey1,
+  skipAnswer: '#E2E2E2',
   submit: Brand.colors.buttonText,
   cancel: '#E2E2E2',
   placeholder: '#E2E2E2'
@@ -37,7 +38,8 @@ const colors = {
   sideMenu: {
     background: Brand.colors.backgroundMain,
     buttonBackground: Brand.colors.backgroundMain,
-    text: Brand.colors.textMain
+    text: Brand.colors.textMain,
+    textDisabled: Brand.colors.grey2
   },
   messageBubbles: {
     left: {
@@ -122,7 +124,8 @@ const colors = {
   video: {
     thumb: button.text, // slider handle
     minTint: Brand.colors.buttonBackground, // slider background left
-    maxTint: Brand.colors.grey1 // slider background right
+    maxTint: Brand.colors.grey1, // slider background right
+    activityIndicator: '#FFF'
   },
   playAudio: {
     progressbarBackground: Brand.colors.buttonBackground
@@ -137,12 +140,18 @@ const colors = {
     text: Brand.colors.primaryText
   },
   modules: {
+    chat: {
+      date: Brand.colors.grey2
+    },
+    dashboardChat: {
+      date: Brand.colors.grey2
+    },
     tour: {
       background: Brand.colors.background2
     },
     backpack: {
-      background: Brand.colors.background2,
-      text: Brand.colors.text2
+      infoBackground: button.background,
+      infoText: button.text
     },
     recipes: {
       background: Brand.colors.background2,

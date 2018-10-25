@@ -75,7 +75,18 @@ export default class HeaderBar extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Colors.navigationBar.background
+    backgroundColor: Colors.navigationBar.background,
+    // iOS shadow
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowRadius: 2,
+    shadowOpacity: 0.25,
+    // Android shadow
+    elevation: 2,
+    zIndex: 10
   },
   header: {
     height: Metrics.navbarHeight,

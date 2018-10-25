@@ -8,6 +8,7 @@ const images = {
     require('../Images/Coaches/coach_male.png'),
     require('../Images/Coaches/coach_female.png')
   ],
+  coachGeneric: require('../Images/Coaches/coach_generic.png'),
   chatBg: Brand.images.chatBackground,
   custom: {
     pyramidBg: require('../Images/FoodPyramid/pyramid_bg.png'),

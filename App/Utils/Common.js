@@ -1,7 +1,11 @@
 import { DOMParser } from 'react-native-html-parser'
 import {ImageCacheManager} from 'react-native-cached-image'
 import ImageResizer from 'react-native-image-resizer'
+import {Alert, PanResponder} from 'react-native'
 import RNFS from 'react-native-fs'
+import I18n from '../I18n/I18n'
+import AppConfig from '../Config/AppConfig'
+import {getState} from '../Containers/App'
 
 import Log from './Log'
 const log = new Log('Utils/Common')
@@ -14,6 +18,21 @@ const convertUriToFilePath = function (uri) {
   let path = uri
   if (path.startsWith('file://')) path = path.substring(7)
   return path
+}
+
+// Returns url with authentification-Token if neccecary
+export const authTokenUri = function (uri) {
+  const {mediaUploadSecurityCheck, remoteMediaURL, role} = AppConfig.config.serverSync
+
+  const tokenRequired = (mediaUploadSecurityCheck && uri.startsWith(remoteMediaURL + 'MC_'))
+
+  if (!tokenRequired) return uri
+  else {
+    const state = getState()
+    const {deepstreamUser, deepstreamSecret} = state.serverSyncSettings
+
+    return `${uri}?c=ds&u=${deepstreamUser}&t=${deepstreamSecret.substring(0, 32)}&r=${role}`
+  }
 }
 
 export default class Common {
@@ -30,15 +49,27 @@ export default class Common {
     return { command, value, values: valuesOnlyArray, content: valuesOnlyArray.join(' '), contentWithoutFirstValue: valuesOnlyArray.slice(1).join(' ') }
   }
 
+  static showExpiryAlert () {
+    if (AppConfig.config.messages.showExpiryAlert) {
+      Alert.alert(
+        I18n.t('Common.expiryNotice'),
+          '',
+        [
+            {text: 'Ok', onPress: () => true}
+        ]
+      )
+    }
+  }
+
   static formatInfoMessage (content, timestamp) {
-    // let content = serverMessage.content  // .replace(/\n/g, '')
+    // let content = serverMessage.content  // .replace(/\\n/g, '')
     let parsedTags = new DOMParser().parseFromString(content, 'text/html')
     let meta = parsedTags.getElementsByTagName('meta')[0]
     let title = ''
     let subtitle = ''
     if (meta) {
-      title = meta.getAttribute('title').replace('\\n', '\n')
-      subtitle = meta.getAttribute('subtitle').replace('\\n', '\n')
+      title = meta.getAttribute('title').replace(/\\n/g, '\n')
+      subtitle = meta.getAttribute('subtitle').replace(/\\n/g, '\n')
     }
 
     // Remove Button
@@ -104,4 +135,42 @@ export default class Common {
   static getImageCacheManager () {
     return imageCacheManager
   }
+
+  static isBlank (object) {
+    if (object === undefined || object === null || object === '') {
+      return true
+    } else {
+      return false
+    }
+  }
+
+  static userCanEdit (currentMessage) {
+    const role = AppConfig.config.serverSync.role
+    if (role === 'supervisor' || role === 'observer') {
+      return false
+    } else if (role === 'participant') {
+      if (currentMessage.custom && currentMessage.custom.unanswered) return false
+      else return true
+    }
+    // default = true
+    return true
+  }
 }
+
+const panResponder = PanResponder.create({
+    // Ask to be the responder:
+  onStartShouldSetPanResponder: (evt, gestureState) => true,
+  onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
+  onMoveShouldSetPanResponder: (evt, gestureState) => true,
+  onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
+  onPanResponderTerminationRequest: (evt, gestureState) => true,
+  onPanResponderRelease: (evt, gestureState) => {
+    if (AppConfig.config.messages.showExpiryAlert) Common.showExpiryAlert()
+  },
+  onShouldBlockNativeResponder: (evt, gestureState) => {
+    // Dont block native events (e.g. ScrollView Scroll)
+    return false
+  }
+})
+
+export const tapBlockingHandlers = panResponder.panHandlers

@@ -3,7 +3,7 @@ import { Image, View, ViewPropTypes, ActivityIndicator } from 'react-native'
 import resolveAssetSource from 'resolveAssetSource'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
-import Common from '../Utils/Common'
+import Common, {authTokenUri} from '../Utils/Common'
 
 import Log from '../Utils/Log'
 const log = new Log('Components/ResponsiveImage')
@@ -74,8 +74,10 @@ export default class ResponsiveImage extends Component {
 
   processSourceCaching (source) {
     const url = _.get(source, ['uri'], null)
+    const authTokenUrl = authTokenUri(url)
     const imageCacheManager = Common.getImageCacheManager()
-    imageCacheManager.downloadAndCacheUrl(url)
+    // Fortunatley, ImageCacheManager doesn't use Query strings (e.g. authToken) for cache-key (see: 'useQueryParamsInCacheKey' option).
+    imageCacheManager.downloadAndCacheUrl(authTokenUrl)
       .then(cachedImagePath => {
         this.setState({
           cachedImagePath

@@ -5,6 +5,8 @@ import moment from 'moment'
 
 import I18n from '../I18n/I18n'
 import { onboardingNav } from '../Containers/Onboarding/OnboardingNav'
+import Common from '../Utils/Common'
+import { MessageActions } from './MessageRedux'
 
 import Log from '../Utils/Log'
 const log = new Log('Redux/SettingsRedux')
@@ -13,7 +15,8 @@ const log = new Log('Redux/SettingsRedux')
 const { Types, Creators } = createActions({
   changeLanguage: ['language'],
   chooseCoach: ['coach'],
-  completeTutorial: ['tutorialCompleted']
+  completeTutorial: ['tutorialCompleted'],
+  changeSyncedSetting: ['variable', 'value', 'localValue', 'asIntention']
 })
 
 export const SettingsActions = Types
@@ -24,7 +27,8 @@ export const INITIAL_STATE = Immutable({
   language: I18n.currentLocale(), // take over the recognized, or default if not recognized, language locale as initial state
   coach: null,
   tutorialCompleted: false,
-  tutorialStep: null
+  tutorialStep: null,
+  syncedSettings: {}
 })
 
 /* ------------- Reducers ------------- */
@@ -71,11 +75,43 @@ export const rememberTutorialStep = (state, {routeName}) => {
   }
 }
 
+export const changeSyncedSetting = (state, {variable, value, localValue = null, asIntention}) => {
+  log.debug('Change setting', variable, 'to', value, ' - local:', localValue)
+  log.action('App', 'SettingsChange')
+
+  const newState = changeSynedSettingState(state, variable, localValue === null ? value : localValue)
+
+  return state.merge(newState)
+}
+
+export const handleProgressCommand = (state, {command, content, timestamp}) => {
+  const parsedCommand = Common.parseCommand(command)
+  switch (parsedCommand.command) {
+    case 'settings':
+      const newState = changeSynedSettingState(state, parsedCommand.value, parsedCommand.contentWithoutFirstValue)
+      return state.merge(newState)
+    default:
+      return state
+  }
+}
+
+const changeSynedSettingState = (state, variable, value) => {
+  let newState = { ...state }
+
+  if (newState.syncedSettings === undefined) {
+    newState = Immutable.setIn(newState, ['syncedSettings'], {})
+  }
+
+  return Immutable.setIn(newState, ['syncedSettings', variable], value)
+}
+
 /* ------------- Hookup Reducers To Actions ------------- */
 export const reducer = createReducer(INITIAL_STATE, {
   [StartupActions.STARTUP]: startup,
+  [MessageActions.COMMAND_TO_EXECUTE]: handleProgressCommand,
   [Types.CHANGE_LANGUAGE]: changeLanguage,
   [Types.CHOOSE_COACH]: chooseCoach,
   [Types.COMPLETE_TUTORIAL]: completeTutorial,
+  [Types.CHANGE_SYNCED_SETTING]: changeSyncedSetting,
   'Navigation/NAVIGATE': rememberTutorialStep
 })

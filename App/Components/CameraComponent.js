@@ -9,17 +9,21 @@ import {
   AppState,
   Alert,
   Dimensions,
-  StatusBar
+  StatusBar,
+  BackHandler,
+  TouchableOpacity
 } from 'react-native'
 import RNFS from 'react-native-fs'
 import { RNCamera } from 'react-native-camera'
 
 import HeaderBar from './HeaderBar'
 import CameraButton from './Camera/CameraButton'
+import Icon from 'react-native-vector-icons/Ionicons'
 import PicturePreview from './Camera/PicturePreview'
 import VideoPreview from './Camera/VideoPreview'
 import { Colors } from './../Themes'
 import AppConfig from '../Config/AppConfig'
+import I18n from '../I18n/I18n'
 
 import Log from './../Utils/Log'
 const log = new Log('CameraComponent')
@@ -27,6 +31,10 @@ const log = new Log('CameraComponent')
 class CameraComponent extends Component {
   constructor (props) {
     super(props)
+
+    this.appStateDidChange = this.appStateDidChange.bind(this)
+    this.handleBackpressForVideoAndPhotoRecording = this.handleBackpressForVideoAndPhotoRecording.bind(this)
+
     this.initialState = {
       cameraFlashMode: RNCamera.Constants.FlashMode.off,
       cameraType: RNCamera.Constants.Type.back,
@@ -38,7 +46,8 @@ class CameraComponent extends Component {
       readBarcode: true,
       appState: AppState.currentState,
       bounds: [{x: 0, y: 0}, {x: 0, y: 0}, {x: 0, y: 0}],
-      headerBarHeight: 0
+      headerBarHeight: 0,
+      backButtonPressedWhileRecordingVideo: false
     }
     this.state = this.initialState
   }
@@ -56,8 +65,8 @@ class CameraComponent extends Component {
       * This Event-Listener is triggered when the app changes its state.
       * For example from inactive to active
       */
-    AppState.addEventListener('change', this.appStateDidChange.bind(this))
-
+    AppState.addEventListener('change', this.appStateDidChange)
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackpressForVideoAndPhotoRecording)
     // Debug functionality
     if (this.props.usage === 'qr' && AppConfig.config.dev.fakeQRCodeScanWithURL != null) {
       setTimeout(() => { this.barcodeDetected({ 'data': AppConfig.config.dev.fakeQRCodeScanWithURL }) }, 1000)
@@ -66,7 +75,8 @@ class CameraComponent extends Component {
 
   componentWillUnmount () {
     // Remove the Event-Listener for App-State change so that it will not be triggered anymore
-    AppState.removeEventListener('change', this.appStateDidChange.bind(this))
+    AppState.removeEventListener('change', this.appStateDidChange)
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackpressForVideoAndPhotoRecording)
   }
 
   /**
@@ -78,6 +88,27 @@ class CameraComponent extends Component {
       this.camera = null
     }
     this.setState({appState: nextAppState})
+  }
+
+  async handleBackpressForVideoAndPhotoRecording () {
+    if (this.props.usage === 'photo') {
+      if (this.state.picturePath !== null) {
+        log.debug('Back-Button was pressed after picture was taken')
+        await this.abortPicture()
+      } else {
+        log.debug('Back-Button was pressed in Camera-View')
+        this.props.onBack()
+      }
+    } else if (this.props.usage === 'video') {
+      if (this.state.videoIsRecording) {
+        log.debug('Back-Button was pressed while recording video')
+        this.setState({backButtonPressedWhileRecordingVideo: true})
+        await this.takeVideo()
+      } else if (this.state.videoPath !== null) {
+        log.debug('Back-Button was pressed after recording video')
+        await this.abortVideo()
+      }
+    }
   }
 
   /**
@@ -122,6 +153,14 @@ class CameraComponent extends Component {
           const data = await this.camera.recordAsync(options)
           log.debug('Video recorded. File is saved under: ', data.uri)
           this.setState({videoPath: data.uri})
+          if (this.state.backButtonPressedWhileRecordingVideo) {
+            log.debug('Erase Video and go back to Chat-Screen after pressing Back-Button while recording.')
+            await this.abortVideo()
+            setTimeout(() => {
+              this.setState({backButtonPressedWhileRecordingVideo: false})
+              this.props.onBack()
+            }, 500)
+          }
         } catch (error) {
           Alert.alert(
             'Camera reagiert nicht',
@@ -180,7 +219,7 @@ class CameraComponent extends Component {
       const audioPermissionsGranted = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.RECORD_AUDIO)
       const cameraPermissionsGranted = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.CAMERA)
 
-      if (!audioPermissionsGranted) {
+      if (!audioPermissionsGranted && this.props.usage !== 'qr' && this.props.usage !== 'photo') {
         log.debug('Audio permissions not granted. Permissions will be requested.')
         const audioPermissionUserChoice = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.RECORD_AUDIO)
         if (audioPermissionUserChoice === PermissionsAndroid.RESULTS.GRANTED) {
@@ -190,7 +229,7 @@ class CameraComponent extends Component {
           log.debug('User has not granted Audio-Permissions. Video Recording will throw an error')
         }
       } else {
-        log.debug('Audio permissions already granted.')
+        log.debug('Audio permissions already granted or not required.')
         this.setState({audioPermissionsGranted: true})
       }
 
@@ -215,7 +254,7 @@ class CameraComponent extends Component {
   renderCameraView () {
     return (
       <View style={{flex: 1}}>
-        <View onLayout={(event) => {
+        <View style={{justifyContent: 'center'}} onLayout={(event) => {
           if (Platform.OS === 'ios') {
             this.setState({headerBarHeight: event.nativeEvent.layout.height})
           } else {
@@ -235,16 +274,31 @@ class CameraComponent extends Component {
             style={styles.preview}
             captureAudio
             skipProcessing
+            notAuthorizedView={null}
+            pendingAuthorizationView={null}
             type={this.state.cameraType}
             flashMode={this.state.cameraFlashMode}
             barCodeTypes={[RNCamera.Constants.BarCodeType.qr]}
             onBarCodeRead={this.barcodeDetected.bind(this)}
           />
+          {this.props.usage !== 'qr' ? <TouchableOpacity onPress={this.switchCameraFrontBack.bind(this)} style={styles.flipCameraButton}>
+            <Icon name='ios-reverse-camera' size={40} color={Colors.buttons.common.text} />
+          </TouchableOpacity> : null}
           {this.renderQrOverlay()}
           {this.renderCameraButton()}
         </View>
       </View>
     )
+  }
+
+  switchCameraFrontBack () {
+    if (this.state.cameraType === RNCamera.Constants.Type.back) {
+      this.setState({cameraType: RNCamera.Constants.Type.front})
+    } else if (this.state.cameraType === RNCamera.Constants.Type.front) {
+      this.setState({cameraType: RNCamera.Constants.Type.back})
+    } else {
+      this.setState({cameraType: RNCamera.Constants.Type.back})
+    }
   }
 
   renderQrOverlay () {
@@ -326,14 +380,14 @@ class CameraComponent extends Component {
           onClose={this.props.usage === 'qr' ? false : this.props.onClose}
           />
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-          <Text style={{color: 'white', padding: 15, alignSelf: 'center', textAlign: 'center', fontWeight: 'bold'}}> Die Applikation bennötigt die Berechtigung auf Ihre Camera und Ihr Mikrofon zuzugreifen </Text>
+          <Text style={{color: 'white', padding: 15, alignSelf: 'center', textAlign: 'center', fontWeight: 'bold'}}> Keine Berechtigung vorhanden </Text>
         </View>
       </View>
     )
   }
 
   render () {
-    if (this.state.audioPermissionsGranted && this.state.cameraPermissionsGranted && this.state.appState === 'active') {
+    if ((this.state.audioPermissionsGranted || this.props.usage === 'qr' || this.props.usage === 'photo') && this.state.cameraPermissionsGranted && this.state.appState === 'active') {
       if (this.state.picturePath === null && this.state.videoPath === null) {
         return (
           this.renderCameraView()
@@ -342,36 +396,36 @@ class CameraComponent extends Component {
         return (
           <PicturePreview
             onConfirm={() => {
-              this.props.onSubmitMedia(this.state.picturePath)
+              this.props.onSubmitMedia(this.state.picturePath, 0.0)
               this.props.onBack()
             }}
             onAbort={this.abortPicture.bind(this, false)}
             onBack={async () => {
-              await this.abortPicture(true)
-              this.props.onBack()
+              await this.abortPicture()
+              // this.props.onBack()
             }}
             imageSource={this.state.picturePath}
-            title='Bild bestätigen'
+            title={I18n.t('Common.confirmPhoto')}
           />
         )
-      } else {
+      } else if (!this.state.backButtonPressedWhileRecordingVideo && this.state.videoPath !== null) {
         return (
           <VideoPreview
             onConfirm={() => {
-              this.props.onSubmitMedia(this.state.videoPath)
+              this.props.onSubmitMedia(this.state.videoPath, 0.0)
               this.props.onBack()
             }}
             onAbort={this.abortVideo.bind(this, false)}
             onBack={async () => {
-              await this.abortVideo(true)
-              this.props.onBack()
+              await this.abortVideo()
+              // this.props.onBack()
             }}
             source={this.state.videoPath}
-            title='Video bestätigen'
+            title={I18n.t('Common.confirmVideo')}
           />
         )
       }
-    } else if (!this.state.audioPermissionsGranted || !this.state.cameraPermissionsGranted) {
+    } else if ((!this.state.audioPermissionsGranted && this.state.audioPermissionsGranted !== null && this.props.usage !== 'qr' && this.props.usage !== 'photo') || (!this.state.cameraPermissionsGranted && this.state.cameraPermissionsGranted !== null)) {
       return (
         this.renderPermissionsNotGranted()
       )
@@ -401,6 +455,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-end',
     alignItems: 'center'
+  },
+  flipCameraButton: {
+    position: 'absolute',
+    right: 15,
+    top: 0,
+    padding: 8
   }
 })
 
@@ -425,7 +485,7 @@ CameraComponent.defaultProps = {
   onBack: false,
   onClose: false,
   usage: 'Photo',
-  title: 'Kamera'
+  title: I18n.t('Common.recordPhoto')
 }
 
 export default CameraComponent

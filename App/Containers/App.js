@@ -4,6 +4,7 @@ import { setCustomText } from 'react-native-global-props'
 import { Provider } from 'react-redux'
 import { isIphoneX } from 'react-native-iphone-x-helper'
 import SInfo from 'react-native-sensitive-info'
+import Orientation from 'react-native-orientation'
 
 import '../I18n/I18n' // import this before RootContainer as RootContainer is using react-native-i18n, and I18n.js needs to be initialized before that!
 import RootContainer from './RootContainer'
@@ -19,6 +20,14 @@ const { config } = AppConfig
 
 // Redux storage
 let store = null
+
+export const getState = () => {
+  if (store) return store.getState()
+  else {
+    log.warn('Tried to access state before it was initialized!')
+    return null
+  }
+}
 
 // App status
 let initialized = false
@@ -55,7 +64,8 @@ class App extends Component {
         fontFamily: Fonts.type.family
       }
     }
-
+    // Lock device to Portrait!
+    Orientation.lockToPortrait()
     setCustomText(customTextProps)
   }
 

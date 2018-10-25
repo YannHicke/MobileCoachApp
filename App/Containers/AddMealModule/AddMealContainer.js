@@ -288,7 +288,7 @@ const styles = StyleSheet.create({
     })
   },
   buttonDisabled: {
-    backgroundColor: Colors.buttons.common.disabled
+    backgroundColor: Colors.buttons.common.skipAnswer
   },
   searchButton: {
     color: Colors.main.grey2

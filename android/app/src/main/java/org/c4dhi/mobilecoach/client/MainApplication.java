@@ -3,6 +3,7 @@ package org.c4dhi.mobilecoach.client;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.github.yamill.orientation.OrientationPackage;
 import fr.bamlab.rnimageresizer.ImageResizerPackage;
 import com.zmxv.RNSound.RNSoundPackage;
 import com.rnim.rn.audio.ReactNativeAudioPackage;
@@ -46,6 +47,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new OrientationPackage(),
             new ImageResizerPackage(),
             new RNSoundPackage(),
             new ReactNativeAudioPackage(),

@@ -71,7 +71,9 @@
     "react-native-iphone-x-helper": "^1.0.2",
     "react-native-keyboard-spacer": "^0.4.1",
     "react-native-material-dropdown": "^0.6.1",
+    "react-native-mime-types": "^2.2.1",
     "react-native-navbar": "^2.1.0",
+    "react-native-orientation": "^3.1.3",
     "react-native-piwik": "^0.0.8",
     "react-native-progress": "^3.5.0",
     "react-native-push-notification": "^3.0.1",
@@ -84,10 +86,11 @@
     "react-native-sound": "^0.10.9",
     "react-native-spinkit": "^1.1.1",
     "react-native-splash-screen": "^3.0.6",
+    "react-native-super-grid": "^2.4.3",
     "react-native-tab-view": "^0.0.74",
     "react-native-true-sight": "https://github.com/afiller/react-native-true-sight.git#master",
     "react-native-vector-icons": "^4.5.0",
-    "react-native-video": "^2.0.0",
+    "react-native-video": "^3.2.0",
     "react-navigation": "1.0.0-beta.27",
     "react-redux": "^5.0.6",
     "redux": "^3.6.0",
@@ -156,7 +159,8 @@
       "React$Element"
     ],
     "ignore": [
-      "/Access_Keys/**"
+      "/Access_Keys/**",
+      "/Web/js/sliderPage.js"
     ]
   }
 }

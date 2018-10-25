@@ -2,7 +2,6 @@ import { createReducer, createActions } from 'reduxsauce'
 import Immutable from 'seamless-immutable'
 
 import Common from '../Utils/Common'
-// Import message actions
 import { MessageActions } from './MessageRedux'
 import R from 'ramda'
 
@@ -11,10 +10,13 @@ const log = new Log('Redux/StoryProgressRedux')
 /* ------------- Actions and Action Creators ------------- */
 
 const { Types, Creators } = createActions({
-  handleProgressCommand: ['command'],
   visitScreen: ['visitedScreen'],
   resetVisitedScreens: [],
-  addBackpackInfo: ['backpackInfoMessage']
+  setVideoCardAnimationPlayed: ['video'],
+  setInfoCardAnimationPlayed: ['info'],
+  addBackpackInfo: ['backpackInfoMessage'],
+  incrementUnreadDashboardMessages: [],
+  clearUnreadDashboardMessages: []
 })
 
 export const StoryProgressActions = Types
@@ -25,15 +27,50 @@ export default Creators
 export const INITIAL_STATE = Immutable({
   foodTutorialActive: true,
   visitedScreens: [],
-  backpackActivated: false,
+  dashboardChatActivated: true,
+  backpackActivated: true,
+  mediaLibraryActivated: true,
   diaryActivated: false,
   tourActivated: false,
   recipesActivated: false,
   actionButtonActive: false,
-  backpackInfo: {}
+  disabledActivated: false,
+  backpackInfo: {},
+  mediaLibrary: {},
+  unreadDashboardMessages: 0
 })
 
 /* ------------- Reducers ------------- */
+
+export const setInfoCardAnimationPlayed = (state, {info}) => {
+  let newLibrary = R.clone(state.backpackInfo)
+  // Only set if video really exists! (Prevent this reducer from accidentally adding new Videocard!)
+  if (newLibrary[info]) {
+    newLibrary[info].appearAnimationPlayed = true
+    return {
+      ...state,
+      backpackInfo: newLibrary
+    }
+  } else {
+    log.warn(`Tried to set animationPlayed-Flag for info-id ${info} which could not be found in libray!`)
+    return state
+  }
+}
+
+export const setVideoCardAnimationPlayed = (state, {video}) => {
+  let newMediaLibrary = R.clone(state.mediaLibrary)
+  // Only set if video really exists! (Prevent this reducer from accidentally adding new Videocard!)
+  if (newMediaLibrary[video]) {
+    newMediaLibrary[video].appearAnimationPlayed = true
+    return {
+      ...state,
+      mediaLibrary: newMediaLibrary
+    }
+  } else {
+    log.warn(`Tried to set animationPlayed-Flag for video ${video} which could not be found in media-libray!`)
+    return state
+  }
+}
 
 export const handleProgressCommand = (state, {command, content, timestamp}) => {
   const parsedCommand = Common.parseCommand(command)
@@ -43,10 +80,20 @@ export const handleProgressCommand = (state, {command, content, timestamp}) => {
         ...state,
         foodTutorialActive: false
       }
+    case 'activate-dashboard-chat':
+      return {
+        ...state,
+        dashboardChatActivated: true
+      }
     case 'activate-backpack':
       return {
         ...state,
         backpackActivated: true
+      }
+    case 'activate-medialibrary':
+      return {
+        ...state,
+        mediaLibraryActivated: true
       }
     case 'activate-recipes':
       return {
@@ -84,6 +131,27 @@ export const handleProgressCommand = (state, {command, content, timestamp}) => {
         ...state,
         backpackInfo: newBackpackInfo
       }
+    case 'add-video':
+      const uri = content
+      let newMediaLibrary = R.clone(state.mediaLibrary)
+      const videoName = parsedCommand.value
+      const video = {
+        uri,
+        timestamp: timestamp,
+        thumbnail: videoName
+      }
+      // Add new info under the given name
+      if (videoName) newMediaLibrary[videoName] = video
+      else log.warn('Could not add Video to Media-Library, because no ID was defined. (Info-Title: ' + video.uri + ')')
+      return {
+        ...state,
+        mediaLibrary: newMediaLibrary
+      }
+    case 'activate-disabled':
+      return {
+        ...state,
+        disabledActivated: true
+      }
     default:
       return state
   }
@@ -104,6 +172,22 @@ export const resetVisitedScreens = (state) => {
     visitedScreens: []
   }
 }
+
+export const incrementUnreadDashboardMessages = (state) => {
+  let unreadDashboardMessages = state.unreadDashboardMessages + 1
+  return {
+    ...state,
+    unreadDashboardMessages
+  }
+}
+
+export const clearUnreadDashboardMessages = (state) => {
+  return {
+    ...state,
+    unreadDashboardMessages: 0
+  }
+}
+
 /* ------------- Hookup Reducers To Actions ------------- */
 
 // {
@@ -113,5 +197,9 @@ export const resetVisitedScreens = (state) => {
 export const reducer = createReducer(INITIAL_STATE, {
   [MessageActions.COMMAND_TO_EXECUTE]: handleProgressCommand,
   [Types.VISIT_SCREEN]: visitScreen,
-  [Types.RESET_VISITED_SCREENS]: resetVisitedScreens
+  [Types.RESET_VISITED_SCREENS]: resetVisitedScreens,
+  [Types.SET_VIDEO_CARD_ANIMATION_PLAYED]: setVideoCardAnimationPlayed,
+  [Types.SET_INFO_CARD_ANIMATION_PLAYED]: setInfoCardAnimationPlayed,
+  [Types.INCREMENT_UNREAD_DASHBOARD_MESSAGES]: incrementUnreadDashboardMessages,
+  [Types.CLEAR_UNREAD_DASHBOARD_MESSAGES]: clearUnreadDashboardMessages
 })

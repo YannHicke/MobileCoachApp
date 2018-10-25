@@ -24,6 +24,10 @@
 #import "BackgroundTaskManager.h"
 // ADDED FOR BACKGROUND HACK - STOP
 
+// ADDED FOR REACT-NATIVE-ORIENTATION - START
+#import "Orientation.h"
+// ADDED FOR REACT-NATIVE-ORIENTATION - STOP
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -31,7 +35,7 @@
   // ADDED FOR FABRIC - START
   [Fabric with:@[[Crashlytics class]]];
   // ADDED FOR FABRIC - END
-  
+
   NSURL *jsCodeLocation;
 
   jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index.ios" fallbackResource:nil];
@@ -67,11 +71,11 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
   NSLog(@"push-notification received: %@", notification);
   //[RCTPushNotificationManager didReceiveRemoteNotification:notification fetchCompletionHandler:completionHandler];
-  
+
   NSUInteger taskKey = [[BackgroundTaskManager sharedTasks] beginTaskWithCompletionHandler:^{
     NSLog(@"push-notification bg-task complete: %@", notification);
   }];
-  
+
   [RCTPushNotificationManager didReceiveRemoteNotification:notification fetchCompletionHandler:^(UIBackgroundFetchResult result) {
     NSLog(@"push-notification bg-task completionHandler, result code: %lu, task-key: %lu", (unsigned long)result, (unsigned long)taskKey);
     completionHandler(result);
@@ -96,4 +100,10 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 }
 // ADDED FOR PUSH NOTIFICATIONS - END
 
+// ADDED FOR REACT-NATIVE-ORIENTATION - START
+- (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window
+{
+  return [Orientation getOrientation];
+}
+// ADDED FOR REACT-NATIVE-ORIENTATION - END
 @end

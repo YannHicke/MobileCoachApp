@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
     paddingTop: 5
   },
   disabled: {
-    backgroundColor: Colors.buttons.common.disabled
+    backgroundColor: Colors.buttons.common.skipAnswer
   },
   subtitleView: {
     flexDirection: 'column',

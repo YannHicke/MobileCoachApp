@@ -68,8 +68,10 @@ class ReduxNavigation extends Component {
     let currentScreen = this._getCurrentRouteName(nav)
     log.info('Hardware Back-Button has been pressed in', currentScreen)
     if (this.state.modal.visible) {
-      log.info('Hiding Modal')
-      this.hideModal()
+      if (this.state.modal.type !== 'record-video' && this.state.modal.tyoe !== 'record-audio' && this.state.modal.type !== 'take-photo') {
+        log.info('Hiding Modal')
+        this.hideModal()
+      }
       return true
     }
     // If we're not in Chat-Screen or in first onboarding screen

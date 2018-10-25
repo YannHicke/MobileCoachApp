@@ -51,14 +51,14 @@ export const getBackpackInformation = createSelector(
     let information = []
     let filtered = commandMessages.filter(message => message['server-message'] === 'show-backpack-info')
     filtered.forEach((serverMessage) => {
-      let content = serverMessage.content  // .replace(/\n/g, '')
+      let content = serverMessage.content  // .replace(/\\n/g, '')
       let parsedTags = new DOMParser().parseFromString(content, 'text/html')
       let meta = parsedTags.getElementsByTagName('meta')[0]
       let title = ''
       let subtitle = ''
       if (meta) {
-        title = meta.getAttribute('title').replace('\\n', '\n')
-        subtitle = meta.getAttribute('subtitle').replace('\\n', '\n')
+        title = meta.getAttribute('title').replace(/\\n/g, '\n')
+        subtitle = meta.getAttribute('subtitle').replace(/\\n/g, '\n')
       }
 
       // Remove Button

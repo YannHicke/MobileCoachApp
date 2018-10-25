@@ -3,13 +3,15 @@ import { View, Platform, ActivityIndicator } from 'react-native'
 import RNFetchBlob from 'react-native-fetch-blob'
 import RNFS from 'react-native-fs'
 import PropTypes from 'prop-types'
-import {Metrics, Colors} from '../../Themes/'
+import {Colors} from '../../Themes/'
 import BottomControls from './BottomControls'
 import VideoPlayer from 'react-native-true-sight'
-import Common from '../../Utils/Common'
+import Common, {authTokenUri} from '../../Utils/Common'
 
 import Log from '../../Utils/Log'
 const log = new Log('CustomMessages/ChatVideo')
+
+const renderLoader = () => <ActivityIndicator color={Colors.video.activityIndicator} size='large' />
 
 export default class Video extends Component {
   /*
@@ -43,17 +45,18 @@ export default class Video extends Component {
 
   componentWillMount () {
     const {source} = this.props
-
     // Check if it's a local or remote/web file
     // if it's a web url...
     let urlPattern = /^https?:\/\//i
     if (urlPattern.test(source)) {
       // ...check if there is a cached version of the video
       const cacheManager = Common.getImageCacheManager()
+      // attach auth tokens
+      const authTokenUrl = authTokenUri(source)
       cacheManager.queryUrl(source).then(result => {
         // if the video url isn't cached, just use the url as source
         if (result === null) {
-          this.setState({source})
+          this.setState({source: authTokenUrl})
         // if there is a cached version, use to local file!
         } else {
           this.setState({source: result})
@@ -78,7 +81,6 @@ export default class Video extends Component {
             // decompress and copy to destination...
             RNFS.copyFileAssets(source, dest)
               .then(() => {
-                // then open the PDF
                 this.setState({source: dest})
               })
               .catch((err) => {
@@ -94,12 +96,12 @@ export default class Video extends Component {
     let width = this.props.width
     let height = this.props.height
     if (!height) height = 0.5625 * width
+    let style = {width, height}
     if (this.props.fullscreenMode) {
-      width = Metrics.screenWidth
-      height = Metrics.screenHeight - 40
+      style = {position: 'absolute', top: 0, left: 0, bottom: 0, right: 0}
     }
     return (
-      <View style={{ width: width, height: height, backgroundColor: 'black' }}>
+      <View style={[style, {backgroundColor: 'black'}]}>
         {this.renderVideo()}
       </View>
     )
@@ -138,12 +140,13 @@ export default class Video extends Component {
           source={this.state.source}
           initialPosition={this.props.initialPosition}
           middleControlsBarProps={controlProps}
+          loader={renderLoader}
         />
       )
     } else {
       return (
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          <ActivityIndicator color={Colors.activityIndicator} />
+          {renderLoader()}
         </View>
       )
     }

@@ -9,8 +9,9 @@ import I18n from '../../I18n/I18n'
 import * as Progress from 'react-native-progress'
 import {connect} from 'react-redux'
 import RNFetchBlob from 'react-native-fetch-blob'
-import Common from '../../Utils/Common'
 
+import AppConfig from '../../Config/AppConfig'
+import CommonUtils, {tapBlockingHandlers} from './../../Utils/Common'
 import {Colors} from '../../Themes/'
 import { TextBubbleStyle } from './../../Containers/Chat/Styles'
 import {inputMessageStyles} from './Styles/CommonStyles'
@@ -18,7 +19,7 @@ import ChatImage from './ChatImage'
 import ChatVideo from './ChatVideo'
 import PlayAudioFile from './PlayAudioFile'
 import Ticks from './Ticks'
-import ServerMessageRedux, {MessageStates} from './../../Redux/MessageRedux'
+import ServerMessageRedux, {MessageStates} from '../../Redux/MessageRedux'
 import { uploadMediaInput } from '../../Sagas/ServerSyncSagas'
 
 import Log from '../../Utils/Log'
@@ -46,6 +47,7 @@ class MediaInput extends Component {
     let initialized = true
     this.shouldAnimate = this.props.currentMessage.custom.shouldAnimate
     this.mediaPath = ''
+    this.mediaLength = 0.0
     // If uploadPath is set (Media was recorded already, but not uploaded),
     // check if file still exists (see componentDidMount) befire initialization
     if (props.currentMessage.custom.uploadPath) {
@@ -62,7 +64,7 @@ class MediaInput extends Component {
     switch (props.type) {
       case 'image': {
         this.modal = 'take-photo'
-        this.buttonTitle = I18n.t('Common.takePhoto')
+        this.buttonTitle = I18n.t('Common.recordPhoto')
         this.icon = 'ios-camera'
         break
       }
@@ -131,6 +133,9 @@ class MediaInput extends Component {
     // Only submit if mediaPath was set!
     if (this.mediaPath !== '') {
       // Update state and start upload afterwards
+      if (AppConfig.config.serverSync.sendRecordedMediaLengthValues !== null) {
+        this.props.sendVariableValue(AppConfig.config.serverSync.sendRecordedMediaLengthValues, this.mediaLength)
+      }
       this.setState({submitted: true, mediaFileIsUploading: true}, this.uploadMedia.bind(this))
     }
   }
@@ -141,7 +146,7 @@ class MediaInput extends Component {
     messageMediaUploading(relatedMessageId, this.mediaPath)
 
     // let mediaUrl = 'https://redux-saga.js.org/docs/advanced/Testing.aac'
-    // Common.cacheLocalMedia(mediaUrl, this.mediaPath, (this.modal === 'take-photo')).then(() => {
+    // CommonUtils.cacheLocalMedia(mediaUrl, this.mediaPath, (this.modal === 'take-photo')).then(() => {
     //   // After caching, send answer message to server
     //   log.info(`Successfully cached local file: ${this.mediaPath.toString()}.`)
     // }).catch((e) => {
@@ -155,10 +160,10 @@ class MediaInput extends Component {
       log.debug('Upload successful')
       // Cache local file related to remote URL
       // Params: remote url, local url, create thumbnail (bool) -> only for images!
-      Common.cacheLocalMedia(mediaUrl, this.mediaPath, (this.modal === 'take-photo')).then((filepath) => {
+      CommonUtils.cacheLocalMedia(mediaUrl, this.mediaPath, (this.modal === 'take-photo')).then((filepath) => {
         // After caching, send answer message to server
         // Cleanup: remove local file (from now on, file in cached folder will be used)
-        Common.deleteLocalFile(this.mediaPath).then(() => {
+        CommonUtils.deleteLocalFile(this.mediaPath).then(() => {
           log.info('Temporary file removed successfully.')
         }).catch((e) => log.warn('Error while trying to remove temporary file: ' + e.toString()))
         log.info(`Successfully cached local file to path: ${this.mediaPath}.`)
@@ -178,13 +183,16 @@ class MediaInput extends Component {
   // Shows screen to record audio/video or to take a picture
   showModalScreen () {
     const { showModal } = this.props
-    showModal(this.modal, {onSubmitMedia: (mediaPath) => this.setMediaPath(mediaPath)}, () => this.onSubmitHandler())
+    showModal(this.modal, {onSubmitMedia: (mediaPath, mediaLength) => {
+      this.setMediaPathAndLength(mediaPath, mediaLength)
+    }}, () => this.onSubmitHandler())
     return null
   }
 
   // Sets the media path to access file inside of the chat
-  setMediaPath (mediaPath) {
+  setMediaPathAndLength (mediaPath, mediaLength) {
     this.mediaPath = mediaPath
+    this.mediaLength = mediaLength
   }
 
   // Component which should be displayed inside of the Chat-Bubble while file is uploading
@@ -242,7 +250,7 @@ class MediaInput extends Component {
           style={{flex: 1, alignSelf: 'stretch', alignItems: 'center', justifyContent: 'center'}}
           onPress={() => this.onSubmitHandler()}>
           <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
-            <Icon name='file-upload' type='material' color={Colors.buttons.common.disabled} size={30} />
+            <Icon name='file-upload' type='material' color={Colors.buttons.common.skipAnswer} size={30} />
             <Text style={{color: 'white', fontWeight: 'bold', marginLeft: 10}}> {I18n.t('Common.retry')} </Text>
           </View>
         </TouchableOpacity>
@@ -289,11 +297,15 @@ class MediaInput extends Component {
         )
       // Otherwise show normal Chat-Bubble to access Modal-Screen
       } else {
+        const {currentMessage} = this.props
+        const editable = CommonUtils.userCanEdit(currentMessage)
         return (
           <Animatable.View useNativeDriver animation={this.shouldAnimate ? this.props.fadeInAnimation : null} duration={this.props.duration} style={[inputMessageStyles.container]} onAnimationEnd={() => { this.shouldAnimate = false }} >
-            <View style={styles.inputBubble}>
+            <View {...editable ? null : tapBlockingHandlers} style={[styles.inputBubble, {backgroundColor: editable ? Colors.buttons.common.background : Colors.buttons.common.disabled}]}>
               <Button
-                onPress={() => this.showModalScreen()}>
+                onPress={() => {
+                  return editable ? this.showModalScreen() : false
+                }}>
                 <Icon name={this.icon} type='ionicon' color={Colors.buttons.common.text} size={30} />
                 <Text style={{color: Colors.buttons.common.text, fontWeight: 'bold', marginLeft: 10}}> {this.buttonTitle} </Text>
               </Button>
@@ -306,7 +318,8 @@ class MediaInput extends Component {
 }
 
 const mapStateToDispatch = dispatch => ({
-  messageMediaUploading: (relatedMessageId, uploadPath) => dispatch(ServerMessageRedux.messageMediaUploading(relatedMessageId, uploadPath))
+  messageMediaUploading: (relatedMessageId, uploadPath) => dispatch(ServerMessageRedux.messageMediaUploading(relatedMessageId, uploadPath)),
+  sendVariableValue: (variable, value) => dispatch(ServerMessageRedux.sendVariableValue(variable, value))
 })
 
 export default connect(null, mapStateToDispatch)(MediaInput)
@@ -323,7 +336,6 @@ const styles = StyleSheet.create({
     minHeight: 35,
     borderRadius: 16,
     borderTopRightRadius: 3,
-    backgroundColor: Colors.buttons.common.background,
     marginBottom: 4
   }
 })

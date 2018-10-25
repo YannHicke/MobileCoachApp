@@ -19,7 +19,9 @@ export default {
       purgeStoreAtStartup: true,
       fakeDeviceAlwaysOnlineForOfflineDev: false,
       fakeQRCodeScanWithURL: null,
-      allowDebugKeyboard: false
+      allowDebugKeyboard: false,
+      deepstreamUserForDebugging: null,
+      deepstreamSecretForDebugging: null
     },
     storage: {
       encryptedReduxStorage: false,
@@ -65,18 +67,29 @@ export default {
       initialNumberOfMinimalShownMessages: 10,
       incrementShownMessagesBy: 25,
       // Show message instead if loading-indicator if chat is empty
-      showEmptyChatMessage: false
+      showEmptyChatMessage: false,
+      // true: expired answer-buttons are switched to an 'answer expired'-message
+      // false: expired answers are being greyed out
+      showAnswerExpiredMessage: false,
+      // if true, alert text is displayed when user taps on expired message (text defined in i18n json)
+      showExpiryAlert: true
     },
     startup: {
       automaticallyRequestPushPermissions: false,
       automaticallyConnectOnFirstStartup: true,
+      automaticallyShareObserverAccessToken: false,
+      automaticallyShareParticipantAccessToken: false,
       backButtonInOnboardingEnabled: false,
       onboardingURL: '---'
     },
     serverSync: {
       useLocalServer: false,
+      userChatEnabled: true,
+      dashboardChatEnabled: true,
+      // null or varible name if record length shall be automatically communicated to server
+      sendRecordedMediaLengthValues: 'lastRecordLength',
       clientVersion: 1,
-      role: 'participant',
+      role: 'participant', // Can be: participant, supervisor, observer, or team-manager
       defaultNickname: 'MobileCoach Client User',
       interventionPattern: '----',
       interventionPassword: '----',
@@ -86,7 +99,9 @@ export default {
       localMediaURL: 'http://127.0.0.1/MC/files/',
       remoteDeepstreamURL: 'wss://---:8443/deepstream',
       remoteRestURL: 'https://---/MC/api/v02/',
-      remoteMediaURL: 'https://---/MC/files/'
+      remoteMediaURL: 'https://---/MC/files/',
+      // Whether or not user uploads are protected with auth-tokens
+      mediaUploadsWithAuthenticiation: true
     },
     whitelabel: {
       shareUrl: {

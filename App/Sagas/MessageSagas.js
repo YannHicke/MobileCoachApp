@@ -76,15 +76,28 @@ export function * sendIntention (action) {
 
 /* --- Send variable value --- */
 export function * sendVariableValue (action) {
-  log.info('Send intention...')
+  log.info('Send variable value...')
   log.action('Dialog', 'SendVariableValue', 'Timestamp', new Date())
 
   const { variable, value } = action
   const messages = yield select(selectMessages)
 
-  const message = createMessage(variable, value, null, null, null, MessageTypes.VARIABLE, true, messages)
+  const message = createMessage(variable.startsWith('$') ? variable : ('$' + variable), value, null, null, null, MessageTypes.VARIABLE, true, messages)
 
   yield put({type: MessageActions.ADD_OR_UPDATE_MESSAGE, message, status: MessageStates.PREPARED_FOR_SENDING})
+}
+
+/* --- Send changed synced setting as variable value or intention --- */
+export function * sendChangedSyncedSetting (action) {
+  log.info('Send changed synced setting...')
+
+  const { variable, value, asIntention } = action
+
+  if (asIntention) {
+    yield put({type: MessageActions.SEND_INTENTION, text: null, intention: 'settings', content: JSON.stringify({variable, value})})
+  } else {
+    yield put({type: MessageActions.SEND_VARIABLE_VALUE, variable, value})
+  }
 }
 
 /* --- Disable message --- */
@@ -116,8 +129,14 @@ export function * executeCommand (action) {
   if (relatedMessage !== undefined) {
     if (relatedMessage['client-command-executed'] === undefined || !relatedMessage['client-command-executed']) {
       log.info('Command not executed yet, so execute it now...')
-      yield put({type: MessageActions.COMMAND_TO_EXECUTE, command: relatedMessage['server-message'], content: relatedMessage['content'], timestamp: relatedMessage['message-timestamp']})
-      yield put({type: MessageActions.COMMAND_EXECUTED, messageId})
+      // Special case for commands from messages containing media (command to add-video can't be read from message content in this case)
+      if (relatedMessage['media-name'] && relatedMessage['media-type'] === 'video') {
+        yield put({type: MessageActions.COMMAND_TO_EXECUTE, command: 'add-video ' + relatedMessage['media-name'], content: relatedMessage['contains-media'], timestamp: relatedMessage['message-timestamp']})
+        yield put({type: MessageActions.COMMAND_EXECUTED, messageId})
+      } else {
+        yield put({type: MessageActions.COMMAND_TO_EXECUTE, command: relatedMessage['server-message'], content: relatedMessage['content'], timestamp: relatedMessage['message-timestamp']})
+        yield put({type: MessageActions.COMMAND_EXECUTED, messageId})
+      }
     }
   }
 }

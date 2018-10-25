@@ -1,9 +1,23 @@
-const type = {
-  family: 'Roboto',
-  base: 'Roboto Regular',
-  bold: 'Roboto Bold',
-  italic: 'Roboto Italic',
-  boldItalic: 'Roboto Bold Italic'
+import { Platform } from 'react-native'
+
+let type
+
+if (Platform.OS === 'ios') {
+  type = {
+    family: 'Roboto',
+    base: 'Roboto Regular',
+    bold: 'Roboto Bold',
+    italic: 'Roboto Italic',
+    boldItalic: 'Roboto Bold Italic'
+  }
+} else {
+  type = {
+    family: 'roboto',
+    base: 'roboto_regular',
+    bold: 'roboto_bold',
+    italic: 'roboto_italic',
+    boldItalic: 'roboto_bold_italic'
+  }
 }
 
 const size = {

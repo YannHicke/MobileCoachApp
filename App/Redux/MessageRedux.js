@@ -42,7 +42,7 @@ export const INITIAL_STATE = Immutable({})
 
 // Add or update messages
 export const addOrUpdateMessage = (state, { message, status }) => {
-  log.debug('Add or update message...')
+  log.debug('Add or update user message...')
 
   const messageToStore = R.clone(message)
   let confirmationMessageToStore = null
@@ -81,7 +81,10 @@ export const addOrUpdateMessage = (state, { message, status }) => {
       messageToStore['client-status'] = MessageStates.ANSWERED_AND_PROCESSED_BY_SERVER
       messageToStore['sticky'] = false
       confirmationMessageToStore = R.clone(state['c-' + messageToStore['user-timestamp']])
-      confirmationMessageToStore['client-status'] = MessageStates.PROCESSED_BY_SERVER
+      if (confirmationMessageToStore !== undefined) {
+        // TODO: The observer does not know this message, yet, so it cannot be adjusted
+        confirmationMessageToStore['client-status'] = MessageStates.PROCESSED_BY_SERVER
+      }
       break
     case 'NOT_ANSWERED_BY_USER':
       messageToStore['client-status'] = MessageStates.NOT_ANSWERED_AND_PROCESSED_BY_SERVER

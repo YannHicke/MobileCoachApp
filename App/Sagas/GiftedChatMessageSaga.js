@@ -3,6 +3,7 @@ import { take, call, put, select, fork } from 'redux-saga/effects'
 import R from 'ramda'
 
 import Common from '../Utils/Common'
+import I18n from '../I18n/I18n'
 // Import Reducers / Actions for Chat Messages
 import { GiftedChatMessageActions } from '../Redux/GiftedChatMessageRedux'
 import { MessageActions, AuthorTypes, MessageStates } from '../Redux/MessageRedux'
@@ -355,7 +356,11 @@ function convertServerMessageToGiftedChatMessages (serverMessage, fakeTimestamp 
       break
     // Message from user
     case AuthorTypes.USER:
-      message.text = serverMessage['user-message']
+      if (serverMessage.status === 'SENT_BY_USER') {
+        message.text = serverMessage['user-text']
+      } else {
+        message.text = serverMessage['user-message']
+      }
       message.createdAt = serverMessage['user-timestamp']
       message.user = {
         _id: 1
@@ -397,6 +402,16 @@ function convertServerMessageToGiftedChatMessages (serverMessage, fakeTimestamp 
         subMessages = message.text.split('\n---\n')
       }
       subId = 0
+      // If a video has been sent, add it to media library
+      if (serverMessage['media-name'] && serverMessage['media-type'] === 'video') {
+        // Add a separate message to execute addInfoCommand
+        let addVideoCommandMessage = R.clone(message)
+        // No need to double store content because it will be loaded from serverMessage using the related-id
+        addVideoCommandMessage.type = 'hidden-command'
+        addVideoCommandMessage.text = ''
+        addVideoCommandMessage._id = serverMessage['client-id'] + '-' + subId++
+        messages.push(addVideoCommandMessage)
+      }
       subMessages.forEach(subMessage => {
         let newMessage = R.clone(message)
         newMessage.text = subMessage.trim()
@@ -418,7 +433,7 @@ function convertServerMessageToGiftedChatMessages (serverMessage, fakeTimestamp 
           message.type = 'open-component'
           // Default title
           let buttonTitle = ''
-          let content = serverMessage.content  // .replace(/\n/g, '')
+          let content = serverMessage.content  // .replace(/\\n/g, '')
           // Button Title is delivered in message-Field
           const pattern = new RegExp('<button>(.*)</button>', 'g')
           const regExpResult = pattern.exec(content)
@@ -574,6 +589,24 @@ function convertServerMessageToGiftedChatMessages (serverMessage, fakeTimestamp 
           }
           inputMessage.custom = {
             ...inputMessage.custom,
+            intention: 'answer-to-server-visible',
+            options: answers
+          }
+          break
+        }
+        case 'select-many-modal': {
+          inputMessage.type = 'open-component'
+          let answers = []
+          for (let j = 0; j < options.length; j++) {
+            answers.push({
+              label: options[j][0],
+              value: options[j][1]
+            })
+          }
+          inputMessage.custom = {
+            ...inputMessage.custom,
+            component: 'select-many-modal',
+            buttonTitle: I18n.t('Common.selectManyTitle'),
             intention: 'answer-to-server-visible',
             options: answers
           }

@@ -9,19 +9,19 @@ import Lightbox from '../Components/Lightbox'
 import FullscreenVideo from '../Components/Video/FullscreenVideo'
 import CameraComponent from './../Components/CameraComponent'
 import RecordAudioComponent from './../Components/RecordAudioComponent'
+import SelectManyModal from './../Components/SelectManyModal'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import * as Animatable from 'react-native-animatable'
-
 import FeedbackForm from './Settings/FeedbackForm'
-
 import ServerMessageActions from '../Redux/MessageRedux'
 import GUIActions from '../Redux/GUIRedux'
+import I18n from '../I18n/I18n'
 
 // In specific cases, using the real Modal can cause issues.
 // E.g. when using panResponder (see: https://github.com/facebook/react-native/issues/14295)
 // When useFakeModal is set, a View-Component is used instead.
-const fakeModalTypes = ['image-lightbox']
+const fakeModalTypes = ['image-lightbox', 'record-video', 'take-photo', 'record-audio', 'fullscreen-video']
 
 class ModalContent extends Component {
   static propTypes = {
@@ -38,9 +38,6 @@ class ModalContent extends Component {
 
   // TODO: can be deleted?
   onSend = (messages = []) => {
-    if (!Array.isArray(messages)) {
-      console.warn('onSend wants an array')
-    }
     messages.forEach(msg => {
       // Send the textmessage to server
       this.props.sendMessageToServer(msg.text, msg.text)
@@ -137,7 +134,7 @@ class ModalContent extends Component {
           <CameraComponent
             usage='photo'
             onBack={this.props.onClose}
-            title='Kamera'
+            title={I18n.t('Common.recordPhoto')}
             onSubmitMedia={this.props.content.onSubmitMedia}
           />
         )
@@ -146,8 +143,16 @@ class ModalContent extends Component {
           <CameraComponent
             usage='video'
             onBack={this.props.onClose}
-            title='Video'
+            title={I18n.t('Common.recordVideo')}
             onSubmitMedia={this.props.content.onSubmitMedia}
+          />
+        )
+      case 'select-many-modal':
+        return (
+          <SelectManyModal
+            onClose={this.props.onClose}
+            currentMessage={this.props.content.currentMessage}
+            answerAction={this.props.content.answerAction}
           />
         )
       case 'scan-qr':
@@ -155,7 +160,7 @@ class ModalContent extends Component {
           <CameraComponent
             usage='qr'
             onBack={this.props.onClose}
-            title='Read Qr-Code'
+            title={I18n.t('Common.scanQRCode')}
           />
         )
       case 'record-audio':

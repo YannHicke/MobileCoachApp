@@ -33,7 +33,8 @@ export default class Log {
     }
   }
 
-  setUser (userId) {
+  setUser (userRole, userId) {
+    Log.userRole = userRole
     Log.userId = userId
   }
 
@@ -71,6 +72,7 @@ export default class Log {
       if (!userIdSharedWithUserTracking && Log.userId !== undefined) {
         userIdSharedWithUserTracking = true
         this.action('User', 'Identifier', Log.userId)
+        this.action('User', 'Role', Log.userRole)
       }
 
       if (logTrackingEvents) {
@@ -89,6 +91,7 @@ export default class Log {
       if (!userIdSharedWithUserTracking && Log.userId !== undefined) {
         userIdSharedWithUserTracking = true
         this.action('User', 'Identifier', Log.userId)
+        this.action('User', 'Role', Log.userRole)
       }
 
       if (logTrackingEvents) {
@@ -130,7 +133,7 @@ export default class Log {
     if (defaultLevel === LEVEL_VALUES.CRASHLYTICS) {
       if (!userIdSharedWithCrashlytics && Log.userId !== undefined) {
         userIdSharedWithCrashlytics = true
-        Crashlytics.setUserIdentifier(Log.userId)
+        Crashlytics.setUserIdentifier(Log.userRole + '-' + Log.userId)
       }
       let messages = Array.prototype.slice.call(messageArguments)
       const loggingMessage = Log.formatMessage(logger, Object.keys(LEVEL_TEXTS)[level], method, messages)

@@ -3,6 +3,7 @@ import { View } from 'react-native'
 
 import {inputMessageStyles} from './Styles/CommonStyles'
 import PropTypes from 'prop-types'
+
 import {Metrics} from '../../Themes/'
 import Video from '../Video/Video.js'
 // import Log from '../../Utils/Log'

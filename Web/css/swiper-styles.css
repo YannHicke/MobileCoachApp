@@ -1,0 +1,30 @@
+/* ---------------------------------------------------------
+   Swipe Styles
+   ---------------------------------------------------------*/
+
+body {
+    padding: 0px 0px 0px 0px;
+}
+
+.swiper-pagination {
+    position: fixed !important;
+    width: auto !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    padding: 15px;
+    background-color: rgba(255,255,255,1);
+    border-radius: 34px;
+    box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.4);
+}
+
+.swiper-button-next, .swiper-button-prev {
+    position: fixed !important;
+}
+
+.swiper-container {
+    padding: 20px 20px 40px 20px;
+}
+
+.swiper-pagination-bullet-active {
+    background: #000000;
+}

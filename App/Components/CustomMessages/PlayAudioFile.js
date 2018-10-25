@@ -5,7 +5,7 @@ import Sound from 'react-native-sound'
 // import I18n from '../../I18n/I18n'
 import {inputMessageStyles} from './Styles/CommonStyles'
 import RNFS from 'react-native-fs'
-import Common from '../../Utils/Common'
+import Common, {authTokenUri} from '../../Utils/Common'
 
 import {Colors} from '../../Themes/'
 
@@ -37,13 +37,15 @@ export default class PlayAudioFile extends Component {
     // if it's a web url...
     let urlPattern = /^https?:\/\//i
     if (urlPattern.test(source)) {
+      // attach auth tokens
+      const authTokenUrl = authTokenUri(source)
       // ...check if there is a cached version of the audiofile
       const cacheManager = Common.getImageCacheManager()
       cacheManager.queryUrl(source).then(result => {
         // if the url record isn't cached, just use the url as source
         if (result === null) {
-          log.info('Initialized audio using web-version from url: ' + source)
-          this.audioFile = new Sound(source, '', this.initialize.bind(this))
+          log.info('Initialized audio using web-version from url: ' + authTokenUrl)
+          this.audioFile = new Sound(authTokenUrl, '', this.initialize.bind(this))
         // if there is a cached version, use to local file!
         } else {
           log.info('Retrieved audio file from local cache: ' + source)
@@ -70,7 +72,6 @@ export default class PlayAudioFile extends Component {
             // decompress and copy to destination...
             RNFS.copyFileAssets(source, dest)
               .then(() => {
-                // then open the PDF
                 log.info('Initialized audio after decompressing to local source: ' + source)
                 this.audioFile = new Sound(dest, '', this.initialize.bind(this))
               })

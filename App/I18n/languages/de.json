@@ -17,10 +17,17 @@
   },
   "Chat": {
     "title": "Chat mit {{coach}}",
-    "placeholder": "Bitte Nachricht eingeben",
     "loadEarlier": "Ältere Mitteilungen anzeigen",
-    "emptyChatMessage": "Der Coach wird sich in Kürze mit dir in Verbindung setzen.",
-    "send": "Senden"
+    "emptyChatMessage": "Der Coach wird sich in Kürze mit dir in Verbindung setzen."
+  },
+  "DashboardChat": {
+    "title": "Chat mit Betreuer",
+    "placeholder": "Bitte Nachricht eingeben",
+    "send": "Senden",
+    "user": {
+      "1": "Teilnehmer",
+      "2": "Betreuer"
+    }
   },
   "ConnectionStates": {
     "connectionToCoach": "Verbindung zum Coach",
@@ -349,23 +356,32 @@
     }
   },
   "Backpack": {
-    "header": "Meine Info-Bibliothek"
+    "header": "Bibliothek"
+  },
+  "MediaLibrary": {
+    "header": "Mediathek"
   },
   "Menu": {
-    "Chat": "Chat",
+    "Chat": "Chat mit {{coach}}",
+    "DashboardChat": "Chat mit Betreuer",
     "Tour": "Karte",
     "Backpack": "Bibliothek",
+    "MediaLibrary": "Mediathek",
     "Diary": "Tagebuch",
     "Settings": "Einstellungen",
-    "Recipes": "Rezepte"
+    "Recipes": "Rezepte",
+    "Disabled": "Disabled"
   },
   "Common": {
+    "selectManyTitle": "Antwortoptionen auswählen",
+    "selectManySubtitle": "Bitte wählen Sie alle zutreffenden Antworten aus:",
     "abort": "Abbrechen",
     "answerExpired": "Antwortzeit abgelaufen",
     "backButton": "Zweimal drücken zum Beenden der App",
     "confirm": "Bestätigen",
     "invalid": "Ungültiger Wert",
     "validationError": "Bitte trage einen gültigen Wert ein.",
+    "expiryNotice": "Der Antwortzeitraum für diese Frage ist abgelaufen.",
     "ok": "OK",
     "close": "Schliessen",
     "chooseAtLeastOne": "Bitte wähle mindestens eine Option.",
@@ -377,9 +393,15 @@
     "datePicker": {
       "outOfRange": "Bitte wählen Sie einen Zeitpunkt zwischen"
     },
+    "recordPhoto": "Foto machen",
     "recordAudio": "Aufnahme starten",
+    "recordVideo": "Video aufnehmen",
+    "scanQRCode": "QR-Code scannen",
+    "confirmPhoto": "Foto bestätigen",
+    "confirmVideo": "Video bestätigen",
+    "permissionsAudio": "Zur Aufzeichnung von Audio-Aufnahmen werden Zugriffsrechte auf das Mikrofon benötigt",
     "retry": "Wiederholen",
-    "takePhoto": "Foto aufnehmen",
-    "recordVideo": "Video aufnehmen"
+    "pressToRecord": "Drücke um zu starten",
+    "pressToStop": "Drücke um zu stoppen"
   }
 }
