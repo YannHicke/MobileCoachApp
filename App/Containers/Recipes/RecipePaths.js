@@ -11,7 +11,8 @@ export default {
       vegetarian: false
     },
     {
-      recipeName: 'Geschmorter Pouletschenkel mit Ratatouille, Couscous und Gemüsesuppe',
+      recipeName:
+        'Geschmorter Pouletschenkel mit Ratatouille, Couscous und Gemüsesuppe',
       path: 'de/Geschmorter_Pouletschenkel_mit_Couscous.pdf',
       vegetarian: false
     },
@@ -26,12 +27,14 @@ export default {
       vegetarian: false
     },
     {
-      recipeName: 'Pouletbrust mit Orangen-Peterli-Marinade, Gemüse & Risotto alla Milanese',
+      recipeName:
+        'Pouletbrust mit Orangen-Peterli-Marinade, Gemüse & Risotto alla Milanese',
       path: 'de/Pouletbrust_mit_Gemuese_und_Risotto.pdf',
       vegetarian: false
     },
     {
-      recipeName: 'Riz Casimir mit Schweinsgeschnetzeltem, karamellisierten Mandelstiften und Salat',
+      recipeName:
+        'Riz Casimir mit Schweinsgeschnetzeltem, karamellisierten Mandelstiften und Salat',
       path: 'de/Riz_Casimir_mit_Schweinsgeschnetzeltem_und_Salat.pdf',
       vegetarian: false
     },
@@ -91,7 +94,8 @@ export default {
       vegetarian: false
     },
     {
-      recipeName: 'Gefüllte Kalbsbrust in Marsalasauce mit Federkohl und Salzkartoffeln',
+      recipeName:
+        'Gefüllte Kalbsbrust in Marsalasauce mit Federkohl und Salzkartoffeln',
       path: 'de/Rezept_Kalbsbrust_06_2016_End.pdf',
       vegetarian: false
     },
@@ -106,7 +110,8 @@ export default {
       vegetarian: false
     },
     {
-      recipeName: 'Rindstatar vom Eckstück mit Vollkorntoast und lauwarmem Spargelsalat',
+      recipeName:
+        'Rindstatar vom Eckstück mit Vollkorntoast und lauwarmem Spargelsalat',
       path: 'de/Rezept_Rindstartar_06_2016_End.pdf',
       vegetarian: false
     },
@@ -168,8 +173,10 @@ export default {
       vegetarian: false
     },
     {
-      recipeName: 'Cuisse de poulet braisée, ratatouille, couscous et soupe de légumes',
-      path: 'fr/cuisse_de_poulet_braisee_ratatouille_coucous_et_soupe_de_legumes.pdf',
+      recipeName:
+        'Cuisse de poulet braisée, ratatouille, couscous et soupe de légumes',
+      path:
+        'fr/cuisse_de_poulet_braisee_ratatouille_coucous_et_soupe_de_legumes.pdf',
       vegetarian: false
     },
     {
@@ -183,13 +190,17 @@ export default {
       vegetarian: false
     },
     {
-      recipeName: 'Pot-au-feu de boeuf, légumes racines, pommes de terre et pain',
-      path: 'fr/pot-au-feu_de_boeuf_legumes_racines_pommes_de_terre_et_pain.pdf',
+      recipeName:
+        'Pot-au-feu de boeuf, légumes racines, pommes de terre et pain',
+      path:
+        'fr/pot-au-feu_de_boeuf_legumes_racines_pommes_de_terre_et_pain.pdf',
       vegetarian: false
     },
     {
-      recipeName: 'Poitrine de poulet marinée à l’orange et au persil, légumes et risotto alla Milanaise',
-      path: 'fr/poitrine_de_poulet_marinee_a_lorange_et_au_persil_legumes_et_risotto_alla_milanaise.pdf',
+      recipeName:
+        'Poitrine de poulet marinée à l’orange et au persil, légumes et risotto alla Milanaise',
+      path:
+        'fr/poitrine_de_poulet_marinee_a_lorange_et_au_persil_legumes_et_risotto_alla_milanaise.pdf',
       vegetarian: false
     },
     {
@@ -198,8 +209,10 @@ export default {
       vegetarian: false
     },
     {
-      recipeName: 'Filet mignon de porc sauce yogourt-menthe et ragoût de légumes-poire',
-      path: 'fr/filet_mignon_de_porc_sauce_yogourt-menthe_et_ragout_de_legumes-poire.pdf',
+      recipeName:
+        'Filet mignon de porc sauce yogourt-menthe et ragoût de légumes-poire',
+      path:
+        'fr/filet_mignon_de_porc_sauce_yogourt-menthe_et_ragout_de_legumes-poire.pdf',
       vegetarian: false
     },
     {
@@ -233,8 +246,10 @@ export default {
       vegetarian: false
     },
     {
-      recipeName: 'Paupiettes de bœuf, haricots, purée de pommes de terre et salade',
-      path: 'fr/paupiettes-de-boeuf_haricots_puree-de-pommes-de-terre_salade.pdf',
+      recipeName:
+        'Paupiettes de bœuf, haricots, purée de pommes de terre et salade',
+      path:
+        'fr/paupiettes-de-boeuf_haricots_puree-de-pommes-de-terre_salade.pdf',
       vegetarian: false
     },
     {
@@ -253,23 +268,28 @@ export default {
       vegetarian: false
     },
     {
-      recipeName: 'Bouilli de boeuf, lentilles au vinaigre balsamique et salade',
+      recipeName:
+        'Bouilli de boeuf, lentilles au vinaigre balsamique et salade',
       path: 'fr/recette_bouilli_de_buf_lentilles_et_salade_end.pdf',
       vegetarian: false
     },
     {
-      recipeName: 'Coquelets au citron – carottes, pommes de terre au four et salade',
+      recipeName:
+        'Coquelets au citron – carottes, pommes de terre au four et salade',
       path: 'fr/Recette_coquelets_carottes_pommes_de_terre_et_salade_End.pdf',
       vegetarian: false
     },
     {
-      recipeName: 'Jarret de veau à la provençale accompagné de courgettes et de pommes de terre',
+      recipeName:
+        'Jarret de veau à la provençale accompagné de courgettes et de pommes de terre',
       path: 'fr/Recette_jarret_de_Vaud_courgettes_pommes_de_terre_End.pdf',
       vegetarian: false
     },
     {
-      recipeName: 'Poitrine de veau farcie à la sauce au marsala accompagnée de chou kale et de pommes de terre',
-      path: 'fr/Recette_poitrine_de_veau_farcie_chou_kale_pommes_de_terre_End.pdf',
+      recipeName:
+        'Poitrine de veau farcie à la sauce au marsala accompagnée de chou kale et de pommes de terre',
+      path:
+        'fr/Recette_poitrine_de_veau_farcie_chou_kale_pommes_de_terre_End.pdf',
       vegetarian: false
     },
     {
@@ -278,17 +298,20 @@ export default {
       vegetarian: false
     },
     {
-      recipeName: 'Spare-ribs accompagnés d’une salade de quinoa colorée et d’une salade verte',
+      recipeName:
+        'Spare-ribs accompagnés d’une salade de quinoa colorée et d’une salade verte',
       path: 'fr/Recette_spare-ribs_salade_de_quinoa_salade_verte_End.pdf',
       vegetarian: false
     },
     {
-      recipeName: 'Tartare de coin de boeuf accompagné de toasts de pain complet et d’une salade d’asperges tiède',
+      recipeName:
+        'Tartare de coin de boeuf accompagné de toasts de pain complet et d’une salade d’asperges tiède',
       path: 'fr/recette_tartare_de_buf_toasts_salade_dasperges_end.pdf',
       vegetarian: false
     },
     {
-      recipeName: 'Faisselle, pommes de terre en robe des champs et bâtonnets de légumes',
+      recipeName:
+        'Faisselle, pommes de terre en robe des champs et bâtonnets de légumes',
       path: 'fr/recette-2-huettenkaese-gschwellti-gemuesesticks-f_cor.pdf',
       vegetarian: true
     },
@@ -335,12 +358,15 @@ export default {
       vegetarian: false
     },
     {
-      recipeName: 'Cosce di pollo stufate con ratatouille, cuscus e passato di verdure',
-      path: 'it/pouletschenkel_mit_-ratatouille_couscous_und_suppe_it_211013.pdf',
+      recipeName:
+        'Cosce di pollo stufate con ratatouille, cuscus e passato di verdure',
+      path:
+        'it/pouletschenkel_mit_-ratatouille_couscous_und_suppe_it_211013.pdf',
       vegetarian: false
     },
     {
-      recipeName: 'Petto di pollo con marinata di arance e prezzemolo, verdure e risotto alla milanese',
+      recipeName:
+        'Petto di pollo con marinata di arance e prezzemolo, verdure e risotto alla milanese',
       path: 'it/pouletbrust_mit_gemuese_und_risotto_it_211013.pdf',
       vegetarian: false
     },
@@ -350,7 +376,7 @@ export default {
       vegetarian: false
     },
     {
-      recipeName: 'Spezzatino d\'agnello con fagioli bianchi e polenta',
+      recipeName: "Spezzatino d'agnello con fagioli bianchi e polenta",
       path: 'it/lammragout_mit_bohnen_und_polenta_it_2110131.pdf',
       vegetarian: false
     },
@@ -360,12 +386,14 @@ export default {
       vegetarian: false
     },
     {
-      recipeName: 'Filetto di maiale con salsa di yoghurt e menta su dadolata di pere e verdure',
+      recipeName:
+        'Filetto di maiale con salsa di yoghurt e menta su dadolata di pere e verdure',
       path: 'it/schweinsfilet_auf_gemuese-birnen-ragout_it_211013.pdf',
       vegetarian: false
     },
     {
-      recipeName: 'Riz Casimir con sminuzzato di maiale, mandorle caramellate e insalata',
+      recipeName:
+        'Riz Casimir con sminuzzato di maiale, mandorle caramellate e insalata',
       path: 'it/riz_casimir_mit_schweinsgeschnetzeltem_und_salat_it_211013.pdf',
       vegetarian: false
     },
@@ -420,23 +448,30 @@ export default {
       vegetarian: false
     },
     {
-      recipeName: 'Carne per bollito di manzo, aceto balsamico, verdura a base di lenticchie e insalata',
-      path: 'it/Ricetta_carne_per_bollito_aceto_balsamico_verdura_e_insalata_End.pdf',
+      recipeName:
+        'Carne per bollito di manzo, aceto balsamico, verdura a base di lenticchie e insalata',
+      path:
+        'it/Ricetta_carne_per_bollito_aceto_balsamico_verdura_e_insalata_End.pdf',
       vegetarian: false
     },
     {
-      recipeName: 'Costine con quinoa colorata - insalata e insalata verde in foglia',
+      recipeName:
+        'Costine con quinoa colorata - insalata e insalata verde in foglia',
       path: 'it/Ricetta_costine_con_quinoa_e_insalata_verde_End.pdf',
       vegetarian: false
     },
     {
-      recipeName: 'Petto di vitello ripieno in salsa al Marsala con cavolo riccio e patate lessev',
-      path: 'it/Ricetta_petto_di_vitello_salsa_al_Marsala_cavolo_riccio_e_patate_End.pdf',
+      recipeName:
+        'Petto di vitello ripieno in salsa al Marsala con cavolo riccio e patate lessev',
+      path:
+        'it/Ricetta_petto_di_vitello_salsa_al_Marsala_cavolo_riccio_e_patate_End.pdf',
       vegetarian: false
     },
     {
-      recipeName: 'Pollo ruspante con limone - carote, patate al forno e insalata',
-      path: 'it/Ricetta_pollo_ruspante_carote_patate_al_forno_e_insalata_End.pdf',
+      recipeName:
+        'Pollo ruspante con limone - carote, patate al forno e insalata',
+      path:
+        'it/Ricetta_pollo_ruspante_carote_patate_al_forno_e_insalata_End.pdf',
       vegetarian: false
     },
     {
@@ -445,8 +480,10 @@ export default {
       vegetarian: false
     },
     {
-      recipeName: 'Tartara di fesa di manzo con pane da toast integrale e insalata di asparagi tiepida',
-      path: 'it/Ricetta_tartara_di_fesa_di_manzo_pane_da_toast_e_insalata_di_asparagi_End.pdf',
+      recipeName:
+        'Tartara di fesa di manzo con pane da toast integrale e insalata di asparagi tiepida',
+      path:
+        'it/Ricetta_tartara_di_fesa_di_manzo_pane_da_toast_e_insalata_di_asparagi_End.pdf',
       vegetarian: false
     },
     {
@@ -460,7 +497,8 @@ export default {
       vegetarian: true
     },
     {
-      recipeName: 'Fiocchi di latte con patate lesse con buccia e bastoncini di verdure',
+      recipeName:
+        'Fiocchi di latte con patate lesse con buccia e bastoncini di verdure',
       path: 'it/huettenkaese-gschwellti-gemuesesticks_it_def.pdf',
       vegetarian: true
     },

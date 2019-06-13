@@ -1,11 +1,11 @@
-import React, {Component} from 'react'
-import {View, StyleSheet} from 'react-native'
+import React, { Component } from 'react'
+import { View, StyleSheet } from 'react-native'
 import I18n from '../../I18n/I18n'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import { TabViewAnimated, TabBar, SceneMap } from 'react-native-tab-view'
 
 import AddMealActionButton from '../AddMealModule/AddMealActionButton'
-import {Colors} from '../../Themes/'
+import { Colors } from '../../Themes/'
 import DiaryView from './DiaryView'
 import PyramidView from './PyramidView'
 import PMNavigationBar from '../../Components/Navbar'
@@ -25,7 +25,12 @@ class FoodDiary extends Component {
     super(props)
     let initialTab = 0
     // If initial tab was passed as argument, use it
-    if (props.navigation.state.params && props.navigation.state.params.initialTab) initialTab = props.navigation.state.params.initialTab
+    if (
+      props.navigation.state.params &&
+      props.navigation.state.params.initialTab
+    ) {
+      initialTab = props.navigation.state.params.initialTab
+    }
     this.state = {
       index: initialTab,
       routes: [
@@ -38,11 +43,7 @@ class FoodDiary extends Component {
   _renderActionButton () {
     const { showModal } = this.props.screenProps
     if (this.props.storyProgress.actionButtonActive) {
-      return (
-        <AddMealActionButton
-          showModal={showModal}
-          />
-      )
+      return <AddMealActionButton showModal={showModal} />
     } else {
       return null
     }
@@ -53,13 +54,26 @@ class FoodDiary extends Component {
     this.setState({ index })
   }
 
-  _renderHeader = props => <TabBar {...props} style={styles.tabStyle} labelStyle={styles.tabLabel} pressColor={'#000'} indicatorStyle={styles.indicator} />
+  _renderHeader = (props) => (
+    <TabBar
+      {...props}
+      style={styles.tabStyle}
+      labelStyle={styles.tabLabel}
+      pressColor={'#000'}
+      indicatorStyle={styles.indicator}
+    />
+  )
 
   _renderScene = SceneMap({
     diary: DiaryView,
     // Note that props passed this way won't update on changes (see: https://github.com/react-native-community/react-native-tab-view/issues/241)
     // in this case this is not relevant though
-    pyramid: () => <PyramidView showModal={this.props.screenProps.showModal} infoText={this.props.cachedText['backpack-info-90']} />
+    pyramid: () => (
+      <PyramidView
+        showModal={this.props.screenProps.showModal}
+        infoText={this.props.cachedText['backpack-info-90']}
+      />
+    )
   })
 
   renderMainContent () {
@@ -78,21 +92,19 @@ class FoodDiary extends Component {
   renderNavigationbar (props) {
     let title = I18n.t('FoodDiary.yourDiary')
 
-    return (
-      <PMNavigationBar title={title} props={props} />
-    )
+    return <PMNavigationBar title={title} props={props} />
   }
 
   render () {
     return (
-      <View style={{
-        flex: 1,
-        flexDirection: 'column'
-      }}>
+      <View
+        style={{
+          flex: 1,
+          flexDirection: 'column'
+        }}
+      >
         {this.renderNavigationbar(this.props)}
-        <View style={styles.container}>
-          {this.renderMainContent()}
-        </View>
+        <View style={styles.container}>{this.renderMainContent()}</View>
         {this._renderActionButton()}
       </View>
     )
@@ -107,11 +119,15 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapStateToDispatch = dispatch => ({
-  visitScreen: (visitedScreen) => dispatch(StoryProgressActions.visitScreen(visitedScreen))
+const mapStateToDispatch = (dispatch) => ({
+  visitScreen: (visitedScreen) =>
+    dispatch(StoryProgressActions.visitScreen(visitedScreen))
 })
 
-export default connect(mapStateToProps, mapStateToDispatch)(FoodDiary)
+export default connect(
+  mapStateToProps,
+  mapStateToDispatch
+)(FoodDiary)
 
 const styles = StyleSheet.create({
   container: {

@@ -24,6 +24,12 @@ let platform = null
 let badges = 0
 let appInBackground = true
 
+let handler = () => null
+
+export const setHandler = function (cb) {
+  handler = cb
+}
+
 export default class PushNotifications {
   static getInstance () {
     if (instance == null) {
@@ -55,7 +61,10 @@ export default class PushNotifications {
         if (message === null) {
           log.debug('Decrypt and show notification')
           const iv = CryptoJS.enc.Utf8.parse('4537823546456123')
-          const decrypted = CryptoJS.AES.decrypt(data, parsedEncKey, {iv: iv, padding: CryptoJS.pad.ZeroPadding})
+          const decrypted = CryptoJS.AES.decrypt(data, parsedEncKey, {
+            iv: iv,
+            padding: CryptoJS.pad.ZeroPadding
+          })
           messageToShow = decrypted.toString(CryptoJS.enc.Utf8)
         } else {
           log.debug('Show notification')
@@ -72,7 +81,9 @@ export default class PushNotifications {
       var resetBadges = function () {
         badges = 0
         PushNotificationsHandler.setApplicationIconBadgeNumber(badges)
-        PushNotificationsHandler.cancelAllLocalNotifications()
+
+        // Commented out to not destroy local push-schedule (see: LocalNotifications.js)
+        // PushNotificationsHandler.cancelAllLocalNotifications()
         log.debug('Reset badges to 0')
       }
 
@@ -97,64 +108,105 @@ export default class PushNotifications {
           let data = null
           let key = null
 
-          if (notification.data !== undefined && notification.data !== null && notification.data.blob !== undefined && notification.data.blob !== null && notification.data.key !== undefined && notification.data.key !== null) {
+          if (
+            notification.data !== undefined &&
+            notification.data !== null &&
+            notification.data.blob !== undefined &&
+            notification.data.blob !== null &&
+            notification.data.key !== undefined &&
+            notification.data.key !== null
+          ) {
             data = notification.data.blob
             key = notification.data.key
           }
 
-          if (AppState.currentState === null || AppState.currentState !== 'active') {
+          if (
+            AppState.currentState === null ||
+            AppState.currentState !== 'active'
+          ) {
             // Set badges for encrypted push notifications
-            if (data !== null) {
+            if (data !== null && data.remote) {
               badges++
               PushNotificationsHandler.setApplicationIconBadgeNumber(badges)
               log.debug('Set badges (for encrypted notifications) to', badges)
             }
 
             // Set badges for unencrypted push notifications on Android
-            if (Platform.OS === 'android' && data == null && notification.badge !== undefined && notification.badge !== null) {
+            if (
+              Platform.OS === 'android' &&
+              data == null &&
+              notification.badge !== undefined &&
+              notification.badge !== null
+            ) {
               badges = parseInt(notification.badge)
               PushNotificationsHandler.setApplicationIconBadgeNumber(badges)
               log.debug('Set badges (for unencrypted notifications) to', badges)
             }
 
             // Show local notification for encrypted push notifications
-            if (data !== null) {
+            if (data !== null && data.remote) {
               // Push only first message
               if (badges === 1) {
                 if (parsedEncKey === null) {
                   if (encKey === null) {
-                    store.get(STORE_NAME)
-                    .then((res) => {
-                      // Show notifcation after retrieving encKey and calculating parsedEncKey and confirm
+                    store.get(STORE_NAME).then((res) => {
+                      // Show notification after retrieving encKey and calculating parsedEncKey and confirm
                       const encKeyEncrypted = res.encKey
 
                       const iv = CryptoJS.enc.Utf8.parse('4537823546456123')
-                      const decrypted = CryptoJS.AES.decrypt(encKeyEncrypted, CryptoJS.enc.Utf8.parse(key), {iv: iv, padding: CryptoJS.pad.ZeroPadding})
+                      const decrypted = CryptoJS.AES.decrypt(
+                        encKeyEncrypted,
+                        CryptoJS.enc.Utf8.parse(key),
+                        {
+                          iv: iv,
+                          padding: CryptoJS.pad.ZeroPadding
+                        }
+                      )
                       encKey = decrypted.toString(CryptoJS.enc.Utf8)
 
                       parsedEncKey = CryptoJS.enc.Utf8.parse(encKey)
                       decryptIfNecessaryAndShow(data, null)
-                      if (Platform.OS === 'ios') notification.finish(PushNotificationIOS.FetchResult.NoData)
+                      if (Platform.OS === 'ios') {
+                        notification.finish(
+                          PushNotificationIOS.FetchResult.NoData
+                        )
+                      }
                     })
                   } else {
                     // Show notification after calculating parsedEncKey and confirm
                     parsedEncKey = CryptoJS.enc.Utf8.parse(encKey)
                     decryptIfNecessaryAndShow(data, null)
-                    if (Platform.OS === 'ios') notification.finish(PushNotificationIOS.FetchResult.NoData)
+                    if (Platform.OS === 'ios') {
+                      notification.finish(
+                        PushNotificationIOS.FetchResult.NoData
+                      )
+                    }
                   }
                 } else {
                   // Show notification with already available parsedEncKey and confirm
                   decryptIfNecessaryAndShow(data, null)
-                  if (Platform.OS === 'ios') notification.finish(PushNotificationIOS.FetchResult.NoData)
+                  if (Platform.OS === 'ios') {
+                    notification.finish(PushNotificationIOS.FetchResult.NoData)
+                  }
                 }
               } else if (badges === 2) {
                 // Show ... and confirm
                 decryptIfNecessaryAndShow(null, '...')
-                if (Platform.OS === 'ios') notification.finish(PushNotificationIOS.FetchResult.NoData)
+                if (Platform.OS === 'ios') {
+                  notification.finish(PushNotificationIOS.FetchResult.NoData)
+                }
               }
             } else {
               // No notification to show, but confirm
-              if (Platform.OS === 'ios') notification.finish(PushNotificationIOS.FetchResult.NoData)
+              if (Platform.OS === 'ios') {
+                notification.finish(PushNotificationIOS.FetchResult.NoData)
+              }
+            }
+            // When App is running, trigger cb-function
+          } else {
+            handler()
+            if (Platform.OS === 'ios') {
+              notification.finish(PushNotificationIOS.FetchResult.NoData)
             }
           }
         },
@@ -212,7 +264,10 @@ export default class PushNotifications {
         appInBackground = false
       }
 
-      log.debug('Current app state:', appInBackground ? 'background' : 'foreground')
+      log.debug(
+        'Current app state:',
+        appInBackground ? 'background' : 'foreground'
+      )
 
       initialized = true
       log.debug('Init push notifications done')
@@ -243,7 +298,12 @@ export default class PushNotifications {
   }
 
   rememberToken (tokenToRemember, platformToRemember) {
-    log.debug('Remember token', tokenToRemember, 'for platform', platformToRemember)
+    log.debug(
+      'Remember token',
+      tokenToRemember,
+      'for platform',
+      platformToRemember
+    )
     token = tokenToRemember
     platform = platformToRemember
 
@@ -255,10 +315,14 @@ export default class PushNotifications {
     encKey = encKeyToStore
 
     const iv = CryptoJS.enc.Utf8.parse('4537823546456123')
-    const encrypted = CryptoJS.AES.encrypt(encKeyToStore, CryptoJS.enc.Utf8.parse(passwordForKeyStore), {iv: iv, padding: CryptoJS.pad.ZeroPadding})
+    const encrypted = CryptoJS.AES.encrypt(
+      encKeyToStore,
+      CryptoJS.enc.Utf8.parse(passwordForKeyStore),
+      { iv: iv, padding: CryptoJS.pad.ZeroPadding }
+    )
     const encKeyEncrypted = encrypted.toString()
 
-    store.update(STORE_NAME, { 'encKey': encKeyEncrypted })
+    store.update(STORE_NAME, { encKey: encKeyEncrypted })
   }
 
   subscribeRegistration (fn) {
@@ -274,13 +338,11 @@ export default class PushNotifications {
 
   unsubscribeRegistration (fn) {
     log.debug('Removing subscription for push notifications')
-    handlers = handlers.filter(
-      function (item) {
-        if (item !== fn) {
-          return item
-        }
+    handlers = handlers.filter(function (item) {
+      if (item !== fn) {
+        return item
       }
-    )
+    })
   }
 
   fireRegistration (token, platform) {
@@ -290,13 +352,27 @@ export default class PushNotifications {
     })
   }
 
+  localNotification (notification) {
+    PushNotificationsHandler.localNotification(notification)
+  }
+
+  scheduleLocalNotification (notification) {
+    log.info(`Scheduled local notification (title: ${notification.title})`)
+    PushNotificationsHandler.localNotificationSchedule(notification)
+  }
+
+  cancelLocalNotification (notificationId) {
+    log.info(`Cancel notification (id: ${notificationId})`)
+    PushNotificationsHandler.cancelLocalNotifications({
+      id: notificationId
+    })
+  }
+
+  cancelAllLocalNotifications () {
+    PushNotificationsHandler.cancelAllLocalNotifications()
+  }
+
   alert (text) {
-    Alert.alert(
-      text,
-        '',
-      [
-          {text: 'Ok', onPress: () => true}
-      ]
-    )
+    Alert.alert(text, '', [{ text: 'Ok', onPress: () => true }])
   }
 }

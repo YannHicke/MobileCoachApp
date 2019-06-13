@@ -4,9 +4,9 @@ import PropTypes from 'prop-types'
 import urlapi from 'url'
 
 import ResponsiveImage from '../ResponsiveImage'
-import {Metrics, Colors} from '../../Themes/'
+import { Metrics, Colors } from '../../Themes/'
 import AppConfig from '../../Config/AppConfig'
-import {inputMessageStyles} from './Styles/CommonStyles'
+import { inputMessageStyles } from './Styles/CommonStyles'
 
 export default class ChatImage extends Component {
   static propTypes = {
@@ -17,19 +17,24 @@ export default class ChatImage extends Component {
 
   render () {
     // TODO: Would be nice if we didn't need to compute the image width this way..
-    const {source, position} = this.props
+    const { source, position } = this.props
     let imageWidth = Metrics.screenWidth - 135
     return (
       <TouchableOpacity
         style={styles.imageContainer}
-        onPress={() => this.props.showModal('image-lightbox', {source: {uri: this.props.source}}
-        )}
+        onPress={() =>
+          this.props.showModal('image-lightbox', {
+            source: { uri: this.props.source }
+          })
+        }
       >
         <ResponsiveImage
           cached
-          activityIndicatorColor={Colors.messageBubbles[position].activityIndicator}
+          activityIndicatorColor={
+            Colors.messageBubbles[position].activityIndicator
+          }
           imageStyle={inputMessageStyles.mediaContent}
-          source={{uri: this.getSourcePath(source)}}
+          source={{ uri: this.getSourcePath(source) }}
           width={imageWidth}
         />
       </TouchableOpacity>
@@ -38,9 +43,15 @@ export default class ChatImage extends Component {
 
   getSourcePath (source) {
     // Use thumbnail service for images from own servers
-    const { useLocalServer, localMediaURL, remoteMediaURL } = AppConfig.config.serverSync
+    const {
+      useLocalServer,
+      localMediaURL,
+      remoteMediaURL
+    } = AppConfig.config.serverSync
 
-    const hostname = urlapi.parse(useLocalServer ? localMediaURL : remoteMediaURL).hostname
+    const hostname = urlapi.parse(
+      useLocalServer ? localMediaURL : remoteMediaURL
+    ).hostname
 
     if (source.includes(hostname + '/')) {
       return source + '/500/500/false/false'

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
-import {ifIphoneX} from 'react-native-iphone-x-helper'
+import { ifIphoneX } from 'react-native-iphone-x-helper'
 import { connect } from 'react-redux'
 
 import I18n from '../../I18n/I18n'
@@ -14,14 +14,14 @@ const nextScreen = 'ScreenWelcomeByCoach'
 
 class ScreenCoachSelection extends Component {
   render () {
-    const {chooseCoach, sendCoachIntention} = this.props
+    const { chooseCoach, sendCoachIntention } = this.props
     const coaches = Images.coaches
-    const {navigate} = this.props.navigation
+    const { navigate } = this.props.navigation
 
     return (
       <View style={Styles.container}>
         <View style={Styles.containerMargin} />
-        <View style={{marginHorizontal: 30, flex: 0.5}}>
+        <View style={{ marginHorizontal: 30, flex: 0.5 }}>
           <View style={Styles.imageContainer}>
             {coaches.map((coach, index) => (
               <TouchableOpacity
@@ -30,36 +30,54 @@ class ScreenCoachSelection extends Component {
                   chooseCoach(index)
                   sendCoachIntention(I18n.t('Coaches.' + index))
                   navigate(nextScreen)
-                }}>
+                }}
+              >
                 <View style={Styles.circle}>
                   <Image style={Styles.coachImage} source={coach} />
                 </View>
-                <Text style={Styles.coachText}>{I18n.t('Coaches.' + index)}</Text>
+                <Text style={Styles.coachText}>
+                  {I18n.t('Coaches.' + index)}
+                </Text>
               </TouchableOpacity>
-             ))}
+            ))}
           </View>
         </View>
         <View style={Styles.textContainer}>
-          <Text style={Styles.subtitle}>{I18n.t('Onboarding.chooseCoach')}</Text>
+          <Text style={Styles.subtitle}>
+            {I18n.t('Onboarding.chooseCoach')}
+          </Text>
         </View>
       </View>
     )
   }
 }
 
-const mapStateToDispatch = dispatch => ({
+const mapStateToDispatch = (dispatch) => ({
   chooseCoach: (coach) => dispatch(SettingsActions.chooseCoach(coach)),
-  sendCoachIntention: (coachName) => dispatch(MessageActions.sendIntention(null, 'coach', coachName))
+  sendCoachIntention: (coachName) =>
+    dispatch(MessageActions.sendIntention(null, 'coach', coachName))
 })
 
-export default connect(null, mapStateToDispatch)(ScreenCoachSelection)
+export default connect(
+  null,
+  mapStateToDispatch
+)(ScreenCoachSelection)
 
 const Styles = StyleSheet.create({
-  container: {flex: 1, justifyContent: 'center', backgroundColor: Colors.onboarding.background, ...ifIphoneX({ paddingTop: 40 })},
-  containerMargin: {flex: 0.3},
-  imageContainer: {flex: 0.7, flexDirection: 'row', justifyContent: 'space-around'},
-  image: {flex: 1, alignSelf: 'stretch', resizeMode: 'contain'},
-  textContainer: {flex: 0.35, justifyContent: 'flex-start'},
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    backgroundColor: Colors.onboarding.background,
+    ...ifIphoneX({ paddingTop: 40 })
+  },
+  containerMargin: { flex: 0.3 },
+  imageContainer: {
+    flex: 0.7,
+    flexDirection: 'row',
+    justifyContent: 'space-around'
+  },
+  image: { flex: 1, alignSelf: 'stretch', resizeMode: 'contain' },
+  textContainer: { flex: 0.35, justifyContent: 'flex-start' },
   subtitle: {
     color: Colors.onboarding.text,
     textAlign: 'center',

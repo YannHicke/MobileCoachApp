@@ -1,10 +1,17 @@
 import React, { Component } from 'react'
-import { View, WebView, StyleSheet, Platform, ActivityIndicator } from 'react-native'
-import {connect} from 'react-redux'
+import {
+  View,
+  WebView,
+  StyleSheet,
+  Platform,
+  ActivityIndicator
+} from 'react-native'
+import { connect } from 'react-redux'
 import KeyboardSpacer from 'react-native-keyboard-spacer'
 
+import I18n from '../I18n/I18n'
 import HeaderBar from './HeaderBar'
-import {Colors} from '../Themes/'
+import { Colors } from '../Themes/'
 import ServerMessageActions from '../Redux/MessageRedux'
 
 import Log from '../Utils/Log'
@@ -18,19 +25,23 @@ const log = new Log('Components/WebViewContent')
  */
 
 class WebViewContent extends Component {
-  componentWillMount () {
-  }
+  componentWillMount () {}
 
   render () {
     log.debug('Opening web:', this.props.children)
 
     return (
       <View style={styles.container}>
-        <HeaderBar title='Befragung' onClose={this.props.onClose} />
+        <HeaderBar
+          title={I18n.t('Common.information')}
+          onClose={this.props.onClose}
+        />
         <View style={styles.webViewContainer}>
           <WebView
             ref='web'
-            source={{uri: this.props.children + '?' + Math.random()}}
+            source={{
+              uri: this.props.children + '?' + Math.random()
+            }}
             style={styles.webView}
             scalesPageToFit={!(Platform.OS === 'ios')}
             javaScriptEnabled
@@ -42,23 +53,37 @@ class WebViewContent extends Component {
             startInLoadingState
             renderLoading={() => {
               return (
-                <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}} >
+                <View
+                  style={{
+                    flex: 1,
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                >
                   <ActivityIndicator
                     animating
                     color={Colors.modal.loadingIndicator}
                     size='large'
-                    hidesWhenStopped />
+                    hidesWhenStopped
+                  />
                 </View>
               )
             }}
             renderError={(e) => {
               return (
-                <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}} >
+                <View
+                  style={{
+                    flex: 1,
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                >
                   <ActivityIndicator
                     animating
                     color={Colors.modal.loadingIndicator}
                     size='large'
-                    hidesWhenStopped />
+                    hidesWhenStopped
+                  />
                 </View>
               )
             }}
@@ -117,12 +142,15 @@ const styles = StyleSheet.create({
 })
 
 const mapStateToProps = (state) => {
-  return {
-  }
+  return {}
 }
 
-const mapStateToDispatch = dispatch => ({
-  sendVariableValue: (variable, value) => dispatch(ServerMessageActions.sendVariableValue(variable, value))
+const mapStateToDispatch = (dispatch) => ({
+  sendVariableValue: (variable, value) =>
+    dispatch(ServerMessageActions.sendVariableValue(variable, value))
 })
 
-export default connect(mapStateToProps, mapStateToDispatch)(WebViewContent)
+export default connect(
+  mapStateToProps,
+  mapStateToDispatch
+)(WebViewContent)

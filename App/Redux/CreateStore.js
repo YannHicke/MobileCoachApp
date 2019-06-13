@@ -18,7 +18,7 @@ export default (rootReducer, rootSaga, encryptionKey) => {
 
   /* ------------- Saga Middleware ------------- */
 
-  const sagaMiddleware = createSagaMiddleware({ })
+  const sagaMiddleware = createSagaMiddleware({})
   middleware.push(sagaMiddleware)
 
   /* ------------- Assemble Middleware ------------- */
@@ -33,10 +33,12 @@ export default (rootReducer, rootSaga, encryptionKey) => {
   // Add react dev tools
   const composeEnhancers =
     typeof window === 'object' &&
-    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ &&
+    __DEV__
       ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
         // Specify extension’s options like name, actionsBlacklist, actionsCreators, serialize...
-      }) : compose
+      })
+      : compose
 
   const store = createStore(rootReducer, composeEnhancers(...enhancers))
 

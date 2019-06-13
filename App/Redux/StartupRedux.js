@@ -5,6 +5,7 @@ import Immutable from 'seamless-immutable'
 
 const { Types, Creators } = createActions({
   startup: [], // saga
+  appStateChange: ['newAppState'], // saga
   manuallyConnect: [], // saga
   manuallyRequestPushPermissions: [] // saga
 })

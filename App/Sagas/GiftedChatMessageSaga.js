@@ -6,7 +6,11 @@ import Common from '../Utils/Common'
 import I18n from '../I18n/I18n'
 // Import Reducers / Actions for Chat Messages
 import { GiftedChatMessageActions } from '../Redux/GiftedChatMessageRedux'
-import { MessageActions, AuthorTypes, MessageStates } from '../Redux/MessageRedux'
+import {
+  MessageActions,
+  AuthorTypes,
+  MessageStates
+} from '../Redux/MessageRedux'
 // Import Reducers / Actions for Chat Messages
 import { GUIActions } from '../Redux/GUIRedux'
 // import { StoryProgressActions } from '../Redux/StoryProgressRedux'
@@ -18,34 +22,51 @@ const log = new Log('Sagas/GiftedChatMessageSaga')
 let oldestShownMessage = -1
 
 // selectors
-const allMessages = (state) => state.messages
+const allMessages = (state) => state.messages.messageObjects
+const messageIds = (state) => state.messages.messageIds
+
 let addedHistoricalMessages = []
 // const getNumberOfMessages = (state) => Object.keys(state.messages).length
 // const getNumberOfShownMessages = state => state.guistate.numberOfShownMessages
-export function * initializeGiftedChat ({buffer, newOrUpdatedMessagesChannel}, action) {
+export function * initializeGiftedChat (
+  { buffer, newOrUpdatedMessagesChannel },
+  action
+) {
   log.info('Initializing gifted chat...')
   yield call(loadEarlierMessages)
 
   log.info('Starting to watch for new or updated messages...')
-  yield fork(watchNewOrUpdatedMessageForGiftedChat, {buffer, newOrUpdatedMessagesChannel})
+  yield fork(watchNewOrUpdatedMessageForGiftedChat, {
+    buffer,
+    newOrUpdatedMessagesChannel
+  })
 }
 
 // This saga watches for new messages from the server which will always dispatched with type "NEW_OR_UPDATED_MESSAGE_FOR_GIFTED_CHAT"
-export function * watchNewOrUpdatedMessageForGiftedChat ({buffer, newOrUpdatedMessagesChannel}, action) {
+export function * watchNewOrUpdatedMessageForGiftedChat (
+  { buffer, newOrUpdatedMessagesChannel },
+  action
+) {
   while (true) {
     const { message } = yield take(newOrUpdatedMessagesChannel)
     log.debug('New or updated message:', message)
 
     // Check if we already have a version of this message
-    let guiClientVersion = yield call(getClientVersionOfGuiMessage, message['client-id'])
+    let guiClientVersion = yield call(
+      getClientVersionOfGuiMessage,
+      message['client-id']
+    )
 
     // If we have a message with this client-id already...
     if (guiClientVersion !== null) {
       if (guiClientVersion < message['client-version']) {
         // Update the messages immediately
-        yield put({ type: GiftedChatMessageActions.GIFTED_CHAT_UPDATE_MESSAGES, serverMessage: message })
+        yield put({
+          type: GiftedChatMessageActions.GIFTED_CHAT_UPDATE_MESSAGES,
+          serverMessage: message
+        })
       }
-    // If its a new message, add it with some typing-delay
+      // If its a new message, add it with some typing-delay
     } else {
       let fakeTimestamp = null
 
@@ -53,7 +74,11 @@ export function * watchNewOrUpdatedMessageForGiftedChat ({buffer, newOrUpdatedMe
       if (!message['client-read']) {
         fakeTimestamp = yield call(checkForDelayedPresentation, message)
 
-        yield put({ type: MessageActions.MESSAGE_FAKE_TIMESTAMP_FOR_GIFTED_CHAT, messageId: message['client-id'], fakeTimestamp })
+        yield put({
+          type: MessageActions.MESSAGE_FAKE_TIMESTAMP_FOR_GIFTED_CHAT,
+          messageId: message['client-id'],
+          fakeTimestamp
+        })
       }
       // Convert the servermessage to giftedchat-format
       let giftedChatMessages = parseServerMessage(message, fakeTimestamp)
@@ -68,9 +93,15 @@ export function * watchNewOrUpdatedMessageForGiftedChat ({buffer, newOrUpdatedMe
 
     // Inform GUI state if another message is expected
     if (buffer.isEmpty()) {
-      yield put({ type: GUIActions.SET_CURRENTLY_FURTHER_MESSAGES_EXPECTED, currentlyFurtherMessagesExpected: false })
+      yield put({
+        type: GUIActions.SET_CURRENTLY_FURTHER_MESSAGES_EXPECTED,
+        currentlyFurtherMessagesExpected: false
+      })
     } else {
-      yield put({ type: GUIActions.SET_CURRENTLY_FURTHER_MESSAGES_EXPECTED, currentlyFurtherMessagesExpected: true })
+      yield put({
+        type: GUIActions.SET_CURRENTLY_FURTHER_MESSAGES_EXPECTED,
+        currentlyFurtherMessagesExpected: true
+      })
     }
   }
 }
@@ -84,7 +115,7 @@ export function * loadEarlierMessages () {
     return
   }
 
-  let messagesKeys = Object.keys(messages)
+  let messageKeys = yield select(messageIds)
 
   let minimalMessagesToLoad = 0
   let messageToStart = 0
@@ -92,8 +123,9 @@ export function * loadEarlierMessages () {
   if (oldestShownMessage === -1) {
     log.debug('Startup case...')
     startup = true
-    minimalMessagesToLoad = AppConfig.config.messages.initialNumberOfMinimalShownMessages
-    messageToStart = messagesKeys.length - 1
+    minimalMessagesToLoad =
+      AppConfig.config.messages.initialNumberOfMinimalShownMessages
+    messageToStart = messageKeys.length - 1
   } else {
     log.debug('Load earlier case...')
     startup = false
@@ -101,13 +133,18 @@ export function * loadEarlierMessages () {
     messageToStart = oldestShownMessage - 1
   }
 
-  log.debug('Load at least ', minimalMessagesToLoad, ' messages starting with ', messageToStart)
+  log.debug(
+    'Load at least ',
+    minimalMessagesToLoad,
+    ' messages starting with ',
+    messageToStart
+  )
 
   let commandsToCheck = []
   let addedMessages = 0
   let onlyStickyMessages = false
   for (let i = messageToStart; i >= 0; i--) {
-    const messageToAdd = { ...messages[messagesKeys[i]] }
+    const messageToAdd = { ...messages[messageKeys[i]] }
     let giftedChatMessages = parseServerMessage(messageToAdd)
 
     // Cancel if already shown enough messages
@@ -117,7 +154,12 @@ export function * loadEarlierMessages () {
 
     if (startup) {
       // Remember commands
-      if ((typeof messageToAdd['client-command-executed'] === 'undefined' || messageToAdd['client-command-executed'] === false) && giftedChatMessages.length >= 1 && giftedChatMessages[0].type === 'hidden-command') {
+      if (
+        (typeof messageToAdd['client-command-executed'] === 'undefined' ||
+          messageToAdd['client-command-executed'] === false) &&
+        giftedChatMessages.length >= 1 &&
+        giftedChatMessages[0].type === 'hidden-command'
+      ) {
         commandsToCheck.unshift(giftedChatMessages[0])
       }
     }
@@ -137,7 +179,10 @@ export function * loadEarlierMessages () {
     const giftedChatMessagesReversed = giftedChatMessages.reverse()
     // Add message
     for (const giftedChatMessage of giftedChatMessagesReversed) {
-      if (!onlyStickyMessages || (onlyStickyMessages && giftedChatMessage.custom.sticky)) {
+      if (
+        !onlyStickyMessages ||
+        (onlyStickyMessages && giftedChatMessage.custom.sticky)
+      ) {
         if (!addedHistoricalMessages.includes(giftedChatMessage._id)) {
           log.debug('Adding message ', giftedChatMessage._id)
           addedHistoricalMessages.push(giftedChatMessage._id)
@@ -149,7 +194,13 @@ export function * loadEarlierMessages () {
 
   // Execute commands
   for (const commandMessage of commandsToCheck) {
-    yield put({ type: MessageActions.EXECUTE_COMMAND, messageId: commandMessage._id.substring(0, commandMessage._id.lastIndexOf('-')) })
+    yield put({
+      type: MessageActions.EXECUTE_COMMAND,
+      messageId: commandMessage._id.substring(
+        0,
+        commandMessage._id.lastIndexOf('-')
+      )
+    })
   }
 
   // Show or hide load earlier button
@@ -167,7 +218,7 @@ function * checkForDelayedPresentation (message) {
     const now = Date.now()
     const messageTimestamp = message['message-timestamp'] * 1
 
-    if ((messageTimestamp + 300000) > now) {
+    if (messageTimestamp + 300000 > now) {
       return now
     }
   }
@@ -189,7 +240,7 @@ function * getClientVersionOfGuiMessage (messageId) {
   // If the message was found
   if (message) {
     return message.custom.clientVersion
-  // else return undefined
+    // else return undefined
   } else {
     return null
   }
@@ -200,15 +251,46 @@ function * addMessages (messages = [], addToStart = false) {
   for (let i = 0; i < messages.length; i++) {
     let message = { ...messages[i] }
 
+    // Create server message id
+    const serverMessageId = message._id.substring(
+      0,
+      message._id.lastIndexOf('-')
+    )
+
     // Fire commands (only for newly added messages, not for load earlier messages)
     if (!addToStart && message.type === 'hidden-command') {
-      yield put({ type: MessageActions.EXECUTE_COMMAND, messageId: message._id.substring(0, message._id.lastIndexOf('-')) })
+      yield put({
+        type: MessageActions.EXECUTE_COMMAND,
+        messageId: serverMessageId
+      })
     }
 
     // Remember message as read
-    yield put({ type: MessageActions.MESSAGE_READ_BY_GIFTED_CHAT, messageId: message._id.substring(0, message._id.lastIndexOf('-')) })
+    yield put({
+      type: MessageActions.MESSAGE_READ_BY_GIFTED_CHAT,
+      messageId: serverMessageId
+    })
 
-    yield put({ type: GiftedChatMessageActions.GIFTED_CHAT_ADD_MESSAGE, message, addToStart })
+    // Adjust deactivation state to current state
+    const allServerMessages = yield select(allMessages)
+    if (allServerMessages[serverMessageId].deactivated) {
+      message.custom.deactivated = true
+    }
+
+    // Count up badge only for visible messages
+    if (
+      message.user._id === 2 &&
+      message.type !== 'hidden-command' &&
+      !(message.type === 'text' && message.text === '')
+    ) {
+      yield put({ type: GUIActions.ADD_UNREAD_MESSAGE, count: 1 })
+    }
+
+    yield put({
+      type: GiftedChatMessageActions.GIFTED_CHAT_ADD_MESSAGE,
+      message,
+      addToStart
+    })
   }
 }
 
@@ -239,13 +321,25 @@ function * addMessagesWithDelay (messages = []) {
       }
     }
 
+    // Create server message id
+    const serverMessageId = message._id.substring(
+      0,
+      message._id.lastIndexOf('-')
+    )
+
     // Fire commands
     if (message.type === 'hidden-command') {
-      yield put({ type: MessageActions.EXECUTE_COMMAND, messageId: message._id.substring(0, message._id.lastIndexOf('-')) })
+      yield put({
+        type: MessageActions.EXECUTE_COMMAND,
+        messageId: serverMessageId
+      })
     }
 
     // Remember message as read
-    yield put({ type: MessageActions.MESSAGE_READ_BY_GIFTED_CHAT, messageId: message._id.substring(0, message._id.lastIndexOf('-')) })
+    yield put({
+      type: MessageActions.MESSAGE_READ_BY_GIFTED_CHAT,
+      messageId: serverMessageId
+    })
 
     // If the message is sent from coach and no command...
     if (message.user._id === 2 && message.type !== 'hidden-command') {
@@ -258,7 +352,7 @@ function * addMessagesWithDelay (messages = []) {
         if (fastMode) {
           yield delay(50)
         } else {
-          yield delay(Math.floor(ms / 5 * 4))
+          yield delay(Math.floor((ms / 5) * 4))
         }
         yield put({ type: GUIActions.HIDE_COACH_IS_TYPING })
       } else {
@@ -268,8 +362,26 @@ function * addMessagesWithDelay (messages = []) {
           yield delay(interactiveElementDelay)
         }
       }
+
+      // Adjust deactivation state to current state
+      const allServerMessages = yield select(allMessages)
+      if (allServerMessages[serverMessageId].deactivated) {
+        message.custom.deactivated = true
+      }
+
+      // Count up badge only for visible messages
+      if (
+        message.type !== 'hidden-command' &&
+        !(message.type === 'text' && message.text === '')
+      ) {
+        yield put({ type: GUIActions.ADD_UNREAD_MESSAGE, count: 1 })
+      }
+
       // Add message to chat
-      yield put({ type: GiftedChatMessageActions.GIFTED_CHAT_ADD_MESSAGE, message })
+      yield put({
+        type: GiftedChatMessageActions.GIFTED_CHAT_ADD_MESSAGE,
+        message
+      })
 
       // Wait again for a while (if ms have been calculated)
       if (fastMode) {
@@ -278,10 +390,19 @@ function * addMessagesWithDelay (messages = []) {
         yield delay(Math.floor(ms / 5))
       }
 
-    // If it's a message from user, a system message or a hidden command, add it directly
+      // If it's a message from user, a system message or a hidden command, add it directly
     } else {
+      // Adjust deactivation state to current state
+      const allServerMessages = yield select(allMessages)
+      if (allServerMessages[serverMessageId].deactivated) {
+        message.custom.deactivated = true
+      }
+
       // Add message to chat
-      yield put({ type: GiftedChatMessageActions.GIFTED_CHAT_ADD_MESSAGE, message })
+      yield put({
+        type: GiftedChatMessageActions.GIFTED_CHAT_ADD_MESSAGE,
+        message
+      })
     }
   }
 }
@@ -296,22 +417,33 @@ function calculateMessageDelay (message) {
   // milliseconds
   let ms = sPerChar * message.text.length * 1000
   // Max delay
-  if (ms > AppConfig.config.typingIndicator.maxTypingDelay) ms = AppConfig.config.typingIndicator.maxTypingDelay
+  if (ms > AppConfig.config.typingIndicator.maxTypingDelay) {
+    ms = AppConfig.config.typingIndicator.maxTypingDelay
+  }
   log.debug('Calculated message delay is ', ms / 1000, ' seconds')
   return ms
 }
 
 function parseServerMessage (serverMessage, fakeTimestamp = null) {
   try {
-    let giftedChatMessages = convertServerMessageToGiftedChatMessages(serverMessage, fakeTimestamp)
+    let giftedChatMessages = convertServerMessageToGiftedChatMessages(
+      serverMessage,
+      fakeTimestamp
+    )
     return giftedChatMessages
   } catch (error) {
-    log.error('Error: Failed to convert Server-Message to GiftedChat-Message:', error.toString())
+    log.error(
+      'Error: Failed to convert Server-Message to GiftedChat-Message:',
+      error.toString()
+    )
     return []
   }
 }
 
-function convertServerMessageToGiftedChatMessages (serverMessage, fakeTimestamp = null) {
+function convertServerMessageToGiftedChatMessages (
+  serverMessage,
+  fakeTimestamp = null
+) {
   // Actively ignore specific types
   if (serverMessage.type === 'VARIABLE') {
     return []
@@ -326,13 +458,19 @@ function convertServerMessageToGiftedChatMessages (serverMessage, fakeTimestamp 
   let message = {
     _id: serverMessage['client-id'] + '-' + subId++,
     custom: {
+      timestamp:
+        serverMessage.author === AuthorTypes.SERVER
+          ? serverMessage['message-timestamp']
+          : serverMessage['user-timestamp'],
       clientVersion: serverMessage['client-version'],
       clientStatus: serverMessage['client-status'],
       linkedMedia: serverMessage['contains-media'],
+      format: serverMessage['format'],
       mediaType: serverMessage['media-type'],
       linkedSurvey: serverMessage['contains-survey'],
       sticky: serverMessage['sticky'],
       disabled: serverMessage['disabled'],
+      deactivated: serverMessage['deactivated'],
       visible: true,
       unanswered: false
     }
@@ -366,11 +504,15 @@ function convertServerMessageToGiftedChatMessages (serverMessage, fakeTimestamp 
         _id: 1
       }
       break
-    default: {}
+    default: {
+    }
   }
 
   // convention: If the serverMessage contains media, but the text doesn't include a link to it, add a the media as a new bubble at the bottom of the message
-  if (serverMessage['contains-media'] && !message.text.includes('####LINKED_MEDIA_OBJECT####')) {
+  if (
+    serverMessage['contains-media'] &&
+    !message.text.includes('####LINKED_MEDIA_OBJECT####')
+  ) {
     // if the message is empty, completely replace it to prevent the empty bubble
     if (message.text === '') message.text = '####LINKED_MEDIA_OBJECT####'
     // otherwise, add it to the bottom
@@ -378,7 +520,10 @@ function convertServerMessageToGiftedChatMessages (serverMessage, fakeTimestamp 
   }
 
   // ...same convention for linked surveys
-  if (serverMessage['contains-survey'] && !message.text.includes('####LINKED_SURVEY####')) {
+  if (
+    serverMessage['contains-survey'] &&
+    !message.text.includes('####LINKED_SURVEY####')
+  ) {
     // if the message is empty, completely replace it to prevent the empty bubble
     if (message.text === '') message.text = '####LINKED_SURVEY####'
     else message.text = message.text + '\n---\n####LINKED_SURVEY####'
@@ -403,7 +548,10 @@ function convertServerMessageToGiftedChatMessages (serverMessage, fakeTimestamp 
       }
       subId = 0
       // If a video has been sent, add it to media library
-      if (serverMessage['media-name'] && serverMessage['media-type'] === 'video') {
+      if (
+        serverMessage['media-name'] &&
+        serverMessage['media-type'] === 'video'
+      ) {
         // Add a separate message to execute addInfoCommand
         let addVideoCommandMessage = R.clone(message)
         // No need to double store content because it will be loaded from serverMessage using the related-id
@@ -412,7 +560,7 @@ function convertServerMessageToGiftedChatMessages (serverMessage, fakeTimestamp 
         addVideoCommandMessage._id = serverMessage['client-id'] + '-' + subId++
         messages.push(addVideoCommandMessage)
       }
-      subMessages.forEach(subMessage => {
+      subMessages.forEach((subMessage) => {
         let newMessage = R.clone(message)
         newMessage.text = subMessage.trim()
         newMessage.type = 'text'
@@ -433,7 +581,7 @@ function convertServerMessageToGiftedChatMessages (serverMessage, fakeTimestamp 
           message.type = 'open-component'
           // Default title
           let buttonTitle = ''
-          let content = serverMessage.content  // .replace(/\\n/g, '')
+          let content = serverMessage.content // .replace(/\\n/g, '')
           // Button Title is delivered in message-Field
           const pattern = new RegExp('<button>(.*)</button>', 'g')
           const regExpResult = pattern.exec(content)
@@ -452,14 +600,19 @@ function convertServerMessageToGiftedChatMessages (serverMessage, fakeTimestamp 
           }
           // Only remember backpack infos
           if (parsedCommand.command === 'show-backpack-info') {
-            if (parsedCommand.value === null) log.warn('Received show-backpack-info without id! Command: ' + serverMessage['server-message'])
-            else {
+            if (parsedCommand.value === null) {
+              log.warn(
+                'Received show-backpack-info without id! Command: ' +
+                  serverMessage['server-message']
+              )
+            } else {
               // Add a separate message to execute addInfoCommand
               let addInfoCommandMessage = R.clone(message)
               // No need to double store content because it will be loaded from serverMessage using the related-id
               addInfoCommandMessage.content = ''
               addInfoCommandMessage.type = 'hidden-command'
-              addInfoCommandMessage._id = serverMessage['client-id'] + '-' + subId++
+              addInfoCommandMessage._id =
+                serverMessage['client-id'] + '-' + subId++
               messages.push(addInfoCommandMessage)
 
               message.custom.component = 'backpack-info'
@@ -479,6 +632,28 @@ function convertServerMessageToGiftedChatMessages (serverMessage, fakeTimestamp 
             component: 'web',
             buttonTitle: parsedCommand.contentWithoutFirstValue,
             infoId: parsedCommand.value
+          }
+          break
+        }
+        // Show Triage-Form
+        case 'show-triage': {
+          message.type = 'open-component'
+          message.custom = {
+            ...message.custom,
+            // Component to be opened on Tap
+            component: 'triage',
+            buttonTitle: parsedCommand.content
+          }
+          break
+        }
+        // Show new Measurement-Form
+        case 'add-measurement': {
+          message.type = 'open-component'
+          message.custom = {
+            ...message.custom,
+            // Component to be opened on Tap
+            component: 'new-measurement',
+            buttonTitle: parsedCommand.content
           }
           break
         }
@@ -526,6 +701,53 @@ function convertServerMessageToGiftedChatMessages (serverMessage, fakeTimestamp 
           }
           break
         }
+        // Show Verification Command
+        case 'show-verification': {
+          message.type = 'open-component'
+          message.custom = {
+            ...message.custom,
+            // Component to be opened on Tap
+            component: 'verification',
+            buttonTitle: I18n.t('Verification.customer'),
+            secondButton: true,
+            secondButtonAction: 'verification-info',
+            secondButtonTitle: I18n.t('Verification.noCustomer')
+          }
+          break
+        }
+        // Show Link Command
+        case 'show-link': {
+          message.type = 'open-component'
+          message.custom = {
+            ...message.custom,
+            component: 'link',
+            buttonTitle: parsedCommand.contentWithoutFirstValue,
+            content: parsedCommand.value
+          }
+          break
+        }
+        // Speedometer Command
+        case 'show-speedometer': {
+          message.type = 'speedometer'
+          message.custom = {
+            ...message.custom,
+            medication: parsedCommand.values[0] === '1',
+            systolic: parsedCommand.values[1] * 1,
+            diastolic: parsedCommand.values[2] * 1
+          }
+          break
+        }
+        // Show level-progress Command
+        case 'show-level-progress': {
+          message.type = 'level-progress'
+          message.custom = {
+            ...message.custom,
+            level: parsedCommand.values[0],
+            task: parsedCommand.values[1],
+            progress: parsedCommand.values[2]
+          }
+          break
+        }
         // Other command not related to chat
         default:
           message.type = 'hidden-command'
@@ -535,7 +757,11 @@ function convertServerMessageToGiftedChatMessages (serverMessage, fakeTimestamp 
       break
     }
     default:
-      log.warn('Received Deepstream Message with type: ' + serverMessage.type + ', but was ignored by ChatScreenComponent.')
+      log.warn(
+        'Received Deepstream Message with type: ' +
+          serverMessage.type +
+          ', but was ignored by ChatScreenComponent.'
+      )
       messages.push(message)
   }
 
@@ -548,10 +774,17 @@ function convertServerMessageToGiftedChatMessages (serverMessage, fakeTimestamp 
         _id: 1
       },
       custom: {
+        timestamp: serverMessage['message-timestamp'],
         clientVersion: serverMessage['client-version'],
         clientStatus: serverMessage['client-status'],
+        canBeCancelled:
+          serverMessage['can-be-cancelled'] === undefined
+            ? true
+            : serverMessage['can-be-cancelled'],
         sticky: serverMessage['sticky'],
         uploadPath: serverMessage['media-upload-path'],
+        deactivated: serverMessage['deactivated'],
+        disabled: serverMessage['disabled'],
         visible: true,
         unanswered: false
       }
@@ -581,16 +814,26 @@ function convertServerMessageToGiftedChatMessages (serverMessage, fakeTimestamp 
         case 'select-many': {
           inputMessage.type = 'select-many'
           let answers = []
+          let min = 1
+          let max = -1
           for (let j = 0; j < options.length; j++) {
-            answers.push({
-              label: options[j][0],
-              value: options[j][1]
-            })
+            if (options[j][0] === 'min') {
+              min = options[j][1] * 1
+            } else if (options[j][0] === 'max') {
+              max = options[j][1] * 1
+            } else {
+              answers.push({
+                label: options[j][0],
+                value: options[j][1]
+              })
+            }
           }
           inputMessage.custom = {
             ...inputMessage.custom,
             intention: 'answer-to-server-visible',
-            options: answers
+            options: answers,
+            min,
+            max
           }
           break
         }
@@ -614,48 +857,47 @@ function convertServerMessageToGiftedChatMessages (serverMessage, fakeTimestamp 
         }
         case 'free-text':
         case 'free-text-multiline':
-        case 'free-numbers':
-          {
-            let multiline = false
-            let onlyNumbers = false
-            let placeholder = null
-            let textBefore = null
-            let textAfter = null
+        case 'free-numbers': {
+          let multiline = false
+          let onlyNumbers = false
+          let placeholder = null
+          let textBefore = null
+          let textAfter = null
 
-            // Different types
-            if (type === 'free-text') {
-              inputMessage.type = 'free-text'
-            } else if (type === 'free-text-multiline') {
-              inputMessage.type = 'free-text'
-              multiline = true
-            } else if (type === 'free-numbers') {
-              inputMessage.type = 'free-numbers'
-              onlyNumbers = true
-            }
-
-            // Determine appropriate placeholders
-            let placeholderText = ''
-            if (options) placeholderText = options
-
-            if (options.includes('_')) {
-              let splitText = placeholderText.split(('_'), 2)
-              if (splitText[0]) textBefore = splitText[0]
-              if (splitText[1]) textAfter = splitText[1]
-            } else if (placeholderText !== '') {
-              placeholder = placeholderText
-            }
-
-            inputMessage.custom = {
-              ...inputMessage.custom,
-              intention: 'answer-to-server-visible',
-              multiline,
-              onlyNumbers,
-              placeholder,
-              textBefore,
-              textAfter
-            }
-            break
+          // Different types
+          if (type === 'free-text') {
+            inputMessage.type = 'free-text'
+          } else if (type === 'free-text-multiline') {
+            inputMessage.type = 'free-text'
+            multiline = true
+          } else if (type === 'free-numbers') {
+            inputMessage.type = 'free-numbers'
+            onlyNumbers = true
           }
+
+          // Determine appropriate placeholders
+          let placeholderText = ''
+          if (options) placeholderText = options
+
+          if (options.includes('_')) {
+            let splitText = placeholderText.split('_', 2)
+            if (splitText[0]) textBefore = splitText[0]
+            if (splitText[1]) textAfter = splitText[1]
+          } else if (placeholderText !== '') {
+            placeholder = placeholderText
+          }
+
+          inputMessage.custom = {
+            ...inputMessage.custom,
+            intention: 'answer-to-server-visible',
+            multiline,
+            onlyNumbers,
+            placeholder,
+            textBefore,
+            textAfter
+          }
+          break
+        }
         case 'date':
         case 'time':
         case 'date-and-time': {
@@ -669,7 +911,9 @@ function convertServerMessageToGiftedChatMessages (serverMessage, fakeTimestamp 
             min: null,
             max: null
           }
-          if (options && options.length > 0 && options[0][0]) defaultOptions.placeholder = options[0][0]
+          if (options && options.length > 0 && options[0][0]) {
+            defaultOptions.placeholder = options[0][0]
+          }
           if (options) {
             for (let j = 0; j < options.length; j++) {
               if (options[j][0] === 'min') {
@@ -743,7 +987,10 @@ function convertServerMessageToGiftedChatMessages (serverMessage, fakeTimestamp 
       message.custom.visible = false
     }
     // Never render intentions without text => fancy ES6 syntax! :)
-    if (message.type === 'intention' && ['', null, undefined].includes(message.text)) {
+    if (
+      message.type === 'intention' &&
+      ['', null, undefined].includes(message.text)
+    ) {
       message.custom.visible = false
     }
     // Never render hidden commands
@@ -751,11 +998,20 @@ function convertServerMessageToGiftedChatMessages (serverMessage, fakeTimestamp 
       message.custom.visible = false
     }
     // If message is answered don't render it
-    if (message.type !== 'text' && (serverMessage['client-status'] === MessageStates.ANSWERED_ON_CLIENT || serverMessage['client-status'] === MessageStates.ANSWERED_AND_PROCESSED_BY_SERVER)) {
+    if (
+      message.type !== 'text' &&
+      (serverMessage['client-status'] === MessageStates.ANSWERED_ON_CLIENT ||
+        serverMessage['client-status'] ===
+          MessageStates.ANSWERED_AND_PROCESSED_BY_SERVER)
+    ) {
       message.custom.visible = false
     }
     // If message is not answered render it differently
-    if (message.type !== 'text' && serverMessage['client-status'] === MessageStates.NOT_ANSWERED_AND_PROCESSED_BY_SERVER) {
+    if (
+      message.type !== 'text' &&
+      serverMessage['client-status'] ===
+        MessageStates.NOT_ANSWERED_AND_PROCESSED_BY_SERVER
+    ) {
       message.custom.unanswered = true
     }
   })

@@ -15,7 +15,7 @@ export const INITIAL_STATE = Immutable({
 })
 
 /* ------------- Reducers ------------- */
-export const signalStorageLoaded = (state, {hydrationCompleted}) =>
+export const signalStorageLoaded = (state, { hydrationCompleted }) =>
   state.merge({
     hydrationCompleted
   })

@@ -13,7 +13,7 @@ export default class NativeRichContent extends Component {
         stylesheet={styles}
         addLineBreaks={false}
         renderNode={renderLiTest}
-        />
+      />
     )
   }
 }
@@ -24,7 +24,7 @@ function renderLiTest (node, index, siblings, parent, defaultRenderer) {
   let listItemSuffix = null
 
   if (node.name === 'li') {
-  // First check for Bullet / Numbered Formats
+    // First check for Bullet / Numbered Formats
 
     //  if (parent) {}
     // Ordered List
@@ -35,7 +35,7 @@ function renderLiTest (node, index, siblings, parent, defaultRenderer) {
         parent: node
       }
     } else if (parent.name === 'ul') {
-    // Unordered List
+      // Unordered List
       listItemPrefix = {
         data: '\u2022 ',
         type: 'text',
@@ -64,32 +64,27 @@ function renderLiTest (node, index, siblings, parent, defaultRenderer) {
     if (!isLast) children.push(listItemSuffix)
 
     // Render Text with default renderer
-    return (
-      <Text key={index}>
-        {defaultRenderer(children, node)}
-      </Text>
-    )
+    return <Text key={index}>{defaultRenderer(children, node)}</Text>
   }
 
   // IMAGE-ELEMENTS
   if (node.name === 'img') {
     return (
-      <FitImage key={index} style={styles.img} source={{uri: node.attribs.src}} />
+      <FitImage
+        key={index}
+        style={styles.img}
+        source={{ uri: node.attribs.src }}
+      />
     )
   }
 }
 
 // ATTENTION: DONT USE CAPITAL LETTERS IN STYLE CLASS NAMES FOR THE HTML STUFF
 const styles = StyleSheet.create({
-  h1: {...fonts.style.h4,
-    marginTop: 20,
-    marginBottom: 10
-  },
-  h2: {...fonts.style.h5,
-    marginTop: 15,
-    marginBottom: 10
-  },
-  h3: {...fonts.style.h6,
+  h1: { ...fonts.style.h4, marginTop: 20, marginBottom: 10 },
+  h2: { ...fonts.style.h5, marginTop: 15, marginBottom: 10 },
+  h3: {
+    ...fonts.style.h6,
     color: colors.main.paragraph,
     marginTop: 10,
     marginBottom: 10
@@ -100,7 +95,8 @@ const styles = StyleSheet.create({
   i: {
     ...fonts.style.italic
   },
-  p: {...fonts.style.p,
+  p: {
+    ...fonts.style.p,
     color: colors.main.paragraph,
     marginTop: 5,
     marginBottom: 5
@@ -119,9 +115,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     marginTop: 5
   },
-  li: {...fonts.style.p,
-    color: colors.main.paragraph
-  },
+  li: { ...fonts.style.p, color: colors.main.paragraph },
   img: {
     marginTop: 10,
     marginBottom: 10

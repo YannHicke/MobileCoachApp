@@ -1,19 +1,22 @@
 import { AsyncStorage } from 'react-native'
 import debugState from '../Fixtures/debugState.json'
 
-const safeDebugState = {
-  ...debugState,
-  // Don't load deepstream credentials from debug state
-  serverSyncSettings: {
-    ...debugState.serverSyncSettings,
-    deepstreamUser: 'user', // null,
-    deepstreamSecret: 'secret', // null,
-    restUser: null,
-    restToken: null,
-    pushPlatform: null,
-    pushToken: null
+const safeDebugState = debugState.state
+  ? {
+    ...debugState.state,
+    // Don't load deepstream credentials from debug state
+    serverSyncSettings: {
+      ...debugState.state.serverSyncSettings,
+      deepstreamUser: 'user', // null,
+      deepstreamSecret: 'secret', // null,
+      restUser: null,
+      restToken: null,
+      pushPlatform: null,
+      pushToken: null
+    }
   }
-}
+  : null
+
 // const safeDebugState = {
 //   ...debugState,
 //   // DS credentials from 'debugUser' on Test-Intervention:
@@ -44,6 +47,9 @@ const JSONStorage = {
         reject(new Error('Could not find key: ' + propName))
       }
     })
+  },
+  isEmpty: function () {
+    return JSON.stringify(debugState) === JSON.stringify({})
   }
 }
 

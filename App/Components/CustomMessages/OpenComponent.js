@@ -2,58 +2,139 @@ import React, { Component } from 'react'
 import { StyleSheet, View } from 'react-native'
 import Button from 'react-native-button'
 import PropTypes from 'prop-types'
-import {Colors} from '../../Themes/'
+import { Colors } from '../../Themes/'
 import { Icon } from 'react-native-elements'
 import * as Animatable from 'react-native-animatable'
 
-import AppConfig from './../../Config/AppConfig'
 import CommonUtils from './../../Utils/Common'
 
 export default class OpenComponent extends Component {
   static propTypes = {
     currentMessage: PropTypes.object,
     onPress: PropTypes.func,
+    onPressSecondButton: PropTypes.func,
     setAnimationShown: PropTypes.func,
     icon: PropTypes.string,
-    iconType: PropTypes.string
+    iconType: PropTypes.string,
+    iconPosition: PropTypes.string
   }
 
   constructor (props) {
     super(props)
     this.shouldAnimate = this.props.currentMessage.custom.shouldAnimate
-
-    this.userCanEdit = CommonUtils.userCanEdit(AppConfig.config.serverSync.role)
   }
 
   render () {
-    const {currentMessage, onPress, icon, iconType} = this.props
+    const {
+      currentMessage,
+      onPress,
+      onPressSecondButton,
+      icon,
+      iconType,
+      iconPosition
+    } = this.props
+    const editable = CommonUtils.userCanEdit(currentMessage)
+    const secondButton = currentMessage.custom.secondButton
     return (
       <Animatable.View
         useNativeDriver
         animation={this.shouldAnimate ? this.props.fadeInAnimation : null}
         duration={this.props.duration}
-        style={[styles.container, currentMessage.previousMessage.type === 'open-component' ? {marginTop: 0} : null]}
-        onAnimationEnd={() => { this.shouldAnimate = false }}
+        style={[
+          styles.container,
+          currentMessage.previousMessage.type === 'open-component'
+            ? { marginTop: 0 }
+            : null
+        ]}
+        onAnimationEnd={() => {
+          this.shouldAnimate = false
+        }}
       >
         <Button
-          containerStyle={styles.buttonContainer}
+          containerStyle={[
+            styles.buttonContainer,
+            secondButton ? styles.buttonContainerSeveralButtons : null
+          ]}
           disabledContainerStyle={[styles.buttonDisabled]}
-          disabled={currentMessage.custom.disabled || !this.userCanEdit}
-          style={[styles.button, icon ? {paddingLeft: 30} : null]}
+          disabled={!editable}
+          style={[
+            styles.button,
+            iconPosition === 'left' ? { paddingLeft: 30 } : null,
+            iconPosition === 'right' ? { paddingRight: 30 } : null
+          ]}
           onPress={() => {
             onPress(currentMessage.custom.component)
-          }}>
-          {icon ? <Icon name={icon} type={iconType} size={20} color={Colors.buttons.openComponent.text} containerStyle={{position: 'absolute', left: 0}} /> : null}
+          }}
+        >
+          {icon && iconPosition === 'left' ? (
+            <Icon
+              name={icon}
+              type={iconType}
+              size={20}
+              color={Colors.buttons.openComponent.text}
+              containerStyle={{ position: 'absolute', left: 0 }}
+            />
+          ) : null}
           {currentMessage.custom.buttonTitle}
+          {icon && iconPosition === 'right' ? (
+            <Icon
+              name={icon}
+              type={iconType}
+              size={20}
+              color={Colors.buttons.openComponent.text}
+              containerStyle={{ position: 'absolute', right: 0 }}
+            />
+          ) : null}
           {/* this.renderInteractionBadge() */}
         </Button>
+        {secondButton ? (
+          <Button
+            containerStyle={[
+              styles.buttonContainer,
+              secondButton ? styles.buttonContainerSeveralButtons : null
+            ]}
+            disabledContainerStyle={[styles.buttonDisabled]}
+            disabled={!editable}
+            style={[styles.button, icon ? { paddingLeft: 30 } : null]}
+            onPress={() => {
+              onPressSecondButton(currentMessage.custom.component)
+            }}
+          >
+            {icon && iconPosition === 'left' ? (
+              <Icon
+                name={icon}
+                type={iconType}
+                size={20}
+                color={Colors.buttons.openComponent.text}
+                containerStyle={{
+                  position: 'absolute',
+                  left: 0
+                }}
+              />
+            ) : null}
+            {currentMessage.custom.secondButtonTitle}
+            {icon && iconPosition === 'right' ? (
+              <Icon
+                name={icon}
+                type={iconType}
+                size={20}
+                color={Colors.buttons.openComponent.text}
+                containerStyle={{
+                  position: 'absolute',
+                  left: 0
+                }}
+              />
+            ) : null}
+            {/* this.renderInteractionBadge() */}
+          </Button>
+        ) : null}
       </Animatable.View>
     )
   }
 
   componentDidMount () {
     // notify redux that animationw as shown after first render
-    const {currentMessage} = this.props
+    const { currentMessage } = this.props
     if (currentMessage.custom.shouldAnimate) {
       this.props.setAnimationShown(currentMessage._id)
     }
@@ -97,6 +178,9 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     backgroundColor: Colors.buttons.openComponent.background,
     marginBottom: 2
+  },
+  buttonContainerSeveralButtons: {
+    width: 250
   },
   button: {
     fontSize: 16,

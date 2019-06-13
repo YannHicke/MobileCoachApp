@@ -2,7 +2,7 @@ import * as React from 'react'
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import * as PropTypes from 'prop-types'
 import Slider from 'react-native-slider'
-import {Colors} from '../../Themes/'
+import { Colors } from '../../Themes/'
 import { Icon } from 'react-native-elements'
 
 export default class BottomControlsBar extends React.PureComponent {
@@ -96,19 +96,13 @@ export default class BottomControlsBar extends React.PureComponent {
     if (this.props.fullscreenMode) {
       return (
         <TouchableOpacity onPress={this.props.onToggleFullscreen}>
-          <Icon
-            name='fullscreen-exit'
-            color='#fff'
-          />
+          <Icon name='fullscreen-exit' color='#fff' />
         </TouchableOpacity>
       )
     } else {
       return (
         <TouchableOpacity onPress={this.props.onToggleFullscreen}>
-          <Icon
-            name='fullscreen'
-            color='#fff'
-          />
+          <Icon name='fullscreen' color='#fff' />
         </TouchableOpacity>
       )
     }

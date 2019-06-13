@@ -1,5 +1,5 @@
-import React, {Component} from 'react'
-import {Text, StyleSheet, View} from 'react-native'
+import React, { Component } from 'react'
+import { Text, StyleSheet, View } from 'react-native'
 import PropTypes from 'prop-types'
 import * as Animatable from 'react-native-animatable'
 
@@ -48,8 +48,11 @@ export default class EmptyChatIndicator extends Component {
     clearTimeout(this.timeoutID)
     this.timeoutID = null
     // Fade out Animation
-    if (this.refs.view) this.refs.view.fadeOut(300).then(() => this.setState({shouldRender: false}))
-    else this.setState({shouldRender: false})
+    if (this.refs.view) {
+      this.refs.view
+        .fadeOut(300)
+        .then(() => this.setState({ shouldRender: false }))
+    } else this.setState({ shouldRender: false })
   }
 
   componentWillReceiveProps (nextProps) {
@@ -68,15 +71,26 @@ export default class EmptyChatIndicator extends Component {
     if (this.props.emptyChatMessage && this.props.emptyChatMessage !== '') {
       return (
         <View style={styles.container}>
-          <Animatable.View useNativeDriver delay={600} animation='flipInX' duration={350} style={styles.textWrapper}>
+          <Animatable.View
+            useNativeDriver
+            delay={600}
+            animation='flipInX'
+            duration={350}
+            style={styles.textWrapper}
+          >
             <Text style={styles.text}>{this.props.emptyChatMessage}</Text>
           </Animatable.View>
         </View>
       )
-    // else return an activity indicator
+      // else return an activity indicator
     } else {
       return (
-        <LoadingOverlay type='Bounce' color={Colors.activityIndicator} size={60} backgroundOpacity={0} />
+        <LoadingOverlay
+          type='Bounce'
+          color={Colors.activityIndicator}
+          size={60}
+          backgroundOpacity={0}
+        />
       )
     }
   }
@@ -84,7 +98,19 @@ export default class EmptyChatIndicator extends Component {
   render () {
     if (this.state.shouldRender) {
       return (
-        <Animatable.View animation='fadeIn' duration={2000} useNativeDriver ref='view' style={{position: 'absolute', top: 0, left: 0, bottom: 0, right: 0}}>
+        <Animatable.View
+          animation='fadeIn'
+          duration={2000}
+          useNativeDriver
+          ref='view'
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            bottom: 0,
+            right: 0
+          }}
+        >
           {this.renderIndicator()}
         </Animatable.View>
       )

@@ -1,16 +1,16 @@
-import React, {Component} from 'react'
-import {ListView, View, StyleSheet, Platform} from 'react-native'
-import {Icon} from 'react-native-elements'
+import React, { Component } from 'react'
+import { ListView, View, StyleSheet, Platform } from 'react-native'
+import { Icon } from 'react-native-elements'
 import SearchBar from 'react-native-searchbar'
 import PropTypes from 'prop-types'
 import Fuse from 'fuse.js'
-import {ifIphoneX} from 'react-native-iphone-x-helper'
+import { ifIphoneX } from 'react-native-iphone-x-helper'
 import KeyboardSpacer from 'react-native-keyboard-spacer'
 import I18n from '../../I18n/I18n'
 
 import SelectableFoodList from './SelectableFoodList'
-import {Colors} from '../../Themes'
-import {FoodList} from './Food'
+import { Colors } from '../../Themes'
+import { FoodList } from './Food'
 
 export default class SearchFood extends Component {
   static propTypes = {
@@ -28,15 +28,13 @@ export default class SearchFood extends Component {
       maxPatternLength: 32,
       includeScore: true,
       minMatchCharLength: 3,
-      keys: [
-        'foodnameDE',
-        'brands',
-        'shadowDE'
-      ]
+      keys: ['foodnameDE', 'brands', 'shadowDE']
     }
     this.fuse = new Fuse(FoodList, searchOptions)
 
-    this.ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
+    this.ds = new ListView.DataSource({
+      rowHasChanged: (r1, r2) => r1 !== r2
+    })
 
     this.state = {
       currentInput: '',
@@ -44,13 +42,15 @@ export default class SearchFood extends Component {
     }
   }
 
-  handleSearch = input => {
+  handleSearch = (input) => {
     let results = []
 
     results = this.fuse.search(input)
     // Custom refinements for optimized search results
     results = this.refineSearch(results, input)
-    results.sort((a, b) => { return (a.score - b.score) })
+    results.sort((a, b) => {
+      return a.score - b.score
+    })
 
     let resultItems = []
     for (let i = 0; i < results.length; i++) {
@@ -67,22 +67,35 @@ export default class SearchFood extends Component {
       let result = results[i]
       let foodNames = ['foodnameDE', 'foodnameFR', 'foodnameIT']
       let shadowNames = ['shadowDE', 'shadowFR', 'shadowIT']
-      const {brands} = results[i]
+      const { brands } = results[i]
       foodNames.forEach((foodName) => {
-        if (result.item[foodName] !== null && typeof result.item[foodName] !== 'undefined') {
+        if (
+          result.item[foodName] !== null &&
+          typeof result.item[foodName] !== 'undefined'
+        ) {
           // Check if user input matches Foodname completely (if true, add 0.5 to score)
-          if (result.item[foodName].toUpperCase() === input.toUpperCase()) result.score = 0
-          else {
+          if (result.item[foodName].toUpperCase() === input.toUpperCase()) {
+            result.score = 0
+          } else {
             // Check if the full seachTerm is partially included, but as a Full Term (e.g. search Term: 'Reiss', result: 'Reiss (weiss)' )
-            if (result.item[foodName].includes(input + ' ')) result.score = result.score * 0.01
+            if (result.item[foodName].includes(input + ' ')) {
+              result.score = result.score * 0.01
+            }
           }
         }
       })
       for (let h = 0; h < shadowNames.length; h++) {
         let shadowName = shadowNames[h]
-        if (result.item[shadowName] !== null && typeof result.item[shadowName] !== 'undefined') {
+        if (
+          result.item[shadowName] !== null &&
+          typeof result.item[shadowName] !== 'undefined'
+        ) {
           // Check if user input matches Foodname completely (if true, add 0.5 to score)
-          if (result.item[shadowName] === input || result.item[shadowName].includes(input + ' ') || result.item[shadowName].includes(' ' + input)) {
+          if (
+            result.item[shadowName] === input ||
+            result.item[shadowName].includes(input + ' ') ||
+            result.item[shadowName].includes(' ' + input)
+          ) {
             result.score = result.score * 0.02
             break
           }
@@ -102,8 +115,9 @@ export default class SearchFood extends Component {
   }
 
   getEmptyNotice () {
-    if (this.refs.searchbar && this.refs.searchbar.getValue() !== '') return I18n.t('FoodDiary.noSearchResults')
-    else return I18n.t('FoodDiary.emptySearch')
+    if (this.refs.searchbar && this.refs.searchbar.getValue() !== '') {
+      return I18n.t('FoodDiary.noSearchResults')
+    } else return I18n.t('FoodDiary.emptySearch')
   }
 
   render () {
@@ -116,7 +130,11 @@ export default class SearchFood extends Component {
           showOnLoad
           autoCorrect={false}
           backButton={
-            <Icon name='ios-arrow-back' type='ionicon' iconStyle={styles.backIcon} />
+            <Icon
+              name='ios-arrow-back'
+              type='ionicon'
+              iconStyle={styles.backIcon}
+            />
           }
           onBack={this.props.onBack}
           allDataOnEmptySearch={false}

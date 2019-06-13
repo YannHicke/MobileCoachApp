@@ -15,7 +15,9 @@ export default (encryptionKey) => {
     messages: resettable(require('./MessageRedux').reducer),
     dashboardMessages: resettable(require('./DashboardMessageRedux').reducer),
     storyProgress: resettable(require('./StoryProgressRedux').reducer),
-    serverSyncSettings: resettable(require('./ServerSyncRedux').settingsReducer),
+    serverSyncSettings: resettable(
+      require('./ServerSyncRedux').settingsReducer
+    ),
 
     // Project-specific reducers
     cachedText: resettable(require('./CachedTextRedux').reducer),

@@ -1,13 +1,13 @@
-import React, {Component} from 'react'
-import {View, ScrollView, Text, StyleSheet, Alert} from 'react-native'
+import React, { Component } from 'react'
+import { View, ScrollView, Text, StyleSheet, Alert } from 'react-native'
 import Button from 'react-native-button'
 import I18n from '../../I18n/I18n'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import R from 'ramda'
 import { Icon } from 'react-native-elements'
-import {ifIphoneX} from 'react-native-iphone-x-helper'
+import { ifIphoneX } from 'react-native-iphone-x-helper'
 
-import {Colors, Metrics} from '../../Themes/'
+import { Colors, Metrics } from '../../Themes/'
 import AddMealPreStep from './AddMealPreStep'
 import MealListView from './MealListView'
 import SearchFood from './SearchFood'
@@ -40,9 +40,22 @@ class AddMealContainer extends Component {
   renderCardOverlays () {
     switch (this.state.overlay) {
       case 'pre-step':
-        return <AddMealPreStep onDiscard={this.props.onPress} onConfirm={(mealPlace, mealTime) => this.onSubmitPreStep(mealPlace, mealTime)} />
+        return (
+          <AddMealPreStep
+            onDiscard={this.props.onPress}
+            onConfirm={(mealPlace, mealTime) =>
+              this.onSubmitPreStep(mealPlace, mealTime)
+            }
+          />
+        )
       case 'add-food':
-        return <AddFoodStep food={this.state.selectedFood} addFood={(food) => this.onAddFood(food)} onCancel={() => this.closeOverlay()} />
+        return (
+          <AddFoodStep
+            food={this.state.selectedFood}
+            addFood={(food) => this.onAddFood(food)}
+            onCancel={() => this.closeOverlay()}
+          />
+        )
       default:
         return null
     }
@@ -51,13 +64,36 @@ class AddMealContainer extends Component {
   renderFullScreenOverlays () {
     switch (this.state.overlay) {
       case 'recently-added':
-        return <RecentlyAdded onSelectFood={(food) => this.onSelectFood(food)} onBack={() => this.closeOverlay()} />
+        return (
+          <RecentlyAdded
+            onSelectFood={(food) => this.onSelectFood(food)}
+            onBack={() => this.closeOverlay()}
+          />
+        )
       case 'categories':
-        return <Categories onSelectFood={(food) => this.onSelectFood(food)} onBack={() => this.closeOverlay()} />
+        return (
+          <Categories
+            onSelectFood={(food) => this.onSelectFood(food)}
+            onBack={() => this.closeOverlay()}
+          />
+        )
       case 'search-food':
-        return <SearchFood onBack={() => this.closeOverlay()} onSelectFood={(food) => this.onSelectFood(food)} />
+        return (
+          <SearchFood
+            onBack={() => this.closeOverlay()}
+            onSelectFood={(food) => this.onSelectFood(food)}
+          />
+        )
       case 'diary-info':
-        return <ModalContent onClose={() => this.closeOverlay()} type='rich-text' content={{htmlMarkup: this.props.cachedText['backpack-info-01']}} />
+        return (
+          <ModalContent
+            onClose={() => this.closeOverlay()}
+            type='rich-text'
+            content={{
+              htmlMarkup: this.props.cachedText['backpack-info-01']
+            }}
+          />
+        )
       default:
         return null
     }
@@ -84,7 +120,7 @@ class AddMealContainer extends Component {
     // clear amount
     delete foodCopy.amount
     this.props.addRecentlyAdded(foodCopy)
-    let newMeal = {...this.state.meal}
+    let newMeal = { ...this.state.meal }
     let newFood = [...this.state.meal.food, food]
     newMeal.food = newFood
     this.setState({
@@ -96,10 +132,14 @@ class AddMealContainer extends Component {
 
   onDeleteFood (food) {
     Alert.alert(
-        food.foodnameDE + ' ' + I18n.t('FoodDiary.confirmDelete'),
-        '',
+      food.foodnameDE + ' ' + I18n.t('FoodDiary.confirmDelete'),
+      '',
       [
-        {text: I18n.t('Settings.no'), onPress: () => {}, style: 'cancel'},
+        {
+          text: I18n.t('Settings.no'),
+          onPress: () => {},
+          style: 'cancel'
+        },
         {
           text: I18n.t('Settings.yes'),
           onPress: () => {
@@ -109,12 +149,12 @@ class AddMealContainer extends Component {
           }
         }
       ],
-        { cancelable: false }
+      { cancelable: false }
     )
   }
 
   deleteFood (food) {
-    let newMeal = {...this.state.meal}
+    let newMeal = { ...this.state.meal }
     let index = newMeal.food.indexOf(food)
     if (index > -1) {
       newMeal.food.splice(index, 1)
@@ -130,12 +170,20 @@ class AddMealContainer extends Component {
   onSubmitMeal () {
     log.action('Module', 'AddMeal', 'meal_added')
 
-    const {storyProgress} = this.props
+    const { storyProgress } = this.props
     let meal = R.clone(this.state.meal)
     // create message for server
     let message = I18n.t('FoodDiary.' + meal.mealType) + ':'
     meal.food.forEach((food) => {
-      message = message + '\n - ' + food.foodnameDE + ' (' + parseFloat(food.selectedAmount.value.toFixed(2)) + ' ' + I18n.t('FoodUnits.' + food.selectedAmount.unit.unitId) + ')'
+      message =
+        message +
+        '\n - ' +
+        food.foodnameDE +
+        ' (' +
+        parseFloat(food.selectedAmount.value.toFixed(2)) +
+        ' ' +
+        I18n.t('FoodUnits.' + food.selectedAmount.unit.unitId) +
+        ')'
     })
     let mealDate = moment(meal['mealTime']).format('DD.MM.YYYY')
     meal['mealDate'] = mealDate
@@ -144,12 +192,20 @@ class AddMealContainer extends Component {
     // if the user is still in tutorial mode, don't store the meal
     if (storyProgress.foodTutorialActive) {
       this.props.sendIntention(message, 'add-meal', meal)
-    // If the tutorial is completed, store the meal in fooddiary
+      // If the tutorial is completed, store the meal in fooddiary
     } else {
       // Add meal to local redux store
       this.props.addMeal(meal)
       this.props.sendIntention(message, 'add-meal', meal)
-      log.info('New meal (' + meal.mealType + ', ' + meal.mealDate + ') with ' + meal.food.length + ' food-items added to diary.')
+      log.info(
+        'New meal (' +
+          meal.mealType +
+          ', ' +
+          meal.mealDate +
+          ') with ' +
+          meal.food.length +
+          ' food-items added to diary.'
+      )
     }
     // close addmeal-modal
     this.props.onPress()
@@ -172,42 +228,84 @@ class AddMealContainer extends Component {
     // width of rectangle-Icons = screenWidth / 3 - Margins (4x20)
     let iconWidth = (Metrics.screenWidth - 80) / 3
     return (
-      <View style={{flex: 1}}>
-        <ScrollView style={{flex: 1, flexDirection: 'column'}}>
+      <View style={{ flex: 1 }}>
+        <ScrollView style={{ flex: 1, flexDirection: 'column' }}>
           <Button
             containerStyle={styles.searchButtonContainer}
             textStyle={styles.searchButtonText}
             style={styles.searchButton}
             onPress={() => {
               log.action('Module', 'AddMeal', 'freetext_search')
-              this.setState({overlay: 'search-food'})
-            }}>
-            <Icon containerStyle={styles.searchIcon} color={Colors.main.grey2} type='ionicon' name='ios-search' />
+              this.setState({ overlay: 'search-food' })
+            }}
+          >
+            <Icon
+              containerStyle={styles.searchIcon}
+              color={Colors.main.grey2}
+              type='ionicon'
+              name='ios-search'
+            />
             {I18n.t('FoodDiary.searchFood')}
           </Button>
           <View style={styles.rectangleIconContainer}>
-            <RectangleIconButton backgroundColor={Colors.buttons.common.background} color={Colors.buttons.common.text} onPress={() => this.setState({overlay: 'diary-info'})} title={I18n.t('FoodDiary.manual')} icon='info' type='entypo' width={iconWidth} />
-            <RectangleIconButton backgroundColor={Colors.buttons.common.background} color={Colors.buttons.common.text} onPress={() => {
-              log.action('Module', 'AddMeal', 'recently_added')
-              this.setState({overlay: 'recently-added'})
-            }} title={I18n.t('FoodDiary.recentlyAdded')} icon='ios-bookmarks' type='ionicon' width={iconWidth} />
-            <RectangleIconButton backgroundColor={Colors.buttons.common.background} color={Colors.buttons.common.text} onPress={() => {
-              log.action('Module', 'AddMeal', 'category_search')
-              this.setState({overlay: 'categories'})
-            }} title={I18n.t('FoodDiary.categories')} icon='ios-cart' type='ionicon' width={iconWidth} />
+            <RectangleIconButton
+              backgroundColor={Colors.buttons.common.background}
+              color={Colors.buttons.common.text}
+              onPress={() => this.setState({ overlay: 'diary-info' })}
+              title={I18n.t('FoodDiary.manual')}
+              icon='info'
+              type='entypo'
+              width={iconWidth}
+            />
+            <RectangleIconButton
+              backgroundColor={Colors.buttons.common.background}
+              color={Colors.buttons.common.text}
+              onPress={() => {
+                log.action('Module', 'AddMeal', 'recently_added')
+                this.setState({ overlay: 'recently-added' })
+              }}
+              title={I18n.t('FoodDiary.recentlyAdded')}
+              icon='ios-bookmarks'
+              type='ionicon'
+              width={iconWidth}
+            />
+            <RectangleIconButton
+              backgroundColor={Colors.buttons.common.background}
+              color={Colors.buttons.common.text}
+              onPress={() => {
+                log.action('Module', 'AddMeal', 'category_search')
+                this.setState({ overlay: 'categories' })
+              }}
+              title={I18n.t('FoodDiary.categories')}
+              icon='ios-cart'
+              type='ionicon'
+              width={iconWidth}
+            />
           </View>
           <View style={styles.headlineContainer}>
             <Text style={styles.headline}>{I18n.t('FoodDiary.yourMeal')}</Text>
           </View>
-          <MealListView fadeInFood fadeInTitle meal={this.state.meal} onDeleteFood={(food) => this.onDeleteFood(food)} />
+          <MealListView
+            fadeInFood
+            fadeInTitle
+            meal={this.state.meal}
+            onDeleteFood={(food) => this.onDeleteFood(food)}
+          />
         </ScrollView>
         <Button
           containerStyle={styles.buttonContainer}
           style={styles.button}
           disabledContainerStyle={styles.buttonDisabled}
           onPress={() => this.onSubmitMeal()}
-          disabled={this.state.meal.food.length === 0}>
-          <Icon size={45} type='ionicon' name='ios-checkmark' color={'#fff'} iconStyle={{height: 45, marginRight: 5}} />
+          disabled={this.state.meal.food.length === 0}
+        >
+          <Icon
+            size={45}
+            type='ionicon'
+            name='ios-checkmark'
+            color={'#fff'}
+            iconStyle={{ height: 45, marginRight: 5 }}
+          />
           {I18n.t('FoodDiary.mealCompleted')}
         </Button>
       </View>
@@ -216,11 +314,17 @@ class AddMealContainer extends Component {
 
   render () {
     return (
-      <View style={{
-        flex: 1,
-        flexDirection: 'column'
-      }}>
-        <HeaderBar title={I18n.t('FoodDiary.addMeal')} onClose={this.props.onPress} confirmClose={I18n.t('FoodDiary.confirmClose')} />
+      <View
+        style={{
+          flex: 1,
+          flexDirection: 'column'
+        }}
+      >
+        <HeaderBar
+          title={I18n.t('FoodDiary.addMeal')}
+          onClose={this.props.onPress}
+          confirmClose={I18n.t('FoodDiary.confirmClose')}
+        />
         <View style={styles.container}>
           {this.renderMainContent()}
           {this.renderCardOverlays()}
@@ -239,13 +343,18 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapStateToDispatch = dispatch => ({
-  addRecentlyAdded: (food) => dispatch(FoodDiaryActions.foodDiaryAddRecentlyAddedFood(food)),
+const mapStateToDispatch = (dispatch) => ({
+  addRecentlyAdded: (food) =>
+    dispatch(FoodDiaryActions.foodDiaryAddRecentlyAddedFood(food)),
   addMeal: (meal) => dispatch(FoodDiaryActions.foodDiaryAddMeal(meal)),
-  sendIntention: (text, intention, content) => dispatch(ServerMessageActions.sendIntention(text, intention, content))
+  sendIntention: (text, intention, content) =>
+    dispatch(ServerMessageActions.sendIntention(text, intention, content))
 })
 
-export default connect(mapStateToProps, mapStateToDispatch)(AddMealContainer)
+export default connect(
+  mapStateToProps,
+  mapStateToDispatch
+)(AddMealContainer)
 
 const styles = StyleSheet.create({
   container: {

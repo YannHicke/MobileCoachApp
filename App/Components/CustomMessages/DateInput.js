@@ -8,9 +8,9 @@ import DatePicker from 'react-native-datepicker'
 import I18n from '../../I18n/I18n'
 import moment from 'moment'
 
-import CommonUtils, {tapBlockingHandlers} from './../../Utils/Common'
-import {Colors} from '../../Themes/'
-import {inputMessageStyles} from './Styles/CommonStyles'
+import CommonUtils, { tapBlockingHandlers } from './../../Utils/Common'
+import { Colors } from '../../Themes/'
+import { inputMessageStyles } from './Styles/CommonStyles'
 
 export default class DateInput extends Component {
   static propTypes = {
@@ -28,8 +28,8 @@ export default class DateInput extends Component {
   }
 
   getMinMaxDate (maxDate) {
-    const {currentMessage} = this.props
-    const {min, max} = currentMessage.custom
+    const { currentMessage } = this.props
+    const { min, max } = currentMessage.custom
     let dateTime = null
     if (maxDate) {
       dateTime = max
@@ -55,7 +55,10 @@ export default class DateInput extends Component {
         const hour = Math.floor(Number(dateTimeArray[1]))
         const minute = Math.round((Number(dateTimeArray[1]) - hour) * 60)
         const timeString = hour + ':' + minute
-        return moment(dateTimeArray[0] + ' ' + timeString, 'DD.MM.YYYY HH:mm').toDate()
+        return moment(
+          dateTimeArray[0] + ' ' + timeString,
+          'DD.MM.YYYY HH:mm'
+        ).toDate()
       }
     }
   }
@@ -68,35 +71,53 @@ export default class DateInput extends Component {
   onSubmitHandler () {
     // Only handle submit the first time (to prevent unwanted "double-taps")
     if (!this.submitted) {
-      const {currentMessage, onSubmit} = this.props
-      let relatedMessageId = currentMessage._id.substring(0, currentMessage._id.lastIndexOf('-'))
+      const { currentMessage, onSubmit } = this.props
+      let relatedMessageId = currentMessage._id.substring(
+        0,
+        currentMessage._id.lastIndexOf('-')
+      )
       // when date is empty, send a blank space so a empty bubble will be shown..
       if (this.state.date === null) {
-        return Alert.alert(I18n.t('Common.invalid'),
-            I18n.t('Common.validationError'),
-          [
-              {text: I18n.t('Common.ok'), onPress: () => true}
-          ]
+        return Alert.alert(
+          I18n.t('Common.invalid'),
+          I18n.t('Common.validationError'),
+          [{ text: I18n.t('Common.ok'), onPress: () => true }]
         )
       } else {
         // Check if date is valid (on IOS, we can rely on the datePicker, while on android there is no
         // min/max values for the time-picker)
-        if ((this.minDate != null && this.state.date < this.minDate) || (this.maxDate != null && this.state.date > this.maxDate)) {
-          return Alert.alert(I18n.t('Common.invalid'),
-              (`${I18n.t('Common.datePicker.outOfRange')} ${moment(this.minDate).format(this.formatDateForClient())} ${I18n.t('Common.and')}\n${moment(this.maxDate).format(this.formatDateForClient())}.`),
-            [
-              {text: I18n.t('Common.ok'), onPress: () => true}
-            ]
+        if (
+          (this.minDate != null && this.state.date < this.minDate) ||
+          (this.maxDate != null && this.state.date > this.maxDate)
+        ) {
+          return Alert.alert(
+            I18n.t('Common.invalid'),
+            `${I18n.t('Common.datePicker.outOfRange')} ${moment(
+              this.minDate
+            ).format(this.formatDateForClient())} ${I18n.t(
+              'Common.and'
+            )}\n${moment(this.maxDate).format(this.formatDateForClient())}.`,
+            [{ text: I18n.t('Common.ok'), onPress: () => true }]
           )
-        } else onSubmit(currentMessage.custom.intention, moment(this.state.date).format(this.formatDateForClient()), this.formatDateForServer(this.state.date), relatedMessageId)
+        } else {
+          onSubmit(
+            currentMessage.custom.intention,
+            moment(this.state.date).format(this.formatDateForClient()),
+            this.formatDateForServer(this.state.date),
+            relatedMessageId
+          )
+        }
       }
     }
     this.submitted = true
   }
 
   onCancel () {
-    const {currentMessage, onSubmit} = this.props
-    let relatedMessageId = currentMessage._id.substring(0, currentMessage._id.lastIndexOf('-'))
+    const { currentMessage, onSubmit } = this.props
+    let relatedMessageId = currentMessage._id.substring(
+      0,
+      currentMessage._id.lastIndexOf('-')
+    )
     // Convention: when canceled, just send an empty string
     // intention, text, value, relatedMessageId
     onSubmit(currentMessage.custom.intention, '', '', relatedMessageId)
@@ -104,12 +125,16 @@ export default class DateInput extends Component {
 
   // fix formats for dates sent to server
   formatDateForServer (date) {
-    const {currentMessage} = this.props
+    const { currentMessage } = this.props
     switch (currentMessage.custom.mode) {
       case 'time': {
         const momentDate = moment(date)
-        const minutes = '0' + Math.floor(momentDate.format('mm') / 60 * 100)
-        return momentDate.format('HH') + '.' + minutes.substr(minutes.length - 2)
+        const minutes = '0' + Math.floor((momentDate.format('mm') / 60) * 100)
+        return (
+          momentDate.format('HH') +
+          '.' +
+          minutes.substring(minutes.length - 2, minutes.length)
+        )
       }
       case 'date': {
         return moment(date).format('DD.MM.YYYY')
@@ -117,15 +142,21 @@ export default class DateInput extends Component {
       case 'datetime':
       default: {
         const momentDate = moment(date)
-        const minutes = '0' + Math.floor(momentDate.format('mm') / 60 * 100)
-        return moment(date).format('DD.MM.YYYY') + ',' + momentDate.format('HH') + '.' + minutes.substr(minutes.length - 2)
+        const minutes = '0' + Math.floor((momentDate.format('mm') / 60) * 100)
+        return (
+          moment(date).format('DD.MM.YYYY') +
+          ',' +
+          momentDate.format('HH') +
+          '.' +
+          minutes.substring(minutes.length - 2, minutes.length)
+        )
       }
     }
   }
 
   // Use different converter for client to be able to adjust to clients locale
   formatDateForClient () {
-    const {currentMessage} = this.props
+    const { currentMessage } = this.props
     switch (currentMessage.custom.mode) {
       case 'time': {
         return 'LT'
@@ -142,11 +173,9 @@ export default class DateInput extends Component {
 
   // Measure width of hidden Text element to adjust input width
   measureView (event) {
-    this.setState(
-      {
-        inputWidth: event.nativeEvent.layout.width
-      }
-    )
+    this.setState({
+      inputWidth: event.nativeEvent.layout.width
+    })
   }
 
   // On android, it seems that 00:00 belongs to the previous date (->24:00), this causes a 1 day offset for min an max dates
@@ -155,73 +184,146 @@ export default class DateInput extends Component {
   correctBoundsForAndroidPicker (date) {
     if (Platform.OS === 'android' && moment(date).format('HH:mm') === '00:00') {
       // add 1 day to correct the unwanted offset
-      return moment(date).add(1, 'days').toDate()
+      return moment(date)
+        .add(1, 'days')
+        .toDate()
     } else return date
   }
 
   render () {
-    const {currentMessage} = this.props
+    const { currentMessage } = this.props
     let icon = 'calendar-blank'
     if (currentMessage.custom.mode === 'datetime') icon = 'calendar-clock'
     if (currentMessage.custom.mode === 'time') icon = 'clock'
     const editable = CommonUtils.userCanEdit(currentMessage)
     // <Text onLayout={(event) => this.measureView(event)} style={[{}, styles.dateText]}>{this.state.date ? moment(this.state.date).format(this.formatDateForClient()) : currentMessage.custom.placeholder}</Text>
     return (
-      <Animatable.View useNativeDriver animation={this.shouldAnimate ? this.props.fadeInAnimation : null} duration={this.props.duration} style={[inputMessageStyles.container]} onAnimationEnd={() => { this.shouldAnimate = false }} >
-        <View {...editable ? null : tapBlockingHandlers} style={[styles.inputBubble, {backgroundColor: editable ? Colors.buttons.common.background : Colors.buttons.common.disabled}]}>
+      <Animatable.View
+        useNativeDriver
+        animation={this.shouldAnimate ? this.props.fadeInAnimation : null}
+        duration={this.props.duration}
+        style={[inputMessageStyles.container]}
+        onAnimationEnd={() => {
+          this.shouldAnimate = false
+        }}
+      >
+        <View
+          {...(editable ? null : tapBlockingHandlers)}
+          style={[
+            styles.inputBubble,
+            {
+              backgroundColor: editable
+                ? Colors.buttons.common.background
+                : Colors.buttons.common.disabled
+            }
+          ]}
+        >
           {/* To adjust the width of the Input-Field dynamically by it's content,
           we need to create a hidden Text view with the same content and measure it using onLayout.
           This is quiet dirty, but until now, it seems to be the only working way.
           See: https://stackoverflow.com/a/33027556/4150548 */}
-          <View style={{height: 0, overflow: 'hidden'}}>
-            <Text onLayout={(event) => this.measureView(event)} style={[styles.dateText, {position: 'absolute', color: 'transparent', top: -30}]}>{this.state.date ? moment(this.state.date).format(this.formatDateForClient()) : currentMessage.custom.placeholder}</Text>
+          <View style={{ height: 0, overflow: 'hidden' }}>
+            <Text
+              onLayout={(event) => this.measureView(event)}
+              style={[
+                styles.dateText,
+                {
+                  position: 'absolute',
+                  color: 'transparent',
+                  top: -30
+                }
+              ]}
+            >
+              {this.state.date
+                ? moment(this.state.date).format(this.formatDateForClient())
+                : currentMessage.custom.placeholder}
+            </Text>
           </View>
           <DatePicker
             disabled={!editable}
             onLayout={(event) => this.measureContainer(event)}
-            style={{width: null}}
+            style={{ width: null }}
             date={this.state.date}
             mode={currentMessage.custom.mode}
             is24Hour
             locale={moment.locale()}
             format={this.formatDateForClient()}
-            placeholder={currentMessage.custom.placeholder === '' ? ' ' : currentMessage.custom.placeholder}
+            placeholder={
+              currentMessage.custom.placeholder === ''
+                ? ' '
+                : currentMessage.custom.placeholder
+            }
             confirmBtnText={I18n.t('Common.confirm')}
             cancelBtnText={I18n.t('Common.abort')}
-            minDate={this.minDate ? this.correctBoundsForAndroidPicker(this.minDate) : undefined}
-            maxDate={this.maxDate ? this.correctBoundsForAndroidPicker(this.maxDate) : undefined}
-            iconComponent={<Icon name={icon} containerStyle={{
-              position: 'absolute',
-              left: 0,
-              marginLeft: 0
-            }} type='material-community' size={24} color='#fff' />}
+            minDate={
+              this.minDate
+                ? this.correctBoundsForAndroidPicker(this.minDate)
+                : undefined
+            }
+            maxDate={
+              this.maxDate
+                ? this.correctBoundsForAndroidPicker(this.maxDate)
+                : undefined
+            }
+            iconComponent={
+              <Icon
+                name={icon}
+                containerStyle={{
+                  position: 'absolute',
+                  left: 0,
+                  marginLeft: 0
+                }}
+                type='material-community'
+                size={24}
+                color='#fff'
+              />
+            }
             customStyles={{
-              dateInput: [styles.dateInput, {flex: 0, width: this.state.inputWidth}],
+              dateInput: [
+                styles.dateInput,
+                { flex: 0, width: this.state.inputWidth }
+              ],
               dateText: [styles.dateText],
               placeholderText: [styles.dateText],
-              disabled: {backgroundColor: Colors.buttons.common.disabled}
-            // ... You can check the source to find the other keys.
+              disabled: {
+                backgroundColor: Colors.buttons.common.disabled
+              }
+              // ... You can check the source to find the other keys.
             }}
             onDateChange={(string, date) => {
               // clear seconds (android time-picker sets seconds)
               date.setSeconds(0)
               date.setMilliseconds(0)
-              this.setState({date})
+              this.setState({ date })
             }}
-           />
-          <Button
-            containerStyle={styles.button}
-            onPress={() => {
-              return editable ? this.onCancel() : false
-            }}>
-            <Icon name='ios-close-circle' type='ionicon' color={Colors.buttons.common.skipAnswer} size={30} />
-          </Button>
+          />
+          {currentMessage.custom.canBeCancelled ? (
+            <Button
+              containerStyle={styles.button}
+              onPress={() => {
+                return editable ? this.onCancel() : false
+              }}
+            >
+              <Icon
+                name='ios-close-circle'
+                type='ionicon'
+                color={Colors.buttons.common.skipAnswer}
+                size={30}
+              />
+            </Button>
+          ) : null}
           <Button
             containerStyle={styles.button}
             onPress={() => {
               return editable ? this.onSubmitHandler() : false
-            }}>
-            <Icon name='ios-checkmark-circle' type='ionicon' color={Colors.buttons.common.text} size={30} />
+            }}
+          >
+            <Icon
+              name='ios-checkmark-circle'
+              type='ionicon'
+              color={Colors.buttons.common.text}
+              size={30}
+            />
           </Button>
         </View>
       </Animatable.View>
@@ -230,7 +332,7 @@ export default class DateInput extends Component {
 
   componentDidMount () {
     // notify redux that animationw as shown after first render
-    const {currentMessage} = this.props
+    const { currentMessage } = this.props
     if (currentMessage.custom.shouldAnimate) {
       this.props.setAnimationShown(currentMessage._id)
     }

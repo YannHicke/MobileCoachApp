@@ -1,4 +1,3 @@
-
 // TODO for improvement check: https://github.com/idibidiart/react-native-responsive-grid/blob/master/UniversalTiles.md
 
 import React, { Component } from 'react'
@@ -7,18 +6,17 @@ import {
   View,
   StyleSheet,
   ScrollView,
-  Image,
   TouchableWithoutFeedback,
   Platform
 } from 'react-native'
 import { connect } from 'react-redux'
-import {Metrics, Colors} from '../../Themes/'
+import { Metrics, Colors } from '../../Themes/'
 import CardView from 'react-native-cardview'
 import * as Animatable from 'react-native-animatable'
 import PMNavigationBar from '../../Components/Navbar'
 import I18n from '../../I18n/I18n'
 import FileViewer from 'react-native-file-viewer'
-import RNFetchBlob from 'react-native-fetch-blob'
+import RNFetchBlob from 'rn-fetch-blob'
 import RNFS from 'react-native-fs'
 
 import RecipePaths from './RecipePaths'
@@ -27,7 +25,7 @@ import InfoButton from '../../Components/InfoButton'
 import Log from '../../Utils/Log'
 const log = new Log('Containers/Recipes/Recipes')
 
-const CARD_WIDTH = Metrics.screenWidth / 2 * 0.9
+const CARD_WIDTH = (Metrics.screenWidth / 2) * 0.9
 const CARD_HEIGHT = CARD_WIDTH
 const INITIAL_DELAY = 0 // 1000
 const DELAY = 0 // 300
@@ -36,24 +34,43 @@ class Item extends Component {
   render () {
     // this.props.onPress()
     return (
-      <TouchableWithoutFeedback onPress={() => this.refs.view.pulse(250).then(() => this.props.onPress())}>
-        <Animatable.View useNativeDriver ref='view' delay={this.props.delay} animation='fadeIn' style={{backgroundColor: 'transparent', height: CARD_HEIGHT}}>
+      <TouchableWithoutFeedback
+        onPress={() =>
+          this.refs.view.pulse(250).then(() => this.props.onPress())
+        }
+      >
+        <Animatable.View
+          useNativeDriver
+          ref='view'
+          delay={this.props.delay}
+          animation='fadeIn'
+          style={{
+            backgroundColor: 'transparent',
+            height: CARD_HEIGHT
+          }}
+        >
           <CardView
             cardElevation={2}
             cardMaxElevation={2}
             cornerRadius={5}
-            style={{backgroundColor: Colors.buttons.common.background}}
+            style={{
+              backgroundColor: Colors.buttons.common.background
+            }}
+          >
+            <View
+              style={{
+                height: CARD_HEIGHT,
+                width: CARD_WIDTH,
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                padding: 10
+              }}
             >
-            <View style={{
-              height: CARD_HEIGHT,
-              width: CARD_WIDTH,
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-              padding: 10
-            }}>
               <Text style={styles.title}>{this.props.title}</Text>
-              {this.props.subtitle ? <Text style={styles.subtitle}>{this.props.subtitle}</Text> : null}
+              {this.props.subtitle ? (
+                <Text style={styles.subtitle}>{this.props.subtitle}</Text>
+              ) : null}
             </View>
           </CardView>
         </Animatable.View>
@@ -70,7 +87,8 @@ class Recipes extends Component {
 
   componentWillMount () {
     if (Platform.OS === 'ios') {
-      this.baseDir = RNFetchBlob.fs.dirs.MainBundleDir + '/Web/assets/pdf/recipes/'
+      this.baseDir =
+        RNFetchBlob.fs.dirs.MainBundleDir + '/Web/assets/pdf/recipes/'
     } else if (Platform.OS === 'android') {
       this.baseDir = 'web/assets/pdf/recipes/'
     }
@@ -79,8 +97,16 @@ class Recipes extends Component {
   renderNavigationbar (props) {
     let title = I18n.t('Recipes.header')
     return (
-      <PMNavigationBar title={title} props={props}
-        rightButton={<InfoButton onPress={() => { this.openPDF(RecipePaths['info_' + this.props.language].path) }} />}
+      <PMNavigationBar
+        title={title}
+        props={props}
+        rightButton={
+          <InfoButton
+            onPress={() => {
+              this.openPDF(RecipePaths['info_' + this.props.language].path)
+            }}
+          />
+        }
       />
     )
   }
@@ -90,7 +116,7 @@ class Recipes extends Component {
       <View style={styles.container}>
         {this.renderNavigationbar(this.props)}
         <View style={styles.content}>
-          <Image source={require('../../Images/Recipes/recipes.jpg')} style={styles.backgroundImage} />
+          {/* <Image source={require('../../Images/Recipes/recipes.jpg')} style={styles.backgroundImage} /> */}
           <ScrollView style={styles.grid} indicatorStyle='white'>
             {this.renderGrid()}
           </ScrollView>
@@ -102,12 +128,14 @@ class Recipes extends Component {
   openPDF (filename) {
     const path = this.baseDir + filename
     if (Platform.OS === 'ios') {
-      FileViewer.open(path).then(() => {
-        log.info('Opened Recipe-PDF successfully')
-      }).catch((error) => {
-        log.warn('Could not open Recipe PDF on ios', error)
-      })
-    // On android, we need to decompress assets first, and then we can show them
+      FileViewer.open(path)
+        .then(() => {
+          log.info('Opened Recipe-PDF successfully')
+        })
+        .catch((error) => {
+          log.warn('Could not open Recipe PDF on ios', error)
+        })
+      // On android, we need to decompress assets first, and then we can show them
     } else {
       // destination path for copied PDF
       const dest = `${RNFS.DocumentDirectoryPath}/recipe.pdf`
@@ -116,12 +144,15 @@ class Recipes extends Component {
         .then(() => {
           // then open the PDF
           FileViewer.open(dest)
-          .then(() => {
-            log.info('Opened Recipe-PDF successfully')
-          })
-          .catch((error) => {
-            log.warn('Could not find a suitable application to open PDF.', error)
-          })
+            .then(() => {
+              log.info('Opened Recipe-PDF successfully')
+            })
+            .catch((error) => {
+              log.warn(
+                'Could not find a suitable application to open PDF.',
+                error
+              )
+            })
         })
         .catch((error) => {
           log.warn('Could not open PDF from android assets.', error)
@@ -130,25 +161,58 @@ class Recipes extends Component {
   }
 
   sortRecipes (a, b) {
-    let recipeA = a.recipeName.toUpperCase().replace('Ä', 'AE').replace('Ü', 'UE').replace('Ö', 'OE')
-    let recipeB = b.recipeName.toUpperCase().replace('Ä', 'AE').replace('Ü', 'UE').replace('Ö', 'OE')
-    return (recipeA < recipeB) ? -1 : (recipeA > recipeB) ? 1 : 0
+    let recipeA = a.recipeName
+      .toUpperCase()
+      .replace('Ä', 'AE')
+      .replace('Ü', 'UE')
+      .replace('Ö', 'OE')
+    let recipeB = b.recipeName
+      .toUpperCase()
+      .replace('Ä', 'AE')
+      .replace('Ü', 'UE')
+      .replace('Ö', 'OE')
+    return recipeA < recipeB ? -1 : recipeA > recipeB ? 1 : 0
   }
 
   renderGrid () {
-    const recipes = RecipePaths[this.props.language].sort((a, b) => this.sortRecipes(a, b))
+    const recipes = RecipePaths[this.props.language].sort((a, b) =>
+      this.sortRecipes(a, b)
+    )
     return (
-      <View style={{marginBottom: 20}}>
+      <View style={{ marginBottom: 20 }}>
         {recipes.map((recipe, index, array) => {
           if (index % 2 === 0) {
             return (
-              <View key={index} style={{
-                flexDirection: 'row',
-                justifyContent: 'space-around',
-                marginTop: 20
-              }}>
-                <Item key={index} delay={INITIAL_DELAY + index * DELAY} title={recipe.recipeName} subtitle={recipe.vegetarian ? I18n.t('Recipes.vegetarian') : null} onPress={() => this.openPDF(recipe.path)} />
-                {array[index + 1] !== undefined ? <Item key={index + 1} delay={INITIAL_DELAY + (index + 0.5) * DELAY} title={array[index + 1].recipeName} subtitle={array[index + 1].vegetarian ? I18n.t('Recipes.vegetarian') : null} onPress={() => this.openPDF(array[index + 1].path)} /> : null}
+              <View
+                key={index}
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-around',
+                  marginTop: 20
+                }}
+              >
+                <Item
+                  key={index}
+                  delay={INITIAL_DELAY + index * DELAY}
+                  title={recipe.recipeName}
+                  subtitle={
+                    recipe.vegetarian ? I18n.t('Recipes.vegetarian') : null
+                  }
+                  onPress={() => this.openPDF(recipe.path)}
+                />
+                {array[index + 1] !== undefined ? (
+                  <Item
+                    key={index + 1}
+                    delay={INITIAL_DELAY + (index + 0.5) * DELAY}
+                    title={array[index + 1].recipeName}
+                    subtitle={
+                      array[index + 1].vegetarian
+                        ? I18n.t('Recipes.vegetarian')
+                        : null
+                    }
+                    onPress={() => this.openPDF(array[index + 1].path)}
+                  />
+                ) : null}
               </View>
             )
           }
@@ -188,6 +252,15 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0
   },
-  title: {textAlign: 'center', fontSize: 18, color: Colors.buttons.common.text},
-  subtitle: {marginTop: 10, textAlign: 'center', fontSize: 14, color: Colors.buttons.common.text}
+  title: {
+    textAlign: 'center',
+    fontSize: 18,
+    color: Colors.buttons.common.text
+  },
+  subtitle: {
+    marginTop: 10,
+    textAlign: 'center',
+    fontSize: 14,
+    color: Colors.buttons.common.text
+  }
 })

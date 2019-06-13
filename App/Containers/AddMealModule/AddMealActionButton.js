@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import {StyleSheet, View} from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import PropTypes from 'prop-types'
 import ActionButton from 'react-native-action-button'
 import I18n from '../../I18n/I18n'
-import {MealTypeArray} from './FoodMetrics'
+import { MealTypeArray } from './FoodMetrics'
 import BlurView from '../../Components/BlurView'
-import {Colors} from '../../Themes'
+import { Colors } from '../../Themes'
 
 class AddMealActionButton extends Component {
   static propTypes = {
@@ -25,7 +25,9 @@ class AddMealActionButton extends Component {
           spaceBetween={-50}
           buttonColor={'transparent'}
           title={I18n.t('FoodDiary.' + mealType)}
-          onPress={() => { this.props.showModal('add-meal', {mealType}) }}
+          onPress={() => {
+            this.props.showModal('add-meal', { mealType })
+          }}
           textContainerStyle={styles.button}
           textStyle={styles.buttonTitle}
           nativeFeedbackRippleColor={'transparent'}
@@ -41,11 +43,7 @@ class AddMealActionButton extends Component {
   }
 
   renderItems () {
-    return (
-      this.buttonItems.map((item, i) => (
-        item
-      ))
-    )
+    return this.buttonItems.map((item, i) => item)
   }
 
   render () {

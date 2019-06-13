@@ -1,0 +1,8 @@
+/* 
+  InfoPlist.strings
+  MobileCoachClient
+*/
+"NSCameraUsageDescription" = "Wir benötigen Zugriff auf deine Kamera, um es dir zu ermöglichen Fotos zu schiessen oder grafische Codes zu scannen";
+"NSLocationWhenInUseUsageDescription" = "Wir benötigen Zugriff auf deine Position, um es dir zu ermöglichen....´";
+"NSMicrophoneUsageDescription" = "Wir benötigen Zugriff auf dein Mikrofon, um es dir zu ermöglichen Audioschnipsel aufzuzeichnen";
+"NSLocationAlwaysUsageDescription" = "Wir benötigen permanent Zugriff auf deine Position, um es dir zu ermöglichen....´";

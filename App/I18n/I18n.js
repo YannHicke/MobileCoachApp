@@ -1,5 +1,6 @@
 import I18n from 'react-native-i18n'
 import moment from 'moment'
+import { extendMoment } from 'moment-range'
 
 // Required for compatibility issues
 import 'moment/locale/en-gb'
@@ -25,8 +26,11 @@ I18n.translations = {
 }
 
 // Use device language as default language if available as translation, otherwise default language
-I18n.locale = I18n.translations.hasOwnProperty(I18n.locale.substr(0, 2)) ? I18n.locale.substr(0, 2) : I18n.defaultLocale
+I18n.locale = I18n.translations.hasOwnProperty(I18n.locale.substr(0, 2))
+  ? I18n.locale.substr(0, 2)
+  : I18n.defaultLocale
 
+extendMoment(moment)
 // Set base locale also for moment
 moment.locale(I18n.currentLocale())
 

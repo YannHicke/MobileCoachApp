@@ -1,14 +1,13 @@
-
 // TODO for improvement check: https://github.com/idibidiart/react-native-responsive-grid/blob/master/UniversalTiles.md
 
 import React, { Component } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import I18n from '../../I18n/I18n'
 import PropTypes from 'prop-types'
-import { FormLabel, FormInput, FormValidationMessage } from 'react-native-elements'
+import { Input, FormValidationMessage } from 'react-native-elements'
 
 import NextButton from '../../Components/NextButton'
-import {Colors} from '../../Themes/'
+import { Colors } from '../../Themes/'
 
 export default class FeedbackForm extends Component {
   static propTypes = {
@@ -32,27 +31,36 @@ export default class FeedbackForm extends Component {
   renderForm () {
     return (
       <View>
-        <FormLabel labelStyle={styles.labelStyle}>{I18n.t('Settings.feedbackForm.nameInput')}</FormLabel>
-        <FormInput
+        <Input
+          label={I18n.t('Settings.feedbackForm.nameInput')}
+          labelStyle={styles.labelStyle}
           inputStyle={styles.formInput}
           containerStyle={styles.inputContainer}
-          onChangeText={(name) => this.setState({name})}
+          onChangeText={(name) => this.setState({ name })}
         />
-        <FormLabel labelStyle={styles.labelStyle}>{I18n.t('Settings.feedbackForm.emailInput')}</FormLabel>
-        <FormInput
+        <Input
+          label={I18n.t('Settings.feedbackForm.emailInput')}
+          labelStyle={styles.labelStyle}
           inputStyle={styles.formInput}
           containerStyle={styles.inputContainer}
-          onChangeText={(email) => this.setState({email})}
+          onChangeText={(email) => this.setState({ email })}
         />
-        <FormLabel labelStyle={styles.labelStyle}>{I18n.t('Settings.feedbackForm.feedbackInput')}</FormLabel>
-        <FormInput
+        <Input
+          label={I18n.t('Settings.feedbackForm.feedbackInput')}
+          labelStyle={styles.labelStyle}
           onFocus={this.props.onFeedbackFocus}
-          inputStyle={[styles.formInput, {minHeight: 72}]}
+          inputStyle={[styles.formInput, { minHeight: 72 }]}
           containerStyle={styles.inputContainer}
           multiline
-          onChangeText={(errorDescription) => this.setState({errorDescription})}
+          onChangeText={(errorDescription) =>
+            this.setState({ errorDescription })
+          }
         />
-        {!this.inputValid() && this.state.submitPressed ? <FormValidationMessage labelStyle={styles.inputContainer}>{I18n.t('Settings.feedbackForm.errorMessage')}</FormValidationMessage> : null}
+        {!this.inputValid() && this.state.submitPressed ? (
+          <FormValidationMessage labelStyle={styles.inputContainer}>
+            {I18n.t('Settings.feedbackForm.errorMessage')}
+          </FormValidationMessage>
+        ) : null}
         <NextButton
           styleButton={styles.button}
           styleText={styles.buttonText}
@@ -74,8 +82,14 @@ export default class FeedbackForm extends Component {
 
   onSubmitHandler () {
     if (this.inputValid()) {
-      this.setState({submitted: true}, () => this.props.onSubmit(this.state.name, this.state.email, this.state.errorDescription))
-    } else this.setState({submitPressed: true})
+      this.setState({ submitted: true }, () =>
+        this.props.onSubmit(
+          this.state.name,
+          this.state.email,
+          this.state.errorDescription
+        )
+      )
+    } else this.setState({ submitPressed: true })
   }
 
   inputValid () {
@@ -108,6 +122,11 @@ const styles = StyleSheet.create({
     color: Colors.main.paragraph,
     fontWeight: 'normal'
   },
-  button: {backgroundColor: Colors.buttons.common.background, borderRadius: 20, marginVertical: 10, marginTop: 30},
-  buttonText: {color: Colors.buttons.common.text, fontSize: 16}
+  button: {
+    backgroundColor: Colors.buttons.common.background,
+    borderRadius: 20,
+    marginVertical: 10,
+    marginTop: 30
+  },
+  buttonText: { color: Colors.buttons.common.text, fontSize: 16 }
 })

@@ -1,9 +1,13 @@
-import React, {Component} from 'react'
-import {View, StyleSheet, Alert} from 'react-native'
-import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button'
+import React, { Component } from 'react'
+import { View, StyleSheet, Alert } from 'react-native'
+import RadioForm, {
+  RadioButton,
+  RadioButtonInput,
+  RadioButtonLabel
+} from 'react-native-simple-radio-button'
 import Button from 'react-native-button'
 import PropTypes from 'prop-types'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import DatePicker from 'react-native-datepicker'
 import I18n from '../../I18n/I18n'
 import moment from 'moment'
@@ -12,9 +16,9 @@ import * as Animatable from 'react-native-animatable'
 import { Dropdown } from 'react-native-material-dropdown'
 
 import BlurView from '../../Components/BlurView'
-import {Colors} from '../../Themes/'
-import {MealPlaces, EatOutOptions} from './FoodMetrics'
-import {getNonEditableDays} from '../../Redux/Selectors'
+import { Colors } from '../../Themes/'
+import { MealPlaces, EatOutOptions } from './FoodMetrics'
+import { getNonEditableDays } from '../../Redux/Selectors'
 
 import Log from '../../Utils/Log'
 const log = new Log('AddMealModule/AddMealPreStep')
@@ -39,7 +43,10 @@ class AddMealPreStep extends Component {
     this.mealPlaceOptions = []
     for (var key in EatOutOptions) {
       if (EatOutOptions.hasOwnProperty(key)) {
-        this.mealPlaceOptions.push({value: EatOutOptions[key], label: I18n.t('FoodDiary.' + EatOutOptions[key])})
+        this.mealPlaceOptions.push({
+          value: EatOutOptions[key],
+          label: I18n.t('FoodDiary.' + EatOutOptions[key])
+        })
       }
     }
     this.MealTimeProps = [
@@ -90,8 +97,12 @@ class AddMealPreStep extends Component {
             textColor={Colors.buttons.common.text}
             baseColor={Colors.buttons.common.text}
             selectedItemColor={Colors.buttons.common.background}
-            itemTextStyle={{color: Colors.buttons.common.background}}
-            onChangeText={(value, index, data) => this.onChangeDropdown(value, index, data)}
+            itemTextStyle={{
+              color: Colors.buttons.common.background
+            }}
+            onChangeText={(value, index, data) =>
+              this.onChangeDropdown(value, index, data)
+            }
           />
         </Animatable.View>
       )
@@ -118,17 +129,28 @@ class AddMealPreStep extends Component {
       log.debug('Current locale for date picker:', moment.locale())
 
       return (
-        <View style={{flexDirection: 'row'}}>
+        <View style={{ flexDirection: 'row' }}>
           <Animatable.View
             useNativeDriver
             duration={350}
             animation='flipInX'
             style={{
               flexDirection: 'row',
-              flex: 1}}
+              flex: 1
+            }}
           >
             {/* This view just hacks a 0.5 opacity 'underlay'-color beneath DatePicker-Component (because underlay-color can't be specified) */}
-            <View style={{position: 'absolute', top: 10, bottom: 0, left: 0, right: 0, borderRadius: 5, backgroundColor: 'rgba(82,110,124,0.5)'}} />
+            <View
+              style={{
+                position: 'absolute',
+                top: 10,
+                bottom: 0,
+                left: 0,
+                right: 0,
+                borderRadius: 5,
+                backgroundColor: 'rgba(82,110,124,0.5)'
+              }}
+            />
             <DatePicker
               style={{
                 backgroundColor: Colors.main.primary,
@@ -138,7 +160,8 @@ class AddMealPreStep extends Component {
                 padding: 10,
                 paddingTop: 5,
                 paddingBottom: 5,
-                borderColor: Colors.buttons.common.background}}
+                borderColor: Colors.buttons.common.background
+              }}
               date={this.state.mealTime}
               mode='datetime'
               is24Hour
@@ -149,12 +172,20 @@ class AddMealPreStep extends Component {
               cancelBtnText={I18n.t('Common.abort')}
               maxDate={maxDate.toDate()}
               minDate={minDate.toDate()}
-              iconComponent={<Icon name='calendar' containerStyle={{
-                position: 'absolute',
-                left: -2,
-                top: 4,
-                marginLeft: 0
-              }} type='entypo' size={32} color={Colors.buttons.common.text} />}
+              iconComponent={
+                <Icon
+                  name='calendar'
+                  containerStyle={{
+                    position: 'absolute',
+                    left: -2,
+                    top: 4,
+                    marginLeft: 0
+                  }}
+                  type='entypo'
+                  size={32}
+                  color={Colors.buttons.common.text}
+                />
+              }
               customStyles={{
                 dateInput: {
                   marginLeft: 36,
@@ -171,10 +202,10 @@ class AddMealPreStep extends Component {
                   fontSize: 14,
                   color: Colors.buttons.common.text
                 }
-              // ... You can check the source to find the other keys.
+                // ... You can check the source to find the other keys.
               }}
               onDateChange={(date) => this.onDateChange(date)}
-             />
+            />
           </Animatable.View>
         </View>
       )
@@ -191,28 +222,35 @@ class AddMealPreStep extends Component {
   }
 
   renderButtons (buttonProps, statePropertyName) {
-    return (
-      buttonProps.map((obj, i) => (
-        <RadioButton labelHorizontal key={i} style={[styles.radioButtonStyle, i === 0 ? styles.radioButtonLeft : styles.radioButtonRight]} >
-          <RadioButtonInput
-            obj={obj}
-            index={i}
-            isSelected={this.state[statePropertyName] === i}
-            onPress={() => { this.onPressRadioButton(statePropertyName, i) }}
-            buttonInnerColor={Colors.main.primary}
-            buttonOuterColor={Colors.buttons.common.background}
-            buttonWrapStyle={{marginLeft: 10}}
-          />
-          <RadioButtonLabel
-            obj={obj}
-            index={i}
-            labelHorizontal
-            onPress={() => {}}
-            labelStyle={styles.labelStyle}
-          />
-        </RadioButton>
-      ))
-    )
+    return buttonProps.map((obj, i) => (
+      <RadioButton
+        labelHorizontal
+        key={i}
+        style={[
+          styles.radioButtonStyle,
+          i === 0 ? styles.radioButtonLeft : styles.radioButtonRight
+        ]}
+      >
+        <RadioButtonInput
+          obj={obj}
+          index={i}
+          isSelected={this.state[statePropertyName] === i}
+          onPress={() => {
+            this.onPressRadioButton(statePropertyName, i)
+          }}
+          buttonInnerColor={Colors.main.primary}
+          buttonOuterColor={Colors.buttons.common.background}
+          buttonWrapStyle={{ marginLeft: 10 }}
+        />
+        <RadioButtonLabel
+          obj={obj}
+          index={i}
+          labelHorizontal
+          onPress={() => {}}
+          labelStyle={styles.labelStyle}
+        />
+      </RadioButton>
+    ))
   }
 
   render () {
@@ -225,28 +263,29 @@ class AddMealPreStep extends Component {
             useNativeDriver
           >
             <View style={styles.inputContainer}>
-              <RadioForm
-                formHorizontal
-                animation
-              >
-                {this.renderButtons(this.MealPlaceProps, 'selectedMealPlaceOption')}
+              <RadioForm formHorizontal animation>
+                {this.renderButtons(
+                  this.MealPlaceProps,
+                  'selectedMealPlaceOption'
+                )}
               </RadioForm>
-              <View style={{flexDirection: 'row'}}>
+              <View style={{ flexDirection: 'row' }}>
                 {this.renderMealPlaceDropdown()}
               </View>
-              <RadioForm
-                formHorizontal
-                animation
-              >
-                {this.renderButtons(this.MealTimeProps, 'selectedMealTimeOption')}
+              <RadioForm formHorizontal animation>
+                {this.renderButtons(
+                  this.MealTimeProps,
+                  'selectedMealTimeOption'
+                )}
               </RadioForm>
               {this.renderTimePicker()}
             </View>
-            <View style={{flexDirection: 'row'}}>
+            <View style={{ flexDirection: 'row' }}>
               <Button
                 containerStyle={styles.buttonContainer}
                 style={styles.button}
-                onPress={() => this.onConfirm()}>
+                onPress={() => this.onConfirm()}
+              >
                 {I18n.t('Common.next')}
               </Button>
             </View>
@@ -265,20 +304,26 @@ class AddMealPreStep extends Component {
     let m = moment(mealTime)
     // If day has been finally marked as complete / incomplete, dont allow to add a new meal..
     if (this.props.nonEditableDays.includes(m.format('DD.MM.YYYY'))) {
-      Alert.alert(
-        I18n.t('FoodDiary.finallyMarkedCompleteNotice'),
-        '',
-        [
-            {text: I18n.t('FoodDiary.chooseOtherDate'), onPress: () => true},
-            {text: I18n.t('FoodDiary.backToChat'), onPress: () => this.props.onDiscard()}
-        ]
-      )
+      Alert.alert(I18n.t('FoodDiary.finallyMarkedCompleteNotice'), '', [
+        {
+          text: I18n.t('FoodDiary.chooseOtherDate'),
+          onPress: () => true
+        },
+        {
+          text: I18n.t('FoodDiary.backToChat'),
+          onPress: () => this.props.onDiscard()
+        }
+      ])
     } else {
-      if (this.state.selectedMealPlaceOption === 1) mealPlace = this.eatOutOption
+      if (this.state.selectedMealPlaceOption === 1) {
+        mealPlace = this.eatOutOption
+      }
       log.info('Creating new Meal: ' + mealPlace + ', ' + mealTime)
       // simultaniously fadeout blurview & cardview
       this.refs.blurview.animatable().fadeOut(350)
-      this.refs.cardSection.flipOutY(350).then(() => this.props.onConfirm(mealPlace, mealTime))
+      this.refs.cardSection
+        .flipOutY(350)
+        .then(() => this.props.onConfirm(mealPlace, mealTime))
     }
   }
 }

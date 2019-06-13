@@ -102,13 +102,80 @@ button {
   display: none;
 }
 body {
-    padding: 20px 20px 0 20px;
+    padding: 0px 0px 20px 0px;
     font-family: 'RobotoRegular';
     font-weight: normal;
     font-style: normal;
     color: #525252;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
+
+    -ms-word-break: break-all;
+    word-break: break-all;
+
+    /* Non standard for webkit */
+    word-break: break-word;
+
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphens: auto;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+ul, ol {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+ul {
+  list-style: none;
+  padding-left: 1em;
+}
+
+ul li::before {
+  position: absolute;
+  content: "•";
+  color: #269e72;
+  display: inline-block;
+  width: 1em;
+  margin-left: -1em;
+}
+
+ol {
+  list-style: none;
+  padding-left: 1.3em;
+}
+
+ol li {
+  counter-increment: liStandard;
+}
+
+ol li::before {
+  position: absolute;
+  font-weight: bold;
+  content: counter(liStandard)".";
+  color: #269e72;
+  display: inline-block;
+  width: 1.3em;
+  margin-left: -1.3em;
+}
+
+/* set initial counter to 1 (because first ol won't have 'start' set) */
+body {
+  counter-reset: liWithStart 1;
+}
+
+ol[start] {
+  counter-increment: liWithStart;
+}
+
+ol[start] li::before {
+  content: counter(liWithStart)".";
 }
 
 li {
@@ -140,7 +207,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-  font-size: 1.4em;
+  font-size: 1.6em;
   font-family: "RobotoBold";
 }
 
@@ -156,10 +223,16 @@ h4, h5, h6 {
   font-size: 1.1em;
 }
 
-img.fill {
-    padding-top: 0px;
-    padding-bottom: 0px;
-    width: 100%;
+img {
+  display: block;
+  width: 100%;
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+.fill {
+  padding-left: 0px;
+  padding-right: 0px;
 }
 
 .with-linebreaks {

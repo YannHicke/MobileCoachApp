@@ -26,7 +26,7 @@ export const INITIAL_STATE = Immutable({
 })
 
 /* ------------- Reducers ------------- */
-export const setTourStep = (state, {tourStep}) => {
+export const setTourStep = (state, { tourStep }) => {
   log.debug('Set tour step (manually):', tourStep)
   // check if this is a valid tour-step that can be animated in the animation
   if (TOUR_STEPS.includes(tourStep)) {
@@ -36,11 +36,11 @@ export const setTourStep = (state, {tourStep}) => {
       tourSteps: [...state.tourSteps, tourStep]
     }
   }
-  log.error('Error: This is not a valid tourStep', {'tourStep': tourStep})
+  log.error('Error: This is not a valid tourStep', { tourStep: tourStep })
   return state
 }
 
-export const setLastSeenIndex = (state, {lastSeenIndex}) => {
+export const setLastSeenIndex = (state, { lastSeenIndex }) => {
   log.debug('Set last seen index for animation:', lastSeenIndex)
   return {
     ...state,
@@ -48,7 +48,7 @@ export const setLastSeenIndex = (state, {lastSeenIndex}) => {
   }
 }
 
-export const handleProgressCommand = (state, {command}) => {
+export const handleProgressCommand = (state, { command }) => {
   const parsedCommand = Common.parseCommand(command)
 
   switch (parsedCommand.command) {
@@ -61,7 +61,7 @@ export const handleProgressCommand = (state, {command}) => {
           tourSteps: [...state.tourSteps, tourStep]
         }
       }
-      log.warn('This is not a valid tourStep', {'tourStep': tourStep})
+      log.warn('This is not a valid tourStep', { tourStep: tourStep })
       return state
     default:
       return state

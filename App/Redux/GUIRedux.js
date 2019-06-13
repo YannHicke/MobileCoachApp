@@ -2,8 +2,6 @@ import { createReducer, createActions } from 'reduxsauce'
 import Immutable from 'seamless-immutable'
 import { NavigationActions } from 'react-navigation'
 
-import { GiftedChatMessageActions } from './GiftedChatMessageRedux'
-
 import Log from '../Utils/Log'
 const log = new Log('Redux/GUIRedux')
 
@@ -30,7 +28,12 @@ const { Types, Creators } = createActions({
   setCurrentScreen: ['routeName'],
   disableSidemenuGestures: [],
   enableSidemenuGestures: [],
-  clearUnreadMessages: []
+  addUnreadMessage: ['count'],
+  clearUnreadMessages: [],
+  toggleTaskList: [],
+  hideTaskList: [],
+  clearOpenReminders: [],
+  setOpenReminders: ['openReminders']
 })
 
 export const GUIActions = Types
@@ -47,7 +50,9 @@ export const INITIAL_STATE = Immutable({
   actionButtonUnlocked: false,
   unreadMessages: 0,
   // TODO: initial screen shoud not be hardcoded
-  currentScreen: 'LoadingContainer'
+  currentScreen: 'LoadingContainer',
+  taskListVisible: false,
+  openReminders: []
 })
 
 /* ------------- Reducers ------------- */
@@ -68,8 +73,27 @@ export const hideCoachIsTyping = (state) => {
   }
 }
 
+// hide Coach is Typing message
+export const clearOpenReminders = (state) => {
+  return {
+    ...state,
+    openReminders: []
+  }
+}
+
+// show Reminder Screen
+export const setOpenReminders = (state, { openReminders }) => {
+  return {
+    ...state,
+    openReminders
+  }
+}
+
 // remember if further messages are in the pipeline to be shown
-export const setCurrentlyFurtherMessagesExpected = (state, {currentlyFurtherMessagesExpected}) => {
+export const setCurrentlyFurtherMessagesExpected = (
+  state,
+  { currentlyFurtherMessagesExpected }
+) => {
   return {
     ...state,
     currentlyFurtherMessagesExpected
@@ -86,7 +110,7 @@ export const toggleSideMenu = (state) => {
   }
 }
 
-export const closeSideMenu = (state, {isOpen}) => {
+export const closeSideMenu = (state, { isOpen }) => {
   log.action('GUI', 'ToggleMenu', false)
   return {
     ...state,
@@ -122,11 +146,14 @@ export const disableSidemenuGestures = (state) => {
   }
 }
 
-export const addUnreadMessage = (state, {message}) => {
+export const addUnreadMessage = (state, { count }) => {
   // dont increment when in Chat
   if (state.currentScreen === 'Chat') return state
   else {
-    let unreadMessages = state.unreadMessages + 1
+    if (count === undefined) {
+      count = 1
+    }
+    let unreadMessages = state.unreadMessages + count
     return {
       ...state,
       unreadMessages
@@ -141,10 +168,24 @@ export const clearUnreadMessages = (state) => {
   }
 }
 
-export const setCurrentScreen = (state, {routeName}) => {
+export const setCurrentScreen = (state, { routeName }) => {
   return {
     ...state,
     currentScreen: routeName
+  }
+}
+
+export const toggleTaskList = (state) => {
+  return {
+    ...state,
+    taskListVisible: !state.taskListVisible
+  }
+}
+
+export const hideTaskList = (state) => {
+  return {
+    ...state,
+    taskListVisible: false
   }
 }
 
@@ -161,6 +202,10 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.DISABLE_SIDEMENU_GESTURES]: disableSidemenuGestures,
   [Types.ENABLE_SIDEMENU_GESTURES]: enableSidemenuGestures,
   [Types.CLEAR_UNREAD_MESSAGES]: clearUnreadMessages,
-  [GiftedChatMessageActions.GIFTED_CHAT_ADD_MESSAGE]: addUnreadMessage,
+  [Types.TOGGLE_TASK_LIST]: toggleTaskList,
+  [Types.HIDE_TASK_LIST]: hideTaskList,
+  [Types.SET_OPEN_REMINDERS]: setOpenReminders,
+  [Types.CLEAR_OPEN_REMINDERS]: clearOpenReminders,
+  [Types.ADD_UNREAD_MESSAGE]: addUnreadMessage,
   [NavigationActions.navigate]: setCurrentScreen
 })

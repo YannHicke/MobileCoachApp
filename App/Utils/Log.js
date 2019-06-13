@@ -4,8 +4,22 @@ import { Crashlytics } from 'react-native-fabric'
 import 'babel-polyfill'
 import Piwik from 'react-native-piwik'
 
-const LEVEL_TEXTS = { DEBUG: 'DEBUG', INFO: 'INFO', WARN: 'WARN', ERROR: 'ERROR', OFF: 'OFF', CRASHLYTICS: 'CRASHLYTICS' }
-const LEVEL_VALUES = { DEBUG: 0, INFO: 1, WARN: 2, ERROR: 3, OFF: 4, CRASHLYTICS: 5 }
+const LEVEL_TEXTS = {
+  DEBUG: 'DEBUG',
+  INFO: 'INFO',
+  WARN: 'WARN',
+  ERROR: 'ERROR',
+  OFF: 'OFF',
+  CRASHLYTICS: 'CRASHLYTICS'
+}
+const LEVEL_VALUES = {
+  DEBUG: 0,
+  INFO: 1,
+  WARN: 2,
+  ERROR: 3,
+  OFF: 4,
+  CRASHLYTICS: 5
+}
 
 const loggerLength = 20
 
@@ -14,8 +28,16 @@ const loggingCacheSize = 500
 let loggingCacheIndex = 0
 let loggingCacheCount = 0
 
-const defaultLevel = LEVEL_VALUES[AppConfig.config.logger.defaultLevel === undefined ? 'OFF' : AppConfig.config.logger.defaultLevel]
-const loggerLevels = AppConfig.config.logger.loggerLevels === undefined ? {} : AppConfig.config.logger.loggerLevels
+const defaultLevel =
+  LEVEL_VALUES[
+    AppConfig.config.logger.defaultLevel === undefined
+      ? 'OFF'
+      : AppConfig.config.logger.defaultLevel
+  ]
+const loggerLevels =
+  AppConfig.config.logger.loggerLevels === undefined
+    ? {}
+    : AppConfig.config.logger.loggerLevels
 
 const logTrackingEvents = false
 
@@ -58,7 +80,17 @@ export default class Log {
     Log.writeLog(this.loggerName, LEVEL_VALUES.WARN, arguments)
   }
   error (message) {
-    this.problem('ErrorOccured', Log.formatMessage(this.loggerName, LEVEL_TEXTS.ERROR, null, (arguments !== undefined && arguments !== null) ? Array.prototype.slice.call(arguments) : null))
+    this.problem(
+      'ErrorOccured',
+      Log.formatMessage(
+        this.loggerName,
+        LEVEL_TEXTS.ERROR,
+        null,
+        arguments !== undefined && arguments !== null
+          ? Array.prototype.slice.call(arguments)
+          : null
+      )
+    )
     Log.writeLog(this.loggerName, LEVEL_VALUES.ERROR, arguments)
   }
 
@@ -76,7 +108,9 @@ export default class Log {
       }
 
       if (logTrackingEvents) {
-        console.info('[TRACKING] Problem: ' + action + ' ' + label + ' ' + value)
+        console.info(
+          '[TRACKING] Problem: ' + action + ' ' + label + ' ' + value
+        )
       }
       try {
         Piwik.trackEvent('Problem', action + '', label + '', value * 1)
@@ -86,7 +120,12 @@ export default class Log {
     }
   }
   // Example: GUIAction, ToggleMenu, false[, 0]
-  action (category = 'UNDEFINED', action = 'UNKNOWN', label = 'UNKNOWN', value = 0) {
+  action (
+    category = 'UNDEFINED',
+    action = 'UNKNOWN',
+    label = 'UNKNOWN',
+    value = 0
+  ) {
     if (trackActivities) {
       if (!userIdSharedWithUserTracking && Log.userId !== undefined) {
         userIdSharedWithUserTracking = true
@@ -95,7 +134,16 @@ export default class Log {
       }
 
       if (logTrackingEvents) {
-        console.info('[TRACKING] Action: ' + category + ' ' + action + ' ' + label + ' ' + value)
+        console.info(
+          '[TRACKING] Action: ' +
+            category +
+            ' ' +
+            action +
+            ' ' +
+            label +
+            ' ' +
+            value
+        )
       }
       try {
         Piwik.trackEvent(category, action + '', label + '', value * 1)
@@ -136,7 +184,12 @@ export default class Log {
         Crashlytics.setUserIdentifier(Log.userRole + '-' + Log.userId)
       }
       let messages = Array.prototype.slice.call(messageArguments)
-      const loggingMessage = Log.formatMessage(logger, Object.keys(LEVEL_TEXTS)[level], method, messages)
+      const loggingMessage = Log.formatMessage(
+        logger,
+        Object.keys(LEVEL_TEXTS)[level],
+        method,
+        messages
+      )
 
       if (level < 3) {
         Crashlytics.log(loggingMessage)
@@ -149,7 +202,8 @@ export default class Log {
         }
       }
 
-      loggingCache[loggingCacheIndex] = loggingCacheCount + ': ' + loggingMessage
+      loggingCache[loggingCacheIndex] =
+        loggingCacheCount + ': ' + loggingMessage
       loggingCacheIndex++
       loggingCacheCount++
       if (loggingCacheIndex === loggingCacheSize) {
@@ -165,19 +219,27 @@ export default class Log {
       switch (level) {
         case LEVEL_VALUES.DEBUG:
           messages = Array.prototype.slice.call(messageArguments)
-          console.log(Log.formatMessage(logger, LEVEL_TEXTS.DEBUG, method, messages))
+          console.log(
+            Log.formatMessage(logger, LEVEL_TEXTS.DEBUG, method, messages)
+          )
           break
         case LEVEL_VALUES.INFO:
           messages = Array.prototype.slice.call(messageArguments)
-          console.log(Log.formatMessage(logger, LEVEL_TEXTS.INFO, method, messages))
+          console.log(
+            Log.formatMessage(logger, LEVEL_TEXTS.INFO, method, messages)
+          )
           break
         case LEVEL_VALUES.WARN:
           messages = Array.prototype.slice.call(messageArguments)
-          console.warn(Log.formatMessage(logger, LEVEL_TEXTS.WARN, method, messages))
+          console.warn(
+            Log.formatMessage(logger, LEVEL_TEXTS.WARN, method, messages)
+          )
           break
         case LEVEL_VALUES.ERROR:
           messages = Array.prototype.slice.call(messageArguments)
-          console.error(Log.formatMessage(logger, LEVEL_TEXTS.ERROR, method, messages))
+          console.error(
+            Log.formatMessage(logger, LEVEL_TEXTS.ERROR, method, messages)
+          )
           break
         case LEVEL_VALUES.OFF:
           break
@@ -214,7 +276,11 @@ export default class Log {
                 }
               }
             } catch (error) {
-              if (message !== undefined && message !== null && (message.toString !== undefined || message.toString !== null)) {
+              if (
+                message !== undefined &&
+                message !== null &&
+                (message.toString !== undefined || message.toString !== null)
+              ) {
                 messagePart = '[Other] ' + message.toString()
               } else {
                 messagePart = '[Other] <non stringifyable object>'
@@ -259,7 +325,15 @@ export default class Log {
       methodString = ' (@' + method + ')'
     }
 
-    return '[PM] [' + levelString + '] ' + loggerString + ': ' + concatMessage + methodString
+    return (
+      '[PM] [' +
+      levelString +
+      '] ' +
+      loggerString +
+      ': ' +
+      concatMessage +
+      methodString
+    )
   }
 
   static getType (element) {

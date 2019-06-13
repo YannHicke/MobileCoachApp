@@ -10,7 +10,7 @@ import {
   Text
 } from 'react-native'
 import LottieView from 'lottie-react-native'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 
 import I18n from '../../I18n/I18n'
 import PMNavigationBar from '../../Components/Navbar'
@@ -18,12 +18,12 @@ import TourActions from '../../Redux/TourRedux'
 import InfoButton from '../../Components/InfoButton'
 import AppConfig from '../../Config/AppConfig'
 
-import {Metrics, Colors} from '../../Themes/'
+import { Metrics, Colors } from '../../Themes/'
 
 import Log from '../../Utils/Log'
 const log = new Log('Containers/Tour/Tour')
 
-const {height, width} = Dimensions.get('window')
+const { height, width } = Dimensions.get('window')
 
 // adjust these to values of bodymovin source file
 const sourceWidth = 625
@@ -153,7 +153,7 @@ const halfScrollWindowHeight = height / 2 - Metrics.navbarHeight
 */
 
 const TOUR_STEPS = {
-  'begin': {
+  begin: {
     frameEnd: 0,
     sourcePixelTopPos: 0
   },
@@ -162,7 +162,126 @@ const TOUR_STEPS = {
     frameEnd: 186,
     sourcePixelTopPos: 140
   },
-  // Tour End
+  // tracked 1 day (only full ones)
+  'period-1-day-1': {
+    frameEnd: 269,
+    sourcePixelTopPos: 300
+  },
+  // tracked 2 days
+  'period-1-day-2': {
+    frameEnd: 292,
+    sourcePixelTopPos: 300
+  },
+  // tracked 3 days
+  'period-1-day-3': {
+    frameEnd: 309,
+    sourcePixelTopPos: 300
+  },
+  // finished diary
+  'was-ich-esse-1': {
+    frameEnd: 374,
+    sourcePixelTopPos: 300
+  },
+  // LMP
+  'lmp-1': {
+    frameEnd: 429,
+    sourcePixelTopPos: 980
+  },
+  'lmp-2': {
+    frameEnd: 436,
+    sourcePixelTopPos: 980
+  },
+  'lmp-3': {
+    frameEnd: 444,
+    sourcePixelTopPos: 980
+  },
+  'lmp-4': {
+    frameEnd: 450,
+    sourcePixelTopPos: 980
+  },
+  'lmp-5': {
+    frameEnd: 455,
+    sourcePixelTopPos: 980
+  },
+  'lmp-6': {
+    frameEnd: 460,
+    sourcePixelTopPos: 980
+  },
+  'lmp-final': {
+    frameEnd: 498,
+    sourcePixelTopPos: 980
+  },
+  // Orientierung zw. 12 und 13
+  'lmp-evaluation': {
+    frameEnd: 598,
+    sourcePixelTopPos: 980
+  },
+  //
+  'lmp-advice': {
+    frameEnd: 745,
+    sourcePixelTopPos: 1275
+  },
+  //
+  'optimal-plate': {
+    frameEnd: 869,
+    sourcePixelTopPos: 1570
+  },
+  //
+  meals: {
+    frameEnd: 1017,
+    sourcePixelTopPos: 1770
+  },
+  //
+  shopping: {
+    frameEnd: 1147,
+    sourcePixelTopPos: 1970
+  },
+  //
+  labels: {
+    frameEnd: 1265,
+    sourcePixelTopPos: 2200
+  },
+  //
+  preparation: {
+    frameEnd: 1393,
+    sourcePixelTopPos: 2420
+  },
+  //
+  storage: {
+    frameEnd: 1514,
+    sourcePixelTopPos: 2600
+  },
+  //
+  'balanced-diet': {
+    frameEnd: 1641,
+    sourcePixelTopPos: 2800
+  },
+  //
+  'period-2-day-1': {
+    frameEnd: 1714,
+    sourcePixelTopPos: 3050
+  },
+  //
+  'period-2-day-2': {
+    frameEnd: 1739,
+    sourcePixelTopPos: 3050
+  },
+  //
+  'period-2-day-3': {
+    frameEnd: 1763,
+    sourcePixelTopPos: 3050
+  },
+  //
+  'was-ich-esse-2': {
+    frameEnd: 1801,
+    sourcePixelTopPos: 3050
+  },
+  //
+  'add-topics': {
+    frameEnd: 1918,
+    sourcePixelTopPos: 3300
+  },
+  //
   'tour-end': {
     frameEnd: 2124,
     sourcePixelTopPos: 3400
@@ -170,7 +289,8 @@ const TOUR_STEPS = {
 }
 
 for (const [key, val] of Object.entries(TOUR_STEPS)) {
-  TOUR_STEPS[key].percentage = Number(val.frameEnd) / Number(tourDurationInFrames)
+  TOUR_STEPS[key].percentage =
+    Number(val.frameEnd) / Number(tourDurationInFrames)
 }
 
 // TODO: Language switching
@@ -214,12 +334,25 @@ class AnimatedTour extends Component {
       return
     }
 
-    let top = Math.max(TOUR_STEPS[lastStep].sourcePixelTopPos * width / sourceWidth - halfScrollWindowHeight - 100, 0) // + halfScrollWindowHeight // + halfScrollWindowHeight + 100 //* height / sourceHeight + halfScrollWindowHeight
+    let top = Math.max(
+      (TOUR_STEPS[lastStep].sourcePixelTopPos * width) / sourceWidth -
+        halfScrollWindowHeight -
+        100,
+      0
+    ) // + halfScrollWindowHeight // + halfScrollWindowHeight + 100 //* height / sourceHeight + halfScrollWindowHeight
 
     // let top = Math.max(TOUR_STEPS[lastStep].sourcePixelTopPos / 3640 * 910 * width / sourceWidth - halfScrollWindowHeight - 100, 0) // + halfScrollWindowHeight // + halfScrollWindowHeight + 100 //* height / sourceHeight + halfScrollWindowHeight
 
     setTimeout(() => self.moveToLabel(secondToLastStep, lastStep), 700)
-    setTimeout(() => self.refs._scrollView._component.scrollTo({x: 0, y: top, animated: false}), 0)
+    setTimeout(
+      () =>
+        self.refs._scrollView._component.scrollTo({
+          x: 0,
+          y: top,
+          animated: false
+        }),
+      0
+    )
 
     // set the last seen index
     self.props.setLastSeenIndex(tourSteps.length - 1)
@@ -247,27 +380,34 @@ class AnimatedTour extends Component {
   renderNavigationbar (props) {
     let title = I18n.t('Tour.header')
     return (
-      <PMNavigationBar title={title} props={props}
+      <PMNavigationBar
+        title={title}
+        props={props}
         rightButton={
           <InfoButton
             onPress={() => {
               Alert.alert(
                 I18n.t('Tour.infoIconHeader'),
-                 I18n.t('Tour.infoText'),
-                [
-                  {text: 'Ok', onPress: () => true}
-                ],
+                I18n.t('Tour.infoText'),
+                [{ text: 'Ok', onPress: () => true }],
                 { cancelable: false }
               )
             }}
-            />}
-        />
+          />
+        }
+      />
     )
   }
 
   moveToLabel = (secondToLastStep, lastStep) => {
-    const lastIndex = Math.max(Object.keys(TOUR_STEPS).indexOf(secondToLastStep.toString()), 0)
-    const nextIndex = Math.max(Object.keys(TOUR_STEPS).indexOf(lastStep.toString()), 0)
+    const lastIndex = Math.max(
+      Object.keys(TOUR_STEPS).indexOf(secondToLastStep.toString()),
+      0
+    )
+    const nextIndex = Math.max(
+      Object.keys(TOUR_STEPS).indexOf(lastStep.toString()),
+      0
+    )
     const value = TOUR_STEPS[lastStep].percentage
     Animated.timing(this.state.progress, {
       toValue: value,
@@ -279,22 +419,47 @@ class AnimatedTour extends Component {
     if (this.props.currentLastSeenIndex <= 1) {
       return (
         <View>
-          <View style={{backgroundColor: 'white', height: 1, zIndex: 100, opacity: 0.5}} />
-          <View style={{backgroundColor: 'transparent', margin: 10}}>
-            <Text style={{color: 'white', textAlign: 'center'}}> {I18n.t('Tour.infoText')} </Text>
+          <View
+            style={{
+              backgroundColor: 'white',
+              height: 1,
+              zIndex: 100,
+              opacity: 0.5
+            }}
+          />
+          <View style={{ backgroundColor: 'transparent', margin: 10 }}>
+            <Text style={{ color: 'white', textAlign: 'center' }}>
+              {' '}
+              {I18n.t('Tour.infoText')}
+            </Text>
           </View>
-          <View style={{backgroundColor: 'white', height: 1, zIndex: 100, opacity: 0.5}} />
+          <View
+            style={{
+              backgroundColor: 'white',
+              height: 1,
+              zIndex: 100,
+              opacity: 0.5
+            }}
+          />
         </View>
       )
     } else {
-      return (<View style={{backgroundColor: 'white', height: 1, zIndex: 100, opacity: 0.5}} />)
+      return (
+        <View
+          style={{
+            backgroundColor: 'white',
+            height: 1,
+            zIndex: 100,
+            opacity: 0.5
+          }}
+        />
+      )
     }
   }
 
   render () {
     return (
       <View style={styles.container}>
-
         {this.renderNavigationbar(this.props)}
 
         {this.renderInfoText()}
@@ -304,8 +469,7 @@ class AnimatedTour extends Component {
           contentContainerStyle={styles.outerContainerStyle}
           ref='_scrollView'
           style={styles.animatedScrollView}
-          >
-
+        >
           <LottieView
             source={tourSourceFile}
             style={styles.animationStyle}
@@ -313,9 +477,16 @@ class AnimatedTour extends Component {
             // imageAssetsFolder='lottie' // [Android] Relative folder inside of assets containing image files to be animated: App/android/app/src/main/assets/lottie/
             progress={this.state.progress}
           />
-          <TouchableWithoutFeedback
-            onPress={() => this.backToChat()}>
-            <View style={{position: 'absolute', top: 0, bottom: 0, left: 0, right: 0}} />
+          <TouchableWithoutFeedback onPress={() => this.backToChat()}>
+            <View
+              style={{
+                position: 'absolute',
+                top: 0,
+                bottom: 0,
+                left: 0,
+                right: 0
+              }}
+            />
           </TouchableWithoutFeedback>
         </Animated.ScrollView>
       </View>
@@ -324,21 +495,25 @@ class AnimatedTour extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: {flex: 1, justifyContent: 'flex-start', backgroundColor: Colors.modules.tour.background},
-  outerContainerStyle: {flexGrow: 1},
-  animatedScrollView: {backgroundColor: 'transparent'},
+  container: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    backgroundColor: Colors.modules.tour.background
+  },
+  outerContainerStyle: { flexGrow: 1 },
+  animatedScrollView: { backgroundColor: 'transparent' },
   animationStyle: {
     ...Platform.select({
       ios: {
         width: width,
-        height: width * sourceHeight / sourceWidth
+        height: (width * sourceHeight) / sourceWidth
       },
       // TODO: BUG: see https://github.com/airbnb/lottie-react-native/issues/214#issuecomment-355306742
       android: {
         width: width,
         marginVertical: height,
         height: height,
-        transform: [{scale: 3}]
+        transform: [{ scale: 3 }]
       }
     })
   }
@@ -351,8 +526,12 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapStateToDispatch = dispatch => ({
-  setLastSeenIndex: (lastSeenIndex) => dispatch(TourActions.setLastSeenIndex(lastSeenIndex))
+const mapStateToDispatch = (dispatch) => ({
+  setLastSeenIndex: (lastSeenIndex) =>
+    dispatch(TourActions.setLastSeenIndex(lastSeenIndex))
 })
 
-export default connect(mapStateToProps, mapStateToDispatch)(AnimatedTour)
+export default connect(
+  mapStateToProps,
+  mapStateToDispatch
+)(AnimatedTour)

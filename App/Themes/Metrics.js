@@ -1,4 +1,4 @@
-import {AppState, Dimensions} from 'react-native'
+import { AppState, Dimensions, Platform, StatusBar } from 'react-native'
 
 import Log from '../Utils/Log'
 const log = new Log('Themes/Metrics')
@@ -34,10 +34,17 @@ const metrics = {
     logo: 200
   },
   appInBackground: false,
-  lastBackgroundTimestamp: new Date()
+  lastBackgroundTimestamp: new Date(),
+  androidStatusBarTranslucent: false,
+  statusBarMargin: 0
 }
 
 metrics.aspectRatio = metrics.screenWidth / metrics.screenHeight
+if (Platform.OS === 'android' && metrics.androidStatusBarTranslucent) {
+  metrics.statusBarMargin = StatusBar.currentHeight
+    ? StatusBar.currentHeight
+    : 21
+}
 
 // Care about app state changes
 AppState.addEventListener('change', function (newAppState) {
@@ -53,7 +60,12 @@ AppState.addEventListener('change', function (newAppState) {
   } else {
     if (!metrics.appInBackground) {
       const newTimestamp = new Date()
-      log.action('App', 'Usage', 'Millis', newTimestamp - metrics.lastBackgroundTimestamp)
+      log.action(
+        'App',
+        'Usage',
+        'Millis',
+        newTimestamp - metrics.lastBackgroundTimestamp
+      )
       log.action('GUI', 'AppInForeground', false)
       metrics.lastBackgroundTimestamp = newTimestamp
       metrics.appInBackground = true

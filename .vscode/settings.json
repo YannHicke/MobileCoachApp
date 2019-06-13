@@ -1,0 +1,31 @@
+{
+  "saveAndRunExt": {
+    "commands": [
+      {
+        "match": "\\.js[x]?$",
+        "isShellCommand": true,
+        "cmd": "yarn fixfile '${file}'"
+      },
+      {
+        "match": "\\.json?$",
+        "isShellCommand": true,
+        "cmd": "yarn fixfile '${file}'"
+      },
+      {
+        "match": "\\.htm[l]?$",
+        "isShellCommand": true,
+        "cmd": "yarn fixfile '${file}'"
+      },
+      {
+        "match": "\\.css$",
+        "isShellCommand": true,
+        "cmd": "yarn fixfile '${file}'"
+      },
+      {
+        "match": "\\.md$",
+        "isShellCommand": true,
+        "cmd": "yarn fixfile '${file}'"
+      }
+    ]
+  }
+}

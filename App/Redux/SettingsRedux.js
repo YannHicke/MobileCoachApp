@@ -1,9 +1,10 @@
 import { createReducer, createActions } from 'reduxsauce'
 import Immutable from 'seamless-immutable'
-import {StartupActions} from '../Redux/StartupRedux'
+import { StartupActions } from '../Redux/StartupRedux'
 import moment from 'moment'
 
 import I18n from '../I18n/I18n'
+import AppConfig from '../Config/AppConfig'
 import { onboardingNav } from '../Containers/Onboarding/OnboardingNav'
 import Common from '../Utils/Common'
 import { MessageActions } from './MessageRedux'
@@ -28,7 +29,18 @@ export const INITIAL_STATE = Immutable({
   coach: null,
   tutorialCompleted: false,
   tutorialStep: null,
-  syncedSettings: {}
+  syncedSettings: {
+    name: undefined,
+    birthday: undefined,
+    syncHeartAge: undefined,
+    syncMedicationCompliance: undefined,
+    syncBMI: undefined,
+    syncHeight: undefined,
+    syncWeight: undefined,
+    syncMedication: undefined,
+    syncSmoker: undefined,
+    syncDiabetes: undefined
+  }
 })
 
 /* ------------- Reducers ------------- */
@@ -41,15 +53,21 @@ export const startup = (state, action) => {
   return state
 }
 
-export const changeLanguage = (state, {language}) => {
-  log.debug('New language:', language)
-  log.action('App', 'Language', language)
-  return state.merge({
-    language: language.substr(0, 2)
-  })
+export const changeLanguage = (state, { language }) => {
+  let twoDigitLanguage = language.substr(0, 2)
+  if (AppConfig.config.supportedLanguages.includes(twoDigitLanguage)) {
+    log.debug('New language:', language)
+    log.action('App', 'Language', language)
+    return state.merge({
+      language: language.substr(0, 2)
+    })
+  } else {
+    log.debug('Did not set language', language)
+    return state
+  }
 }
 
-export const chooseCoach = (state, {coach}) => {
+export const chooseCoach = (state, { coach }) => {
   log.debug('New coach:', coach)
   log.action('App', 'Coach', coach)
   return state.merge({
@@ -57,14 +75,14 @@ export const chooseCoach = (state, {coach}) => {
   })
 }
 
-export const completeTutorial = (state, {tutorialCompleted}) => {
+export const completeTutorial = (state, { tutorialCompleted }) => {
   log.action('App', 'TutorialCompleted')
   return state.merge({
     tutorialCompleted
   })
 }
 
-export const rememberTutorialStep = (state, {routeName}) => {
+export const rememberTutorialStep = (state, { routeName }) => {
   if (!state.tutorialCompleted && routeName !== onboardingNav) {
     log.action('App', 'TutorialStep', routeName)
     return state.merge({
@@ -75,20 +93,34 @@ export const rememberTutorialStep = (state, {routeName}) => {
   }
 }
 
-export const changeSyncedSetting = (state, {variable, value, localValue = null, asIntention}) => {
+export const changeSyncedSetting = (
+  state,
+  { variable, value, localValue = null, asIntention }
+) => {
   log.debug('Change setting', variable, 'to', value, ' - local:', localValue)
   log.action('App', 'SettingsChange')
 
-  const newState = changeSynedSettingState(state, variable, localValue === null ? value : localValue)
+  const newState = changeSynedSettingState(
+    state,
+    variable,
+    localValue === null ? value : localValue
+  )
 
   return state.merge(newState)
 }
 
-export const handleProgressCommand = (state, {command, content, timestamp}) => {
+export const handleProgressCommand = (
+  state,
+  { command, content, timestamp }
+) => {
   const parsedCommand = Common.parseCommand(command)
   switch (parsedCommand.command) {
     case 'settings':
-      const newState = changeSynedSettingState(state, parsedCommand.value, parsedCommand.contentWithoutFirstValue)
+      const newState = changeSynedSettingState(
+        state,
+        parsedCommand.value,
+        parsedCommand.contentWithoutFirstValue
+      )
       return state.merge(newState)
     default:
       return state
@@ -102,7 +134,8 @@ const changeSynedSettingState = (state, variable, value) => {
     newState = Immutable.setIn(newState, ['syncedSettings'], {})
   }
 
-  return Immutable.setIn(newState, ['syncedSettings', variable], value)
+  let ns = Immutable.setIn(newState, ['syncedSettings', variable], value)
+  return ns
 }
 
 /* ------------- Hookup Reducers To Actions ------------- */

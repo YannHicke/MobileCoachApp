@@ -1,10 +1,18 @@
-import React, {Component} from 'react'
-import {View, Text, StyleSheet, Platform, TouchableOpacity, Alert, ViewPropTypes} from 'react-native'
+import React, { Component } from 'react'
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+  ViewPropTypes,
+  Platform
+} from 'react-native'
 import I18n from '../I18n/I18n'
 import PropTypes from 'prop-types'
 import { Icon } from 'react-native-elements'
-import {Colors, Fonts, Metrics} from '../Themes/'
-import {ifIphoneX} from 'react-native-iphone-x-helper'
+import { Colors, Metrics } from '../Themes/'
+import { ifIphoneX } from 'react-native-iphone-x-helper'
 
 const iconProps = {
   size: 30,
@@ -14,14 +22,8 @@ const iconProps = {
 export default class HeaderBar extends Component {
   static propTypes = {
     title: PropTypes.string,
-    onBack: PropTypes.oneOfType([
-      PropTypes.func,
-      PropTypes.bool
-    ]),
-    onClose: PropTypes.oneOfType([
-      PropTypes.func,
-      PropTypes.bool
-    ]),
+    onBack: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
+    onClose: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
     confirmClose: PropTypes.string,
     containerStyle: ViewPropTypes.style
   }
@@ -29,8 +31,11 @@ export default class HeaderBar extends Component {
   renderBackIcon () {
     if (this.props.onBack) {
       return (
-        <TouchableOpacity style={styles.backButton} onPress={() => this.props.onBack()}>
-          <Icon name='ios-arrow-back' type='ionicon' {...iconProps} />
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => this.props.onBack()}
+        >
+          <Icon name='arrow-back' type='material' {...iconProps} />
         </TouchableOpacity>
       )
     }
@@ -39,7 +44,10 @@ export default class HeaderBar extends Component {
   renderCloseIcon () {
     if (this.props.onClose) {
       return (
-        <TouchableOpacity style={styles.closeButton} onPress={() => this.onCloseHandler()}>
+        <TouchableOpacity
+          style={styles.closeButton}
+          onPress={() => this.onCloseHandler()}
+        >
           <Icon name='md-close' type='ionicon' {...iconProps} />
         </TouchableOpacity>
       )
@@ -49,24 +57,33 @@ export default class HeaderBar extends Component {
   onCloseHandler () {
     if (this.props.confirmClose) {
       Alert.alert(
-          this.props.confirmClose,
-          '',
+        this.props.confirmClose,
+        '',
         [
-          {text: I18n.t('Settings.no'), onPress: () => {}, style: 'cancel'},
-          {text: I18n.t('Settings.yes'), onPress: this.props.onClose}
+          {
+            text: I18n.t('Settings.no'),
+            onPress: () => {},
+            style: 'cancel'
+          },
+          {
+            text: I18n.t('Settings.yes'),
+            onPress: this.props.onClose
+          }
         ],
-          { cancelable: false }
-        )
+        { cancelable: false }
+      )
     } else this.props.onClose()
   }
 
   render () {
     return (
-      <View style={[styles.container, this.props.containerStyle]}>
-        <View style={styles.header}>
-          <Text style={styles.title}>{this.props.title}</Text>
-          {this.renderBackIcon()}
-          {this.renderCloseIcon()}
+      <View style={styles.wrapper}>
+        <View style={[styles.container, this.props.containerStyle]}>
+          <View style={styles.header}>
+            <Text style={styles.title}>{this.props.title}</Text>
+            {this.renderBackIcon()}
+            {this.renderCloseIcon()}
+          </View>
         </View>
       </View>
     )
@@ -74,7 +91,8 @@ export default class HeaderBar extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  wrapper: {
+    width: '100%',
     backgroundColor: Colors.navigationBar.background,
     // iOS shadow
     shadowColor: '#000',
@@ -86,21 +104,21 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     // Android shadow
     elevation: 2,
-    zIndex: 10
+    zIndex: 100
+  },
+  container: {
+    zIndex: 10,
+    ...Platform.select({
+      ios: {
+        marginTop: 20,
+        ...ifIphoneX({
+          marginTop: 41
+        })
+      }
+    })
   },
   header: {
     height: Metrics.navbarHeight,
-    ...Platform.select({
-      ios: {
-        marginTop: 20
-      },
-      android: {
-        marginTop: 0
-      }
-    }),
-    ...ifIphoneX({
-      marginTop: 40
-    }),
     alignSelf: 'stretch',
     justifyContent: 'center',
     alignItems: 'center',
@@ -109,15 +127,15 @@ const styles = StyleSheet.create({
     borderTopWidth: 1
   },
   title: {
-    fontSize: Fonts.size.regular,
-    fontWeight: '200',
+    fontWeight: '500',
+    fontSize: 17,
     color: Colors.navigationBar.text,
     textAlign: 'center'
   },
   backButton: {
     // fontSize: 30,
     position: 'absolute',
-    left: 15,
+    left: 5,
     padding: 8
   },
   closeButton: {

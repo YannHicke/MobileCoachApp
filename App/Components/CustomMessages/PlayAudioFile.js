@@ -1,13 +1,22 @@
 import React, { Component } from 'react'
-import { StyleSheet, View, Dimensions, TouchableOpacity, Animated, Easing, ActivityIndicator, Platform } from 'react-native'
+import {
+  StyleSheet,
+  View,
+  Dimensions,
+  TouchableOpacity,
+  Animated,
+  Easing,
+  ActivityIndicator,
+  Platform
+} from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import Sound from 'react-native-sound'
 // import I18n from '../../I18n/I18n'
-import {inputMessageStyles} from './Styles/CommonStyles'
+import { inputMessageStyles } from './Styles/CommonStyles'
 import RNFS from 'react-native-fs'
-import Common, {authTokenUri} from '../../Utils/Common'
+import Common, { authTokenUri } from '../../Utils/Common'
 
-import {Colors} from '../../Themes/'
+import { Colors } from '../../Themes/'
 
 import Log from '../../Utils/Log'
 const log = new Log('Components/CustomMessages/PlayAudioFile')
@@ -32,7 +41,7 @@ export default class PlayAudioFile extends Component {
 
   // this.audioFile = new Sound(this.props.source, '', (err) => log.warn(err))
   componentWillMount () {
-    const {source} = this.props
+    const { source } = this.props
     // Check if it's a local or remote/web file
     // if it's a web url...
     let urlPattern = /^https?:\/\//i
@@ -41,12 +50,18 @@ export default class PlayAudioFile extends Component {
       const authTokenUrl = authTokenUri(source)
       // ...check if there is a cached version of the audiofile
       const cacheManager = Common.getImageCacheManager()
-      cacheManager.queryUrl(source).then(result => {
+      cacheManager.queryUrl(source).then((result) => {
         // if the url record isn't cached, just use the url as source
         if (result === null) {
-          log.info('Initialized audio using web-version from url: ' + authTokenUrl)
-          this.audioFile = new Sound(authTokenUrl, '', this.initialize.bind(this))
-        // if there is a cached version, use to local file!
+          log.info(
+            'Initialized audio using web-version from url: ' + authTokenUrl
+          )
+          this.audioFile = new Sound(
+            authTokenUrl,
+            '',
+            this.initialize.bind(this)
+          )
+          // if there is a cached version, use to local file!
         } else {
           log.info('Retrieved audio file from local cache: ' + source)
           this.audioFile = new Sound(result, '', this.initialize.bind(this))
@@ -54,8 +69,7 @@ export default class PlayAudioFile extends Component {
       })
     } else {
       // if it's a local file, check if the filepath exists...
-      RNFS.exists(source)
-      .then((exists) => {
+      RNFS.exists(source).then((exists) => {
         if (exists) {
           // ...set the source instantly
           log.info('Initialized audio from local source: ', source)
@@ -64,19 +78,25 @@ export default class PlayAudioFile extends Component {
           // If the file doesn't exist, find the absolute file-path first
           if (Platform.OS === 'ios') {
             log.warn('Requested audio file could not be found: ' + source)
-          // on android, the video needs to be decompressed first
-          // TODO: Maybe it's possible to use the Android Expansion File for this? -> see: https://github.com/react-native-community/react-native-video#android-expansion-file-usage
+            // on android, the video needs to be decompressed first
+            // TODO: Maybe it's possible to use the Android Expansion File for this? -> see: https://github.com/react-native-community/react-native-video#android-expansion-file-usage
           } else if (Platform.OS === 'android') {
             // destination path for uncompressed audio, this will be overridden each time
             const dest = `${RNFS.DocumentDirectoryPath}/tempAudio.aac`
             // decompress and copy to destination...
             RNFS.copyFileAssets(source, dest)
               .then(() => {
-                log.info('Initialized audio after decompressing to local source: ' + source)
+                log.info(
+                  'Initialized audio after decompressing to local source: ' +
+                    source
+                )
                 this.audioFile = new Sound(dest, '', this.initialize.bind(this))
               })
               .catch((error) => {
-                log.warn('Could not decompress audio-file from local android assets:' + error.toString())
+                log.warn(
+                  'Could not decompress audio-file from local android assets:' +
+                    error.toString()
+                )
               })
           }
         }
@@ -93,7 +113,7 @@ export default class PlayAudioFile extends Component {
       return
     }
     // success case
-    this.setState({initialized: true})
+    this.setState({ initialized: true })
   }
 
   // Plays Audio-File defined in this.audioPath
@@ -102,9 +122,11 @@ export default class PlayAudioFile extends Component {
       if (this.progressbarAnimation === null) {
         // Set the duration of the animation.
         // Duration has to multiplied by 1000 because Sound.getDuration() returns seconds and we want to have milli-seconds
-        this.progressbarIndicatorAnimationDuration = this.audioFile.getDuration() * 1000
+        this.progressbarIndicatorAnimationDuration =
+          this.audioFile.getDuration() * 1000
         this.progressbarAnimation = Animated.timing(
-          this.state.progressbarIndicatorPosition, {
+          this.state.progressbarIndicatorPosition,
+          {
             // Subtrach the size of the progressbar-indicator
             toValue: this.progressbarWidth - 16,
             duration: this.progressbarIndicatorAnimationDuration,
@@ -118,10 +140,13 @@ export default class PlayAudioFile extends Component {
       this.progressbarAnimation.start()
 
       // Set audioIsPlaying-state to true and play audio-file
-      this.setState({audioIsPlaying: true})
+      this.setState({ audioIsPlaying: true })
       this.audioFile.play(() => {
         this.progressbarAnimation = null
-        this.setState({progressbarIndicatorPosition: new Animated.Value(0), audioIsPlaying: false})
+        this.setState({
+          progressbarIndicatorPosition: new Animated.Value(0),
+          audioIsPlaying: false
+        })
       })
     }
   }
@@ -134,18 +159,19 @@ export default class PlayAudioFile extends Component {
         // Reset progressbarAnimation
         this.progressbarAnimation = null
         // Reset progressbar-indicator-position to 0 and set audioIsPlaying to false
-        this.setState({progressbarIndicatorPosition: new Animated.Value(0), audioIsPlaying: false})
+        this.setState({
+          progressbarIndicatorPosition: new Animated.Value(0),
+          audioIsPlaying: false
+        })
       })
     }
   }
 
   // Measure width of hidden Text element to adjust input width
   measureView (event) {
-    this.setState(
-      {
-        inputWidth: event.nativeEvent.layout.width
-      }
-    )
+    this.setState({
+      inputWidth: event.nativeEvent.layout.width
+    })
   }
 
   // Sets progressbar-width for animation
@@ -157,7 +183,21 @@ export default class PlayAudioFile extends Component {
   renderLoadingOverlay () {
     if (!this.state.initialized) {
       return (
-        <View style={[inputMessageStyles.mediaContent, {position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(0,0,0,0.6)'}]}>
+        <View
+          style={[
+            inputMessageStyles.mediaContent,
+            {
+              position: 'absolute',
+              top: 0,
+              bottom: 0,
+              left: 0,
+              right: 0,
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: 'rgba(0,0,0,0.6)'
+            }
+          ]}
+        >
           <ActivityIndicator />
         </View>
       )
@@ -169,15 +209,40 @@ export default class PlayAudioFile extends Component {
     // Substract 50 because of distance to the left (Normal Bubble has marginLeft: 50)
     const { width } = Dimensions.get('window')
     return (
-      <View style={[styles.inputBubble, {width: width - 50}]}>
-        <TouchableOpacity onPress={this.state.audioIsPlaying ? this.onStopAudio.bind(this) : this.onPlayAudio.bind(this)}>
+      <View style={[styles.inputBubble, { width: width - 50 }]}>
+        <TouchableOpacity
+          onPress={
+            this.state.audioIsPlaying
+              ? this.onStopAudio.bind(this)
+              : this.onPlayAudio.bind(this)
+          }
+        >
           <View>
-            <Icon name={this.state.audioIsPlaying ? 'stop' : 'play-arrow'} type='ionicon' color={'white'} size={30} />
+            <Icon
+              name={this.state.audioIsPlaying ? 'stop' : 'play-arrow'}
+              type='ionicon'
+              color={'white'}
+              size={30}
+            />
           </View>
         </TouchableOpacity>
         <View style={styles.progressbarContainer}>
-          <View onLayout={this.getprogressbarWidth.bind(this)} style={styles.progressbar} />
-          <Animated.View style={[styles.progressbarIndicator, { transform: [{translateX: this.state.progressbarIndicatorPosition}] }]} />
+          <View
+            onLayout={this.getprogressbarWidth.bind(this)}
+            style={styles.progressbar}
+          />
+          <Animated.View
+            style={[
+              styles.progressbarIndicator,
+              {
+                transform: [
+                  {
+                    translateX: this.state.progressbarIndicatorPosition
+                  }
+                ]
+              }
+            ]}
+          />
         </View>
         {this.renderLoadingOverlay()}
       </View>

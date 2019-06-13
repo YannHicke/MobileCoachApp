@@ -2,7 +2,7 @@
  * Wrapper Class for GiftedChat-Bubble which removes all possible special-Views (e.g. Text, Time).
  * This can be used as as a blank Bubble-Wrapper, e.g. for Custom Bubbles like 'open-component' where you don't
  * want anything displayed but your custom-view.
-**/
+ **/
 
 import React, { Component } from 'react'
 import { Bubble } from 'react-native-gifted-chat'

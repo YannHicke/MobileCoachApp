@@ -1,14 +1,14 @@
-import React, {Component} from 'react'
-import {View, Text} from 'react-native'
+import React, { Component } from 'react'
+import { View, Text } from 'react-native'
 import PropTypes from 'prop-types'
 import Colors from '../../Themes/Colors'
 import I18n from '../../I18n/I18n'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import moment from 'moment'
 import Button from 'react-native-button'
 import { Icon } from 'react-native-elements'
 import { getNonEditableDays } from '../../Redux/Selectors'
-import {getBaseUnit} from './FoodMetrics'
+import { getBaseUnit } from './FoodMetrics'
 import * as Animatable from 'react-native-animatable'
 
 class MealListView extends Component {
@@ -24,29 +24,63 @@ class MealListView extends Component {
     let id = 0
     if (this.props.meal.food.length === 0) {
       return (
-        <View style={[styles.foodContainer, {borderBottomWidth: 0}]} key={id++}>
-          <Text style={styles.foodTitle}>{I18n.t('FoodDiary.emptyNotice2')}</Text>
+        <View
+          style={[styles.foodContainer, { borderBottomWidth: 0 }]}
+          key={id++}
+        >
+          <Text style={styles.foodTitle}>
+            {I18n.t('FoodDiary.emptyNotice2')}
+          </Text>
         </View>
       )
     } else {
-      return this.props.meal.food.map((food) =>
-        <Animatable.View duration={550} animation={this.props.fadeInFood ? 'fadeIn' : null} style={styles.foodContainer} key={id++}>
-          <Text numberOfLines={2} style={[styles.foodTitle, this.props.onDeleteFood ? {marginRight: 40} : null]}>{food.foodnameDE}</Text>
-          <Text style={styles.foodAmountAndUnit}>{this.formatAmountAndUnit(food)}</Text>
+      return this.props.meal.food.map((food) => (
+        <Animatable.View
+          duration={550}
+          animation={this.props.fadeInFood ? 'fadeIn' : null}
+          style={styles.foodContainer}
+          key={id++}
+        >
+          <Text
+            numberOfLines={2}
+            style={[
+              styles.foodTitle,
+              this.props.onDeleteFood ? { marginRight: 40 } : null
+            ]}
+          >
+            {food.foodnameDE}
+          </Text>
+          <Text style={styles.foodAmountAndUnit}>
+            {this.formatAmountAndUnit(food)}
+          </Text>
           {this.renderDeleteFoodButton(food)}
         </Animatable.View>
-      )
+      ))
     }
   }
 
   formatAmountAndUnit (food) {
-    const {selectedAmount, calculatedGram} = food
-    let result = parseFloat(selectedAmount.value.toFixed(2)) + ' ' + I18n.t('FoodUnits.' + selectedAmount.unit.unitId)
+    const { selectedAmount, calculatedGram } = food
+    let result =
+      parseFloat(selectedAmount.value.toFixed(2)) +
+      ' ' +
+      I18n.t('FoodUnits.' + selectedAmount.unit.unitId)
     // If the user didn't select a base-unit (g, ml), also add the equivalent getBaseUnit-Value
-    if (![0, 1].includes(selectedAmount.unit.unitId)) result = result + ' / ' + calculatedGram + ' ' + getBaseUnit(food)
+    if (![0, 1].includes(selectedAmount.unit.unitId)) {
+      result = result + ' / ' + calculatedGram + ' ' + getBaseUnit(food)
+    }
     // TODO: this is only a temporary fix to keep compatibilty with current version (can be deleted later)
-    if (result.includes('undefined')) return parseFloat(selectedAmount.value.toFixed(2)) + ' ' + selectedAmount.unit + ' / ' + calculatedGram + ' ' + getBaseUnit(food)
-    else return result
+    if (result.includes('undefined')) {
+      return (
+        parseFloat(selectedAmount.value.toFixed(2)) +
+        ' ' +
+        selectedAmount.unit +
+        ' / ' +
+        calculatedGram +
+        ' ' +
+        getBaseUnit(food)
+      )
+    } else return result
   }
 
   renderDeleteFoodButton (food) {
@@ -55,21 +89,36 @@ class MealListView extends Component {
         <Button
           activeOpacity={0.5}
           containerStyle={styles.deleteButton}
-          onPress={() => this.props.onDeleteFood(food)} >
-          <Icon name='delete-forever' type='MaterialIcons' size={30} color={Colors.messageBubbles.right.background} />
+          onPress={() => this.props.onDeleteFood(food)}
+        >
+          <Icon
+            name='delete-forever'
+            type='MaterialIcons'
+            size={30}
+            color={Colors.messageBubbles.right.background}
+          />
         </Button>
       )
     } else return null
   }
 
   renderDeleteMealButton (meal) {
-    if (this.props.onDeleteMeal && !this.props.nonEditableDays.includes(meal.mealDate)) {
+    if (
+      this.props.onDeleteMeal &&
+      !this.props.nonEditableDays.includes(meal.mealDate)
+    ) {
       return (
         <Button
           activeOpacity={0.5}
           containerStyle={styles.deleteButton}
-          onPress={() => this.props.onDeleteMeal(meal)} >
-          <Icon name='delete-forever' type='MaterialIcons' size={30} color={'white'} />
+          onPress={() => this.props.onDeleteMeal(meal)}
+        >
+          <Icon
+            name='delete-forever'
+            type='MaterialIcons'
+            size={30}
+            color={'white'}
+          />
         </Button>
       )
     } else return null
@@ -81,13 +130,21 @@ class MealListView extends Component {
       let m = moment(meal.mealTime)
       return (
         <View style={styles.headlineContainer}>
-          <Animatable.Text duration={550} animation={this.props.fadeInTitle ? 'fadeIn' : null} style={styles.headline}>
-            {I18n.t('FoodDiary.' +
-            meal.mealType) + ' (' +
-            I18n.t('FoodDiary.' +
-            // \u00a0 = non breaking space
-            meal.mealPlace).replace(' ', '\u00a0') + ',\u00a0' +
-            m.format('HH:mm') + ')'}
+          <Animatable.Text
+            duration={550}
+            animation={this.props.fadeInTitle ? 'fadeIn' : null}
+            style={styles.headline}
+          >
+            {I18n.t('FoodDiary.' + meal.mealType) +
+              ' (' +
+              I18n.t(
+                'FoodDiary.' +
+                  // \u00a0 = non breaking space
+                  meal.mealPlace
+              ).replace(' ', '\u00a0') +
+              ',\u00a0' +
+              m.format('HH:mm') +
+              ')'}
           </Animatable.Text>
           {this.renderDeleteMealButton(meal)}
         </View>

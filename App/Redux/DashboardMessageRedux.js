@@ -12,7 +12,11 @@ const { Types, Creators } = createActions({
   addOrUpdateDashboardMessage: ['message', 'status']
 })
 
-export const MessageStates = { PREPARED_FOR_SENDING: 'PREPARED_FOR_SENDING', SENT: 'SENT', RECEIVED: 'RECEIVED' }
+export const MessageStates = {
+  PREPARED_FOR_SENDING: 'PREPARED_FOR_SENDING',
+  SENT: 'SENT',
+  RECEIVED: 'RECEIVED'
+}
 export const AuthorTypes = { SERVER: 'SERVER', USER: 'USER' }
 
 export const DashboardMessageActions = Types
@@ -29,12 +33,18 @@ const formatForGiftedChat = (serverMessage, status) => {
   let userId = 1
   if (serverMessage.role !== 'participant') userId = 2
   let timestamp = serverMessage['server-timestamp']
-  if (serverMessage['client-timestamp']) timestamp = serverMessage['client-timestamp']
+  if (serverMessage['client-timestamp']) {
+    timestamp = serverMessage['client-timestamp']
+  }
   let messageStatus = status
   if (serverMessage['status']) messageStatus = serverMessage['status']
-  if (serverMessage['client-status']) messageStatus = serverMessage['client-status']
+  if (serverMessage['client-status']) {
+    messageStatus = serverMessage['client-status']
+  }
   // Normalize messages-states (received -> sent)
-  if (messageStatus === MessageStates.RECEIVED) messageStatus = MessageStates.SENT
+  if (messageStatus === MessageStates.RECEIVED) {
+    messageStatus = MessageStates.SENT
+  }
 
   let giftedChatMessage = {}
   giftedChatMessage._id = serverMessage['client-id']
@@ -55,17 +65,21 @@ const formatForGiftedChat = (serverMessage, status) => {
 // Add or update dashboard message
 export const addOrUpdateDashboardMessage = (state, { message, status }) => {
   log.debug('Add or update dashboard message:', message)
-  const mergedMessageToStore = R.mergeDeepRight(state[message['client-id']], message)
-  mergedMessageToStore['giftedChatMessage'] = formatForGiftedChat(message, status)
+  const mergedMessageToStore = R.mergeDeepRight(
+    state[message['client-id']],
+    message
+  )
+  mergedMessageToStore['giftedChatMessage'] = formatForGiftedChat(
+    message,
+    status
+  )
 
   // Set new status
   if (status !== undefined && status !== null) {
     mergedMessageToStore['status'] = status
   }
 
-  return { ...state,
-    [message['client-id']]: mergedMessageToStore
-  }
+  return { ...state, [message['client-id']]: mergedMessageToStore }
 }
 
 /* ------------- Hookup Reducers To Actions ------------- */

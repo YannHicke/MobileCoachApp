@@ -1,17 +1,19 @@
 import React, { Component } from 'react'
 import { View, Platform, ActivityIndicator } from 'react-native'
-import RNFetchBlob from 'react-native-fetch-blob'
+import RNFetchBlob from 'rn-fetch-blob'
 import RNFS from 'react-native-fs'
 import PropTypes from 'prop-types'
-import {Colors} from '../../Themes/'
+import { Colors } from '../../Themes/'
 import BottomControls from './BottomControls'
 import VideoPlayer from 'react-native-true-sight'
-import Common, {authTokenUri} from '../../Utils/Common'
+import Common, { authTokenUri } from '../../Utils/Common'
 
 import Log from '../../Utils/Log'
 const log = new Log('CustomMessages/ChatVideo')
 
-const renderLoader = () => <ActivityIndicator color={Colors.video.activityIndicator} size='large' />
+const renderLoader = () => (
+  <ActivityIndicator color={Colors.video.activityIndicator} size='large' />
+)
 
 export default class Video extends Component {
   /*
@@ -44,7 +46,7 @@ export default class Video extends Component {
   }
 
   componentWillMount () {
-    const {source} = this.props
+    const { source } = this.props
     // Check if it's a local or remote/web file
     // if it's a web url...
     let urlPattern = /^https?:\/\//i
@@ -53,22 +55,21 @@ export default class Video extends Component {
       const cacheManager = Common.getImageCacheManager()
       // attach auth tokens
       const authTokenUrl = authTokenUri(source)
-      cacheManager.queryUrl(source).then(result => {
+      cacheManager.queryUrl(source).then((result) => {
         // if the video url isn't cached, just use the url as source
         if (result === null) {
-          this.setState({source: authTokenUrl})
-        // if there is a cached version, use to local file!
+          this.setState({ source: authTokenUrl })
+          // if there is a cached version, use to local file!
         } else {
-          this.setState({source: result})
+          this.setState({ source: result })
         }
       })
     } else {
       // if it's a local file, check if the filepath exists...
-      RNFS.exists(source)
-      .then((exists) => {
+      RNFS.exists(source).then((exists) => {
         if (exists) {
           // ...set the source instantly
-          this.setState({source})
+          this.setState({ source })
         } else {
           // If the file doesn't exist, find the absolute file-path first
           if (Platform.OS === 'ios') {
@@ -81,10 +82,13 @@ export default class Video extends Component {
             // decompress and copy to destination...
             RNFS.copyFileAssets(source, dest)
               .then(() => {
-                this.setState({source: dest})
+                this.setState({ source: dest })
               })
               .catch((err) => {
-                log.warn('Could not uncompress video from local android assets: ' + err.toString())
+                log.warn(
+                  'Could not uncompress video from local android assets: ' +
+                    err.toString()
+                )
               })
           }
         }
@@ -96,12 +100,18 @@ export default class Video extends Component {
     let width = this.props.width
     let height = this.props.height
     if (!height) height = 0.5625 * width
-    let style = {width, height}
+    let style = { width, height }
     if (this.props.fullscreenMode) {
-      style = {position: 'absolute', top: 0, left: 0, bottom: 0, right: 0}
+      style = {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0
+      }
     }
     return (
-      <View style={[style, {backgroundColor: 'black'}]}>
+      <View style={[style, { backgroundColor: 'black' }]}>
         {this.renderVideo()}
       </View>
     )
@@ -122,7 +132,13 @@ export default class Video extends Component {
         // Pause current player
         this.refs.player.setPaused()
         // then call fullscreen callback with current time
-        this.props.onToggleFullscreen(this.state.source, this.refs.player.getCurrentTime(), paused, (currentTime, paused) => this.closeFullscreenCallback(currentTime, paused))
+        this.props.onToggleFullscreen(
+          this.state.source,
+          this.refs.player.getCurrentTime(),
+          paused,
+          (currentTime, paused) =>
+            this.closeFullscreenCallback(currentTime, paused)
+        )
       }
       // If useIOSNativeFullscreen is set, override fullscreen-callback with openplayer function
       if (this.props.useIOSNativeFullscreen && Platform.OS === 'ios') {
@@ -145,7 +161,13 @@ export default class Video extends Component {
       )
     } else {
       return (
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}
+        >
           {renderLoader()}
         </View>
       )

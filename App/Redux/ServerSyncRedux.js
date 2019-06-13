@@ -17,10 +17,24 @@ const { Types, Creators } = createActions({
   rememberLatestUserTimestamp: ['timestamp'],
   rememberLatestDashboardTimestamp: ['timestamp'],
   rememberPushToken: ['platform', 'token'],
-  connectionStateChange: ['connectionState', 'deepstreamUser', 'deepstreamSecret']
+  rememberServerSync: ['serverSync'],
+  rememberVersionInfo: ['versionInfo'],
+  connectionStateChange: [
+    'connectionState',
+    'deepstreamUser',
+    'deepstreamSecret'
+  ]
 })
 
-export const ConnectionStates = { INITIALIZING: 'INITIALIZING', INITIALIZED: 'INITIALIZED', CONNECTING: 'CONNECTING', RECONNECTING: 'RECONNECTING', CONNECTED: 'CONNECTED', SYNCHRONIZATION: 'SYNCHRONIZATION', SYNCHRONIZED: 'SYNCHRONIZED' }
+export const ConnectionStates = {
+  INITIALIZING: 'INITIALIZING',
+  INITIALIZED: 'INITIALIZED',
+  CONNECTING: 'CONNECTING',
+  RECONNECTING: 'RECONNECTING',
+  CONNECTED: 'CONNECTED',
+  SYNCHRONIZATION: 'SYNCHRONIZATION',
+  SYNCHRONIZED: 'SYNCHRONIZED'
+}
 
 export const ServerSyncActions = Types
 export default Creators
@@ -31,14 +45,28 @@ export default Creators
 export const SETTINGS_INITIAL_STATE = Immutable({
   timestamp: 0,
   timestampDashboard: 0,
-  registered: AppConfig.config.serverSync.role === 'observer' || AppConfig.config.serverSync.role === 'team-manager',
-  deepstreamUser: ((AppConfig.config.serverSync.role === 'observer' || AppConfig.config.serverSync.role === 'team-manager') && AppConfig.config.dev.deepstreamUserForDebugging !== null) ? AppConfig.config.dev.deepstreamUserForDebugging : null,
-  deepstreamSecret: ((AppConfig.config.serverSync.role === 'observer' || AppConfig.config.serverSync.role === 'team-manager') && AppConfig.config.dev.deepstreamSecretForDebugging !== null) ? AppConfig.config.dev.deepstreamSecretForDebugging.substring(0, 64) : null,
+  registered:
+    AppConfig.config.serverSync.role === 'observer' ||
+    AppConfig.config.serverSync.role === 'team-manager',
+  deepstreamUser:
+    (AppConfig.config.serverSync.role === 'observer' ||
+      AppConfig.config.serverSync.role === 'team-manager') &&
+    AppConfig.config.dev.deepstreamUserForDebugging !== null
+      ? AppConfig.config.dev.deepstreamUserForDebugging
+      : null,
+  deepstreamSecret:
+    (AppConfig.config.serverSync.role === 'observer' ||
+      AppConfig.config.serverSync.role === 'team-manager') &&
+    AppConfig.config.dev.deepstreamSecretForDebugging !== null
+      ? AppConfig.config.dev.deepstreamSecretForDebugging.substring(0, 64)
+      : null,
   restUser: null, // Must be "ds:"+user
   pushPlatform: null,
   pushToken: null,
   pushRequested: false,
-  pushShared: false
+  pushShared: false,
+  versionInfo: null,
+  serverSync: null
 })
 
 // Status (not stored, current state)
@@ -53,7 +81,12 @@ export const rememberRegistration = (state, action) => {
   log.debug('Remember registration')
 
   const { deepstreamUser, deepstreamSecret } = action
-  return state.merge({ registered: true, deepstreamUser, deepstreamSecret, restUser: 'ds:' + deepstreamUser })
+  return state.merge({
+    registered: true,
+    deepstreamUser,
+    deepstreamSecret,
+    restUser: 'ds:' + deepstreamUser
+  })
 }
 
 export const rememberLatestUserTimestamp = (state, action) => {
@@ -105,10 +138,26 @@ export const rememberPushToken = (state, action) => {
   const { platform, token } = action
 
   if (state.pushToken !== null && state.pushToken !== token) {
-    return state.merge({ pushPlatform: platform, pushToken: token, pushShared: false })
+    return state.merge({
+      pushPlatform: platform,
+      pushToken: token,
+      pushShared: false
+    })
   } else {
     return state.merge({ pushPlatform: platform, pushToken: token })
   }
+}
+
+export const rememberServerSync = (state, action) => {
+  log.debug('Remember server sync settings')
+
+  return state.merge({ serverSync: action.serverSync })
+}
+
+export const rememberVersionInfo = (state, action) => {
+  log.debug('Remember server sync settings')
+
+  return state.merge({ versionInfo: action.versionInfo })
 }
 
 /* ------------- Hookup Reducers To Actions ------------- */
@@ -120,7 +169,9 @@ export const settingsReducer = createReducer(SETTINGS_INITIAL_STATE, {
   [Types.REMEMBER_PUSH_TOKEN_SHARED]: rememberPushTokenShared,
   [Types.REMEMBER_LATEST_USER_TIMESTAMP]: rememberLatestUserTimestamp,
   [Types.REMEMBER_LATEST_DASHBOARD_TIMESTAMP]: rememberLatestDashboardTimestamp,
-  [Types.REMEMBER_PUSH_TOKEN]: rememberPushToken
+  [Types.REMEMBER_PUSH_TOKEN]: rememberPushToken,
+  [Types.REMEMBER_SERVER_SYNC]: rememberServerSync,
+  [Types.REMEMBER_VERSION_INFO]: rememberVersionInfo
 })
 
 // Status

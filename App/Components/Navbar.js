@@ -1,17 +1,29 @@
-import React, {Component} from 'react'
-import {Platform, View} from 'react-native'
-import {connect} from 'react-redux'
+import React, { Component } from 'react'
+import { Platform, View, StyleSheet } from 'react-native'
+import { connect } from 'react-redux'
 import NavigationBar from 'react-native-navbar'
-import {ifIphoneX} from 'react-native-iphone-x-helper'
+import { ifIphoneX } from 'react-native-iphone-x-helper'
 
-import {Metrics, Colors} from '../Themes/'
+import { Metrics, Colors } from '../Themes/'
 import NavBarButton from './NavBarButton'
 import GUIActions from '../Redux/GUIRedux'
 import Badge from './Badge'
+import AppConfig from '../Config/AppConfig'
 
 class PMNavigationBar extends Component {
+  constructor (props) {
+    super(props)
+    this.defaultLeftButton = (
+      <NavBarButton
+        position='left'
+        icon='ios-menu'
+        onPress={() => this.props.toggleSideMenu()}
+      />
+    )
+  }
+
   render () {
-    const {title, toggleSideMenu, rightButton} = this.props
+    const { title, toggleSideMenu, rightButton, leftButton } = this.props
     return (
       <View style={styles.wrapper}>
         <NavigationBar
@@ -20,21 +32,21 @@ class PMNavigationBar extends Component {
             title: title,
             tintColor: NavigationBarStyles.title.tintColor
           }}
-          leftButton={
-            <NavBarButton
-              position='left'
-              icon='ios-menu'
-              onPress={() => toggleSideMenu()} />
-        }
+          leftButton={leftButton || this.defaultLeftButton}
           rightButton={rightButton}
-          />
-        <Badge containerStyle={styles.badgeContainer} onPress={() => toggleSideMenu()} />
+        />
+        <Badge
+          containerStyle={styles.badgeContainer}
+          onPress={() => toggleSideMenu()}
+        />
       </View>
     )
   }
 }
-const badgeTopPosition = Metrics.navbarHeight / 2 - 19
-const styles = {
+
+let badgeTopPosition = Metrics.navbarHeight / 2 - 19
+
+const styles = StyleSheet.create({
   wrapper: {
     backgroundColor: Colors.navigationBar.background,
     elevation: 4,
@@ -52,35 +64,38 @@ const styles = {
     elevation: 5,
     ...Platform.select({
       ios: {
-        ...ifIphoneX({
-          top: badgeTopPosition + 40
-        }, {
-          top: badgeTopPosition + 20
-        })
+        ...ifIphoneX(
+          {
+            top: badgeTopPosition + 40
+          },
+          {
+            top: badgeTopPosition + 20
+          }
+        )
       },
       android: {
-        top: badgeTopPosition
+        top: badgeTopPosition + Metrics.statusBarMargin
       }
     }),
     left: 24,
     justifyContent: 'center',
     alignItems: 'flex-start'
   }
-}
+})
+
 const NavigationBarStyles = {
   containerStyle: {
-    height: Metrics.navbarHeight,
     ...Platform.select({
       ios: {
+        height: Metrics.navbarHeight + 20,
         ...ifIphoneX({
-          height: Metrics.navbarHeight + 40,
+          height: Metrics.navbarHeight + 41,
           paddingTop: 20
-        }, {
-          height: Metrics.navbarHeight + 20
         })
       },
       android: {
-        paddingTop: 0
+        marginTop: Metrics.statusBarMargin,
+        height: Metrics.navbarHeight
       }
     }),
     justifyContent: 'center',
@@ -100,13 +115,15 @@ const mapStateToProps = (state) => {
   return {
     language: state.settings.language,
     coach: state.settings.coach,
-    messages: state.giftedchatmessages,
     guistate: state.guistate
   }
 }
 
-const mapStateToDispatch = dispatch => ({
+const mapStateToDispatch = (dispatch) => ({
   toggleSideMenu: () => dispatch(GUIActions.toggleSideMenu())
 })
 
-export default connect(mapStateToProps, mapStateToDispatch)(PMNavigationBar)
+export default connect(
+  mapStateToProps,
+  mapStateToDispatch
+)(PMNavigationBar)

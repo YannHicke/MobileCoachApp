@@ -15,7 +15,7 @@ export default Creators
 /* ------------- Initial State ------------- */
 export const INITIAL_STATE = Immutable({})
 
-export const handleCacheTextCommand = (state, {command, content}) => {
+export const handleCacheTextCommand = (state, { command, content }) => {
   const parsedCommand = Common.parseCommand(command)
 
   switch (parsedCommand.command) {
@@ -23,7 +23,7 @@ export const handleCacheTextCommand = (state, {command, content}) => {
     case 'cache-text':
       let id = parsedCommand.value
       return update(state, {
-        [id]: {$set: content}
+        [id]: { $set: content }
       })
     default:
       return state

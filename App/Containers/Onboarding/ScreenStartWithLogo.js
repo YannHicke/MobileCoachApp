@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
-import {ifIphoneX} from 'react-native-iphone-x-helper'
+import { ifIphoneX } from 'react-native-iphone-x-helper'
 import { Text, View, Image, StyleSheet, Platform } from 'react-native'
 import { connect } from 'react-redux'
+import SplashScreen from 'react-native-splash-screen'
 
 import NextButton from '../../Components/NextButton'
 import { Colors, Images } from '../../Themes/'
+import { normalize } from '../../Utils/Common'
 import I18n from '../../I18n/I18n'
 import MessageActions from '../../Redux/MessageRedux'
 
@@ -12,8 +14,12 @@ import MessageActions from '../../Redux/MessageRedux'
 const nextScreen = 'ScreenLanguageSelection'
 
 class ScreenStartWithLogo extends Component {
+  componentDidMount () {
+    SplashScreen.hide()
+  }
+
   render () {
-    const {sendPlatformIntention} = this.props
+    const { sendPlatformIntention } = this.props
     const { navigate } = this.props.navigation
     return (
       <View style={styles.container}>
@@ -22,35 +28,56 @@ class ScreenStartWithLogo extends Component {
             <Image style={styles.logoImage} source={Images.appLogo} />
           </View>
           <View style={styles.poweredByContainer}>
-            <Image style={styles.poweredByImage} source={Images.poweredByLogo} />
+            <Image
+              style={styles.poweredByImage}
+              source={Images.poweredByLogo}
+            />
           </View>
         </View>
         <View style={styles.textContainer}>
           <Text style={styles.title}>{I18n.t('Onboarding.title')}</Text>
           <Text style={styles.subtitle}>{I18n.t('Onboarding.subtitle')}</Text>
-          <NextButton text={I18n.t('Onboarding.next')} onPress={() => {
-            sendPlatformIntention(Platform.OS)
-            navigate(nextScreen)
-          }} />
+          <NextButton
+            text={I18n.t('Onboarding.next')}
+            onPress={() => {
+              sendPlatformIntention(Platform.OS)
+              navigate(nextScreen)
+            }}
+          />
         </View>
       </View>
     )
   }
 }
 
-const mapStateToDispatch = dispatch => ({
-  sendPlatformIntention: (platform) => dispatch(MessageActions.sendIntention(null, 'platform', platform))
+const mapStateToDispatch = (dispatch) => ({
+  sendPlatformIntention: (platform) =>
+    dispatch(MessageActions.sendIntention(null, 'platform', platform))
 })
 
-export default connect(null, mapStateToDispatch)(ScreenStartWithLogo)
+export default connect(
+  null,
+  mapStateToDispatch
+)(ScreenStartWithLogo)
 
 const styles = StyleSheet.create({
-  container: {flex: 1, alignItems: 'center', flexDirection: 'column', backgroundColor: Colors.onboarding.background},
-  imageContainer: {flex: 1, alignSelf: 'stretch', padding: 20, backgroundColor: '#fff', ...ifIphoneX({ paddingTop: 40 })},
-  logoContainer: {flex: 1, flexDirection: 'row', alignItems: 'center'},
-  poweredByContainer: {height: 40, alignItems: 'center'},
-  logoImage: {flex: 1, resizeMode: 'contain'},
-  poweredByImage: {flex: 1, resizeMode: 'contain'},
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    flexDirection: 'column',
+    backgroundColor: Colors.onboarding.background
+  },
+  imageContainer: {
+    flex: 1,
+    alignSelf: 'stretch',
+    padding: 20,
+    backgroundColor: '#fff',
+    ...ifIphoneX({ paddingTop: 40 })
+  },
+  logoContainer: { flex: 1, flexDirection: 'row', alignItems: 'center' },
+  poweredByContainer: { height: 40, alignItems: 'center' },
+  logoImage: { flex: 1, resizeMode: 'contain' },
+  poweredByImage: { flex: 1, resizeMode: 'contain' },
   textContainer: {
     flex: 1,
     flexDirection: 'column',
@@ -58,10 +85,15 @@ const styles = StyleSheet.create({
     marginHorizontal: 30,
     alignSelf: 'stretch'
   },
-  title: {fontSize: 30, fontWeight: 'bold', color: Colors.onboarding.text, textAlign: 'center'},
+  title: {
+    fontSize: normalize(25),
+    fontWeight: 'bold',
+    color: Colors.onboarding.text,
+    textAlign: 'center'
+  },
   subtitle: {
     color: Colors.onboarding.text,
     textAlign: 'center',
-    fontSize: 20
+    fontSize: normalize(18)
   }
 })

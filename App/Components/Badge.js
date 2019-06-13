@@ -1,11 +1,11 @@
-import React, {Component} from 'react'
-import {ViewPropTypes, TouchableWithoutFeedback} from 'react-native'
-import {connect} from 'react-redux'
+import React, { Component } from 'react'
+import { ViewPropTypes, TouchableWithoutFeedback } from 'react-native'
+import { connect } from 'react-redux'
 // import PropTypes from 'prop-types'
 import * as Animatable from 'react-native-animatable'
-import {Badge} from 'react-native-elements'
+import { Badge } from 'react-native-elements'
 
-import {Colors} from '../Themes/'
+import { Colors } from '../Themes/'
 
 export const strongPulse = {
   0: {
@@ -29,13 +29,27 @@ class NewMessagesBadge extends Component {
   }
 
   render () {
-    const allUnreadMessages = this.props.unreadMessages + this.props.unreadDashboardMessages
+    const allUnreadMessages =
+      this.props.unreadMessages + this.props.unreadDashboardMessages
     if (allUnreadMessages > 0) {
       return (
-        <TouchableWithoutFeedback onPress={this.props.onPress} >
-          <Animatable.View style={this.props.containerStyle} animation='strongPulse' iterationDelay={1000} iterationCount='infinite' useNativeDriver>
-            <Animatable.View animation='bounceIn' duration={600} useNativeDriver>
-              <Badge value={allUnreadMessages <= 99 ? allUnreadMessages : '99+'} containerStyle={badgeStyles.containerStyle} textStyle={badgeStyles.textStyle} />
+        <TouchableWithoutFeedback onPress={this.props.onPress}>
+          <Animatable.View
+            style={this.props.containerStyle}
+            iterationDelay={1000}
+            iterationCount='infinite'
+            useNativeDriver
+          >
+            <Animatable.View
+              animation='bounceIn'
+              duration={600}
+              useNativeDriver
+            >
+              <Badge
+                value={allUnreadMessages <= 99 ? allUnreadMessages : '99+'}
+                badgeStyle={badgeStyles.badgeStyle}
+                textStyle={badgeStyles.textStyle}
+              />
             </Animatable.View>
           </Animatable.View>
         </TouchableWithoutFeedback>
@@ -45,14 +59,12 @@ class NewMessagesBadge extends Component {
 }
 
 export const badgeStyles = {
-  containerStyle: {
+  badgeStyle: {
     backgroundColor: Colors.badge.background,
-    padding: 4,
-    minWidth: 23
+    borderWidth: 0
   },
   textStyle: {
-    fontSize: 12,
-    color: Colors.badge.text
+    color: Colors.main.appBackground
   }
 }
 

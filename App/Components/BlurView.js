@@ -1,5 +1,5 @@
-import React, {Component} from 'react'
-import {TouchableWithoutFeedback, ViewPropTypes, Keyboard} from 'react-native'
+import React, { Component } from 'react'
+import { TouchableWithoutFeedback, ViewPropTypes, Keyboard } from 'react-native'
 import PropTypes from 'prop-types'
 import * as Animatable from 'react-native-animatable'
 
@@ -7,7 +7,8 @@ export default class BlurView extends Component {
   static propTypes = {
     containerStyle: ViewPropTypes.style,
     fadeIn: PropTypes.bool,
-    opacity: PropTypes.number
+    opacity: PropTypes.number,
+    onPress: PropTypes.func
   }
 
   static defaultProps = {
@@ -17,8 +18,24 @@ export default class BlurView extends Component {
   render () {
     let backgroundColor = `rgba(0, 0, 0, ${this.props.opacity})`
     return (
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        <Animatable.View duration={350} animation={this.props.fadeIn ? 'fadeIn' : null} ref='view' style={[styles.blurViewStyle, this.props.containerStyle, {backgroundColor}]}>
+      <TouchableWithoutFeedback
+        onPress={() => {
+          if (this.props.onPress) this.props.onPress()
+          Keyboard.dismiss()
+        }}
+        accessible={false}
+      >
+        <Animatable.View
+          useNativeDriver
+          duration={350}
+          animation={this.props.fadeIn ? 'fadeIn' : null}
+          ref='view'
+          style={[
+            styles.blurViewStyle,
+            this.props.containerStyle,
+            { backgroundColor }
+          ]}
+        >
           {this.props.children}
         </Animatable.View>
       </TouchableWithoutFeedback>

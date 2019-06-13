@@ -1,4 +1,4 @@
-import { NetInfo, Platform } from 'react-native'
+import { NetInfo, Platform, AsyncStorage } from 'react-native'
 import { call, select, put, take } from 'redux-saga/effects'
 import { delay } from 'redux-saga'
 import createDeepstream from 'deepstream.io-client-js'
@@ -10,7 +10,10 @@ import AppConfig from '../Config/AppConfig'
 import { StartupActions } from '../Redux/StartupRedux'
 import { ServerSyncActions, ConnectionStates } from '../Redux/ServerSyncRedux'
 import { MessageStates, MessageActions } from '../Redux/MessageRedux'
-import { MessageStates as DashboardMessageStates, DashboardMessageActions } from '../Redux/DashboardMessageRedux'
+import {
+  MessageStates as DashboardMessageStates,
+  DashboardMessageActions
+} from '../Redux/DashboardMessageRedux'
 import { MessageTypes } from '../Sagas/MessageSagas'
 import PushNotifications from '../Utils/PushNotifications'
 
@@ -18,13 +21,18 @@ import Log from '../Utils/Log'
 const log = new Log('Sagas/ServerSyncSagas')
 
 const selectServerSyncSettings = (state) => state.serverSyncSettings
-const selectMessages = (state) => state.messages
+
+// selectors
+const allUserMessages = (state) => state.messages.messageObjects
+const userMessageIds = (state) => state.messages.messageIds
+
 const selectDashboardMessages = (state) => state.dashboardMessages
 
 const serverSyncConfig = AppConfig.config.serverSync
 const startupConfig = AppConfig.config.startup
 
-const fakeDeviceAlwaysOnlineForOfflineDev = AppConfig.config.dev.fakeDeviceAlwaysOnlineForOfflineDev
+const fakeDeviceAlwaysOnlineForOfflineDev =
+  AppConfig.config.dev.fakeDeviceAlwaysOnlineForOfflineDev
 
 const createSyncClient = createDeepstream
 
@@ -50,10 +58,14 @@ let outgoingMessageChannel = null
 let hasUserChatSendingPermission = false
 let hasDashboardChatSendingPermission = false
 
-const wait = ms => new Promise((resolve, reject) => setTimeout(resolve, ms))
+const wait = (ms) => new Promise((resolve, reject) => setTimeout(resolve, ms))
 
 /* --- Set channels from outside --- */
-export function setChannels (newConnectionStateChannel, newIncomingMessageChannel, newOutgoingMessageChannel) {
+export function setChannels (
+  newConnectionStateChannel,
+  newIncomingMessageChannel,
+  newOutgoingMessageChannel
+) {
   log.debug('Setting serverSync channels.')
   connectionStateChannel = newConnectionStateChannel
   incomingMessageChannel = newIncomingMessageChannel
@@ -62,8 +74,19 @@ export function setChannels (newConnectionStateChannel, newIncomingMessageChanne
 
 /* --- Register user on server --- */
 export function * initializeServerSync (action) {
+  // Remember server sync config for update case
+  yield put({
+    type: ServerSyncActions.REMEMBER_SERVER_SYNC,
+    serverSync: serverSyncConfig
+  })
+
   const preInitSettings = yield select(selectServerSyncSettings)
-  if (action.type === StartupActions.STARTUP && !AppConfig.config.startup.automaticallyConnectOnFirstStartup && (preInitSettings.deepstreamUser == null || preInitSettings.deepstreamSecret == null)) {
+  if (
+    action.type === StartupActions.STARTUP &&
+    !AppConfig.config.startup.automaticallyConnectOnFirstStartup &&
+    (preInitSettings.deepstreamUser == null ||
+      preInitSettings.deepstreamSecret == null)
+  ) {
     log.info('Server sync is not starting up automatically.')
     return
   }
@@ -97,31 +120,30 @@ export function * initializeServerSync (action) {
   log.debug('Care for prepared messages...')
 
   if (serverSyncConfig.userChatEnabled) {
-    const allUserMessages = yield select(selectMessages)
-    yield call(sendPreparedMessages, allUserMessages, true)
+    let userMessageKeys = yield select(userMessageIds)
+    let userMessageObjects = yield select(allUserMessages)
+    yield call(sendPreparedMessages, userMessageKeys, userMessageObjects, true)
   }
 
   if (serverSyncConfig.dashboardChatEnabled) {
     const allDashboardMessages = yield select(selectDashboardMessages)
-    yield call(sendPreparedMessages, allDashboardMessages, false)
+    yield call(sendPreparedMessages, null, allDashboardMessages, false)
   }
 
   log.debug('Care for connection status of device...')
 
   // START of workaround for problems with network connection state on some android devices
-  const onInitialNetConnection = isConnected => {
-    NetInfo.isConnected.removeEventListener(
-          onInitialNetConnection
-      )
+  const onInitialNetConnection = (isConnected) => {
+    NetInfo.isConnected.removeEventListener(onInitialNetConnection)
   }
 
   NetInfo.isConnected.addEventListener(
-      'connectionChange',
-      onInitialNetConnection
+    'connectionChange',
+    onInitialNetConnection
   )
   // END of workaround
 
-  yield NetInfo.isConnected.fetch().then(isConnected => {
+  yield NetInfo.isConnected.fetch().then((isConnected) => {
     handleDeviceConnectivity(isConnected)
   })
   NetInfo.isConnected.addEventListener(
@@ -138,7 +160,10 @@ export function * initializeServerSync (action) {
     log.debug('User already registered.')
     serverSyncUser = settings.deepstreamUser
     restUser = settings.restUser
-    PushNotifications.getInstance().setEncryptionKey(('ds:' + serverSyncUser).substring(0, 16), serverSyncUser.substring(serverSyncUser.length - 16))
+    PushNotifications.getInstance().setEncryptionKey(
+      ('ds:' + serverSyncUser).substring(0, 16),
+      serverSyncUser.substring(serverSyncUser.length - 16)
+    )
     log.setUser(serverSyncConfig.role, serverSyncUser)
   } else {
     log.debug('User not registered, so it will be done implicitely on connect')
@@ -147,12 +172,15 @@ export function * initializeServerSync (action) {
   // Check success of manual push notification request
   yield call(checkPushNotificationsRequested)
 
-  connectionStateChannel.put({type: ServerSyncActions.CONNECTION_STATE_CHANGE, connectionState: ConnectionStates.INITIALIZED})
+  connectionStateChannel.put({
+    type: ServerSyncActions.CONNECTION_STATE_CHANGE,
+    connectionState: ConnectionStates.INITIALIZED
+  })
 }
 
 /* --- Handle special commands --- */
 export function * handleCommands (action) {
-  const {command} = action
+  const { command } = action
 
   const parsedCommand = Common.parseCommand(command)
 
@@ -160,7 +188,7 @@ export function * handleCommands (action) {
     // Manually request push permissions
     case 'request-push-permissions':
       log.debug('Manually requesting push permissions...')
-      yield put({type: ServerSyncActions.REMEMBER_PUSH_TOKEN_REQUESTED})
+      yield put({ type: ServerSyncActions.REMEMBER_PUSH_TOKEN_REQUESTED })
       PushNotifications.getInstance().requestPermissions()
       break
   }
@@ -168,14 +196,31 @@ export function * handleCommands (action) {
 
 /* --- Handle messages created on the client --- */
 export function * handleNewClientCreatedMessages (action) {
-  const {type, message, status} = action
+  const { type, message, status } = action
 
-  if (type === MessageActions.ADD_OR_UPDATE_MESSAGE && status === MessageStates.PREPARED_FOR_SENDING) {
+  if (
+    type === MessageActions.ADD_OR_UPDATE_MESSAGE &&
+    status === MessageStates.PREPARED_FOR_SENDING
+  ) {
     log.debug('Adding new user message to outgoing message channel:', message)
-    outgoingMessageChannel.put({type: MessageActions.ADD_OR_UPDATE_MESSAGE, message, status: MessageStates.SENT})
-  } else if (type === DashboardMessageActions.ADD_OR_UPDATE_DASHBOARD_MESSAGE && status === DashboardMessageStates.PREPARED_FOR_SENDING) {
-    log.debug('Adding new dashboard message to outgoing message channel:', message)
-    outgoingMessageChannel.put({type: DashboardMessageActions.ADD_OR_UPDATE_DASHBOARD_MESSAGE, message, status: DashboardMessageStates.SENT})
+    outgoingMessageChannel.put({
+      type: MessageActions.ADD_OR_UPDATE_MESSAGE,
+      message,
+      status: MessageStates.SENT
+    })
+  } else if (
+    type === DashboardMessageActions.ADD_OR_UPDATE_DASHBOARD_MESSAGE &&
+    status === DashboardMessageStates.PREPARED_FOR_SENDING
+  ) {
+    log.debug(
+      'Adding new dashboard message to outgoing message channel:',
+      message
+    )
+    outgoingMessageChannel.put({
+      type: DashboardMessageActions.ADD_OR_UPDATE_DASHBOARD_MESSAGE,
+      message,
+      status: DashboardMessageStates.SENT
+    })
   }
 }
 
@@ -185,8 +230,17 @@ export function * watchConnectionStateChannel () {
   while (true) {
     const action = yield take(connectionStateChannel)
 
-    yield put(action)
-    yield call(reactBasedOnConnectionState, action)
+    if (action.versionInfo !== undefined) {
+      // Remember server sync config for update case
+      yield put({
+        type: ServerSyncActions.REMEMBER_VERSION_INFO,
+        versionInfo: action.versionInfo
+      })
+    }
+    if (action.type !== undefined) {
+      yield put(action)
+      yield call(reactBasedOnConnectionState, action)
+    }
   }
 }
 
@@ -202,7 +256,9 @@ export function * watchIncomingMessageChannel () {
       yield call(checkServerPushNotificationRegistration)
     } else if (action.type === ServerSyncActions.REMEMBER_REGISTRATION) {
       yield put(action)
-    } else if (action.type === DashboardMessageActions.ADD_OR_UPDATE_DASHBOARD_MESSAGE) {
+    } else if (
+      action.type === DashboardMessageActions.ADD_OR_UPDATE_DASHBOARD_MESSAGE
+    ) {
       yield call(handleIncomingDashboardMessage, action)
     } else {
       yield call(handleIncomingUserMessage, action)
@@ -225,7 +281,13 @@ export function * watchOutgoingMessageChannel () {
       syncStatus = inSync
     }
 
-    if ((action.type === MessageActions.ADD_OR_UPDATE_MESSAGE && !hasUserChatSendingPermission) || (action.type === DashboardMessageActions.ADD_OR_UPDATE_DASHBOARD_MESSAGE && !hasDashboardChatSendingPermission)) {
+    if (
+      (action.type === MessageActions.ADD_OR_UPDATE_MESSAGE &&
+        !hasUserChatSendingPermission) ||
+      (action.type ===
+        DashboardMessageActions.ADD_OR_UPDATE_DASHBOARD_MESSAGE &&
+        !hasDashboardChatSendingPermission)
+    ) {
       log.debug('The current role cannot send such a message, so skip this one')
       continue
     }
@@ -235,7 +297,10 @@ export function * watchOutgoingMessageChannel () {
       try {
         log.debug('Trying to send message...')
         sendingResult = yield call(handleOutgoingMessage, action)
-        log.debug('Trying to send message was successful, result was:', sendingResult)
+        log.debug(
+          'Trying to send message was successful, result was:',
+          sendingResult
+        )
       } catch (error) {
         log.warn('Error when sending message (outer backup try/catch):', error)
         sendingResult = false
@@ -255,22 +320,35 @@ export function * watchOutgoingMessageChannel () {
 /* --- Handle incoming message --- */
 function * handleIncomingUserMessage (action) {
   log.debug('Handle incoming user message...')
+  if (action.message.deactivation) {
+    // Start deactivation if requested by incoming message
+    yield put({
+      type: MessageActions.DEACTIVATE_PREVIOUS_MESSAGES,
+      timestamp: action.message['message-timestamp']
+    })
+  }
   yield put(action)
-  yield put({type: ServerSyncActions.REMEMBER_LATEST_USER_TIMESTAMP, timestamp: action.message['last-modified']})
+  yield put({
+    type: ServerSyncActions.REMEMBER_LATEST_USER_TIMESTAMP,
+    timestamp: action.message['last-modified']
+  })
 }
 
 /* --- Handle incoming dashboard message --- */
 function * handleIncomingDashboardMessage (action) {
   log.debug('Handle incoming dashboard message...')
   yield put(action)
-  yield put({type: ServerSyncActions.REMEMBER_LATEST_DASHBOARD_TIMESTAMP, timestamp: action.message['server-timestamp']})
+  yield put({
+    type: ServerSyncActions.REMEMBER_LATEST_DASHBOARD_TIMESTAMP,
+    timestamp: action.message['server-timestamp']
+  })
 }
 
 /* --- Handle outgoinng message --- */
 function * handleOutgoingMessage (action) {
   log.debug('Handle outgoing message...')
 
-  const {message} = action
+  const { message } = action
 
   let method = null
   let messageObject = null
@@ -278,9 +356,9 @@ function * handleOutgoingMessage (action) {
   if (action.type === DashboardMessageActions.ADD_OR_UPDATE_DASHBOARD_MESSAGE) {
     method = 'dashboard-message'
     messageObject = {
-      'user': serverSyncUser,
+      user: serverSyncUser,
       'user-message': message['user-message'],
-      'role': message['role'],
+      role: message['role'],
       'client-id': message['client-id']
     }
   } else {
@@ -288,20 +366,26 @@ function * handleOutgoingMessage (action) {
       case MessageTypes.PLAIN:
         method = 'user-message'
         messageObject = {
-          'user': serverSyncUser,
-          'user-message': (message['user-value'] !== undefined) ? message['user-value'] : '',
+          user: serverSyncUser,
+          'user-message':
+            message['user-value'] !== undefined ? message['user-value'] : '',
           'user-timestamp': message['user-timestamp'],
           'client-id': 'c-' + message['user-timestamp']
         }
 
         // Optional fields
         if (message['related-message-id'] !== undefined) {
-          messageObject['related-message-id'] = message['related-message-id'].substring(2)
+          messageObject['related-message-id'] = message[
+            'related-message-id'
+          ].substring(2)
         }
         if (message['user-message'] !== undefined) {
           messageObject['user-text'] = message['user-message']
         }
-        if (message['contains-media'] !== undefined && message['media-type'] !== undefined) {
+        if (
+          message['contains-media'] !== undefined &&
+          message['media-type'] !== undefined
+        ) {
           messageObject['contains-media'] = message['contains-media']
           messageObject['media-type'] = message['media-type']
         }
@@ -310,7 +394,7 @@ function * handleOutgoingMessage (action) {
       case MessageTypes.INTENTION:
         method = 'user-intention'
         messageObject = {
-          'user': serverSyncUser,
+          user: serverSyncUser,
           'user-intention': message['user-intention'],
           'user-timestamp': message['user-timestamp'],
           'client-id': 'c-' + message['user-timestamp']
@@ -327,9 +411,16 @@ function * handleOutgoingMessage (action) {
       case MessageTypes.VARIABLE:
         method = 'user-variable'
         messageObject = {
-          'user': serverSyncUser,
-          'variable': message['variable'],
-          'value': message['value']
+          user: serverSyncUser,
+          variable: message['variable'],
+          value: message['value']
+        }
+        break
+      case MessageTypes.VARIABLES:
+        method = 'user-variables'
+        messageObject = {
+          user: serverSyncUser,
+          variables: message['variablesWithValues']
         }
         break
     }
@@ -356,7 +447,7 @@ function * handleOutgoingMessage (action) {
 function * reactBasedOnConnectionState (action) {
   log.debug('Connection state changed...')
 
-  const {connectionState, deepstreamUser, deepstreamSecret} = action
+  const { connectionState, deepstreamUser, deepstreamSecret } = action
   let settings = yield select(selectServerSyncSettings)
 
   switch (connectionState) {
@@ -369,25 +460,49 @@ function * reactBasedOnConnectionState (action) {
         yield delay(2000)
         onlineStatus = online
       }
-      connectionStateChannel.put({type: ServerSyncActions.CONNECTION_STATE_CHANGE, connectionState: ConnectionStates.CONNECTING})
+      connectionStateChannel.put({
+        type: ServerSyncActions.CONNECTION_STATE_CHANGE,
+        connectionState: ConnectionStates.CONNECTING
+      })
 
       break
     case ConnectionStates.CONNECTING:
-      if (serverSyncUser === null && deepstreamUser !== undefined && deepstreamSecret !== undefined) {
+      if (
+        serverSyncUser === null &&
+        deepstreamUser !== undefined &&
+        deepstreamSecret !== undefined
+      ) {
         log.debug('Remembering registration...')
 
-        yield put({type: ServerSyncActions.REMEMBER_REGISTRATION, deepstreamUser, deepstreamSecret})
+        yield put({
+          type: ServerSyncActions.REMEMBER_REGISTRATION,
+          deepstreamUser,
+          deepstreamSecret
+        })
 
         if (startupConfig.automaticallyShareObserverAccessToken) {
-          yield put({type: MessageActions.SEND_INTENTION, text: null, intention: 'access-token-observer', content: deepstreamSecret.substring(0, 64)})
+          yield put({
+            type: MessageActions.SEND_INTENTION,
+            text: null,
+            intention: 'access-token-observer',
+            content: deepstreamSecret.substring(0, 64)
+          })
         }
         if (startupConfig.automaticallyShareParticipantAccessToken) {
-          yield put({type: MessageActions.SEND_INTENTION, text: null, intention: 'access-token-participant', content: deepstreamSecret})
+          yield put({
+            type: MessageActions.SEND_INTENTION,
+            text: null,
+            intention: 'access-token-participant',
+            content: deepstreamSecret
+          })
         }
 
         serverSyncUser = deepstreamUser
         restUser = 'ds:' + deepstreamUser
-        PushNotifications.getInstance().setEncryptionKey(('ds:' + serverSyncUser).substring(0, 16), serverSyncUser.substring(serverSyncUser.length - 16))
+        PushNotifications.getInstance().setEncryptionKey(
+          ('ds:' + serverSyncUser).substring(0, 16),
+          serverSyncUser.substring(serverSyncUser.length - 16)
+        )
         log.setUser(serverSyncConfig.role, serverSyncUser)
         settings = yield select(selectServerSyncSettings)
       }
@@ -398,7 +513,10 @@ function * reactBasedOnConnectionState (action) {
         yield call(connectAndLogin, settings)
       } catch (error) {
         log.warn('Error during connect:', error)
-        connectionStateChannel.put({type: ServerSyncActions.CONNECTION_STATE_CHANGE, connectionState: ConnectionStates.INITIALIZED})
+        connectionStateChannel.put({
+          type: ServerSyncActions.CONNECTION_STATE_CHANGE,
+          connectionState: ConnectionStates.INITIALIZED
+        })
       }
 
       break
@@ -413,7 +531,10 @@ function * reactBasedOnConnectionState (action) {
 
       firstConnectSuccessful = true
 
-      connectionStateChannel.put({type: ServerSyncActions.CONNECTION_STATE_CHANGE, connectionState: ConnectionStates.SYNCHRONIZATION})
+      connectionStateChannel.put({
+        type: ServerSyncActions.CONNECTION_STATE_CHANGE,
+        connectionState: ConnectionStates.SYNCHRONIZATION
+      })
 
       break
     case ConnectionStates.SYNCHRONIZATION:
@@ -423,7 +544,10 @@ function * reactBasedOnConnectionState (action) {
         yield call(doSynchronization, settings)
       } catch (error) {
         log.warn('Error during synchronization:', error)
-        connectionStateChannel.put({type: ServerSyncActions.CONNECTION_STATE_CHANGE, connectionState: ConnectionStates.CONNECTED})
+        connectionStateChannel.put({
+          type: ServerSyncActions.CONNECTION_STATE_CHANGE,
+          connectionState: ConnectionStates.CONNECTED
+        })
       }
 
       break
@@ -445,7 +569,10 @@ function * doSynchronization (settings) {
   const listenerRegistrationSuccessful = yield call(registerListeners, settings)
 
   if (!listenerRegistrationSuccessful) {
-    connectionStateChannel.put({type: ServerSyncActions.CONNECTION_STATE_CHANGE, connectionState: ConnectionStates.CONNECTED})
+    connectionStateChannel.put({
+      type: ServerSyncActions.CONNECTION_STATE_CHANGE,
+      connectionState: ConnectionStates.CONNECTED
+    })
     return
   }
 
@@ -455,21 +582,27 @@ function * doSynchronization (settings) {
 
     if (serverSyncConfig.userChatEnabled) {
       resultOne = yield call(rpcPromise, 'message-diff', {
-        'user': settings.deepstreamUser,
+        user: settings.deepstreamUser,
         'server-timestamp': settings.timestamp
       })
     }
 
     if (serverSyncConfig.dashboardChatEnabled) {
       resultTwo = yield call(rpcPromise, 'dashboard-diff', {
-        'user': settings.deepstreamUser,
+        user: settings.deepstreamUser,
         'server-timestamp': settings.timestampDashboard
       })
     }
 
-    if ((serverSyncConfig.userChatEnabled && resultOne === null) || (serverSyncConfig.dashboardChatEnabled && resultTwo === null)) {
+    if (
+      (serverSyncConfig.userChatEnabled && resultOne === null) ||
+      (serverSyncConfig.dashboardChatEnabled && resultTwo === null)
+    ) {
       log.warn('Error when retrieving old messages: result is null')
-      connectionStateChannel.put({type: ServerSyncActions.CONNECTION_STATE_CHANGE, connectionState: ConnectionStates.CONNECTED})
+      connectionStateChannel.put({
+        type: ServerSyncActions.CONNECTION_STATE_CHANGE,
+        connectionState: ConnectionStates.CONNECTED
+      })
     } else {
       if (serverSyncConfig.userChatEnabled) {
         log.debug('Update user message result:')
@@ -478,7 +611,11 @@ function * doSynchronization (settings) {
 
         log.debug('Adding new user messsages to channel...')
         for (let i in resultOne['list']) {
-          incomingMessageChannel.put({type: MessageActions.ADD_OR_UPDATE_MESSAGE, message: resultOne['list'][i], status: MessageStates.RECEIVED})
+          incomingMessageChannel.put({
+            type: MessageActions.ADD_OR_UPDATE_MESSAGE,
+            message: resultOne['list'][i],
+            status: MessageStates.RECEIVED
+          })
         }
         log.debug('New user messages added to channel.')
       }
@@ -497,16 +634,26 @@ function * doSynchronization (settings) {
           } else {
             status = MessageStates.RECEIVED
           }
-          incomingMessageChannel.put({type: DashboardMessageActions.ADD_OR_UPDATE_DASHBOARD_MESSAGE, message, status})
+          incomingMessageChannel.put({
+            type: DashboardMessageActions.ADD_OR_UPDATE_DASHBOARD_MESSAGE,
+            message,
+            status
+          })
         }
         log.debug('New dashboard messages added to channel.')
       }
 
-      connectionStateChannel.put({type: ServerSyncActions.CONNECTION_STATE_CHANGE, connectionState: ConnectionStates.SYNCHRONIZED})
+      connectionStateChannel.put({
+        type: ServerSyncActions.CONNECTION_STATE_CHANGE,
+        connectionState: ConnectionStates.SYNCHRONIZED
+      })
     }
   } catch (error) {
     log.warn('Error when retrieving old messages:', error)
-    connectionStateChannel.put({type: ServerSyncActions.CONNECTION_STATE_CHANGE, connectionState: ConnectionStates.CONNECTED})
+    connectionStateChannel.put({
+      type: ServerSyncActions.CONNECTION_STATE_CHANGE,
+      connectionState: ConnectionStates.CONNECTED
+    })
   }
 }
 
@@ -523,8 +670,19 @@ async function connectAndLogin (settings) {
     rpcResponseTimeout: 10000
   }
 
-  const { useLocalServer, clientVersion, defaultNickname, interventionPattern, role, interventionPassword, localDeepstreamURL, remoteDeepstreamURL } = serverSyncConfig
-  const deepstreamURL = useLocalServer ? localDeepstreamURL : remoteDeepstreamURL
+  const {
+    useLocalServer,
+    clientVersion,
+    defaultNickname,
+    interventionPattern,
+    role,
+    interventionPassword,
+    localDeepstreamURL,
+    remoteDeepstreamURL
+  } = serverSyncConfig
+  const deepstreamURL = useLocalServer
+    ? localDeepstreamURL
+    : remoteDeepstreamURL
 
   syncClient = createSyncClient(deepstreamURL, syncServerOptions)
   syncClient.on('connectionStateChanged', handleConnectionStateChange)
@@ -532,30 +690,40 @@ async function connectAndLogin (settings) {
 
   if (serverSyncUser === null && role !== 'observer') {
     if (role === 'supervisor') {
-      await syncClient.login({
-        'client-version': clientVersion,
-        'role': role,
-        'participant': '', // TODO: Implementation for supervisors not finalized. Would require appropriate user ID here
-        'intervention-pattern': interventionPattern,
-        'intervention-password': interventionPassword
-      }, handleConnectionAttempt)
+      await syncClient.login(
+        {
+          'client-version': clientVersion,
+          role: role,
+          participant: '', // TODO: Implementation for supervisors not finalized. Would require appropriate user ID here
+          'intervention-pattern': interventionPattern,
+          'intervention-password': interventionPassword
+        },
+        handleConnectionAttempt
+      )
     } else {
-      await syncClient.login({
-        'client-version': clientVersion,
-        'role': role,
-        'nickname': defaultNickname,
-        'intervention-pattern': interventionPattern,
-        'intervention-password': interventionPassword
-      }, handleConnectionAttempt)
+      await syncClient.login(
+        {
+          'client-version': clientVersion,
+          role: role,
+          nickname: defaultNickname,
+          'intervention-pattern': interventionPattern,
+          'intervention-password': interventionPassword
+        },
+        handleConnectionAttempt
+      )
     }
   } else {
-    await syncClient.login({
-      'client-version': clientVersion,
-      'user': settings.deepstreamUser,
-      'secret': settings.deepstreamSecret,
-      'role': role,
-      'intervention-password': interventionPassword
-    }, handleConnectionAttempt)
+    await syncClient.login(
+      {
+        'client-version': clientVersion,
+        user: settings.deepstreamUser,
+        secret: settings.deepstreamSecret,
+        role: role,
+        'intervention-pattern': interventionPattern,
+        'intervention-password': interventionPassword
+      },
+      handleConnectionAttempt
+    )
   }
 }
 
@@ -572,10 +740,17 @@ async function registerListeners (settings) {
     } else {
       log.info('Registering user listener...')
       try {
-        await syncClient.event.subscribe('message-update/' + settings.deepstreamUser, function (message) {
-          log.debug('Adding new user message to channel')
-          incomingMessageChannel.put({type: MessageActions.ADD_OR_UPDATE_MESSAGE, message, status: MessageStates.RECEIVED})
-        })
+        await syncClient.event.subscribe(
+          'message-update/' + settings.deepstreamUser,
+          function (message) {
+            log.debug('Adding new user message to channel')
+            incomingMessageChannel.put({
+              type: MessageActions.ADD_OR_UPDATE_MESSAGE,
+              message,
+              status: MessageStates.RECEIVED
+            })
+          }
+        )
         listenerOneRegistered = true
         log.info('User listener registered.')
       } catch (error) {
@@ -591,16 +766,23 @@ async function registerListeners (settings) {
     } else {
       log.info('Registering dashboard listener...')
       try {
-        await syncClient.event.subscribe('dashboard-update/' + settings.deepstreamUser, function (message) {
-          log.debug('Adding new dashboard message to channel')
-          let status = null
-          if (serverSyncConfig.role === message.role) {
-            status = DashboardMessageStates.SENT
-          } else {
-            status = DashboardMessageStates.RECEIVED
+        await syncClient.event.subscribe(
+          'dashboard-update/' + settings.deepstreamUser,
+          function (message) {
+            log.debug('Adding new dashboard message to channel')
+            let status = null
+            if (serverSyncConfig.role === message.role) {
+              status = DashboardMessageStates.SENT
+            } else {
+              status = DashboardMessageStates.RECEIVED
+            }
+            incomingMessageChannel.put({
+              type: DashboardMessageActions.ADD_OR_UPDATE_DASHBOARD_MESSAGE,
+              message,
+              status
+            })
           }
-          incomingMessageChannel.put({type: DashboardMessageActions.ADD_OR_UPDATE_DASHBOARD_MESSAGE, message, status})
-        })
+        )
         listenerTwoRegistered = true
         log.info('Dashboard listener registered.')
       } catch (error) {
@@ -614,19 +796,35 @@ async function registerListeners (settings) {
 }
 
 /* --- Add messages prepared for sending to the channel --- */
-async function sendPreparedMessages (allMessages, userMessages) {
-  for (const i in allMessages) {
-    const message = allMessages[i]
+async function sendPreparedMessages (
+  messageKeys,
+  messageObjects,
+  userMessages
+) {
+  if (userMessages) {
+    // Care for user messages
+    for (let i = 0; i < messageKeys.length; i++) {
+      const message = messageObjects[messageKeys[i]]
 
-    if (userMessages) {
-      // Care for user messages
       if (message['client-status'] === MessageStates.PREPARED_FOR_SENDING) {
-        outgoingMessageChannel.put({type: MessageActions.ADD_OR_UPDATE_MESSAGE, message, status: MessageStates.SENT})
+        outgoingMessageChannel.put({
+          type: MessageActions.ADD_OR_UPDATE_MESSAGE,
+          message,
+          status: MessageStates.SENT
+        })
       }
-    } else {
+    }
+  } else {
+    for (const i in messageObjects) {
+      const message = messageObjects[i]
+
       // Care for dashboard messages
       if (message['status'] === MessageStates.PREPARED_FOR_SENDING) {
-        outgoingMessageChannel.put({type: DashboardMessageActions.ADD_OR_UPDATE_DASHBOARD_MESSAGE, message, status: DashboardMessageStates.SENT})
+        outgoingMessageChannel.put({
+          type: DashboardMessageActions.ADD_OR_UPDATE_DASHBOARD_MESSAGE,
+          message,
+          status: DashboardMessageStates.SENT
+        })
       }
     }
   }
@@ -634,7 +832,9 @@ async function sendPreparedMessages (allMessages, userMessages) {
 
 /* --- Callback function for server sync client: Reacts on connection state changes --- */
 async function handleConnectionStateChange (connectionState) {
-  log.debug('Sync server client internal connection state change:' + connectionState)
+  log.debug(
+    'Sync server client internal connection state change:' + connectionState
+  )
   switch (connectionState) {
     case 'AWAITING_CONNECTION':
     case 'CHALLENGING':
@@ -643,11 +843,17 @@ async function handleConnectionStateChange (connectionState) {
       // Expected state changes
       break
     case 'RECONNECTING':
-      connectionStateChannel.put({type: ServerSyncActions.CONNECTION_STATE_CHANGE, connectionState: ConnectionStates.RECONNECTING})
+      connectionStateChannel.put({
+        type: ServerSyncActions.CONNECTION_STATE_CHANGE,
+        connectionState: ConnectionStates.RECONNECTING
+      })
       break
     case 'OPEN':
       if (serverSyncUser !== null) {
-        connectionStateChannel.put({type: ServerSyncActions.CONNECTION_STATE_CHANGE, connectionState: ConnectionStates.CONNECTED})
+        connectionStateChannel.put({
+          type: ServerSyncActions.CONNECTION_STATE_CHANGE,
+          connectionState: ConnectionStates.CONNECTED
+        })
       }
       break
     case 'ERROR':
@@ -662,6 +868,18 @@ async function handleConnectionAttempt (success, result) {
   if (success) {
     log.debug('Sync server client connection attempt successful')
 
+    // Remember version info
+    try {
+      if (!Common.isBlank(result) && !Common.isBlank(result['version-info'])) {
+        connectionStateChannel.put({
+          versionInfo: result['version-info']
+        })
+      }
+    } catch (e) {
+      log.error('Version info could not be parsed:', result['version-info'])
+      log.error('Error:', e.message)
+    }
+
     // Remember registration
     if (serverSyncUser === null) {
       log.info('Registration successful')
@@ -670,16 +888,23 @@ async function handleConnectionAttempt (success, result) {
       try {
         syncClient.close()
       } catch (e) {
-          // Do nothing
+        // Do nothing
       }
 
-      const {user, secret} = result
+      const { user, secret } = result
 
-      connectionStateChannel.put({type: ServerSyncActions.CONNECTION_STATE_CHANGE, connectionState: ConnectionStates.CONNECTING, deepstreamUser: user, deepstreamSecret: secret})
+      connectionStateChannel.put({
+        type: ServerSyncActions.CONNECTION_STATE_CHANGE,
+        connectionState: ConnectionStates.CONNECTING,
+        deepstreamUser: user,
+        deepstreamSecret: secret
+      })
     }
   } else {
     if (!firstConnectSuccessful) {
-      log.debug('Sync server client connection attempt NOT successful - reiterating over former steps (next try)')
+      log.debug(
+        'Sync server client connection attempt NOT successful - reiterating over former steps (next try)'
+      )
 
       try {
         syncClient.close()
@@ -689,9 +914,14 @@ async function handleConnectionAttempt (success, result) {
 
       await delay(2000)
 
-      connectionStateChannel.put({type: ServerSyncActions.CONNECTION_STATE_CHANGE, connectionState: ConnectionStates.INITIALIZED})
+      connectionStateChannel.put({
+        type: ServerSyncActions.CONNECTION_STATE_CHANGE,
+        connectionState: ConnectionStates.INITIALIZED
+      })
     } else {
-      log.debug('Sync server client connection attempt NOT successful - reconnect will be automatically performed')
+      log.debug(
+        'Sync server client connection attempt NOT successful - reconnect will be automatically performed'
+      )
 
       try {
         syncClient.close()
@@ -701,7 +931,10 @@ async function handleConnectionAttempt (success, result) {
 
       await delay(2000)
 
-      connectionStateChannel.put({type: ServerSyncActions.CONNECTION_STATE_CHANGE, connectionState: ConnectionStates.INITIALIZED})
+      connectionStateChannel.put({
+        type: ServerSyncActions.CONNECTION_STATE_CHANGE,
+        connectionState: ConnectionStates.INITIALIZED
+      })
     }
   }
 }
@@ -726,70 +959,119 @@ function handleDeviceConnectivity (isConnected) {
 }
 
 /* --- Promises --- */
-const rpcPromise = (name, data, requiresSync = false) => new Promise((resolve, reject) => {
-  let firstTry = true
-  let callRunning = false
-  let cleanupCallPerformed = false
-  const id = Math.floor((Math.random() * 999999) + 1)
+const rpcPromise = (name, data, requiresSync = false) =>
+  new Promise((resolve, reject) => {
+    let firstTry = true
+    let callRunning = false
+    let cleanupCallPerformed = false
+    const id = Math.floor(Math.random() * 999999 + 1)
 
-  var cleanupCall = function () {
-    if (callRunning) {
-      callRunning = false
-      cleanupCallPerformed = true
-      log.debug('rpcPromise TRACE ' + id + ' - X1 - method:', name, 'cleanup call necessary, reject will be performed.')
-      reject(new Error('RPC call died. (Special case solution)'))
-    } else {
-      log.debug('rpcPromise TRACE ' + id + ' - X2 - method:', name, 'cleanup call not necessary.')
-    }
-  }
-
-  log.debug('rpcPromise TRACE ' + id + ' - S1 (START) - method:', name)
-  try {
-    if (syncClient === undefined || syncClient === null || syncClient.rpc === null || (requiresSync && !inSync)) {
-      log.debug('rpcPromise TRACE ' + id + ' - E1 - method:', name)
-      reject(new Error('Sync client not in sync!'))
-    } else {
-      log.debug('rpcPromise TRACE ' + id + ' - S2 - method:', name)
-      callRunning = true
-      const timeout = setTimeout(cleanupCall, 15000)
-      syncClient.rpc.make(name, data, (error, result) => {
+    var cleanupCall = function () {
+      if (callRunning) {
         callRunning = false
-        clearTimeout(timeout)
-
-        if (!cleanupCallPerformed) {
-          log.debug('rpcPromise TRACE ' + id + ' - S6 - method:', name, 'is result null or undefined:', (typeof result === 'undefined' || result === null))
-          if (error === null) {
-            log.debug('rpcPromise TRACE ' + id + ' - S7 (DONE) - method:', name)
-            resolve(result)
-          } else {
-            log.debug('rpcPromise TRACE ' + id + ' - E2 - method:', name, 'error:', error)
-            if (error === 'RESPONSE_TIMEOUT' && firstTry) {
-              firstTry = false
-              log.debug('rpcPromise TRACE ' + id + ' - E2 (EXPECTING RETRY S7 or E2) - method:', name)
-              return
-            }
-            log.debug('rpcPromise TRACE ' + id + ' - E2 (FAIL) - method:', name)
-            reject(error)
-          }
-        } else {
-          log.debug('rpcPromise TRACE ' + id + ' - E4 - method:', name, 'received RPC response after cleanup has been performed. -> Ignore RPC response.')
-        }
-      })
-      log.debug('rpcPromise TRACE ' + id + ' - S3 - method:', name)
+        cleanupCallPerformed = true
+        log.debug(
+          'rpcPromise TRACE ' + id + ' - X1 - method:',
+          name,
+          'cleanup call necessary, reject will be performed.'
+        )
+        reject(new Error('RPC call died. (Special case solution)'))
+      } else {
+        log.debug(
+          'rpcPromise TRACE ' + id + ' - X2 - method:',
+          name,
+          'cleanup call not necessary.'
+        )
+      }
     }
-    log.debug('rpcPromise TRACE ' + id + ' - S4 - method:', name)
-  } catch (error) {
-    log.debug('rpcPromise TRACE ' + id + ' - E3 - method:', name)
-    reject(error)
-  }
-  log.debug('rpcPromise TRACE ' + id + ' - S5 - method:', name)
-})
+
+    log.debug('rpcPromise TRACE ' + id + ' - S1 (START) - method:', name)
+    try {
+      if (
+        syncClient === undefined ||
+        syncClient === null ||
+        syncClient.rpc === null ||
+        (requiresSync && !inSync)
+      ) {
+        log.debug('rpcPromise TRACE ' + id + ' - E1 - method:', name)
+        reject(new Error('Sync client not in sync!'))
+      } else {
+        log.debug('rpcPromise TRACE ' + id + ' - S2 - method:', name)
+        callRunning = true
+        const timeout = setTimeout(cleanupCall, 15000)
+        syncClient.rpc.make(name, data, (error, result) => {
+          callRunning = false
+          clearTimeout(timeout)
+
+          if (!cleanupCallPerformed) {
+            log.debug(
+              'rpcPromise TRACE ' + id + ' - S6 - method:',
+              name,
+              'is result null or undefined:',
+              typeof result === 'undefined' || result === null
+            )
+            if (error === null) {
+              log.debug(
+                'rpcPromise TRACE ' + id + ' - S7 (DONE) - method:',
+                name
+              )
+              resolve(result)
+            } else {
+              log.debug(
+                'rpcPromise TRACE ' + id + ' - E2 - method:',
+                name,
+                'error:',
+                error
+              )
+              if (error === 'RESPONSE_TIMEOUT' && firstTry) {
+                firstTry = false
+                log.debug(
+                  'rpcPromise TRACE ' +
+                    id +
+                    ' - E2 (EXPECTING RETRY S7 or E2) - method:',
+                  name
+                )
+                return
+              }
+              log.debug(
+                'rpcPromise TRACE ' + id + ' - E2 (FAIL) - method:',
+                name
+              )
+              reject(error)
+            }
+          } else {
+            log.debug(
+              'rpcPromise TRACE ' + id + ' - E4 - method:',
+              name,
+              'received RPC response after cleanup has been performed. -> Ignore RPC response.'
+            )
+          }
+        })
+        log.debug('rpcPromise TRACE ' + id + ' - S3 - method:', name)
+      }
+      log.debug('rpcPromise TRACE ' + id + ' - S4 - method:', name)
+    } catch (error) {
+      log.debug('rpcPromise TRACE ' + id + ' - E3 - method:', name)
+      reject(error)
+    }
+    log.debug('rpcPromise TRACE ' + id + ' - S5 - method:', name)
+  })
 
 /* --- Push notifications --- */
 function rememberPushToken (token, platform) {
   try {
-    log.debug('Trying to remember push token...', token, '(platform:', platform, ')')
-    incomingMessageChannel.put({type: ServerSyncActions.REMEMBER_PUSH_TOKEN, platform, token})
+    log.debug(
+      'Trying to remember push token...',
+      token,
+      '(platform:',
+      platform,
+      ')'
+    )
+    incomingMessageChannel.put({
+      type: ServerSyncActions.REMEMBER_PUSH_TOKEN,
+      platform,
+      token
+    })
     log.debug('Task to remember push token added to incoming message channel')
   } catch (error) {
     log.error('Error at remembering push token:', error)
@@ -814,16 +1096,26 @@ function * checkServerPushNotificationRegistration () {
       log.debug('Trying to communicate push registration to server...')
 
       try {
-        const result = yield call(rpcPromise, 'push-token', {
-          'user': settings.deepstreamUser,
-          'platform': settings.pushPlatform,
-          'token': settings.pushToken
-        }, true)
+        const result = yield call(
+          rpcPromise,
+          'push-token',
+          {
+            user: settings.deepstreamUser,
+            platform: settings.pushPlatform,
+            token: settings.pushToken
+          },
+          true
+        )
         if (result === true) {
           log.info('Communication of push registration successful')
-          yield put({type: ServerSyncActions.REMEMBER_PUSH_TOKEN_SHARED})
+          yield put({
+            type: ServerSyncActions.REMEMBER_PUSH_TOKEN_SHARED
+          })
         } else {
-          log.warn('Error at communication of push registration. Result is:', result)
+          log.warn(
+            'Error at communication of push registration. Result is:',
+            result
+          )
         }
       } catch (error) {
         log.warn('Error at communication of push registration.')
@@ -851,9 +1143,13 @@ async function retrieveRestToken (forceRenew) {
   }
 
   try {
-    const result = await rpcPromise('rest-token', {
-      'user': serverSyncUser
-    }, true)
+    const result = await rpcPromise(
+      'rest-token',
+      {
+        user: serverSyncUser
+      },
+      true
+    )
     if (result !== undefined && result !== null) {
       log.debug('Retrieval of REST token successful:', result)
       restToken = result
@@ -868,8 +1164,23 @@ async function retrieveRestToken (forceRenew) {
   return null
 }
 
-export async function uploadMediaInput (mediaType, variable, file, successCallback, progressCallback, errorCallback, forceNewToken = false) {
-  log.debug('Performing upload of', mediaType, 'from file', file, 'to variable', variable)
+export async function uploadMediaInput (
+  mediaType,
+  variable,
+  file,
+  successCallback,
+  progressCallback,
+  errorCallback,
+  forceNewToken = false
+) {
+  log.debug(
+    'Performing upload of',
+    mediaType,
+    'from file',
+    file,
+    'to variable',
+    variable
+  )
 
   progressCallback(0)
 
@@ -889,17 +1200,31 @@ export async function uploadMediaInput (mediaType, variable, file, successCallba
 
     const config = {
       baseURL: restURL,
-      headers: {'user': restUser, 'token': restToken, 'Content-Type': 'multipart/form-data'},
+      headers: {
+        user: restUser,
+        token: restToken,
+        'Content-Type': 'multipart/form-data'
+      },
       contentType: false,
       onUploadProgress: function (progressEvent) {
-        progressCallback(Math.floor((progressEvent.loaded * 100) / progressEvent.total))
+        progressCallback(
+          Math.floor((progressEvent.loaded * 100) / progressEvent.total)
+        )
       }
     }
 
     const formData = new FormData()
-    formData.append('file', {uri: file, name: file.substring(file.lastIndexOf('/') + 1), type: mime.lookup(file)})
+    formData.append('file', {
+      uri: file,
+      name: file.substring(file.lastIndexOf('/') + 1),
+      type: mime.lookup(file)
+    })
 
-    const response = await axios.post('media/upload/' + mediaType.toUpperCase() + '/' + variable, formData, config)
+    const response = await axios.post(
+      'media/upload/' + mediaType.toUpperCase() + '/' + variable,
+      formData,
+      config
+    )
 
     if (response.status === 200) {
       progressCallback(100)
@@ -909,11 +1234,23 @@ export async function uploadMediaInput (mediaType, variable, file, successCallba
       log.debug('Upload not successful:', response)
     }
   } catch (exception) {
-    if (typeof exception.response !== 'undefined' && typeof exception.response.status !== 'undefined' && exception.response.status === 401) {
+    if (
+      typeof exception.response !== 'undefined' &&
+      typeof exception.response.status !== 'undefined' &&
+      exception.response.status === 401
+    ) {
       log.debug('Upload failed due to outtimed token', exception)
 
       log.debug('Retrying upload')
-      uploadMediaInput(mediaType, variable, file, successCallback, progressCallback, errorCallback, true)
+      uploadMediaInput(
+        mediaType,
+        variable,
+        file,
+        successCallback,
+        progressCallback,
+        errorCallback,
+        true
+      )
       return
     } else {
       log.debug('Upload failed:', exception)
@@ -922,8 +1259,27 @@ export async function uploadMediaInput (mediaType, variable, file, successCallba
 
   if (mediaReference !== null) {
     const { useLocalServer, localMediaURL, remoteMediaURL } = serverSyncConfig
-    successCallback((useLocalServer ? localMediaURL : remoteMediaURL) + mediaReference)
+    successCallback(
+      (useLocalServer ? localMediaURL : remoteMediaURL) + mediaReference
+    )
   } else {
     errorCallback()
   }
+}
+
+export function * performUpdate () {
+  // Restart app
+  // set perform update key in async storage
+  AsyncStorage.setItem('PERFORM_UPDATE', 'LATEST')
+    .then(() => {
+      // and restart app afterwards
+      // 1. --- insert data-migrations here ---
+      // 2. --- restart app: ---
+      // RNRestart.Restart()
+      // after restart, 'performUpdate' in 'VersionSwitch.js' will be perfomed
+    })
+    .catch((error) => {
+      log.warn('Could not write perform update flag to AsyncStorage.')
+      log.warn(error.toString())
+    })
 }

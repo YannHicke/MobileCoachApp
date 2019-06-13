@@ -4,12 +4,14 @@ import PropTypes from 'prop-types'
 
 class FullScreenImage extends Component {
   render () {
-    const {source, children, style, ...props} = this.props
+    const { source, children, style, ...props } = this.props
     return (
-      <Image source={source}
+      <Image
+        source={source}
         style={{ flex: 1, width: null, height: null, ...style }}
-        {...props}>
-        { children }
+        {...props}
+      >
+        {children}
       </Image>
     )
   }

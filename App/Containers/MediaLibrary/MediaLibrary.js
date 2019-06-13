@@ -4,47 +4,110 @@ import {
   StyleSheet,
   ScrollView,
   Image,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
+  Text
 } from 'react-native'
 import { Icon } from 'react-native-elements'
 import { connect } from 'react-redux'
 import { SuperGridSectionList } from 'react-native-super-grid'
 import * as Animatable from 'react-native-animatable'
 import propTypes from 'prop-types'
+import _ from 'lodash'
 
+import ServerMessageActions from './../../Redux/MessageRedux'
 import StoryProgressRedux from '../../Redux/StoryProgressRedux'
-import {Colors} from '../../Themes/'
+import { Colors, Metrics } from '../../Themes/'
 import PMNavigationBar from '../../Components/Navbar'
 import I18n from '../../I18n/I18n'
+import Common, { normalize } from '../../Utils/Common'
 
-import Thumbnails from './Thumbnails'
+import MediaInfo from './MediaInfo'
 
-const INITIAL_DELAY = 800
+const INITIAL_DELAY = 200
 const DELAY = 300
+const ICON_SIZE = (Metrics.screenWidth - 100) / 2
 
 class Item extends Component {
   static propTypes = {
     onPress: propTypes.func,
     delay: propTypes.number,
     thumbnail: Image.propTypes.source.isRequired,
-    appearAnimation: propTypes.string
+    appearAnimation: propTypes.string,
+    title: propTypes.string
   }
 
   render () {
     return (
-      <TouchableWithoutFeedback onPress={() => this.refs.view.pulse(250).then(() => this.props.onPress())}>
-        <Animatable.View style={styles.cardContainer} useNativeDriver ref='view' delay={this.props.delay} duration={1800} animation={this.props.appearAnimation}>
+      <TouchableWithoutFeedback
+        onPress={() =>
+          this.refs.view.pulse(250).then(() => this.props.onPress())
+        }
+      >
+        <Animatable.View
+          style={styles.cardContainer}
+          useNativeDriver
+          ref='view'
+          delay={this.props.delay}
+          duration={1800}
+          animation={this.props.appearAnimation}
+        >
+          {/*
+            old layout with thumbnail
           <View style={styles.cardView}>
-            <Image
-              source={this.props.thumbnail}
-              resizeMode='contain'
-              style={{width: '100%'}}
-            />
-            <Icon containerStyle={{position: 'absolute', alignSelf: 'center'}} color={'rgba(255,255,255,0.4)'} size={75} name='play-circle-o' type='font-awesome' />
+            <View style={{flex: 1, borderTopLeftRadius: 5, borderTopRightRadius: 5, overflow: 'hidden', justifyContent: 'center'}}>
+              <Image
+                source={this.props.thumbnail}
+                resizeMode='cover'
+                style={{flex: 1, width: '100%'}}
+                />
+              <Icon containerStyle={{position: 'absolute', alignSelf: 'center'}} color={'rgba(255,255,255,0.4)'} size={75} name='play-circle-o' type='font-awesome' />
+            </View>
+            <View style={{ flexDirection: 'row', alignItems: 'center', height: 50, padding: 10, marginBottom: 5 }}>
+              <Text numberOfLines={2} style={{textAlign: 'center', flex: 1, fontSize: 16, color: Colors.buttons.common.text}}>{this.props.title}</Text>
+            </View>
           </View>
+          */}
+          {this.renderTitles()}
         </Animatable.View>
       </TouchableWithoutFeedback>
     )
+  }
+
+  renderTitles () {
+    if (!Common.isBlank(this.props.subtitle)) {
+      return (
+        <View style={styles.cardView}>
+          <Text style={styles.title}>{this.props.title}</Text>
+          <Text style={styles.subtitle}>{this.props.subtitle}</Text>
+          <Icon
+            containerStyle={{
+              position: 'absolute',
+              alignSelf: 'center'
+            }}
+            color={'rgba(255,255,255,0.1)'}
+            size={ICON_SIZE}
+            name='play-circle-o'
+            type='font-awesome'
+          />
+        </View>
+      )
+    } else {
+      return (
+        <View style={styles.cardView}>
+          <Text style={styles.title}>{this.props.title}</Text>
+          <Icon
+            containerStyle={{
+              position: 'absolute',
+              alignSelf: 'center'
+            }}
+            color={'rgba(255,255,255,0.1)'}
+            size={ICON_SIZE}
+            name='play-circle-o'
+            type='font-awesome'
+          />
+        </View>
+      )
+    }
   }
 }
 
@@ -56,8 +119,20 @@ class MediaLibrary extends Component {
     this.videoArray = []
   }
 
-  componentWillMount () {
-    const {mediaLibrary} = this.props
+  componentWillReceiveProps (newProps) {
+    if (newProps.currentScreen !== this.props.currentScreen) {
+      if (newProps.currentScreen === 'Library') {
+        // Navigating to library screen
+        this.mount()
+      } else {
+        // Navigating away from library screen
+        this.unmount()
+      }
+    }
+  }
+
+  mount () {
+    const { mediaLibrary } = this.props
     // Mark all videos as shown in Component-Will-Unmount to prevent unnessecary re-renders (props will change!).
     // (These updates are only from next mount-cycle!)
     let delay = INITIAL_DELAY
@@ -65,13 +140,18 @@ class MediaLibrary extends Component {
     Object.keys(mediaLibrary).map((key, index) => {
       const videoItem = mediaLibrary[key]
 
-      let thumbnail = Thumbnails.default
-      if (Thumbnails[videoItem.thumbnail]) thumbnail = Thumbnails[videoItem.thumbnail]
+      let mediaInfo = MediaInfo.default
+      if (MediaInfo[videoItem.medianame]) {
+        mediaInfo = MediaInfo[videoItem.medianame]
+      }
 
       let itemDelay = delay
       let appearAnimation
       // increment delay for every unplayed animation
-      if (videoItem.appearAnimationPlayed === undefined || !videoItem.appearAnimationPlayed) {
+      if (
+        videoItem.appearAnimationPlayed === undefined ||
+        !videoItem.appearAnimationPlayed
+      ) {
         delay = delay + DELAY
         appearAnimation = 'bounceIn'
         // also remember this video card so it's animation can be marked as played
@@ -80,7 +160,8 @@ class MediaLibrary extends Component {
 
       const video = {
         ...videoItem,
-        thumbnail,
+        thumbnail: mediaInfo.thumbnail,
+        title: mediaInfo.title,
         key,
         appearAnimation,
         delay: itemDelay
@@ -100,12 +181,16 @@ class MediaLibrary extends Component {
     })
   }
 
-  componentWillUnmount () {
+  unmount () {
     // Mark all videos as shown in Component-Will-Unmount to prevent unnessecary re-renders (props will change!).
     // (These updates are only from next mount-cycle!)
     this.videosToBeMarkedAsShown.map((video) => {
       this.props.setAnimationShown(video)
     })
+
+    // Remember all info-cards which need to be marked as shown
+    this.videosToBeMarkedAsShown = []
+    this.videoArray = []
   }
 
   renderNavigationbar (props) {
@@ -116,32 +201,91 @@ class MediaLibrary extends Component {
   }
 
   render () {
-    const {showModal} = this.props.screenProps
+    const { hideTitle, mediaLibrary } = this.props
     return (
       <View style={styles.container}>
-        {this.renderNavigationbar(this.props)}
+        {hideTitle ? null : this.renderNavigationbar(this.props)}
         <View style={styles.content}>
           {/* <Image source={require('../../Images/Backpack/backpack.jpg')} style={styles.backgroundImage} /> */}
-          <ScrollView style={styles.grid} indicatorStyle='white'>
-            <SuperGridSectionList
-              itemDimension={130}
-              spacing={20}
-              sections={[
-                {
-                  title: '',
-                  data: this.videoArray
-                }]
-              }
-              style={styles.gridView}
-              renderItem={({item, index}) => {
-                return (
-                  <Item thumbnail={item.thumbnail} appearAnimation={item.appearAnimation} delay={item.delay} onPress={() => showModal('fullscreen-video', {source: item.uri, initialPosition: 0, closeFullscreenCallback: () => null})} />
-                )
-              }}
-              renderSectionHeader={({ section }) => null}
-            />
-          </ScrollView>
+          {_.isEmpty(mediaLibrary)
+            ? this.renderEmptyNotice()
+            : this.renderContent()}
         </View>
+      </View>
+    )
+  }
+
+  renderContent () {
+    const { showModal } = this.props.screenProps
+    return (
+      <ScrollView style={styles.grid} indicatorStyle='white'>
+        <SuperGridSectionList
+          itemDimension={150}
+          spacing={0}
+          sections={[
+            {
+              title: '',
+              data: this.videoArray
+            }
+          ]}
+          style={styles.gridView}
+          renderItem={({ item, index }) => {
+            return (
+              <Item
+                thumbnail={item.thumbnail}
+                title={item.mediaTitle}
+                appearAnimation={item.appearAnimation}
+                delay={item.delay}
+                onPress={() => {
+                  this.props.sendIntention(
+                    null,
+                    'library-video',
+                    item.medianame
+                  )
+                  showModal('fullscreen-video', {
+                    source: item.uri,
+                    initialPosition: 0,
+                    closeFullscreenCallback: () => null
+                  })
+                }}
+              />
+            )
+          }}
+          renderSectionHeader={({ section }) => null}
+        />
+      </ScrollView>
+    )
+  }
+
+  renderEmptyNotice () {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          padding: 25,
+          alignItems: 'center'
+        }}
+      >
+        <Text
+          style={{
+            marginBottom: 10,
+            fontSize: 20,
+            color: Colors.main.grey1,
+            textAlign: 'center'
+          }}
+        >
+          {I18n.t('MediaLibrary.noDataTitle').toUpperCase()}
+        </Text>
+        <Text
+          style={{
+            fontSize: 12,
+            color: Colors.main.grey2,
+            textAlign: 'center'
+          }}
+        >
+          {I18n.t('MediaLibrary.noVideoData')}
+        </Text>
       </View>
     )
   }
@@ -149,16 +293,22 @@ class MediaLibrary extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    language: state.settings.language,
-    mediaLibrary: state.storyProgress.mediaLibrary
+    mediaLibrary: state.storyProgress.mediaLibrary,
+    currentScreen: state.guistate.currentScreen
   }
 }
 
-const mapStateToDispatch = dispatch => ({
-  setAnimationShown: (video) => dispatch(StoryProgressRedux.setVideoCardAnimationPlayed(video))
+const mapStateToDispatch = (dispatch) => ({
+  setAnimationShown: (video) =>
+    dispatch(StoryProgressRedux.setVideoCardAnimationPlayed(video)),
+  sendIntention: (text, intention, content) =>
+    dispatch(ServerMessageActions.sendIntention(text, intention, content))
 })
 
-export default connect(mapStateToProps, mapStateToDispatch)(MediaLibrary)
+export default connect(
+  mapStateToProps,
+  mapStateToDispatch
+)(MediaLibrary)
 
 const styles = StyleSheet.create({
   container: {
@@ -175,6 +325,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover'
   },
   grid: {
+    paddingHorizontal: 7,
     position: 'absolute',
     top: 0,
     bottom: 0,
@@ -182,19 +333,16 @@ const styles = StyleSheet.create({
     right: 0
   },
   gridView: {
-    paddingTop: 25,
+    paddingTop: 10,
+    paddingBottom: 10,
     flex: 1
   },
   cardView: {
     flex: 1,
-    overflow: 'hidden',
     borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
-    aspectRatio: 16 / 9
-  },
-  cardContainer: {
+    backgroundColor: Colors.buttons.common.background,
     // iOS shadow
     shadowColor: '#000',
     shadowOffset: {
@@ -203,8 +351,22 @@ const styles = StyleSheet.create({
     },
     shadowRadius: 2,
     shadowOpacity: 0.25,
-    borderRadius: 5,
     // Android shadow
     elevation: 2
+  },
+  cardContainer: {
+    aspectRatio: 1,
+    padding: 7
+  },
+  title: {
+    textAlign: 'center',
+    fontSize: normalize(14),
+    color: Colors.modules.backpack.infoText
+  },
+  subtitle: {
+    marginTop: 10,
+    textAlign: 'center',
+    fontSize: normalize(12),
+    color: Colors.modules.backpack.infoText
   }
 })

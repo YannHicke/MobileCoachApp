@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
-import { Modal } from 'react-native'
+import { Modal, Platform } from 'react-native'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import * as Animatable from 'react-native-animatable'
 
 import AddMealContainer from './AddMealModule/AddMealContainer'
 import FoodDiary from './FoodDiary/FoodDiary'
@@ -10,18 +13,28 @@ import FullscreenVideo from '../Components/Video/FullscreenVideo'
 import CameraComponent from './../Components/CameraComponent'
 import RecordAudioComponent from './../Components/RecordAudioComponent'
 import SelectManyModal from './../Components/SelectManyModal'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import * as Animatable from 'react-native-animatable'
 import FeedbackForm from './Settings/FeedbackForm'
+import Verification from '../Containers/Verification'
 import ServerMessageActions from '../Redux/MessageRedux'
 import GUIActions from '../Redux/GUIRedux'
+import { Metrics } from '../Themes'
 import I18n from '../I18n/I18n'
+import ServiceChannel from '../Containers/ServiceChannel/ServiceChannel'
 
 // In specific cases, using the real Modal can cause issues.
 // E.g. when using panResponder (see: https://github.com/facebook/react-native/issues/14295)
 // When useFakeModal is set, a View-Component is used instead.
-const fakeModalTypes = ['image-lightbox', 'record-video', 'take-photo', 'record-audio', 'fullscreen-video']
+// const fakeModalTypes = [
+//   'image-lightbox',
+//   'record-video',
+//   'take-photo',
+//   'record-audio',
+//   'fullscreen-video',
+//   'level-view',
+//   'schedule',
+//   'new-measurement',
+//   'triage'
+// ]
 
 class ModalContent extends Component {
   static propTypes = {
@@ -38,7 +51,7 @@ class ModalContent extends Component {
 
   // TODO: can be deleted?
   onSend = (messages = []) => {
-    messages.forEach(msg => {
+    messages.forEach((msg) => {
       // Send the textmessage to server
       this.props.sendMessageToServer(msg.text, msg.text)
     })
@@ -48,21 +61,29 @@ class ModalContent extends Component {
   componentWillReceiveProps (nextProps) {
     // We only need to update disableGestures manually for fakeModal-Screens,
     // on the real modal we can use onShow / onDismiss
-    if (fakeModalTypes.includes(nextProps.type)) {
+    // if (fakeModalTypes.includes(nextProps.type)) {
+    if (nextProps.visible !== this.props.visible) {
       if (nextProps.visible) this.props.disableSidemenuGestures()
       else this.props.enableSidemenuGestures()
     }
+    // }
   }
 
   render () {
-    if (fakeModalTypes.includes(this.props.type)) return this.renderFakeModal()
-    else return this.renderModal()
+    // if (fakeModalTypes.includes(this.props.type)) return this.renderFakeModal()
+    // else return this.renderModal()
+    return this.renderFakeModal()
   }
 
   renderFakeModal () {
     if (this.props.visible) {
       return (
-        <Animatable.View animation='fadeIn' duration={350} style={{zIndex: 100, position: 'absolute', top: 0, bottom: 0, left: 0, right: 0}}>
+        <Animatable.View
+          animation='fadeIn'
+          duration={350}
+          style={styles.fakeModalStyle}
+          useNativeDriver
+        >
           {this.renderContent()}
         </Animatable.View>
       )
@@ -72,12 +93,18 @@ class ModalContent extends Component {
   renderModal () {
     return (
       <Modal
-        onShow={() => { this.props.disableSidemenuGestures() }}
-        onDismiss={() => { this.props.enableSidemenuGestures() }}
+        onShow={() => {
+          this.props.disableSidemenuGestures()
+        }}
+        onDismiss={() => {
+          this.props.enableSidemenuGestures()
+        }}
         animationType={'fade'}
         transparent
         visible={this.props.visible}
-        onRequestClose={() => { this.props.onClose() }} // for android
+        onRequestClose={() => {
+          this.props.onClose()
+        }} // for android
       >
         {this.renderContent()}
       </Modal>
@@ -88,7 +115,11 @@ class ModalContent extends Component {
     switch (this.props.type) {
       case 'rich-text':
         return (
-          <WebRichContent onClose={this.props.onClose}>
+          <WebRichContent
+            withHeader
+            headerTitle={this.props.content.headerTitle}
+            onClose={this.props.onClose}
+          >
             {this.props.content.htmlMarkup}
           </WebRichContent>
         )
@@ -99,36 +130,42 @@ class ModalContent extends Component {
           </WebViewContent>
         )
       case 'add-meal':
-        return (<AddMealContainer
-          mealType={this.props.content.mealType}
-          onPress={this.props.onClose}
-              />)
+        return (
+          <AddMealContainer
+            mealType={this.props.content.mealType}
+            onPress={this.props.onClose}
+          />
+        )
       case 'food-diary':
-        return (<FoodDiary
-          onPress={this.props.onClose}
-              />)
+        return <FoodDiary onPress={this.props.onClose} />
       case 'image-lightbox':
-        return (<Lightbox
-          source={this.props.content.source}
-          onClose={this.props.onClose}
-              />)
+        return (
+          <Lightbox
+            source={this.props.content.source}
+            onClose={this.props.onClose}
+          />
+        )
       case 'fullscreen-video':
-        return (<FullscreenVideo
-          videoPlayer={this.props.content.videoPlayer}
-          source={this.props.content.source}
-          initialPosition={this.props.content.initialPosition}
-          paused={this.props.content.paused}
-          closeFullscreenCallback={this.props.content.closeFullscreenCallback}
-          onClose={this.props.onClose}
-              />)
+        return (
+          <FullscreenVideo
+            videoPlayer={this.props.content.videoPlayer}
+            source={this.props.content.source}
+            initialPosition={this.props.content.initialPosition}
+            paused={this.props.content.paused}
+            closeFullscreenCallback={this.props.content.closeFullscreenCallback}
+            onClose={this.props.onClose}
+          />
+        )
       case 'feedback-form':
-        return (<FeedbackForm
-          onSubmit={(name, email, feedback) => {
-            this.props.content.onSubmit(name, email, feedback)
-            this.props.onClose()
-          }}
-          onClose={this.props.onClose}
-              />)
+        return (
+          <FeedbackForm
+            onSubmit={(name, email, feedback) => {
+              this.props.content.onSubmit(name, email, feedback)
+              this.props.onClose()
+            }}
+            onClose={this.props.onClose}
+          />
+        )
       case 'take-photo':
         return (
           <CameraComponent
@@ -170,15 +207,51 @@ class ModalContent extends Component {
             onSubmitMedia={this.props.content.onSubmitMedia}
           />
         )
-      default: return null
+      case 'verification':
+        return (
+          <Verification
+            onClose={() => this.props.onClose(false)}
+            onSubmit={() => this.props.onClose(true)}
+          />
+        )
+      case 'service-channel':
+        return (
+          <ServiceChannel
+            onClose={() => this.props.onClose(false)}
+            onSubmit={() => this.props.onClose(true)}
+          />
+        )
+      default:
+        return null
     }
   }
 }
-
-const mapStateToDispatch = dispatch => ({
-  sendMessageToServer: (text, value, relatedMessageId = null) => dispatch(ServerMessageActions.sendMessage(text, value, relatedMessageId)),
+const styles = {
+  fakeModalStyle: {
+    zIndex: 100,
+    position: 'absolute',
+    ...Platform.select({
+      ios: {
+        top: 0
+      },
+      android: {
+        top: Metrics.statusBarMargin
+      }
+    }),
+    bottom: 0,
+    left: 0,
+    right: 0,
+    elevation: 10
+  }
+}
+const mapStateToDispatch = (dispatch) => ({
+  sendMessageToServer: (text, value, relatedMessageId = null) =>
+    dispatch(ServerMessageActions.sendMessage(text, value, relatedMessageId)),
   enableSidemenuGestures: () => dispatch(GUIActions.enableSidemenuGestures()),
   disableSidemenuGestures: () => dispatch(GUIActions.disableSidemenuGestures())
 })
 
-export default connect(null, mapStateToDispatch)(ModalContent)
+export default connect(
+  null,
+  mapStateToDispatch
+)(ModalContent)

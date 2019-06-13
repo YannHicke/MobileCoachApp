@@ -4,11 +4,13 @@ import {
   View,
   Text,
   ViewPropTypes,
-  Linking
- } from 'react-native'
+  Linking,
+  Platform
+} from 'react-native'
 import PropTypes from 'prop-types'
 import ParsedText from 'react-native-parsed-text'
 
+import ChatRichContent from './ChatRichContent'
 import ChatImage from './ChatImage'
 import ChatVideo from './ChatVideo'
 import PlayAudioFile from './PlayAudioFile'
@@ -19,7 +21,7 @@ const log = new Log('CustomMessages/PMMessageText')
 const URL_PATTERN = /(https?:\/\/|www\.)[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/i
 const WWW_URL_PATTERN = /^www\./i
 const MARKDOWN_URL_PATTERN = /\[(.+?)\]\(.+?\)/i
-const CONTENT_TYPES = {IMAGE: 'image', VIDEO: 'video', AUDIO: 'audio'}
+const CONTENT_TYPES = { IMAGE: 'image', VIDEO: 'video', AUDIO: 'audio' }
 
 export default class PMMessageText extends Component {
   static propTypes = {
@@ -63,27 +65,79 @@ export default class PMMessageText extends Component {
       if (text === '') return null
       else text = this.props.currentMessage.text
     }
-    const linkStyle = StyleSheet.flatten([styles[this.props.position].link, this.props.linkStyle])
 
     return (
-      <View style={[styles[this.props.position].container, this.props.containerStyle[this.props.position]]}>
-        <ParsedText
-          style={[styles[this.props.position].text, this.props.textStyle[this.props.position], this.props.customTextStyle]}
-          parse={[
-            // Markdown URLs
-            {pattern: MARKDOWN_URL_PATTERN, style: linkStyle, onPress: this.onUrlPress, renderText: this.renderMarkdownUrl},
-            // URLs
-            {pattern: URL_PATTERN, style: linkStyle, onPress: this.onUrlPress},
-            // Linked Survey
-            {pattern: /####LINKED_SURVEY####/, style: linkStyle, onPress: () => this.onUrlPress(this.props.currentMessage.custom.linkedSurvey), renderText: this.replaceSurveyPlaceholder}
-          ].concat(this.props.parsePatterns)}
-          childrenProps={{...this.props.textProps}}
-          renderText={this.replaceText}
-        >
-          {text}
-        </ParsedText>
+      <View
+        style={[
+          styles[this.props.position].container,
+          this.props.containerStyle[this.props.position]
+        ]}
+      >
+        {this.renderTextElement(text, this.props.currentMessage.custom.format)}
       </View>
     )
+  }
+
+  renderTextElement (text, format) {
+    switch (format) {
+      case 'html':
+        return (
+          <View style={styles.chatRichContent}>
+            <ChatRichContent
+              theme={this.props.theme}
+              content={text}
+              position={this.props.position}
+            />
+          </View>
+        )
+      case 'plain':
+      default:
+        const linkStyle = StyleSheet.flatten([
+          styles[this.props.position].link,
+          this.props.linkStyle
+        ])
+
+        return (
+          <ParsedText
+            style={[
+              styles[this.props.position].text,
+              this.props.textStyle[this.props.position],
+              this.props.customTextStyle
+            ]}
+            parse={[
+              // Markdown URLs
+              {
+                pattern: MARKDOWN_URL_PATTERN,
+                style: linkStyle,
+                onPress: Platform.OS !== 'web' ? this.onUrlPress : undefined,
+                renderText: this.renderMarkdownUrl
+              },
+              // URLs
+              {
+                pattern: URL_PATTERN,
+                style: linkStyle,
+                onPress: Platform.OS !== 'web' ? this.onUrlPress : undefined,
+                renderText:
+                  Platform.OS === 'web' ? this.renderWebUrl : undefined
+              },
+              // Linked Survey
+              {
+                pattern: /####LINKED_SURVEY####/,
+                style: linkStyle,
+                onPress: () =>
+                  this.onUrlPress(
+                    this.props.currentMessage.custom.linkedSurvey
+                  ),
+                renderText: this.replaceSurveyPlaceholder
+              }
+            ].concat(this.props.parsePatterns)}
+            childrenProps={{ ...this.props.textProps }}
+            renderText={this.replaceText}
+          >
+            {text}
+          </ParsedText>
+        )
+    }
   }
 
   renderMarkdownUrl (matchingString) {
@@ -92,18 +146,14 @@ export default class PMMessageText extends Component {
     let result = ''
     let matches = matchingString.match(pattern)
     if (matches && matches[1]) result = matches[1]
-    return (
-      <Text>{result}</Text>
-    )
+    return <Text>{result}</Text>
   }
 
   replaceSurveyPlaceholder (matchingString, matches) {
     // matches => ["[@michel:5455345]", "@michel", "5455345"]
     // let pattern = /####LINKED_SURVEY####/
     // let match = matchingString.match(pattern)
-    return (
-      <Text>Linked Survey</Text>
-    )
+    return <Text>Linked Survey</Text>
   }
 
   onUrlPress (url) {
@@ -132,61 +182,63 @@ export default class PMMessageText extends Component {
   }
 
   renderMediaText (renderMedia = () => null) {
-    const {text} = this.props.currentMessage
-    const {mediaType} = this.props.currentMessage.custom
+    const { text } = this.props.currentMessage
+    const { mediaType } = this.props.currentMessage.custom
     let subTexts = text.split('####LINKED_MEDIA_OBJECT####')
-    return (
-      subTexts.map((subText, index) => {
-        // if its the last subText, just render the text
-        if (index === subTexts.length - 1) {
-          return (
-            <View key={index}>
-              {this.renderText(subText)}
-            </View>
-          )
-        } else {
-          return (
-            <View key={index} style={mediaType !== 'audio' ? styles.mediaTextVisual : styles.mediaTextAudio}>
-              {this.renderText(subText)}
-              {renderMedia()}
-            </View>
-          )
-        }
-      })
-    )
+    return subTexts.map((subText, index) => {
+      // if its the last subText, just render the text
+      if (index === subTexts.length - 1) {
+        return <View key={index}>{this.renderText(subText)}</View>
+      } else {
+        return (
+          <View
+            key={index}
+            style={
+              mediaType !== 'audio'
+                ? styles.mediaTextVisual
+                : styles.mediaTextAudio
+            }
+          >
+            {this.renderText(subText)}
+            {renderMedia()}
+          </View>
+        )
+      }
+    })
   }
 
   render () {
     const { currentMessage } = this.props
     if (currentMessage.text) {
       // Check if the message contains media
-      if (currentMessage.custom.linkedMedia && currentMessage.text.includes('####LINKED_MEDIA_OBJECT####')) {
+      if (
+        currentMessage.custom.linkedMedia &&
+        currentMessage.text.includes('####LINKED_MEDIA_OBJECT####')
+      ) {
         // Check content-type of media and render accordingly
         log.debug('Rendering media type', currentMessage.custom.mediaType)
         switch (currentMessage.custom.mediaType) {
+          case CONTENT_TYPES.HTML:
+            return <View>{this.renderMediaText(this.renderHTML)}</View>
           case CONTENT_TYPES.IMAGE:
-            return (
-              <View>
-                {this.renderMediaText(this.renderImage)}
-              </View>
-            )
+            return <View>{this.renderMediaText(this.renderImage)}</View>
           case CONTENT_TYPES.VIDEO:
-            return (
-              <View>
-                {this.renderMediaText(this.renderVideo)}
-              </View>
-            )
+            return <View>{this.renderMediaText(this.renderVideo)}</View>
           case CONTENT_TYPES.AUDIO:
-            return (
-              <View>
-                {this.renderMediaText(this.renderAudio)}
-              </View>
-            )
+            return <View>{this.renderMediaText(this.renderAudio)}</View>
           // Fallback-Strategy: If there is a linked-Media-Object, but the contentType is unknown, just render the URL as a link-text.
           default:
-            log.warn('Unknown contentType', currentMessage.custom.mediaType, 'found for linkedMedia-url: ', currentMessage.custom.linkedMedia)
-            return (
-              this.renderText(currentMessage.text.replace('####LINKED_MEDIA_OBJECT####', currentMessage.custom.linkedMedia))
+            log.warn(
+              'Unknown contentType',
+              currentMessage.custom.mediaType,
+              'found for linkedMedia-url: ',
+              currentMessage.custom.linkedMedia
+            )
+            return this.renderText(
+              currentMessage.text.replace(
+                '####LINKED_MEDIA_OBJECT####',
+                currentMessage.custom.linkedMedia
+              )
             )
         }
       } else return this.renderText()
@@ -194,19 +246,27 @@ export default class PMMessageText extends Component {
   }
 
   renderImage = () => {
-    return <ChatImage
-      source={this.props.currentMessage.custom.linkedMedia}
-      showModal={(component, content, onClose) => this.props.showModal(component, content, onClose)}
-      position={this.props.position}
-    />
+    return (
+      <ChatImage
+        source={this.props.currentMessage.custom.linkedMedia}
+        showModal={(component, content, onClose) =>
+          this.props.showModal(component, content, onClose)
+        }
+        position={this.props.position}
+      />
+    )
   }
 
   renderVideo = () => {
-    return <ChatVideo
-      source={this.props.currentMessage.custom.linkedMedia}
-      showModal={(component, content, onClose) => this.props.showModal(component, content, onClose)}
-      position={this.props.position}
-    />
+    return (
+      <ChatVideo
+        source={this.props.currentMessage.custom.linkedMedia}
+        showModal={(component, content, onClose) =>
+          this.props.showModal(component, content, onClose)
+        }
+        position={this.props.position}
+      />
+    )
   }
 
   renderAudio = () => {
@@ -249,10 +309,13 @@ const styles = {
       textDecorationLine: 'underline'
     }
   }),
+  chatRichContent: {
+    marginTop: 5,
+    marginBottom: 5
+  },
   mediaTextVisual: {
     justifyContent: 'center',
     alignItems: 'center'
   },
-  mediaTextAudio: {
-  }
+  mediaTextAudio: {}
 }

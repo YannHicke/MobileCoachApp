@@ -1,5 +1,5 @@
-import React, {Component} from 'react'
-import {Alert, TouchableWithoutFeedback} from 'react-native'
+import React, { Component } from 'react'
+import { Alert, TouchableWithoutFeedback } from 'react-native'
 import { connect } from 'react-redux'
 
 import Log from '../../Utils/Log'
@@ -15,10 +15,16 @@ class SendDebugStateButton extends Component {
     this.sendDebugTaps += 1
     if (this.sendDebugTaps >= 10) {
       Alert.alert(
-          'Do you wish to share your app data with the developers?',
-          '',
+        'Do you wish to share your app data with the developers?',
+        '',
         [
-          {text: 'No', onPress: () => { this.sendDebugTaps = 0 }, style: 'cancel'},
+          {
+            text: 'No',
+            onPress: () => {
+              this.sendDebugTaps = 0
+            },
+            style: 'cancel'
+          },
           {
             text: 'Yes',
             onPress: () => {
@@ -27,32 +33,28 @@ class SendDebugStateButton extends Component {
             }
           }
         ],
-          { cancelable: false }
+        { cancelable: false }
       )
     }
   }
 
   postDebugState () {
-    const {wholeState} = this.props
-    fetch('https://dc.pathmate.online/upload/', {
+    const { wholeState } = this.props
+    fetch('https://---/upload/', {
       method: 'POST',
       headers: {
-        'Accept': 'application/json',
+        Accept: 'application/json',
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({ state: wholeState, log: log.getCache() })
-    }).then((response) => {
-      log.debug('App data successfully sent to server.')
-      Alert.alert(
-        'Thank you!',
-        '',
-        [],
-        { cancelable: true }
-      )
     })
-    .catch((error) => {
-      log.warn(error)
-    })
+      .then((response) => {
+        log.debug('App data successfully sent to server.')
+        Alert.alert('Thank you!', '', [], { cancelable: true })
+      })
+      .catch((error) => {
+        log.warn(error)
+      })
   }
 
   render () {

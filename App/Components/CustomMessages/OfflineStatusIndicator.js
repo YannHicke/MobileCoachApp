@@ -42,8 +42,11 @@ export default class OfflineStatusIndicator extends Component {
     clearTimeout(this.timeoutID)
     this.timeoutID = null
     // Fade out Animation
-    if (this.refs.view) this.refs.view.flipOutX(350).then(() => this.setState({shouldRender: false}))
-    else this.setState({shouldRender: false})
+    if (this.refs.view) {
+      this.refs.view
+        .flipOutX(350)
+        .then(() => this.setState({ shouldRender: false }))
+    } else this.setState({ shouldRender: false })
   }
 
   componentWillReceiveProps (nextProps) {
@@ -61,7 +64,13 @@ export default class OfflineStatusIndicator extends Component {
     if (this.state.shouldRender) {
       return (
         <View style={[styles.container, this.props.containerStyle]}>
-          <Animatable.View ref='view' useNativeDriver style={[styles.wrapper, this.props.wrapperStyle]} duration={350} animation='flipInX'>
+          <Animatable.View
+            ref='view'
+            useNativeDriver
+            style={[styles.wrapper, this.props.wrapperStyle]}
+            duration={350}
+            animation='flipInX'
+          >
             <Text style={[styles.text, this.props.textStyle]}>
               {I18n.t('ConnectionStates.offlineNotice')}
             </Text>
@@ -85,14 +94,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: Colors.connectionIndicator.intermediateState,
     borderRadius: 15,
-    height: 30,
-    paddingLeft: 10,
-    paddingRight: 10
+    minHeight: 30,
+    padding: 8
   },
   text: {
     backgroundColor: 'transparent',
     color: Colors.messageBubbles.system.text,
     fontSize: 12,
+    textAlign: 'center',
+    alignSelf: 'stretch',
     fontWeight: '300'
   }
 })

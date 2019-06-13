@@ -1,22 +1,13 @@
 import React from 'react'
-import {
-  TouchableOpacity,
-  View
-} from 'react-native'
+import { TouchableOpacity, View } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
 const CameraButton = (props) => {
-  const {onPress, icon, buttonColor} = props
+  const { onPress, icon, buttonColor } = props
   return (
-    <TouchableOpacity
-      onPress={onPress}
-    >
+    <TouchableOpacity onPress={onPress}>
       <View style={styles.iconContainer}>
-        <Icon
-          name={icon}
-          size={100}
-          style={{color: buttonColor}}
-        />
+        <Icon name={icon} size={100} style={{ color: buttonColor }} />
       </View>
     </TouchableOpacity>
   )

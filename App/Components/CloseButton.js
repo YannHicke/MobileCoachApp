@@ -1,19 +1,20 @@
 import React from 'react'
-import {
-  StyleSheet,
-  TouchableOpacity,
-  Text
-} from 'react-native'
+import { StyleSheet, TouchableOpacity, Text } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
-import {ifIphoneX} from 'react-native-iphone-x-helper'
+import { ifIphoneX } from 'react-native-iphone-x-helper'
 
 export default ({ title, onPress, style, containerStyle }) => {
   return (
     <TouchableOpacity
       style={[styles.closeButtonContainer, containerStyle]}
-      onPress={onPress}>
+      onPress={onPress}
+    >
       <Text style={[styles.closeButton, style]}>{title}</Text>
-      <Icon name='md-close' type='ionicon' style={{paddingLeft: 10, fontSize: 30, color: '#fff'}} />
+      <Icon
+        name='md-close'
+        type='ionicon'
+        style={{ paddingLeft: 10, fontSize: 30, color: '#fff' }}
+      />
     </TouchableOpacity>
   )
 }

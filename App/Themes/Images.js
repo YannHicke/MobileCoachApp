@@ -11,10 +11,18 @@ const images = {
   coachGeneric: require('../Images/Coaches/coach_generic.png'),
   chatBg: Brand.images.chatBackground,
   custom: {
-    pyramidBg: require('../Images/FoodPyramid/pyramid_bg.png'),
-    pyramidFood: require('../Images/FoodPyramid/pyramid_food.png')
+    pyramidBg: require('../Images/Coaches/coach_generic.png'),
+    pyramidFood: require('../Images/Coaches/coach_generic.png')
   },
-  welcomeQr: require('./../Images/Onboarding/welcomeQR.png')
+  welcomeQr: require('./../Images/Onboarding/welcomeQR.png'),
+  icons: {
+    bloodPressure: require('../Images/Coaches/coach_generic.png'),
+    bloodPressureColored: require('../Images/Coaches/coach_generic.png'),
+    robot: require('../Images/Coaches/coach_generic.png')
+  },
+  misc: {
+    panelToggle: require('./../Images/Misc/paneltoggle.png')
+  }
 }
 
 export default images

@@ -1,18 +1,11 @@
-import {DrawerNavigator} from 'react-navigation'
+import { Animated, Easing } from 'react-native'
 
-import {Animated, Easing} from 'react-native'
-
-// import all screens here
-import Chat from '../Containers/Chat/Chat'
-import DashboardChat from '../Containers/Chat/DashboardChat'
+import DrawerNavigation from './DrawerNavigation'
+import { StackNavigator } from 'react-navigation'
 import OnboardingNav from '../Containers/Onboarding/OnboardingNav'
 import LoadingContainer from '../Containers/LoadingContainer'
-import Tour from '../Containers/Tour/Tour'
-import Backpack from '../Containers/Backpack/Backpack'
-import MediaLibrary from '../Containers/MediaLibrary/MediaLibrary'
-import Recipes from '../Containers/Recipes/Recipes'
-import Settings from '../Containers/Settings/Settings'
-import FoodDiary from '../Containers/FoodDiary/FoodDiary'
+
+const Navigation = DrawerNavigation
 
 // https://github.com/react-community/react-navigation/issues/1254
 const noTransitionConfig = () => ({
@@ -23,62 +16,29 @@ const noTransitionConfig = () => ({
   }
 })
 
-// Manifest of possible screens
-const PrimaryNav = DrawerNavigator({
-  LoadingContainer: {
-    path: '/loading',
-    screen: LoadingContainer
+const PrimaryNav = StackNavigator(
+  {
+    LoadingContainer: {
+      path: '/loading',
+      screen: LoadingContainer
+    },
+    OnboardingNav: {
+      path: '/intro',
+      screen: OnboardingNav
+    },
+    MainNavigation: {
+      path: '/app',
+      screen: Navigation
+    }
   },
-  OnboardingNav: {
-    path: '/intro',
-    screen: OnboardingNav
-  },
-  Chat: {
-    path: '/chat',
-    screen: Chat,
-    test: 'test'
-  },
-  DashboardChat: {
-    path: '/dashboardChat',
-    screen: DashboardChat,
-    test: 'test'
-  },
-  Tour: {
-    path: '/tour',
-    screen: Tour
-  },
-  Backpack: {
-    path: '/backpack',
-    screen: Backpack
-  },
-  MediaLibrary: {
-    path: '/medialibrary',
-    screen: MediaLibrary
-  },
-  Settings: {
-    path: '/settings',
-    screen: Settings
-  },
-  FoodDiary: {
-    path: '/diary',
-    screen: FoodDiary
-  },
-  Recipes: {
-    path: '/recipes',
-    screen: Recipes
+  {
+    headerMode: 'none',
+    transitionConfig: noTransitionConfig,
+    initialRouteName: 'LoadingContainer',
+    navigationOptions: {
+      gesturesEnabled: false
+    }
   }
-}, {
-  // Default config for all screens
-  headerMode: 'none',
-  transitionConfig: noTransitionConfig,
-  initialRouteName: 'LoadingContainer',
-  // LoadingContainer
-  // mode: 'modal'
-  navigationOptions: {
-    gesturesEnabled: false,
-    drawerLockMode: 'locked-closed' // turn of the drawer: we use our own side-menu component
-    // headerStyle: styles.header
-  }
-})
+)
 
 export default PrimaryNav

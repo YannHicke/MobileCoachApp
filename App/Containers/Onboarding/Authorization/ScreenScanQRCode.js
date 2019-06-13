@@ -56,10 +56,7 @@ class ScreenScanQRCode extends Component {
   }
 }
 ScreenScanQRCode.propTypes = {
-  onBack: PropTypes.oneOfType([
-    PropTypes.bool,
-    PropTypes.func
-  ]),
+  onBack: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]),
   onQRRead: PropTypes.func,
   onQRValid: PropTypes.func,
   onQRInvalid: PropTypes.func

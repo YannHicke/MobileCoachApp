@@ -7,9 +7,9 @@
     "chooseCoach": "Suche dir einen Guide aus",
     "welcome": "Herzlich willkommen bei ...",
     "start": "Los geht's",
-    "checkQrUsageSubtitle": "Hast du einen OR-Code, wie oben abgebildet erhalten, um diese App zu nutzen?",
-    "qrAvailable": "Ja, ich habe einen QR-Code",
-    "qrNotAvailable": "Nein, ich habe keinen QR-Code"
+    "checkQrUsageSubtitle": "How do you want to proceed?",
+    "qrAvailable": "With QR-Code",
+    "qrNotAvailable": "Without QR-Code"
   },
   "Coaches": {
     "0": "Lukas",

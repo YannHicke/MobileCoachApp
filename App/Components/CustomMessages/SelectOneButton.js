@@ -4,9 +4,9 @@ import Button from 'react-native-button'
 import PropTypes from 'prop-types'
 import * as Animatable from 'react-native-animatable'
 
-import CommonUtils, {tapBlockingHandlers} from './../../Utils/Common'
-import {Colors} from '../../Themes/'
-import {inputMessageStyles} from './Styles/CommonStyles'
+import CommonUtils, { tapBlockingHandlers } from './../../Utils/Common'
+import { Colors } from '../../Themes/'
+import { inputMessageStyles } from './Styles/CommonStyles'
 
 class Option extends Component {
   static propTypes = {
@@ -26,17 +26,29 @@ class Option extends Component {
   }
 
   render () {
-    const { title, value, currentMessage } = this.props
+    const { title, value, currentMessage, containerStyle } = this.props
     const disabled = !CommonUtils.userCanEdit(currentMessage)
     return (
-      <Animatable.View {...disabled ? tapBlockingHandlers : null} ref='view' useNativeDriver animation={this.shouldAnimate ? this.props.fadeInAnimation : null} delay={this.props.delay} duration={this.props.duration} onAnimationEnd={() => { this.shouldAnimate = false }}>
-        <Button value={value}
-          containerStyle={styles.buttonContainer}
+      <Animatable.View
+        {...(disabled ? tapBlockingHandlers : null)}
+        ref='view'
+        useNativeDriver
+        animation={this.shouldAnimate ? this.props.fadeInAnimation : null}
+        delay={this.props.delay}
+        duration={this.props.duration}
+        onAnimationEnd={() => {
+          this.shouldAnimate = false
+        }}
+      >
+        <Button
+          value={value}
+          containerStyle={[styles.buttonContainer, containerStyle]}
           disabledContainerStyle={styles.buttonContainerDisabled}
           disabled={!CommonUtils.userCanEdit(currentMessage)}
           style={styles.button}
           title={title}
-          onPress={() => this.props.onPress(this.props.optionKey)}>
+          onPress={() => this.props.onPress(this.props.optionKey)}
+        >
           {title}
         </Button>
       </Animatable.View>
@@ -68,8 +80,16 @@ export default class SelectOneButton extends Component {
   onPressHandler (message, text, value, selectedOptionKey) {
     // Only handle click the first time (to prevent unwanted "double-taps")
     if (!this.tapped) {
-      let relatedMessageId = message._id.substring(0, message._id.lastIndexOf('-'))
-      this.props.onPress(message.custom.intention, text, value, relatedMessageId)
+      let relatedMessageId = message._id.substring(
+        0,
+        message._id.lastIndexOf('-')
+      )
+      this.props.onPress(
+        message.custom.intention,
+        text,
+        value,
+        relatedMessageId
+      )
       this.tapped = true
 
       // Apparently, the "Animation-Finished" callback is called quite delayed,
@@ -106,14 +126,14 @@ export default class SelectOneButton extends Component {
 
   componentDidMount () {
     // notify redux that animationw as shown after first render
-    const {currentMessage} = this.props
+    const { currentMessage } = this.props
     if (currentMessage.custom.shouldAnimate) {
       this.props.setAnimationShown(currentMessage._id)
     }
   }
 
   render () {
-    const {options} = this.props.currentMessage.custom
+    const { options } = this.props.currentMessage.custom
 
     return (
       <View style={inputMessageStyles.container}>
@@ -125,12 +145,24 @@ export default class SelectOneButton extends Component {
               title={item.button}
               value={item.value}
               currentMessage={this.props.currentMessage}
-              onPress={(optionKey) => this.onPressHandler(this.props.currentMessage, item.button, item.value, optionKey)}
+              onPress={(optionKey) =>
+                this.onPressHandler(
+                  this.props.currentMessage,
+                  item.button,
+                  item.value,
+                  optionKey
+                )
+              }
               ref={(ref) => {
                 // Apparently, this callback is often called with "null"-values..
                 if (ref !== null) this.animatableRefs[index] = ref
               }}
-              fadeInAnimation={this.shouldAnimate ? this.props.fadeInAnimation : null}
+              containerStyle={
+                options.length > 4 ? styles.buttonContainerSmall : undefined
+              }
+              fadeInAnimation={
+                this.shouldAnimate ? this.props.fadeInAnimation : null
+              }
               fadeOutSelectedAnimation={this.props.fadeOutSelectedAnimation}
               delay={index * this.props.delayOffset}
               duration={this.props.duration}
@@ -147,11 +179,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: 250,
     padding: 5,
-    minHeight: 35,
+    paddingHorizontal: 10,
+    minHeight: 46,
     overflow: 'hidden',
     borderRadius: 16,
     backgroundColor: Colors.buttons.selectOne.background,
     marginBottom: 2
+  },
+  buttonContainerSmall: {
+    minHeight: 40
   },
   buttonContainerDisabled: {
     backgroundColor: Colors.buttons.selectOne.disabled

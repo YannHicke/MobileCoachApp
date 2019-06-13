@@ -9,7 +9,7 @@ const generatePages = function (pages) {
   return htmlContent
 }
 
-const SliderPageTemplate = function ({pages, pageHeader}) {
+const SliderPageTemplate = function ({ pages, pageHeader }) {
   const sliderPageContent = `<html>
     <head>
       <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
@@ -24,7 +24,9 @@ const SliderPageTemplate = function ({pages, pageHeader}) {
         <div class="swiper-wrapper">
           ${generatePages(pages)}
         </div>
-        <div class="swiper-pagination"></div>
+        <div class="pagination-container">
+          <div class="swiper-pagination"></div>
+        </div>
       </div>
       <script src="js/swiper.min.js"></script>
       <script src="js/sliderPage.js"></script>

@@ -11,13 +11,37 @@ import { SettingsActions } from '../Redux/SettingsRedux'
 
 /* ------------- Sagas ------------- */
 
-import { initializeGiftedChat, loadEarlierMessages } from './GiftedChatMessageSaga'
-import { sendMessage, sendInvisibleMessage, sendIntention, sendVariableValue, sendChangedSyncedSetting, disableMessage, executeCommand, watchMessageUpdateChannel } from './MessageSagas'
+import {
+  initializeGiftedChat,
+  loadEarlierMessages
+} from './GiftedChatMessageSaga'
+import {
+  sendMessage,
+  sendInvisibleMessage,
+  sendIntention,
+  sendVariableValue,
+  sendVariableValues,
+  sendChangedSyncedSetting,
+  disableMessage,
+  executeCommand,
+  watchMessageUpdateChannel
+} from './MessageSagas'
 import { sendDashboardMessage } from './DashboardMessageSagas'
-import { setChannels, initializeServerSync, handleCommands, handleNewClientCreatedMessages, watchConnectionStateChannel, watchIncomingMessageChannel, watchOutgoingMessageChannel } from './ServerSyncSagas'
+import {
+  setChannels,
+  initializeServerSync,
+  handleCommands,
+  handleNewClientCreatedMessages,
+  watchConnectionStateChannel,
+  watchIncomingMessageChannel,
+  watchOutgoingMessageChannel
+} from './ServerSyncSagas'
 import { updateLanguage } from './SettingsSagas'
 import { watchCommandToExecute } from './FoodDiarySaga'
-import { watchAddDashboardMessages } from './StoryProgressSagas'
+import {
+  watchAddDashboardMessages,
+  watchServiceChannelNews
+} from './StoryProgressSagas'
 
 /* ------------- API ------------- */
 
@@ -32,11 +56,18 @@ export default function * root () {
   const connectionStateChannel = yield call(channel, buffers.expanding())
   const incomingMessageChannel = yield call(channel, buffers.expanding())
   const outgoingMessageChannel = yield call(channel, buffers.expanding())
-  setChannels(connectionStateChannel, incomingMessageChannel, outgoingMessageChannel)
+  setChannels(
+    connectionStateChannel,
+    incomingMessageChannel,
+    outgoingMessageChannel
+  )
 
   // GiftedChat Messages
   const buffer = buffers.expanding()
-  const newOrUpdatedMessagesChannel = yield actionChannel(MessageActions.NEW_OR_UPDATED_MESSAGE_FOR_GIFTED_CHAT, buffer)
+  const newOrUpdatedMessagesChannel = yield actionChannel(
+    MessageActions.NEW_OR_UPDATED_MESSAGE_FOR_GIFTED_CHAT,
+    buffer
+  )
 
   yield all([
     // Settings Saga
@@ -44,11 +75,19 @@ export default function * root () {
 
     // FoodDiary Saga
     fork(watchCommandToExecute),
+
     // StoryProgress Saga
-    takeEvery(DashboardMessageActions.ADD_OR_UPDATE_DASHBOARD_MESSAGE, watchAddDashboardMessages),
+    takeEvery(
+      DashboardMessageActions.ADD_OR_UPDATE_DASHBOARD_MESSAGE,
+      watchAddDashboardMessages
+    ),
+    takeEvery(MessageActions.COMMAND_TO_EXECUTE, watchServiceChannelNews),
 
     // GiftedChat (top layer)
-    takeEvery(StartupActions.STARTUP, initializeGiftedChat, {buffer, newOrUpdatedMessagesChannel}),
+    takeEvery(StartupActions.STARTUP, initializeGiftedChat, {
+      buffer,
+      newOrUpdatedMessagesChannel
+    }),
     takeEvery(GUIActions.LOAD_EARLIER, loadEarlierMessages),
 
     // Messages (middle layer)
@@ -56,11 +95,15 @@ export default function * root () {
     takeEvery(MessageActions.SEND_INVISIBLE_MESSAGE, sendInvisibleMessage),
     takeEvery(MessageActions.SEND_INTENTION, sendIntention),
     takeEvery(MessageActions.SEND_VARIABLE_VALUE, sendVariableValue),
+    takeEvery(MessageActions.SEND_VARIABLE_VALUES, sendVariableValues),
     takeEvery(SettingsActions.CHANGE_SYNCED_SETTING, sendChangedSyncedSetting),
     takeEvery(MessageActions.DISABLE_MESSAGE, disableMessage),
     takeEvery(MessageActions.EXECUTE_COMMAND, executeCommand),
 
-    takeEvery(DashboardMessageActions.SEND_DASHBOARD_MESSAGE, sendDashboardMessage),
+    takeEvery(
+      DashboardMessageActions.SEND_DASHBOARD_MESSAGE,
+      sendDashboardMessage
+    ),
 
     yield fork(watchMessageUpdateChannel),
 
@@ -68,8 +111,17 @@ export default function * root () {
     takeEvery(StartupActions.STARTUP, initializeServerSync),
     takeEvery(StartupActions.MANUALLY_CONNECT, initializeServerSync),
     takeEvery(MessageActions.COMMAND_TO_EXECUTE, handleCommands),
-    takeEvery(MessageActions.ADD_OR_UPDATE_MESSAGE, handleNewClientCreatedMessages),
-    takeEvery(DashboardMessageActions.ADD_OR_UPDATE_DASHBOARD_MESSAGE, handleNewClientCreatedMessages),
+    takeEvery(
+      MessageActions.ADD_OR_UPDATE_MESSAGE,
+      handleNewClientCreatedMessages
+    ),
+    takeEvery(
+      DashboardMessageActions.ADD_OR_UPDATE_DASHBOARD_MESSAGE,
+      handleNewClientCreatedMessages
+    ),
+
+    // // User triggered App-Update
+    // takeEvery(ServerSyncActions.PERFORM_UPDATE, performUpdate),
 
     yield fork(watchConnectionStateChannel),
     yield fork(watchIncomingMessageChannel),

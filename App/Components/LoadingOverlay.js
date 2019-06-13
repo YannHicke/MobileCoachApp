@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import Spinner from 'react-native-spinkit'
 import PropTypes from 'prop-types'
 
@@ -18,7 +18,14 @@ export default class LoadingOverlay extends Component {
   }
   render () {
     return (
-      <BlurView opacity={this.props.backgroundOpacity} fadeIn containerStyle={{justifyContent: 'center', alignItems: 'center'}}>
+      <BlurView
+        opacity={this.props.backgroundOpacity}
+        fadeIn
+        containerStyle={{
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}
+      >
         <Spinner {...this.props} />
       </BlurView>
     )

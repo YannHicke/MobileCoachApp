@@ -1,15 +1,18 @@
 // https://coolors.co/50514f-f25f5c-ffe066-247ba0-70c1b3
 // https://coolors.co/e63946-f1faee-a8dadc-457b9d-1d3557
 import Brand from './Brand'
+import { Platform } from 'react-native'
 
 const button = {
   background: Brand.colors.buttonBackground,
   text: Brand.colors.buttonText,
-  disabled: Brand.colors.grey1,
+  disabled: Brand.colors.grey2,
+  disabledText: Brand.colors.grey3,
   skipAnswer: '#E2E2E2',
   submit: Brand.colors.buttonText,
   cancel: '#E2E2E2',
-  placeholder: '#E2E2E2'
+  placeholder: '#E2E2E2',
+  invalid: '#E74C3C'
 }
 
 const colors = {
@@ -24,22 +27,33 @@ const colors = {
     primary: Brand.colors.primary,
     grey1: Brand.colors.grey1,
     grey2: Brand.colors.grey2,
-    grey3: Brand.colors.grey3
+    grey3: Brand.colors.grey3,
+    success: '#2aa87d',
+    warn: '#fda428',
+    error: '#E74C3C'
   },
   onboarding: {
     background: Brand.colors.primary,
-    text: Brand.colors.text2,
-    loadingIndicator: Brand.colors.text2
+    text: Brand.colors.buttonText,
+    loadingIndicator: Brand.colors.buttonBackground
+  },
+  statusBar: {
+    background: Platform.OS === 'ios' ? 'transparent' : '#000'
   },
   navigationBar: {
     background: Brand.colors.primary,
-    text: Brand.colors.primaryText
+    text: '#fff'
   },
   sideMenu: {
     background: Brand.colors.backgroundMain,
     buttonBackground: Brand.colors.backgroundMain,
     text: Brand.colors.textMain,
     textDisabled: Brand.colors.grey2
+  },
+  tabBar: {
+    text: Brand.colors.textMain,
+    background: '#fff',
+    textFocused: Brand.colors.buttonBackground
   },
   messageBubbles: {
     left: {
@@ -118,8 +132,8 @@ const colors = {
     loadingIndicator: Brand.colors.textMain
   },
   toast: {
-    text: Brand.colors.primary,
-    background: Brand.colors.primaryText
+    text: '#FFF',
+    background: Brand.colors.primary
   },
   video: {
     thumb: button.text, // slider handle
@@ -133,7 +147,7 @@ const colors = {
   connectionIndicator: {
     neutralState: '#FFFFFF',
     intermediateState: '#fda428',
-    successState: '#33A02C'
+    successState: '#FFF'
   },
   badge: {
     background: '#E74C3C',
@@ -169,6 +183,25 @@ const colors = {
         background: Brand.colors.grey3,
         indicator: Brand.colors.primary,
         text: Brand.colors.primary
+      }
+    },
+    serviceChannel: {
+      title: Brand.colors.primaryText,
+      text: Brand.colors.primaryText,
+      categoryTitle: Brand.colors.grey1
+    },
+    diary: {
+      calendar: {
+        monthTitle: {
+          background: Brand.colors.grey3,
+          text: Brand.colors.primary
+        },
+        month: {
+          background: '#fff'
+        },
+        dayCircle: {
+          background: Brand.colors.grey3
+        }
       }
     }
   }

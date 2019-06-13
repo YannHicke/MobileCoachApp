@@ -3,17 +3,21 @@ import { StyleSheet } from 'react-native'
 import { Message } from 'react-native-gifted-chat'
 import PropTypes from 'prop-types'
 import Spinner from 'react-native-spinkit'
-import { Colors } from '../../Themes'
+import { connect } from 'react-redux'
 
-export default class TypingIndicator extends Component {
+import { Colors, Images } from '../../Themes'
+
+class TypingIndicator extends Component {
   constructor (props) {
     super(props)
 
+    const avatar = Images.coaches[props.coach]
     this.typingMessage = {
       _id: 'typingIndicator',
       type: 'text',
       user: {
-        _id: 2
+        _id: 2,
+        avatar
       }
     }
   }
@@ -25,7 +29,11 @@ export default class TypingIndicator extends Component {
 
   render () {
     return (
-      <Message {...this.props} currentMessage={this.typingMessage} renderCustomView={this.renderCustomView} />
+      <Message
+        {...this.props}
+        currentMessage={this.typingMessage}
+        renderCustomView={this.renderCustomView}
+      />
     )
   }
 
@@ -39,6 +47,14 @@ export default class TypingIndicator extends Component {
     return <Spinner {...spinnerProps} style={styles.spinner} />
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    coach: state.settings.coach
+  }
+}
+
+export default connect(mapStateToProps)(TypingIndicator)
 
 const styles = StyleSheet.create({
   spinner: {

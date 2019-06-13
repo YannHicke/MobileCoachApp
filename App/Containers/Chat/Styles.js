@@ -18,7 +18,6 @@ export default StyleSheet.create({
     top: -30,
     resizeMode: 'contain'
   }
-
 })
 
 export const TextBubbleStyle = {

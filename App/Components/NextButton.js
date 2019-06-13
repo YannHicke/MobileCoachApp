@@ -6,7 +6,7 @@ import {
   StyleSheet,
   Platform
 } from 'react-native'
-import {Colors} from '../Themes'
+import { Colors } from '../Themes'
 
 export default class NextButton extends Component {
   render ({ onPress, styleButton, styleText } = this.props) {
@@ -14,7 +14,9 @@ export default class NextButton extends Component {
       return (
         <TouchableOpacity onPress={onPress}>
           <View style={[Styles.button, styleButton]}>
-            <Text style={[Styles.buttonText, styleText]}>{this.props.text}</Text>
+            <Text style={[Styles.buttonText, styleText]}>
+              {this.props.text}
+            </Text>
           </View>
         </TouchableOpacity>
       )
@@ -24,7 +26,9 @@ export default class NextButton extends Component {
         <TouchableOpacity onPress={onPress}>
           <View style={Styles.border}>
             <View style={[Styles.button, styleButton]}>
-              <Text style={[Styles.buttonText, styleText]}>{this.props.text}</Text>
+              <Text style={[Styles.buttonText, styleText]}>
+                {this.props.text}
+              </Text>
             </View>
           </View>
         </TouchableOpacity>

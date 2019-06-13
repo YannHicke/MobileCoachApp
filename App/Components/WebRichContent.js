@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { View, WebView, StyleSheet, Platform } from 'react-native'
 import KeyboardSpacer from 'react-native-keyboard-spacer'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 
+import I18n from '../I18n/I18n'
 import HeaderBar from './HeaderBar'
 import ServerMessageActions from '../Redux/MessageRedux'
 
@@ -21,37 +22,38 @@ const log = new Log('Components/WebRichContent')
  */
 
 class WebRichContent extends Component {
+  static defaultProps = { withHeader: false }
+
   constructor (props) {
     super(props)
-    this.initialState = {
-      contentType: null
-    }
-    this.state = this.initialState
-    this.baseUrl = null
-    this.templateContent = null
+
     if (Platform.OS === 'ios') {
       this.baseUrl = 'Web/'
     } else if (Platform.OS === 'android') {
       this.baseUrl = 'file:///android_asset/web/'
     }
-  }
 
-  componentDidMount () {
     // Get Template-Content as JSON-Object
-    this.templateContent = this.getTemplateContent()
+    const template = this.getTemplateContent()
+    // Create appropriate HTML content for view
+    this.htmlContent = this.generateHtmlContent(template)
   }
 
   /**
-  * This function defines the contentType of the WebView
-  * TODO: Type should be defined by the server and inside of the message-object
-  */
+   * This function defines the contentType of the WebView
+   * TODO: Type should be defined by the server and inside of the message-object
+   */
   getTemplateContent () {
     const page = {}
+    let contentType = null
     const html = this.props.children
 
     if (html.includes('<head id="force">')) {
       // Page with own additional headers
-      page.pageHeader = html.substr(html.indexOf('<head id="force">') + 17, html.indexOf('</head>') - html.indexOf('<head id="force">') - 17)
+      page.pageHeader = html.substr(
+        html.indexOf('<head id="force">') + 17,
+        html.indexOf('</head>') - html.indexOf('<head id="force">') - 17
+      )
     } else {
       // Page without additional header
       page.pageHeader = ''
@@ -59,7 +61,7 @@ class WebRichContent extends Component {
 
     if (html.includes('<page>')) {
       // Page with slider pages
-      this.setState({contentType: 'slider-page'})
+      contentType = 'slider-page'
 
       let cleanedPages = html.split('<page>')
 
@@ -80,29 +82,33 @@ class WebRichContent extends Component {
       page.pages = cleanedPages
     } else if (html.includes('<body>')) {
       // Regular page
-      this.setState({contentType: 'plain'})
+      contentType = 'plain'
 
-      page.pageContent = html.substr(html.indexOf('<body>') + 6, html.indexOf('</body>') - html.indexOf('<body>') - 6)
+      page.pageContent = html.substr(
+        html.indexOf('<body>') + 6,
+        html.indexOf('</body>') - html.indexOf('<body>') - 6
+      )
     } else {
       // Regular page content (without body)
-      this.setState({contentType: 'plain'})
+      contentType = 'plain'
 
       page.pageContent = html
     }
 
-    return page
+    return { contentType, templateContent: page }
   }
 
   // Templates will be generated with ES6 template-strings
   // Each Template is a single file which will be imported. It receives the templateContent
-  generateHtmlContent () {
+  generateHtmlContent (template) {
     let htmlContent = ''
-    switch (this.state.contentType) {
+
+    switch (template.contentType) {
       case 'plain':
-        htmlContent = PlainTextTemplate(this.templateContent)
+        htmlContent = PlainTextTemplate(template.templateContent)
         break
       case 'slider-page':
-        htmlContent = SliderPageTemplate(this.templateContent)
+        htmlContent = SliderPageTemplate(template.templateContent)
         break
     }
 
@@ -110,25 +116,54 @@ class WebRichContent extends Component {
   }
 
   render () {
-    const htmlContent = this.generateHtmlContent()
-    // When the contentType is not null it means that there is html-content that will be displayed inside of the webView
-    if (this.state.contentType !== null) {
-      return (
-        <View style={styles.container}>
-          <HeaderBar title='Information' onClose={this.props.onClose} />
+    if (this.htmlContent != null) {
+      if (this.props.withHeader) {
+        return (
+          <View style={styles.container}>
+            <HeaderBar
+              title={
+                this.props.headerTitle
+                  ? this.props.headerTitle
+                  : I18n.t('Common.information')
+              }
+              onClose={this.props.onClose}
+            />
+            <View style={styles.webViewContainer}>
+              <WebView
+                source={{
+                  html: this.htmlContent,
+                  baseUrl: this.baseUrl
+                }}
+                originWhitelist={['file://']}
+                style={styles.webView}
+                scalesPageToFit={!(Platform.OS === 'ios')}
+                javaScriptEnabled
+                domStorageEnabled={false}
+                onMessage={this.onEvent.bind(this)}
+              />
+              {Platform.OS === 'android' ? <KeyboardSpacer /> : null}
+            </View>
+          </View>
+        )
+      } else {
+        return (
           <View style={styles.webViewContainer}>
             <WebView
-              source={{html: htmlContent, baseUrl: this.baseUrl}}
+              source={{
+                html: this.htmlContent,
+                baseUrl: this.baseUrl
+              }}
+              originWhitelist={['file://']}
               style={styles.webView}
               scalesPageToFit={!(Platform.OS === 'ios')}
               javaScriptEnabled
               domStorageEnabled={false}
               onMessage={this.onEvent.bind(this)}
-              />
+            />
             {Platform.OS === 'android' ? <KeyboardSpacer /> : null}
           </View>
-        </View>
-      )
+        )
+      }
     } else {
       return null
     }
@@ -175,12 +210,15 @@ const styles = StyleSheet.create({
 })
 
 const mapStateToProps = (state) => {
-  return {
-  }
+  return {}
 }
 
-const mapStateToDispatch = dispatch => ({
-  sendVariableValue: (variable, value) => dispatch(ServerMessageActions.sendVariableValue(variable, value))
+const mapStateToDispatch = (dispatch) => ({
+  sendVariableValue: (variable, value) =>
+    dispatch(ServerMessageActions.sendVariableValue(variable, value))
 })
 
-export default connect(mapStateToProps, mapStateToDispatch)(WebRichContent)
+export default connect(
+  mapStateToProps,
+  mapStateToDispatch
+)(WebRichContent)

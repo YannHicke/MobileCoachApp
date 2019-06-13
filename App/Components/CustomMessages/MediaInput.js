@@ -7,19 +7,19 @@ import * as Animatable from 'react-native-animatable'
 import { Bubble } from 'react-native-gifted-chat'
 import I18n from '../../I18n/I18n'
 import * as Progress from 'react-native-progress'
-import {connect} from 'react-redux'
-import RNFetchBlob from 'react-native-fetch-blob'
+import { connect } from 'react-redux'
+import RNFetchBlob from 'rn-fetch-blob'
 
 import AppConfig from '../../Config/AppConfig'
-import CommonUtils, {tapBlockingHandlers} from './../../Utils/Common'
-import {Colors} from '../../Themes/'
+import CommonUtils, { tapBlockingHandlers } from './../../Utils/Common'
+import { Colors } from '../../Themes/'
 import { TextBubbleStyle } from './../../Containers/Chat/Styles'
-import {inputMessageStyles} from './Styles/CommonStyles'
+import { inputMessageStyles } from './Styles/CommonStyles'
 import ChatImage from './ChatImage'
 import ChatVideo from './ChatVideo'
 import PlayAudioFile from './PlayAudioFile'
 import Ticks from './Ticks'
-import ServerMessageRedux, {MessageStates} from '../../Redux/MessageRedux'
+import ServerMessageRedux, { MessageStates } from '../../Redux/MessageRedux'
 import { uploadMediaInput } from '../../Sagas/ServerSyncSagas'
 
 import Log from '../../Utils/Log'
@@ -96,8 +96,8 @@ class MediaInput extends Component {
   }
 
   componentWillMount () {
-    const {uploadPath} = this.props.currentMessage.custom
-    const {fs} = RNFetchBlob
+    const { uploadPath } = this.props.currentMessage.custom
+    const { fs } = RNFetchBlob
     // If uploadPath is set (Media was recorded already, but not uploaded)...
     if (uploadPath) {
       // ...check if old mediaPath still exists
@@ -106,24 +106,41 @@ class MediaInput extends Component {
           // if it exists, use it as mediaPath
           if (exist) {
             this.mediaPath = uploadPath
-            this.setState({submitted: true, mediaFileIsUploading: false, initialized: true})
-          // if it doesn't exist, clear mediaPath and display record Button again..
+            this.setState({
+              submitted: true,
+              mediaFileIsUploading: false,
+              initialized: true
+            })
+            // if it doesn't exist, clear mediaPath and display record Button again..
           } else {
-            log.info(`Could not find media-object at path ${uploadPath} stored in server message ${this.props.currentMessage._id}. Displaying record Button again.`)
+            log.info(
+              `Could not find media-object at path ${uploadPath} stored in server message ${
+                this.props.currentMessage._id
+              }. Displaying record Button again.`
+            )
             this.mediaPath = ''
-            this.setState({submitted: false, mediaFileIsUploading: false, initialized: true})
+            this.setState({
+              submitted: false,
+              mediaFileIsUploading: false,
+              initialized: true
+            })
           }
         })
         // if an error occured, log a warning and show initial record button
         .catch((e) => {
-          log.warn('Error occured while trying to check for file existence at uploadMedia Message ' + this.props.currentMessage._id + ': ' + e.toString())
+          log.warn(
+            'Error occured while trying to check for file existence at uploadMedia Message ' +
+              this.props.currentMessage._id +
+              ': ' +
+              e.toString()
+          )
         })
     }
   }
 
   componentDidMount () {
     // Notify redux that animationw as shown after first render
-    const {currentMessage} = this.props
+    const { currentMessage } = this.props
     if (currentMessage.custom.shouldAnimate) {
       this.props.setAnimationShown(currentMessage._id)
     }
@@ -134,15 +151,24 @@ class MediaInput extends Component {
     if (this.mediaPath !== '') {
       // Update state and start upload afterwards
       if (AppConfig.config.serverSync.sendRecordedMediaLengthValues !== null) {
-        this.props.sendVariableValue(AppConfig.config.serverSync.sendRecordedMediaLengthValues, this.mediaLength)
+        this.props.sendVariableValue(
+          AppConfig.config.serverSync.sendRecordedMediaLengthValues,
+          this.mediaLength
+        )
       }
-      this.setState({submitted: true, mediaFileIsUploading: true}, this.uploadMedia.bind(this))
+      this.setState(
+        { submitted: true, mediaFileIsUploading: true },
+        this.uploadMedia.bind(this)
+      )
     }
   }
 
   uploadMedia () {
-    const {currentMessage, onSubmit, messageMediaUploading} = this.props
-    let relatedMessageId = currentMessage._id.substring(0, currentMessage._id.lastIndexOf('-'))
+    const { currentMessage, onSubmit, messageMediaUploading } = this.props
+    let relatedMessageId = currentMessage._id.substring(
+      0,
+      currentMessage._id.lastIndexOf('-')
+    )
     messageMediaUploading(relatedMessageId, this.mediaPath)
 
     // let mediaUrl = 'https://redux-saga.js.org/docs/advanced/Testing.aac'
@@ -154,38 +180,75 @@ class MediaInput extends Component {
     // }).finally(() => onSubmit('answer-to-server-visible', '', mediaUrl, relatedMessageId, mediaUrl))
 
     // Upload media to server
-    uploadMediaInput(this.props.type, currentMessage.custom.uploadVariable, this.mediaPath,
-    // 1. Success Callback:
-    (mediaUrl) => {
-      log.debug('Upload successful')
-      // Cache local file related to remote URL
-      // Params: remote url, local url, create thumbnail (bool) -> only for images!
-      CommonUtils.cacheLocalMedia(mediaUrl, this.mediaPath, (this.modal === 'take-photo')).then((filepath) => {
-        // After caching, send answer message to server
-        // Cleanup: remove local file (from now on, file in cached folder will be used)
-        CommonUtils.deleteLocalFile(this.mediaPath).then(() => {
-          log.info('Temporary file removed successfully.')
-        }).catch((e) => log.warn('Error while trying to remove temporary file: ' + e.toString()))
-        log.info(`Successfully cached local file to path: ${this.mediaPath}.`)
-      }).catch((e) => {
-        log.warn(`Error while caching local file: ${e.toString()}. Proceeding without caching.`)
-      }).finally(() => onSubmit('answer-to-server-visible', '', mediaUrl, relatedMessageId, mediaUrl))
-    // 2. Progress Callback
-    }, (progress) => {
-      log.debug('Upload progress:', progress)
-      this.setState({progress})
-    // 3. Upload Fail Callback
-    }, () => {
-      log.debug('Upload failed')
-      this.setState({mediaFileIsUploading: false, progress: 0})
-    })
+    uploadMediaInput(
+      this.props.type,
+      currentMessage.custom.uploadVariable,
+      this.mediaPath,
+      // 1. Success Callback:
+      (mediaUrl) => {
+        log.debug('Upload successful')
+        // Cache local file related to remote URL
+        // Params: remote url, local url, create thumbnail (bool) -> only for images!
+        CommonUtils.cacheLocalMedia(
+          mediaUrl,
+          this.mediaPath,
+          this.modal === 'take-photo'
+        )
+          .then((filepath) => {
+            // After caching, send answer message to server
+            // Cleanup: remove local file (from now on, file in cached folder will be used)
+            CommonUtils.deleteLocalFile(this.mediaPath)
+              .then(() => {
+                log.info('Temporary file removed successfully.')
+              })
+              .catch((e) =>
+                log.warn(
+                  'Error while trying to remove temporary file: ' + e.toString()
+                )
+              )
+            log.info(
+              `Successfully cached local file to path: ${this.mediaPath}.`
+            )
+          })
+          .catch((e) => {
+            log.warn(
+              `Error while caching local file: ${e.toString()}. Proceeding without caching.`
+            )
+          })
+          .finally(() =>
+            onSubmit(
+              'answer-to-server-visible',
+              '',
+              mediaUrl,
+              relatedMessageId,
+              mediaUrl
+            )
+          )
+        // 2. Progress Callback
+      },
+      (progress) => {
+        log.debug('Upload progress:', progress)
+        this.setState({ progress })
+        // 3. Upload Fail Callback
+      },
+      () => {
+        log.debug('Upload failed')
+        this.setState({ mediaFileIsUploading: false, progress: 0 })
+      }
+    )
   }
   // Shows screen to record audio/video or to take a picture
   showModalScreen () {
     const { showModal } = this.props
-    showModal(this.modal, {onSubmitMedia: (mediaPath, mediaLength) => {
-      this.setMediaPathAndLength(mediaPath, mediaLength)
-    }}, () => this.onSubmitHandler())
+    showModal(
+      this.modal,
+      {
+        onSubmitMedia: (mediaPath, mediaLength) => {
+          this.setMediaPathAndLength(mediaPath, mediaLength)
+        }
+      },
+      () => this.onSubmitHandler()
+    )
     return null
   }
 
@@ -247,11 +310,37 @@ class MediaInput extends Component {
     } else {
       return (
         <TouchableOpacity
-          style={{flex: 1, alignSelf: 'stretch', alignItems: 'center', justifyContent: 'center'}}
-          onPress={() => this.onSubmitHandler()}>
-          <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
-            <Icon name='file-upload' type='material' color={Colors.buttons.common.skipAnswer} size={30} />
-            <Text style={{color: 'white', fontWeight: 'bold', marginLeft: 10}}> {I18n.t('Common.retry')} </Text>
+          style={{
+            flex: 1,
+            alignSelf: 'stretch',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+          onPress={() => this.onSubmitHandler()}
+        >
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+          >
+            <Icon
+              name='file-upload'
+              type='material'
+              color={Colors.buttons.common.skipAnswer}
+              size={30}
+            />
+            <Text
+              style={{
+                color: 'white',
+                fontWeight: 'bold',
+                marginLeft: 10
+              }}
+            >
+              {' '}
+              {I18n.t('Common.retry')}{' '}
+            </Text>
           </View>
         </TouchableOpacity>
       )
@@ -260,9 +349,23 @@ class MediaInput extends Component {
 
   renderPreview () {
     return (
-      <View style={{position: 'relative'}}>
+      <View style={{ position: 'relative' }}>
         {this.renderUploadPreview()}
-        <View style={[inputMessageStyles.mediaContent, {position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(0,0,0,0.6)'}]}>
+        <View
+          style={[
+            inputMessageStyles.mediaContent,
+            {
+              position: 'absolute',
+              top: 0,
+              bottom: 0,
+              left: 0,
+              right: 0,
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: 'rgba(0,0,0,0.6)'
+            }
+          ]}
+        >
           {this.renderUploadProgress()}
         </View>
       </View>
@@ -271,9 +374,7 @@ class MediaInput extends Component {
 
   // Tick that will be displayed ehile uploading media file
   renderTicks () {
-    return (
-      <Ticks currentMessage={this.fakeMessage} />
-    )
+    return <Ticks currentMessage={this.fakeMessage} />
   }
 
   render () {
@@ -282,7 +383,7 @@ class MediaInput extends Component {
       if (this.state.submitted) {
         return (
           <Bubble
-            user={{_id: 1}}
+            user={{ _id: 1 }}
             currentMessage={this.fakeMessage}
             renderMessageText={this.renderPreview.bind(this)}
             position='right'
@@ -290,24 +391,59 @@ class MediaInput extends Component {
             timeFormat='LT'
             dateFormat='LL'
             wrapperStyle={TextBubbleStyle.wrapperStyle}
-            textStyle={{right: {...TextBubbleStyle.textStyle.right}}}
+            textStyle={{
+              right: { ...TextBubbleStyle.textStyle.right }
+            }}
             onLongPress={() => null}
             renderTicks={this.renderTicks.bind(this)}
           />
         )
-      // Otherwise show normal Chat-Bubble to access Modal-Screen
+        // Otherwise show normal Chat-Bubble to access Modal-Screen
       } else {
-        const {currentMessage} = this.props
+        const { currentMessage } = this.props
         const editable = CommonUtils.userCanEdit(currentMessage)
         return (
-          <Animatable.View useNativeDriver animation={this.shouldAnimate ? this.props.fadeInAnimation : null} duration={this.props.duration} style={[inputMessageStyles.container]} onAnimationEnd={() => { this.shouldAnimate = false }} >
-            <View {...editable ? null : tapBlockingHandlers} style={[styles.inputBubble, {backgroundColor: editable ? Colors.buttons.common.background : Colors.buttons.common.disabled}]}>
+          <Animatable.View
+            useNativeDriver
+            animation={this.shouldAnimate ? this.props.fadeInAnimation : null}
+            duration={this.props.duration}
+            style={[inputMessageStyles.container]}
+            onAnimationEnd={() => {
+              this.shouldAnimate = false
+            }}
+          >
+            <View
+              {...(editable ? null : tapBlockingHandlers)}
+              style={[
+                styles.inputBubble,
+                {
+                  backgroundColor: editable
+                    ? Colors.buttons.common.background
+                    : Colors.buttons.common.disabled
+                }
+              ]}
+            >
               <Button
                 onPress={() => {
                   return editable ? this.showModalScreen() : false
-                }}>
-                <Icon name={this.icon} type='ionicon' color={Colors.buttons.common.text} size={30} />
-                <Text style={{color: Colors.buttons.common.text, fontWeight: 'bold', marginLeft: 10}}> {this.buttonTitle} </Text>
+                }}
+              >
+                <Icon
+                  name={this.icon}
+                  type='ionicon'
+                  color={Colors.buttons.common.text}
+                  size={30}
+                />
+                <Text
+                  style={{
+                    color: Colors.buttons.common.text,
+                    fontWeight: 'bold',
+                    marginLeft: 10
+                  }}
+                >
+                  {' '}
+                  {this.buttonTitle}{' '}
+                </Text>
               </Button>
             </View>
           </Animatable.View>
@@ -317,12 +453,19 @@ class MediaInput extends Component {
   }
 }
 
-const mapStateToDispatch = dispatch => ({
-  messageMediaUploading: (relatedMessageId, uploadPath) => dispatch(ServerMessageRedux.messageMediaUploading(relatedMessageId, uploadPath)),
-  sendVariableValue: (variable, value) => dispatch(ServerMessageRedux.sendVariableValue(variable, value))
+const mapStateToDispatch = (dispatch) => ({
+  messageMediaUploading: (relatedMessageId, uploadPath) =>
+    dispatch(
+      ServerMessageRedux.messageMediaUploading(relatedMessageId, uploadPath)
+    ),
+  sendVariableValue: (variable, value) =>
+    dispatch(ServerMessageRedux.sendVariableValue(variable, value))
 })
 
-export default connect(null, mapStateToDispatch)(MediaInput)
+export default connect(
+  null,
+  mapStateToDispatch
+)(MediaInput)
 
 const styles = StyleSheet.create({
   inputBubble: {

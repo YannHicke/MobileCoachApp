@@ -10,7 +10,7 @@ const CameraButton = (props) => {
       onPress={props.onPress}
       icon='ios-camera'
       containerStyle={styles.containerStyle}
-      />
+    />
   )
 }
 

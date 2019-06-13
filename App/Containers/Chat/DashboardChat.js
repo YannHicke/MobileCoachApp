@@ -9,7 +9,7 @@ import DashboardMessageRedux from './../../Redux/DashboardMessageRedux'
 import StoryProgressRedux from './../../Redux/StoryProgressRedux'
 // Helpers
 import I18n from '../../I18n/I18n'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import uuid from 'uuid'
 import KeyboardSpacer from 'react-native-keyboard-spacer'
 
@@ -17,9 +17,9 @@ import Ticks from '../../Components/CustomMessages/Ticks'
 import PMTextBubble from '../../Components/CustomMessages/PMTextBubble'
 import RepeatingBackgroundImage from '../../Components/RepeatingBackgroundImage'
 import Styles, { TextBubbleStyle } from './Styles'
-import {Images, Colors} from '../../Themes'
+import { Images, Colors } from '../../Themes'
 import InputToolbar from '../../Components/InputToolbar'
-import {ConnectionStates} from '../../Redux/ServerSyncRedux'
+import { ConnectionStates } from '../../Redux/ServerSyncRedux'
 import AppConfig from '../../Config/AppConfig'
 
 import Log from '../../Utils/Log'
@@ -28,7 +28,9 @@ const log = new Log('Containers/Chat/DashboardChat')
 const getGiftedChatMessages = (messages) => {
   const messagesArray = Object.values(messages).reverse()
   const giftedChatMessages = []
-  messagesArray.map(message => giftedChatMessages.push(message.giftedChatMessage))
+  messagesArray.map((message) =>
+    giftedChatMessages.push(message.giftedChatMessage)
+  )
   return giftedChatMessages
 }
 
@@ -39,15 +41,17 @@ class Chat extends Component {
   }
 
   getChatProperties = () => {
-    return ({
+    return {
       // general configuration (Locale, Time, user, etc.)
       locale: I18n.locale,
       timeFormat: 'LT',
       dateFormat: 'LL',
       minInputToolbarHeight: 0,
-      user: {_id: 1},
-      onLongPress: () => { return null },
-      onPressAvatar: () => { }, // { this.showModal('image-lightbox', {source: Images.coaches[this.props.coach]}) },
+      user: { _id: 1 },
+      onLongPress: () => {
+        return null
+      },
+      onPressAvatar: () => {}, // { this.showModal('image-lightbox', {source: Images.coaches[this.props.coach]}) },
       keyboardShouldPersistTaps: 'always',
       renderAvatarOnTop: true,
       // Source of messages to display
@@ -76,11 +80,11 @@ class Chat extends Component {
       renderInputToolbar: () => null
       // OnSend: Callback when user sends a message (not relevant because no input)
       // onSend: (messages) => this.onSend(messages)
-    })
+    }
   }
 
   onSend (message) {
-    const {role} = AppConfig.config.serverSync
+    const { role } = AppConfig.config.serverSync
     log.debug('Sending message:', message)
     const id = uuid.v4()
     this.props.sendMessageToServer(id, message, new Date(), role)
@@ -91,9 +95,11 @@ class Chat extends Component {
   }
 
   renderBubble (props) {
-    const {currentMessage} = props
+    const { currentMessage } = props
     currentMessage.user['avatar'] = Images.coachGeneric
-    currentMessage.user['name'] = I18n.t('DashboardChat.user.' + currentMessage.user._id)
+    currentMessage.user['name'] = I18n.t(
+      'DashboardChat.user.' + currentMessage.user._id
+    )
 
     return (
       <PMTextBubble
@@ -107,14 +113,17 @@ class Chat extends Component {
 
   renderFooter () {
     return (
-      <View style={[Styles.footerContainer, {paddingBottom: 10}]}>
-        <InputToolbar placeholder={I18n.t('DashboardChat.placeholder')} onSubmit={(message) => this.onSend(message)} />
+      <View style={[Styles.footerContainer, { paddingBottom: 10 }]}>
+        <InputToolbar
+          placeholder={I18n.t('DashboardChat.placeholder')}
+          onSubmit={(message) => this.onSend(message)}
+        />
         {Platform.OS === 'android' ? <KeyboardSpacer /> : null}
       </View>
     )
   }
 
-  showConnectionStateMessage=(connectionState) => {
+  showConnectionStateMessage = (connectionState) => {
     log.action('GUI', 'ConnectionCheck', connectionState)
 
     let alertMessage = null
@@ -139,15 +148,18 @@ class Chat extends Component {
     Alert.alert(
       I18n.t('ConnectionStates.connectionToCoach'),
       alertMessage,
-      [
-        {text: I18n.t('Common.ok'), onPress: () => true}
-      ],
+      [{ text: I18n.t('Common.ok'), onPress: () => true }],
       { cancelable: false }
     )
   }
 
   renderDay (props) {
-    return <Day {...props} textStyle={{color: Colors.modules.dashboardChat.date}} />
+    return (
+      <Day
+        {...props}
+        textStyle={{ color: Colors.modules.dashboardChat.date }}
+      />
+    )
   }
 
   render () {
@@ -155,14 +167,19 @@ class Chat extends Component {
       <View style={Styles.chatContainer}>
         <RepeatingBackgroundImage source={Images.chatBg}>
           {this.renderNavigationbar(this.props)}
-          <GiftedChat ref={(ref) => { this.giftedChat = ref }} {...this.getChatProperties(this.props)} />
+          <GiftedChat
+            ref={(ref) => {
+              this.giftedChat = ref
+            }}
+            {...this.getChatProperties(this.props)}
+          />
         </RepeatingBackgroundImage>
       </View>
     )
   }
 
   renderNavigationbar (props) {
-    const {connectionState} = props
+    const { connectionState } = props
     let title = I18n.t('DashboardChat.title')
     return (
       <PMNavigationBar
@@ -170,12 +187,15 @@ class Chat extends Component {
         rightButton={
           <View>
             <ConnectionStateButton
-              onPress={() => { this.showConnectionStateMessage(connectionState) }}
+              onPress={() => {
+                this.showConnectionStateMessage(connectionState)
+              }}
               connectionState={connectionState}
             />
           </View>
-      }
-        props={props} />
+        }
+        props={props}
+      />
     )
   }
 }
@@ -191,11 +211,16 @@ const mapStateToProps = (state) => {
 }
 
 // TODO: Do we still need messageAnsweredByGiftedChat?
-const mapStateToDispatch = dispatch => ({
-  sendMessageToServer: (id, text, timestamp) => dispatch(DashboardMessageRedux.sendDashboardMessage(id, text, timestamp)),
-  clearUnreadDashboardMessages: (messageId) => dispatch(StoryProgressRedux.clearUnreadDashboardMessages())
+const mapStateToDispatch = (dispatch) => ({
+  sendMessageToServer: (id, text, timestamp) =>
+    dispatch(DashboardMessageRedux.sendDashboardMessage(id, text, timestamp)),
+  clearUnreadDashboardMessages: (messageId) =>
+    dispatch(StoryProgressRedux.clearUnreadDashboardMessages())
   // loadEarlier: () => dispatch(GUIActions.loadEarlier()),
   // markAnimationAsShown: (messageId) => clearUnreadMessages: (messageId) => dispatch(GUIActions.clearUnreadMessages())
 })
 
-export default connect(mapStateToProps, mapStateToDispatch)(Chat)
+export default connect(
+  mapStateToProps,
+  mapStateToDispatch
+)(Chat)

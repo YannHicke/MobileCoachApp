@@ -70,16 +70,22 @@ export const addMeal = (state, { meal }) => {
   let newTrackedDays = [...trackedDays]
   const activeTrackingPeriodIndex = state.activeTrackingPeriod
   return update(state, {
-    trackingPeriods: {[activeTrackingPeriodIndex]: {meals: {$push: [meal]}}},
-    trackedDays: {$set: newTrackedDays},
-    mealIdIncrementer: {$set: mealIdIncrementer}
+    trackingPeriods: {
+      [activeTrackingPeriodIndex]: { meals: { $push: [meal] } }
+    },
+    trackedDays: { $set: newTrackedDays },
+    mealIdIncrementer: { $set: mealIdIncrementer }
   })
 }
 
 // add a Meal to the store
 export const removeMeal = (state, { meal }) => {
   const activeTrackingPeriodIndex = state.activeTrackingPeriod
-  let newMeals = state.trackingPeriods[activeTrackingPeriodIndex].meals.filter((currentMeal) => { return meal.id !== currentMeal.id })
+  let newMeals = state.trackingPeriods[activeTrackingPeriodIndex].meals.filter(
+    (currentMeal) => {
+      return meal.id !== currentMeal.id
+    }
+  )
 
   let newTrackedDays = [...state.trackedDays]
   // check if this was the last remaining meal of this day
@@ -97,8 +103,10 @@ export const removeMeal = (state, { meal }) => {
     })
   }
   return update(state, {
-    trackingPeriods: {[activeTrackingPeriodIndex]: {meals: {$set: newMeals}}},
-    trackedDays: {$set: newTrackedDays}
+    trackingPeriods: {
+      [activeTrackingPeriodIndex]: { meals: { $set: newMeals } }
+    },
+    trackedDays: { $set: newTrackedDays }
   })
 }
 
@@ -125,16 +133,18 @@ export const addRecentlyAddedFood = (state, { food }) => {
 // command: 'tracked-day-complete 01.12.2017'
 // }
 
-export const handleProgressCommand = (state, {command, content}) => {
+export const handleProgressCommand = (state, { command, content }) => {
   const parsedCommand = Common.parseCommand(command)
 
   const activeTrackingPeriodIndex = state.activeTrackingPeriod
-  const {trackingPeriods} = state
+  const { trackingPeriods } = state
   switch (parsedCommand.command) {
     // Add a complete day to the current trackingPeriod
     case 'tracked-day-complete':
       let completeDate = parsedCommand.value
-      let newTrackedDaysComplete = [...trackingPeriods[activeTrackingPeriodIndex].trackedDaysComplete]
+      let newTrackedDaysComplete = [
+        ...trackingPeriods[activeTrackingPeriodIndex].trackedDaysComplete
+      ]
       if (!newTrackedDaysComplete.includes(completeDate)) {
         newTrackedDaysComplete.push(completeDate)
         // sort days
@@ -142,15 +152,21 @@ export const handleProgressCommand = (state, {command, content}) => {
           // Convert to format which is better sortable
           let dateA = moment(a, 'DD.MM.YYYY').format('YYYYMMDD')
           let dateB = moment(b, 'DD.MM.YYYY').format('YYYYMMDD')
-          return (dateA > dateB) ? -1 : (dateA < dateB) ? 1 : 0
+          return dateA > dateB ? -1 : dateA < dateB ? 1 : 0
         })
       }
       return update(state, {
-        trackingPeriods: {[activeTrackingPeriodIndex]: {trackedDaysComplete: {$set: newTrackedDaysComplete}}}
+        trackingPeriods: {
+          [activeTrackingPeriodIndex]: {
+            trackedDaysComplete: { $set: newTrackedDaysComplete }
+          }
+        }
       })
     case 'tracked-day-incomplete':
       let incompleteDate = parsedCommand.value
-      let newTrackedDaysIncomplete = [...trackingPeriods[activeTrackingPeriodIndex].trackedDaysIncomplete]
+      let newTrackedDaysIncomplete = [
+        ...trackingPeriods[activeTrackingPeriodIndex].trackedDaysIncomplete
+      ]
       if (!newTrackedDaysIncomplete.includes(incompleteDate)) {
         newTrackedDaysIncomplete.push(incompleteDate)
         // sort days
@@ -159,10 +175,24 @@ export const handleProgressCommand = (state, {command, content}) => {
         })
       }
       return update(state, {
-        trackingPeriods: {[activeTrackingPeriodIndex]: {trackedDaysIncomplete: {$set: newTrackedDaysIncomplete}}}
+        trackingPeriods: {
+          [activeTrackingPeriodIndex]: {
+            trackedDaysIncomplete: {
+              $set: newTrackedDaysIncomplete
+            }
+          }
+        }
       })
     case 'tracked-day-circumstances':
-      const circumstances = ['ordinary', 'shortTime', 'sick', 'vacation', 'noAppetite', 'invited', 'other']
+      const circumstances = [
+        'ordinary',
+        'shortTime',
+        'sick',
+        'vacation',
+        'noAppetite',
+        'invited',
+        'other'
+      ]
       let date = parsedCommand.values[0]
       let circumstance = circumstances[parsedCommand.values[1]]
       let newCircumstances = R.clone(state.circumstances)
@@ -176,12 +206,14 @@ export const handleProgressCommand = (state, {command, content}) => {
       let periodIndex = state.trackingPeriods.length
       let newTrackingPeriod = R.clone(INITIAL_TRACKING_PERIOD)
       return update(state, {
-        trackingPeriods: {$push: [newTrackingPeriod]},
-        activeTrackingPeriod: {$set: periodIndex}
+        trackingPeriods: { $push: [newTrackingPeriod] },
+        activeTrackingPeriod: { $set: periodIndex }
       })
     case 'tracking-period-complete':
       return update(state, {
-        trackingPeriods: {[activeTrackingPeriodIndex]: {completed: {$set: true}}}
+        trackingPeriods: {
+          [activeTrackingPeriodIndex]: { completed: { $set: true } }
+        }
       })
     default:
       return state

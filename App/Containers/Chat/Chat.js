@@ -1,10 +1,8 @@
 import React, { Component } from 'react'
-import { View, Alert, Platform } from 'react-native'
+import { View, Alert, Linking, Platform } from 'react-native'
 import { GiftedChat, LoadEarlier, Message, Day } from 'react-native-gifted-chat'
 import PMNavigationBar from '../../Components/Navbar'
-import ConnectionStateButton from '../../Components/ConnectionStateButton'
 import { addNavigationHelpers } from 'react-navigation'
-import { ImageCacheProvider } from 'react-native-cached-image'
 // import {Icon} from 'react-native-elements'
 // Actions
 import ServerMessageActions from './../../Redux/MessageRedux'
@@ -13,8 +11,10 @@ import GUIActions from '../../Redux/GUIRedux'
 import GiftedChatMessageActions from '../../Redux/GiftedChatMessageRedux'
 // Helpers
 import I18n from '../../I18n/I18n'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import KeyboardSpacer from 'react-native-keyboard-spacer'
+import SplashScreen from 'react-native-splash-screen'
+import { ifIphoneX } from 'react-native-iphone-x-helper'
 
 // Components
 // TODO: Create index.js of components to be able to import directly from directory
@@ -36,28 +36,22 @@ import SelectManyComponent from '../../Components/CustomMessages/SelectManyCompo
 import PMTextBubble from '../../Components/CustomMessages/PMTextBubble'
 import BlankMessage from '../../Components/CustomMessages/BlankMessage'
 import BlankBubble from '../../Components/CustomMessages/BlankBubble'
+import InfoMessage from '../../Components/InfoMessage'
+import ServiceChannelButton from '../../Components/ServiceChannelButton'
 // Config
 import AppConfig from '../../Config/AppConfig'
 // Styles & Themes
 import Styles, { TextBubbleStyle } from './Styles'
-import {Images, Colors} from '../../Themes'
+import { Images, Colors, Metrics } from '../../Themes'
 // Redux
-import {ConnectionStates} from '../../Redux/ServerSyncRedux'
+import { ConnectionStates } from '../../Redux/ServerSyncRedux'
+import { getGiftedChatMessages } from '../../Redux/Selectors'
+
 // Bug: This is needed for localizing the dates. See https://github.com/FaridSafi/react-native-gifted-chat/issues/614
 import 'moment/locale/de'
 
 import Log from '../../Utils/Log'
 const log = new Log('Containers/Chat/Chat')
-
-const getVisibleMessages = (messages) => {
-  const messagesArray = Object.values(messages).reverse()
-  return messagesArray.filter(message => message.custom.visible && !message.custom.sticky)
-}
-
-const getStickyMessages = (messages) => {
-  const messagesArray = Object.values(messages).reverse()
-  return messagesArray.filter(message => message.custom.visible && message.custom.sticky)
-}
 
 class Chat extends Component {
   constructor (props) {
@@ -72,9 +66,9 @@ class Chat extends Component {
     this.showModal = this.showModal.bind(this)
 
     // If there are still visited-screens in storyProgress-Redux (e.g. user visited screen and left app before returning to chat), send visited-screen intention now!
-    const {visitedScreens} = props.storyProgress
+    const { visitedScreens } = props.storyProgress
     if (visitedScreens.length > 0) {
-      visitedScreens.forEach(screen => {
+      visitedScreens.forEach((screen) => {
         this.props.sendIntention(null, screen + '-opened', null)
       })
       // clear visited screens again
@@ -83,21 +77,38 @@ class Chat extends Component {
   }
 
   componentDidMount () {
+    SplashScreen.hide()
+
     // clear Unread-Messages badge
     this.props.clearUnreadMessages()
   }
 
+  componentWillReceiveProps (newProps) {
+    const oldScreen = this.props.guistate.currentScreen
+    const newScreen = newProps.guistate.currentScreen
+    if (oldScreen !== newScreen && newScreen === 'Chat') {
+      log.info('User navigated to Chat.')
+      this.props.clearUnreadMessages()
+    }
+  }
+
   getChatProperties = () => {
-    return ({
+    return {
       // general configuration (Locale, Time, user, etc.)
       locale: I18n.locale,
       timeFormat: 'LT',
       dateFormat: 'LL',
       minInputToolbarHeight: 0,
-      user: {_id: 1},
-      onLongPress: () => { return null },
-      onPressAvatar: () => { this.showModal('image-lightbox', {source: Images.coaches[this.props.coach]}) },
-      keyboardShouldPersistTaps: 'always',
+      user: { _id: 1 },
+      onLongPress: () => {
+        return null
+      },
+      onPressAvatar: () => {
+        this.showModal('image-lightbox', {
+          source: Images.coaches[this.props.coach]
+        })
+      },
+      keyboardShouldPersistTaps: 'handled',
       renderAvatarOnTop: true,
       // Source of messages to display
       messages: this.props.messages,
@@ -138,11 +149,45 @@ class Chat extends Component {
       // We don't need this now because we use own Action Button Component
       // renderActions: this.renderCustomActions,
       // renderComposer: () => null
+    }
+  }
+
+  onPressInfoMessage () {
+    console.warn(this.props.versionInfo.link[Platform.OS])
+    Alert.alert(
+      this.props.versionInfo.title[I18n.locale]
+        ? this.props.versionInfo.title[I18n.locale]
+        : this.props.versionInfo.title.default,
+      this.props.versionInfo.message[I18n.locale]
+        ? this.props.versionInfo.message[I18n.locale]
+        : this.props.versionInfo.message.default,
+      [
+        { text: I18n.t('Common.ok'), onPress: () => true },
+        {
+          text: this.props.versionInfo.button[I18n.locale]
+            ? this.props.versionInfo.button[I18n.locale]
+            : this.props.versionInfo.button.default,
+          onPress: () => {
+            this.handleOpenLink(this.props.versionInfo.link[Platform.OS])
+          }
+        }
+      ],
+      { cancelable: false }
+    )
+  }
+
+  handleOpenLink = (url) => {
+    Linking.canOpenURL(url).then((supported) => {
+      if (supported) {
+        Linking.openURL(url)
+      } else {
+        console.log("Don't know how to open URI: " + url)
+      }
     })
   }
 
   renderMessage (props) {
-    const {currentMessage} = props
+    const { currentMessage } = props
     // render unanswered questions as textbubble
     if (currentMessage.custom && currentMessage.custom.unanswered) {
       if (AppConfig.config.messages.showAnswerExpiredMessage) {
@@ -150,7 +195,7 @@ class Chat extends Component {
           ...currentMessage,
           type: 'text',
           text: I18n.t('Common.answerExpired'),
-          user: {...currentMessage.user, _id: 1}
+          user: { ...currentMessage.user, _id: 1 }
         }
         return <Message {...props} currentMessage={unansweredMessage} />
       }
@@ -196,24 +241,34 @@ class Chat extends Component {
     // return (
     //   <ChatBubble {...props} coach={this.props.coach} />
     // )
-    const {currentMessage} = props
-    const avatar = Images.coaches[this.props.coach]
-    currentMessage.user['name'] = I18n.t('Coaches.' + this.props.coach)
-    currentMessage.user['avatar'] = avatar
+    const { currentMessage } = props
 
     // render unanswered questions as textbubble
-    if (currentMessage.custom && currentMessage.custom.unanswered && AppConfig.config.messages.showAnswerExpiredMessage) {
+    if (
+      currentMessage.custom &&
+      currentMessage.custom.unanswered &&
+      AppConfig.config.messages.showAnswerExpiredMessage
+    ) {
       let unansweredMessage = {
         ...currentMessage,
         type: 'text',
         text: I18n.t('Common.answerExpired'),
-        user: {...currentMessage.user, _id: 1}
+        user: { ...currentMessage.user, _id: 1 }
       }
       return (
         <PMTextBubble
-          chatProps={{...props, currentMessage: unansweredMessage}}
+          chatProps={{ ...props, currentMessage: unansweredMessage }}
           wrapperStyle={TextBubbleStyle.wrapperStyle}
-          textStyle={{left: {...TextBubbleStyle.textStyle.left, fontStyle: 'italic'}, right: {...TextBubbleStyle.textStyle.right, fontStyle: 'italic'}}}
+          textStyle={{
+            left: {
+              ...TextBubbleStyle.textStyle.left,
+              fontStyle: 'italic'
+            },
+            right: {
+              ...TextBubbleStyle.textStyle.right,
+              fontStyle: 'italic'
+            }
+          }}
         />
       )
     }
@@ -260,7 +315,7 @@ class Chat extends Component {
     //   <CustomView message={currentMessage} />
     // )
     // // )
-    const {currentMessage} = props
+    const { currentMessage } = props
     switch (currentMessage.type) {
       case 'intention':
       case 'text':
@@ -293,16 +348,16 @@ class Chat extends Component {
   }
 
   renderBlankBubble (props) {
-    return (
-      <BlankBubble {...props} />
-    )
+    return <BlankBubble {...props} />
   }
 
   renderSelectButton (props) {
     // suitable fadeIn Animations: bounceInRight, fadeInRight, fadeInUp, zoomInRight
     return (
       <SelectOneButton
-        onPress={(intention, text, value, relatedMessageId) => this.answerAction(intention, text, value, relatedMessageId)}
+        onPress={(intention, text, value, relatedMessageId) =>
+          this.answerAction(intention, text, value, relatedMessageId)
+        }
         currentMessage={props.currentMessage}
         fadeInAnimation='fadeInRight'
         fadeOutAnimation='fadeOutRight'
@@ -317,7 +372,9 @@ class Chat extends Component {
   renderSelectManyButton (props) {
     return (
       <SelectManyComponent
-        onPress={(intention, text, value, relatedMessageId) => this.answerAction(intention, text, value, relatedMessageId)}
+        onPress={(intention, text, value, relatedMessageId) =>
+          this.answerAction(intention, text, value, relatedMessageId)
+        }
         currentMessage={props.currentMessage}
         fadeInAnimation='fadeInRight'
         duration={350}
@@ -329,7 +386,9 @@ class Chat extends Component {
   renderTextOrNumberInputBubble (props) {
     return (
       <TextOrNumberInputBubble
-        onSubmit={(intention, text, value, relatedMessageId) => this.answerAction(intention, text, value, relatedMessageId)}
+        onSubmit={(intention, text, value, relatedMessageId) =>
+          this.answerAction(intention, text, value, relatedMessageId)
+        }
         currentMessage={props.currentMessage}
         fadeInAnimation='fadeInRight'
         duration={350}
@@ -343,7 +402,15 @@ class Chat extends Component {
       <MediaInput
         {...props}
         type={props.currentMessage.type}
-        onSubmit={(intention, text, value, relatedMessageId, containsMedia) => this.answerAction(intention, text, value, relatedMessageId, containsMedia)}
+        onSubmit={(intention, text, value, relatedMessageId, containsMedia) =>
+          this.answerAction(
+            intention,
+            text,
+            value,
+            relatedMessageId,
+            containsMedia
+          )
+        }
         currentMessage={props.currentMessage}
         fadeInAnimation='fadeInRight'
         duration={350}
@@ -355,7 +422,9 @@ class Chat extends Component {
   renderDateInput (props) {
     return (
       <DateInput
-        onSubmit={(intention, text, value, relatedMessageId) => this.answerAction(intention, text, value, relatedMessageId)}
+        onSubmit={(intention, text, value, relatedMessageId) =>
+          this.answerAction(intention, text, value, relatedMessageId)
+        }
         currentMessage={props.currentMessage}
         fadeInAnimation='fadeInRight'
         duration={350}
@@ -367,9 +436,11 @@ class Chat extends Component {
   renderLikert (props) {
     return (
       <Likert
-        onPress={(intention, text, value, relatedMessageId) => this.answerAction(intention, text, value, relatedMessageId)}
+        onPress={(intention, text, value, relatedMessageId) =>
+          this.answerAction(intention, text, value, relatedMessageId)
+        }
         currentMessage={props.currentMessage}
-        fadeInAnimation='flipInX'
+        fadeInAnimation='fadeInRight'
         duration={350}
         delayOffset={100}
         setAnimationShown={(id) => this.props.markAnimationAsShown(id)}
@@ -380,7 +451,9 @@ class Chat extends Component {
   renderLikertSlider (props) {
     return (
       <LikertSlider
-        onSubmit={(intention, text, value, relatedMessageId) => this.answerAction(intention, text, value, relatedMessageId)}
+        onSubmit={(intention, text, value, relatedMessageId) =>
+          this.answerAction(intention, text, value, relatedMessageId)
+        }
         currentMessage={props.currentMessage}
         fadeInAnimation='fadeInRight'
         duration={350}
@@ -390,58 +463,129 @@ class Chat extends Component {
   }
 
   renderOpenComponent (props) {
+    const { type } = props.currentMessage
     return (
       <OpenComponent
         onPress={() => this.openComponent(props.currentMessage)}
+        onPressSecondButton={() => this.openComponent(props.currentMessage, 1)}
         currentMessage={props.currentMessage}
-        fadeInAnimation='flipInX'
+        fadeInAnimation='fadeInRight'
         duration={350}
         setAnimationShown={(id) => this.props.markAnimationAsShown(id)}
-        icon={props.currentMessage.text && props.currentMessage.text.startsWith('show-backpack-info') ? 'info-with-circle' : undefined}
-        iconType={props.currentMessage.text && props.currentMessage.text.startsWith('show-backpack-info') ? 'entypo' : undefined}
+        icon={this.getAppropriateIcon(type, 0)}
+        iconType={this.getAppropriateIcon(type, 1)}
+        iconPosition={this.getAppropriateIcon(type, 2)}
       />
     )
   }
 
+  getAppropriateIcon (type, field) {
+    switch (type) {
+      case 'show-backpack-info':
+        return ['info-with-circle', 'entypo', 'left'][field]
+      case 'show-link':
+        return ['external-link', 'feather', 'right'][field]
+      default:
+        break
+    }
+    return undefined
+  }
+
   renderMessageText (props) {
-    return (
-      <PMMessageText
-        {...props}
-        linkStyle={TextBubbleStyle.textStyle.link}
-        currentMessage={props.currentMessage}
-        onPress={() => this.openComponent({custom: {component: 'progress'}})}
-      />
-    )
+    const { currentMessage } = props
+    switch (currentMessage.type) {
+      case 'level-progress':
+        const taskId = currentMessage.custom.task
+        const levelId = currentMessage.custom.level
+        return (
+          <TaskProgressMessage
+            taskId={taskId}
+            levelId={levelId}
+            progress={parseInt(currentMessage.custom.progress)}
+          />
+        )
+      case 'speedometer':
+        const { systolic, diastolic, medication } = currentMessage.custom
+        return (
+          <SpeedometerMessage
+            systolic={systolic}
+            diastolic={diastolic}
+            medication={medication}
+          />
+        )
+      default:
+        return (
+          <PMMessageText
+            {...props}
+            linkStyle={TextBubbleStyle.textStyle.link}
+            currentMessage={props.currentMessage}
+            onPress={() =>
+              this.openComponent({
+                custom: { component: 'progress' }
+              })
+            }
+          />
+        )
+    }
   }
 
   renderTicks (currentMessage) {
     return <Ticks currentMessage={currentMessage} />
   }
 
-/*
- * The Camera Button is just for Debugging
- */
-  renderNavigationbar (props) {
-    const {coach, connectionState} = props
-    let title = I18n.t('Chat.title', {coach: I18n.t('Coaches.' + coach)})
-    return (
-      <PMNavigationBar
-        title={title}
-        rightButton={
-          <View>
-            <ConnectionStateButton
-              onPress={() => { this.showConnectionStateMessage(connectionState) }}
-              connectionState={connectionState}
-            />
-          </View>
-      }
-        props={props} />
-    )
+  /*
+   * The Camera Button is just for Debugging
+   */
+  renderNavigationbar () {
+    const { hideNavigationBar, coach, serviceChannel } = this.props
+    const serviceChannelUnreadCounter =
+      serviceChannel &&
+      serviceChannel.filter((item) => !item.read && !item.deleted).length
+    const serviceChannelCounter = serviceChannel && serviceChannel.length
+
+    if (hideNavigationBar) return null
+    else {
+      let title = I18n.t('Chat.title', {
+        coach: I18n.t('Coaches.' + coach)
+      })
+      return (
+        <PMNavigationBar
+          title={title}
+          rightButton={this.renderServiceChannelButton(
+            serviceChannelUnreadCounter,
+            serviceChannelCounter
+          )}
+          props={this.props}
+        />
+      )
+    }
+  }
+
+  renderServiceChannelButton (
+    serviceChannelUnreadCounter,
+    serviceChannelCounter
+  ) {
+    if (serviceChannelCounter > 0) {
+      return (
+        <View style={{ justifyContent: 'center' }}>
+          <ServiceChannelButton
+            badgeCounter={serviceChannelUnreadCounter}
+            onPress={() => {
+              this.showModal('service-channel')
+            }}
+          />
+        </View>
+      )
+    }
   }
 
   renderLoadEarlier = (props) => {
     return (
-      <LoadEarlier {...props} label={I18n.t('Chat.loadEarlier')} containerStyle={{marginTop: 20}} />
+      <LoadEarlier
+        {...props}
+        label={I18n.t('Chat.loadEarlier')}
+        containerStyle={{ marginTop: 20 }}
+      />
     )
   }
 
@@ -451,7 +595,13 @@ class Chat extends Component {
    *            (in most cases this will be to send a answer message to the server)
    * payload:   Object which contains any kind of data we might need from our original message object
    */
-  answerAction (intention, text, value, relatedMessageId, containsMedia = false) {
+  answerAction (
+    intention,
+    text,
+    value,
+    relatedMessageId,
+    containsMedia = false
+  ) {
     switch (intention) {
       case 'answer-to-server-invisible': {
         // Send the textmessage to server
@@ -460,43 +610,91 @@ class Chat extends Component {
       }
       case 'answer-to-server-visible': {
         // Send the textmessage to server
-        this.props.sendMessageToServer(text, value, relatedMessageId, containsMedia)
+        this.props.sendMessageToServer(
+          text,
+          value,
+          relatedMessageId,
+          containsMedia
+        )
         break
       }
       default: {
-        log.warn('No answer-action found for intentention of type: ' + intention + ' relatedMessageId (if set): ' + relatedMessageId)
+        log.warn(
+          'No answer-action found for intentention of type: ' +
+            intention +
+            ' relatedMessageId (if set): ' +
+            relatedMessageId
+        )
         break
       }
     }
   }
 
   notifyServer (component, currentMessage = null) {
+    if (currentMessage && currentMessage.custom.deactivated) return
     switch (component) {
       case 'rich-text-closed': {
         log.debug('Rich text closed sent')
         if (currentMessage.custom.infoId) {
           let intention = 'info-' + currentMessage.custom.infoId + '-closed'
           this.props.sendIntention(null, intention, null)
-        } else log.warn('Cannot send info-closed-notification for message: ' + currentMessage.text + ', because "info-id" is undefined.')
+        } else {
+          log.warn(
+            'Cannot send info-closed-notification for message: ' +
+              currentMessage.text +
+              ', because "info-id" is undefined.'
+          )
+        }
         break
       }
       case 'rich-text-completed': {
-        let relatedMessageId = currentMessage._id.substring(0, currentMessage._id.lastIndexOf('-'))
-        log.debug('Rich text closed and completed sent for message', relatedMessageId)
+        let relatedMessageId = currentMessage._id.substring(
+          0,
+          currentMessage._id.lastIndexOf('-')
+        )
+        log.debug(
+          'Rich text closed and completed sent for message',
+          relatedMessageId
+        )
         this.props.markMessageAsDisabled(relatedMessageId)
         if (currentMessage.custom.infoId) {
           let intention = 'info-' + currentMessage.custom.infoId + '-closed'
           this.props.sendIntention(null, intention, null)
           intention = 'info-' + currentMessage.custom.infoId + '-completed'
           this.props.sendIntention(null, intention, null)
-        } else log.warn('Cannot send info-closed-notification for message: ' + currentMessage.text + ', because "info-id" is undefined.')
+        } else {
+          log.warn(
+            'Cannot send info-closed-notification for message: ' +
+              currentMessage.text +
+              ', because "info-id" is undefined.'
+          )
+        }
         break
       }
-      case 'backpack-info': {
+      case 'backpack-info-opened': {
+        if (currentMessage.custom.content) {
+          let intention = 'info-' + currentMessage.custom.content + '-opened'
+          this.props.sendIntention(null, intention, null)
+        } else {
+          log.warn(
+            'Cannot send backpack info-opened-notification for message: ' +
+              currentMessage.text +
+              ', because "content" is undefined.'
+          )
+        }
+        break
+      }
+      case 'backpack-info-closed': {
         if (currentMessage.custom.content) {
           let intention = 'info-' + currentMessage.custom.content + '-closed'
           this.props.sendIntention(null, intention, null)
-        } else log.warn('Cannot send backpack info-closed-notification for message: ' + currentMessage.text + ', because "content" is undefined.')
+        } else {
+          log.warn(
+            'Cannot send backpack info-closed-notification for message: ' +
+              currentMessage.text +
+              ', because "content" is undefined.'
+          )
+        }
         break
       }
       case 'web-closed': {
@@ -505,7 +703,10 @@ class Chat extends Component {
         break
       }
       case 'web-completed': {
-        let relatedMessageId = currentMessage._id.substring(0, currentMessage._id.lastIndexOf('-'))
+        let relatedMessageId = currentMessage._id.substring(
+          0,
+          currentMessage._id.lastIndexOf('-')
+        )
         log.debug('Web closed and completed sent for message', relatedMessageId)
         this.props.markMessageAsDisabled(relatedMessageId)
         this.props.sendIntention(null, 'web-closed', null)
@@ -516,12 +717,69 @@ class Chat extends Component {
         this.props.sendIntention(null, 'select-many-modal-closed', null)
         break
       }
+      case 'triage-closed': {
+        log.debug('Triage closed sent')
+        this.props.sendIntention(null, 'triage-closed', null)
+        break
+      }
+      case 'triage-completed': {
+        let relatedMessageId = currentMessage._id.substring(
+          0,
+          currentMessage._id.lastIndexOf('-')
+        )
+        log.debug(
+          'Triage closed and completed sent for message',
+          relatedMessageId
+        )
+        this.props.markMessageAsDisabled(relatedMessageId)
+        this.props.sendIntention(null, 'triage-closed', null)
+        this.props.sendIntention(null, 'triage-completed', null)
+        break
+      }
+      case 'new-measurement-closed': {
+        log.debug('add-measurement closed sent')
+        this.props.sendIntention(null, 'add-measurement-closed', null)
+        break
+      }
+      case 'new-measurement-completed': {
+        let relatedMessageId = currentMessage._id.substring(
+          0,
+          currentMessage._id.lastIndexOf('-')
+        )
+        log.debug(
+          'new-measurement closed and completed sent for message',
+          relatedMessageId
+        )
+        this.props.markMessageAsDisabled(relatedMessageId)
+        this.props.sendIntention(null, 'add-measurement-closed', null)
+        this.props.sendIntention(null, 'add-measurement-completed', null)
+        break
+      }
+      case 'verification-closed': {
+        log.debug('verification closed sent')
+        this.props.sendIntention(null, 'verification-closed', null)
+        break
+      }
+      case 'verification-completed': {
+        let relatedMessageId = currentMessage._id.substring(
+          0,
+          currentMessage._id.lastIndexOf('-')
+        )
+        log.debug(
+          'verification closed and completed sent for message',
+          relatedMessageId
+        )
+        this.props.markMessageAsDisabled(relatedMessageId)
+        this.props.sendIntention(null, 'verification-closed', null)
+        this.props.sendIntention(null, 'verification-completed', null)
+        break
+      }
     }
   }
 
   // This function determines for each component type (e.g. set Rich Component) the
   // corresponding "openComponent"-Function (= Function which is called when user presses the openComponent Button)
-  openComponent (currentMessage) {
+  openComponent (currentMessage, clickedButton = 0) {
     const { showModal } = this.props.screenProps
     const { component, content } = currentMessage.custom
     const navigation = addNavigationHelpers({
@@ -532,33 +790,64 @@ class Chat extends Component {
     switch (component) {
       case 'rich-text': {
         let onClose = (completed) => {
-          if (completed) this.notifyServer('rich-text-completed', currentMessage)
-          else this.notifyServer('rich-text-closed', currentMessage)
+          if (completed) {
+            this.notifyServer('rich-text-completed', currentMessage)
+          } else this.notifyServer('rich-text-closed', currentMessage)
         }
-        showModal(component, {htmlMarkup: content}, onClose)
+        showModal(component, { htmlMarkup: content }, onClose)
         break
       }
       case 'backpack-info': {
-        let onClose = () => { this.notifyServer(component, currentMessage) }
-        showModal('rich-text', {htmlMarkup: this.props.storyProgress.backpackInfo[content].content}, onClose)
+        let onClose = () => {
+          this.notifyServer('backpack-info-closed', currentMessage)
+        }
+        this.notifyServer('backpack-info-opened', currentMessage)
+        showModal(
+          'rich-text',
+          {
+            htmlMarkup: this.props.storyProgress.backpackInfo[content].content
+          },
+          onClose
+        )
         break
       }
       case 'web': {
         let onClose = (completed) => {
           if (completed) this.notifyServer('web-completed', currentMessage)
-          else this.notifyServer('web-closed')
+          else this.notifyServer('web-closed', currentMessage)
         }
-        showModal(component, {url: content}, onClose)
+        showModal(component, { url: content }, onClose)
         break
       }
       case 'progress': {
         showModal(component)
         break
       }
+      case 'link': {
+        Linking.openURL(content)
+        break
+      }
       case 'tour': {
         navigation.navigate('Tour')
         // remember that user visited that scree for intentions
         this.props.visitScreen('tour')
+        break
+      }
+      case 'triage': {
+        let onClose = (completed) => {
+          if (completed) this.notifyServer('triage-completed', currentMessage)
+          else this.notifyServer('triage-closed')
+        }
+        showModal(component, {}, onClose)
+        break
+      }
+      case 'new-measurement': {
+        let onClose = (completed) => {
+          if (completed) {
+            this.notifyServer('new-measurement-completed', currentMessage)
+          } else this.notifyServer('new-measurement-closed')
+        }
+        showModal(component, {}, onClose)
         break
       }
       case 'backpack': {
@@ -578,9 +867,34 @@ class Chat extends Component {
           dispatch: this.props.navigation.dispatch,
           state: this.props.nav
         })
-        navigation.navigate('FoodDiary', {initialTab: 1})
+        navigation.navigate('FoodDiary', { initialTab: 1 })
         // remember that user visited that scree for intentions
         this.props.visitScreen('pyramid')
+        break
+      }
+      case 'verification': {
+        if (clickedButton === 0) {
+          let onClose = (completed) => {
+            if (completed) {
+              this.notifyServer('verification-completed', currentMessage)
+            } else this.notifyServer('verification-closed')
+          }
+          showModal(component, {}, onClose)
+        } else {
+          Alert.alert(
+            I18n.t('Verification.noCustomerTitle'),
+            I18n.t('Verification.noCustomerInfo'),
+            [
+              { text: I18n.t('Common.ok'), onPress: () => null },
+              {
+                text: I18n.t('Verification.website'),
+                onPress: () => {
+                  Linking.openURL(I18n.t('Verification.url'))
+                }
+              }
+            ]
+          )
+        }
         break
       }
       case 'select-many-modal': {
@@ -590,10 +904,18 @@ class Chat extends Component {
             this.notifyServer(component, currentMessage)
           }
         }
-        showModal(component, {answerAction: this.answerAction.bind(this), currentMessage}, onClose)
+        showModal(
+          component,
+          {
+            answerAction: this.answerAction.bind(this),
+            currentMessage
+          },
+          onClose
+        )
         break
       }
-      default: break
+      default:
+        break
     }
   }
 
@@ -604,67 +926,34 @@ class Chat extends Component {
     showModal(component, content, onClose)
   }
 
-  setRenderInputBar=(value) => {
-    this.setState({renderInputBar: value})
+  setRenderInputBar = (value) => {
+    this.setState({ renderInputBar: value })
   }
 
-  toggleRenderInputBar=() => {
+  toggleRenderInputBar = () => {
     if (AppConfig.config.dev.allowDebugKeyboard) {
       let value = !this.state.renderInputBar
-      this.setState({renderInputBar: value})
+      this.setState({ renderInputBar: value })
     }
   }
 
   openModalCameraWindow () {
-    Alert.alert(
-      'Auswahl der Komponente',
-      '',
-      [
-        {text: 'Foto', onPress: () => this.showModal('take-photo')},
-        {text: 'Video', onPress: () => this.showModal('take-video')},
-        {text: 'Scan QR', onPress: () => this.showModal('scan-qr')}
-      ]
-    )
+    Alert.alert('Auswahl der Komponente', '', [
+      { text: 'Foto', onPress: () => this.showModal('take-photo') },
+      { text: 'Video', onPress: () => this.showModal('take-video') },
+      { text: 'Scan QR', onPress: () => this.showModal('scan-qr') }
+    ])
   }
 
   openModalRecordAudioWindow () {
     this.showModal('record-audio')
   }
 
-  showConnectionStateMessage=(connectionState) => {
-    log.action('GUI', 'ConnectionCheck', connectionState)
-
-    let alertMessage = null
-    switch (connectionState) {
-      case ConnectionStates.INITIALIZING:
-      case ConnectionStates.INITIALIZED:
-        alertMessage = I18n.t('ConnectionStates.initialized')
-        break
-      case ConnectionStates.CONNECTING:
-      case ConnectionStates.RECONNECTING:
-        alertMessage = I18n.t('ConnectionStates.connecting')
-        break
-      case ConnectionStates.CONNECTED:
-      case ConnectionStates.SYNCHRONIZATION:
-        alertMessage = I18n.t('ConnectionStates.connected')
-        break
-      case ConnectionStates.SYNCHRONIZED:
-        alertMessage = I18n.t('ConnectionStates.synchronized')
-        break
-    }
-
-    Alert.alert(
-      I18n.t('ConnectionStates.connectionToCoach'),
-      alertMessage,
-      [
-        {text: I18n.t('Common.ok'), onPress: () => true}
-      ],
-      { cancelable: false }
-    )
-  }
-
   renderFooter (props) {
-    const { coachIsTyping, currentlyFurtherMessagesExpected } = this.props.guistate
+    const {
+      coachIsTyping,
+      currentlyFurtherMessagesExpected
+    } = this.props.guistate
     const { connectionState } = this.props
 
     let showOfflineStatusMessage = false
@@ -695,22 +984,26 @@ class Chat extends Component {
       showOfflineIndicator = true
     }
 
-    return (<View style={Styles.footerContainer}>
-      {showTypingIndicator ? <TypingIndicator {...props} /> : null}
-      {this.props.stickyMessages.map((message) => {
-        return <Message {...this.getChatProperties()} key={message._id} currentMessage={message} />
-      })}
-      <OfflineStatusIndicator active={showOfflineIndicator} />
-    </View>)
+    return (
+      <View style={Styles.footerContainer}>
+        {showTypingIndicator ? <TypingIndicator {...props} /> : null}
+        {this.props.stickyMessages.map((message) => {
+          return (
+            <Message
+              {...this.getChatProperties()}
+              key={message._id}
+              currentMessage={message}
+            />
+          )
+        })}
+        <OfflineStatusIndicator active={showOfflineIndicator} />
+      </View>
+    )
   }
 
   renderActionButton () {
     if (this.props.storyProgress.actionButtonActive) {
-      return (
-        <AddMealActionButton
-          showModal={this.showModal}
-          />
-      )
+      return <AddMealActionButton showModal={this.showModal} />
     } else {
       return null
     }
@@ -718,12 +1011,21 @@ class Chat extends Component {
 
   renderLoadingIndicator () {
     return (
-      <EmptyChatIndicator active={this.props.messages.length === 0 && !this.props.guistate.coachIsTyping} emptyChatMessage={AppConfig.config.messages.showEmptyChatMessage ? I18n.t('Chat.emptyChatMessage') : ''} />
+      <EmptyChatIndicator
+        active={
+          this.props.messages.length === 0 && !this.props.guistate.coachIsTyping
+        }
+        emptyChatMessage={
+          AppConfig.config.messages.showEmptyChatMessage
+            ? I18n.t('Chat.emptyChatMessage')
+            : ''
+        }
+      />
     )
   }
 
   renderDay (props) {
-    return <Day {...props} textStyle={{color: Colors.modules.chat.date}} />
+    return <Day {...props} textStyle={{ color: Colors.modules.chat.date }} />
   }
 
   render () {
@@ -731,11 +1033,38 @@ class Chat extends Component {
       <View style={Styles.chatContainer}>
         <RepeatingBackgroundImage source={Images.chatBg}>
           {this.renderLoadingIndicator()}
-          {this.renderNavigationbar(this.props)}
-          <GiftedChat {...this.getChatProperties()}>
-            <ImageCacheProvider />
-          </GiftedChat>
-          {Platform.OS === 'android' ? <KeyboardSpacer /> : null}
+          {this.renderNavigationbar()}
+          <GiftedChat {...this.getChatProperties()} />
+          {this.props.versionInfo &&
+          this.props.versionInfo.level === 'orange' ? (
+            <InfoMessage
+              message={
+                this.props.versionInfo.teaser[I18n.locale]
+                  ? this.props.versionInfo.teaser[I18n.locale]
+                  : this.props.versionInfo.teaser.default
+              }
+              containerStyle={{
+                position: 'absolute',
+                zIndex: 100,
+                alignSelf: 'center',
+                ...Platform.select({
+                  ios: {
+                    top: Metrics.navbarHeight + 30
+                  },
+                  android: {
+                    top: Metrics.navbarHeight + 10
+                  }
+                }),
+                ...ifIphoneX({
+                  top: Metrics.navbarHeight + 50
+                })
+              }}
+              onPress={() => this.onPressInfoMessage()}
+            />
+          ) : null}
+          {Platform.OS === 'android' ? (
+            <KeyboardSpacer topSpacing={-60} />
+          ) : null}
           {this.renderActionButton()}
         </RepeatingBackgroundImage>
       </View>
@@ -747,26 +1076,52 @@ const mapStateToProps = (state) => {
   return {
     nav: state.nav,
     coach: state.settings.coach,
-    messages: getVisibleMessages(state.giftedchatmessages),
-    stickyMessages: getStickyMessages(state.giftedchatmessages),
+    messages: getGiftedChatMessages(state).messages,
+    stickyMessages: getGiftedChatMessages(state).stickyMessages,
     guistate: state.guistate,
     storyProgress: state.storyProgress,
-    connectionState: state.serverSyncStatus.connectionState
+    connectionState: state.serverSyncStatus.connectionState,
+    versionInfo: state.serverSyncSettings.versionInfo,
+    serviceChannel: state.storyProgress.serviceChannel
   }
 }
 
 // TODO: Do we still need messageAnsweredByGiftedChat?
-const mapStateToDispatch = dispatch => ({
-  sendMessageToServer: (text, value, relatedMessageId = null, containsMedia) => dispatch(ServerMessageActions.sendMessage(text, value, relatedMessageId, containsMedia)),
-  sendInvisibleMessageToServer: (value, relatedMessageId = null) => dispatch(ServerMessageActions.sendInvisibleMessage(value, relatedMessageId)),
-  sendIntention: (text, intention, content) => dispatch(ServerMessageActions.sendIntention(text, intention, content)),
+const mapStateToDispatch = (dispatch) => ({
+  sendMessageToServer: (text, value, relatedMessageId = null, containsMedia) =>
+    dispatch(
+      ServerMessageActions.sendMessage(
+        text,
+        value,
+        relatedMessageId,
+        containsMedia
+      )
+    ),
+  sendInvisibleMessageToServer: (value, relatedMessageId = null) =>
+    dispatch(
+      ServerMessageActions.sendInvisibleMessage(value, relatedMessageId)
+    ),
+  sendIntention: (text, intention, content) =>
+    dispatch(ServerMessageActions.sendIntention(text, intention, content)),
   loadEarlier: () => dispatch(GUIActions.loadEarlier()),
-  messageAnsweredByGiftedChat: (relatedMessageId) => dispatch(ServerMessageActions.messageAnsweredByGiftedChat(relatedMessageId)),
-  visitScreen: (visitedScreen) => dispatch(StoryProgressActions.visitScreen(visitedScreen)),
-  resetVisitedScreens: () => dispatch(StoryProgressActions.resetVisitedScreens()),
-  markMessageAsDisabled: (relatedMessageId) => dispatch(ServerMessageActions.disableMessage(relatedMessageId)),
-  markAnimationAsShown: (messageId) => dispatch(GiftedChatMessageActions.setMessageAnimationFlag(messageId, false)),
+  messageAnsweredByGiftedChat: (relatedMessageId) =>
+    dispatch(
+      ServerMessageActions.messageAnsweredByGiftedChat(relatedMessageId)
+    ),
+  visitScreen: (visitedScreen) =>
+    dispatch(StoryProgressActions.visitScreen(visitedScreen)),
+  resetVisitedScreens: () =>
+    dispatch(StoryProgressActions.resetVisitedScreens()),
+  markMessageAsDisabled: (relatedMessageId) =>
+    dispatch(ServerMessageActions.disableMessage(relatedMessageId)),
+  markAnimationAsShown: (messageId) =>
+    dispatch(
+      GiftedChatMessageActions.setMessageAnimationFlag(messageId, false)
+    ),
   clearUnreadMessages: (messageId) => dispatch(GUIActions.clearUnreadMessages())
 })
 
-export default connect(mapStateToProps, mapStateToDispatch)(Chat)
+export default connect(
+  mapStateToProps,
+  mapStateToDispatch
+)(Chat)

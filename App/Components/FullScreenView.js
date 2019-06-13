@@ -1,5 +1,5 @@
-import React, {Component} from 'react'
-import {View} from 'react-native'
+import React, { Component } from 'react'
+import { View } from 'react-native'
 import PropTypes from 'prop-types'
 import HeaderBar from './HeaderBar'
 
@@ -17,8 +17,17 @@ export default class FullScreenView extends Component {
 
   render () {
     return (
-      <View style={[styles.fullScreenStyle, {backgroundColor: this.props.backgroundColor}]}>
-        <HeaderBar title={this.props.title} onBack={this.props.onBack} onClose={this.props.onClose} />
+      <View
+        style={[
+          styles.fullScreenStyle,
+          { backgroundColor: this.props.backgroundColor }
+        ]}
+      >
+        <HeaderBar
+          title={this.props.title}
+          onBack={this.props.onBack}
+          onClose={this.props.onClose}
+        />
         {this.props.children}
       </View>
     )

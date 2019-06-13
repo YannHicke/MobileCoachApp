@@ -1,8 +1,45 @@
 import { createSelector } from 'reselect'
 import { DOMParser } from 'react-native-html-parser'
+
+import I18n from '../../I18n/I18n'
+import { Images } from '../../Themes'
 /* ------------- Selectors ------------- */
 
-const getMessages = state => state.messages
+const getMessageRedux = (state) => {
+  return state.messages
+}
+const getGiftedChatRedux = (state) => {
+  return state.giftedchatmessages
+}
+const getCoach = (state) => {
+  return state.settings.coach
+}
+
+export const getGiftedChatMessages = createSelector(
+  [getGiftedChatRedux, getCoach],
+  (messageRedux, coach) => {
+    const { messageIds, messageObjects } = messageRedux
+    const messages = []
+    const stickyMessages = []
+    for (let i = messageIds.length - 1; i >= 0; i--) {
+      const messageId = messageIds[i]
+      let message = { ...messageObjects[messageId] }
+      if (message.custom.visible) {
+        const avatar = Images.coaches[coach]
+        if (message.user._id === 2) {
+          message.user = {
+            ...message.user,
+            name: I18n.t('Coaches.' + coach),
+            avatar: avatar
+          }
+        }
+        if (!message.custom.sticky) messages.push(message)
+        else stickyMessages.push(message)
+      }
+    }
+    return { messages, stickyMessages }
+  }
+)
 
 export const getActiveTrackingPeriod = (state) => {
   return state.fooddiary.trackingPeriods[state.fooddiary.activeTrackingPeriod]
@@ -27,38 +64,56 @@ export const getNonEditableDays = (state) => {
   let nonEditableDays = []
   state.fooddiary.trackingPeriods.forEach((trackingPeriod) => {
     // concat arrays of non-editable days while removing duplicates (even though there shouldn't be any..)
-    nonEditableDays = [...nonEditableDays, ...trackingPeriod.trackedDaysComplete, ...trackingPeriod.trackedDaysIncomplete]
+    nonEditableDays = [
+      ...nonEditableDays,
+      ...trackingPeriod.trackedDaysComplete,
+      ...trackingPeriod.trackedDaysIncomplete
+    ]
   })
   return nonEditableDays
 }
 
 const getCommandMessages = createSelector(
-  [getMessages],
-  (messages) => {
+  [getMessageRedux],
+  (messageRedux) => {
     let commandMessages = []
-    for (let message in messages) {
-      if (messages.hasOwnProperty(message) && messages[message].type === 'COMMAND') {
-        commandMessages.push(messages[message])
+    for (let messageId in messageRedux.messageObjects) {
+      if (
+        messageRedux.messageObjects.hasOwnProperty(messageId) &&
+        messageRedux.messageObjects[messageId].type === 'COMMAND'
+      ) {
+        commandMessages.push(messageRedux.messageObjects[messageId])
       }
     }
     return commandMessages
   }
 )
+
 // show-backpack-info
 export const getBackpackInformation = createSelector(
   [getCommandMessages],
   (commandMessages) => {
     let information = []
-    let filtered = commandMessages.filter(message => message['server-message'] === 'show-backpack-info')
+    let filtered = commandMessages.filter(
+      (message) => message['server-message'] === 'show-backpack-info'
+    )
     filtered.forEach((serverMessage) => {
-      let content = serverMessage.content  // .replace(/\\n/g, '')
+      let content = serverMessage.content // .replace(/\\n/g, '')
       let parsedTags = new DOMParser().parseFromString(content, 'text/html')
-      let meta = parsedTags.getElementsByTagName('meta')[0]
+      let metas = parsedTags.getElementsByTagName('meta')
       let title = ''
       let subtitle = ''
-      if (meta) {
-        title = meta.getAttribute('title').replace(/\\n/g, '\n')
-        subtitle = meta.getAttribute('subtitle').replace(/\\n/g, '\n')
+      for (let i in metas) {
+        const meta = metas[i]
+        if (
+          meta.getAttribute !== undefined &&
+          meta.getAttribute('title') !== undefined
+        ) {
+          title = meta.getAttribute('title').replace(/\\n/g, '\n')
+          if (meta.getAttribute('subtitle')) {
+            subtitle = meta.getAttribute('subtitle').replace(/\\n/g, '\n')
+          }
+        }
       }
 
       // Remove Button

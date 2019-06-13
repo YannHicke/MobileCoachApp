@@ -16,7 +16,7 @@ const getCurrentRouteName = (navigationState) => {
   return route.routeName
 }
 
-const screenTracking = ({ getState }) => next => (action) => {
+const screenTracking = ({ getState }) => (next) => (action) => {
   if (
     action.type !== NavigationActions.NAVIGATE &&
     action.type !== NavigationActions.BACK

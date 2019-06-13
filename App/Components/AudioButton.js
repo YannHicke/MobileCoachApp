@@ -10,7 +10,7 @@ const AudioButton = (props) => {
       onPress={props.onPress}
       icon='ios-mic'
       containerStyle={styles.containerStyle}
-      />
+    />
   )
 }
 

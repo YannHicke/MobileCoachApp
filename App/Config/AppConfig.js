@@ -3,35 +3,45 @@
 export default {
   // font scaling override - RN default is on
   allowTextFontScaling: true,
-  // Server URL
 
-  // Current instantiation of whitelabel app for project. Should be adjusted in
+  // Current instantiation of app for project. Should be adjusted in
   // camelCase name of app, e.g., demoXyz
   // (CAUTION 1: MUST be adjusted for encrypted apps!!!!)
-  // (CAUTION 2: Parameter AppConfig.whitelabel must be changed to the same name)
-  project: 'whitelabel',
-  // Encryption secret for instance of whitelabel app project.
-  projectSecret: 'whitelabel-top-secret',
+  // (CAUTION 2: Parameter AppConfig.mobileCoachClient must be changed to the same name)
+  project: 'mobileCoachClient',
+  // Project name as it can be presented to the customer
+  projectName: 'MobileCoach Client App',
+  // Encryption secret for instance of app project.
+  projectSecret: 'mc-client-top-secret',
 
   // Configuration of the project
   config: {
     dev: {
-      purgeStoreAtStartup: true,
+      purgeStoreAtStartup: false,
       fakeDeviceAlwaysOnlineForOfflineDev: false,
       fakeQRCodeScanWithURL: null,
       allowDebugKeyboard: false,
       deepstreamUserForDebugging: null,
-      deepstreamSecretForDebugging: null
+      deepstreamSecretForDebugging: null,
+      disableYellowbox: true
     },
     storage: {
       encryptedReduxStorage: false,
-      reduxStorageBlacklist: ['search', 'nav', 'hydrationCompleted', 'serverSyncStatus', 'giftedchatmessages', 'guistate']
+      reduxStorageBlacklist: [
+        'search',
+        'nav',
+        'hydrationCompleted',
+        'serverSyncStatus',
+        'giftedchatmessages',
+        'guistate'
+      ]
     },
-    logger: { // Levels: 'DEBUG', 'INFO', 'WARN', 'ERROR', 'OFF', 'CRASHLYTICS'
+    logger: {
+      // Levels: 'DEBUG', 'INFO', 'WARN', 'ERROR', 'OFF', 'CRASHLYTICS'
       defaultLevel: 'DEBUG', // 'OFF' to deactivate the WHOLE logger (also exceptions)
       trackActivities: false,
       trackingURL: 'https://---/piwik/piwik.php',
-      trackingId: 0,
+      trackingId: 5,
       loggerLevels: {
         'AddMealModule/AddMealPreStep': 'INFO',
         'AddMealModule/AddFoodStep': 'INFO',
@@ -91,25 +101,55 @@ export default {
       clientVersion: 1,
       role: 'participant', // Can be: participant, supervisor, observer, or team-manager
       defaultNickname: 'MobileCoach Client User',
-      interventionPattern: '----',
-      interventionPassword: '----',
-      androidSenderId: '123456789012',
-      localDeepstreamURL: 'ws://127.0.0.1:6020/deepstream',
-      localRestURL: 'http://127.0.0.1:8080/MC/api/v02/',
-      localMediaURL: 'http://127.0.0.1/MC/files/',
-      remoteDeepstreamURL: 'wss://---:8443/deepstream',
-      remoteRestURL: 'https://---/MC/api/v02/',
-      remoteMediaURL: 'https://---/MC/files/',
+      interventionPattern: 'Intervention x',
+      interventionPassword: 'abc123',
+      androidSenderId: '1234567890',
+      localDeepstreamURL: 'ws://127.0.0.1:8082/deepstream',
+      localRestURL: 'http://127.0.0.1:8080/PMCP/api/v02/',
+      localMediaURL: 'http://127.0.0.1:8080/PMCP/files/',
+      remoteDeepstreamURL: 'wss://---/deepstream',
+      remoteRestURL: 'https://---/PMCP/api/v02/',
+      remoteMediaURL: 'https://---/PMCP/files/',
       // Whether or not user uploads are protected with auth-tokens
       mediaUploadsWithAuthenticiation: true
     },
-    whitelabel: {
+    supportedLanguages: ['de', 'fr', 'it'],
+    mobileCoachClient: {
       shareUrl: {
         fr: 'https://www.shareurl-fr.fr',
         it: 'https://www.shareurl-it.it',
         de: 'https://www.shareurl-de.de'
       },
-      tourSteps: ['begin', 'tour-start', 'tour-end'],
+      tourSteps: [
+        'begin',
+        'tour-start',
+        'period-1-day-1',
+        'period-1-day-2',
+        'period-1-day-3',
+        'was-ich-esse-1',
+        'lmp-1',
+        'lmp-2',
+        'lmp-3',
+        'lmp-4',
+        'lmp-5',
+        'lmp-6',
+        'lmp-final',
+        'lmp-evaluation',
+        'lmp-advice',
+        'optimal-plate',
+        'meals',
+        'shopping',
+        'labels',
+        'preparation',
+        'storage',
+        'balanced-diet',
+        'period-2-day-1',
+        'period-2-day-2',
+        'period-2-day-3',
+        'was-ich-esse-2',
+        'add-topics',
+        'tour-end'
+      ],
       tourFile: 'tour/tour.json'
     }
   }

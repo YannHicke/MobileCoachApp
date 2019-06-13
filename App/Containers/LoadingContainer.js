@@ -1,12 +1,11 @@
 import React, { Component } from 'react'
 import { View } from 'react-native'
 import { connect } from 'react-redux'
-import SplashScreen from 'react-native-splash-screen'
 // import FullScreenImage from '../Components/FullScreenImage'
 import { NavigationActions } from 'react-navigation'
 
 // import LoadingOverlay from '../Components/LoadingOverlay'
-import {Colors} from '../Themes'
+import { Colors } from '../Themes'
 import GUIActions from '../Redux/GUIRedux'
 
 /* Redirect to the direct screen when redux persist values are loaded. Until then show a loading screen image */
@@ -17,13 +16,13 @@ class LoadingContainer extends Component {
   }
 
   componentWillMount () {
-    const {hydrationCompleted} = this.props.hydrationCompleted
-    this.setState({hydrationCompleted})
+    const { hydrationCompleted } = this.props.hydrationCompleted
+    this.setState({ hydrationCompleted })
   }
 
   componentWillReceiveProps (nextProps) {
-    const {hydrationCompleted} = nextProps.hydrationCompleted
-    this.setState({hydrationCompleted})
+    const { hydrationCompleted } = nextProps.hydrationCompleted
+    this.setState({ hydrationCompleted })
   }
 
   componentDidMount () {
@@ -40,17 +39,16 @@ class LoadingContainer extends Component {
         this.didJump = true
         if (this.props.tutorialCompleted) {
           this.props.enableSidemenuGestures()
-          this.navigateToChat()
+          this.navigateToPrimaryNav()
         } else {
           this.props.disableSidemenuGestures()
           this.navigateToOnboarding()
         }
-        SplashScreen.hide()
       }
     }
   }
 
-  navigateToChat () {
+  navigateToPrimaryNav () {
     const navigateAction = NavigationActions.navigate({
       routeName: 'Chat',
       params: {}
@@ -103,9 +101,12 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapStateToDispatch = dispatch => ({
+const mapStateToDispatch = (dispatch) => ({
   enableSidemenuGestures: () => dispatch(GUIActions.enableSidemenuGestures()),
   disableSidemenuGestures: () => dispatch(GUIActions.disableSidemenuGestures())
 })
 
-export default connect(mapStateToProps, mapStateToDispatch)(LoadingContainer)
+export default connect(
+  mapStateToProps,
+  mapStateToDispatch
+)(LoadingContainer)

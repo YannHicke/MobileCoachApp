@@ -1,7 +1,10 @@
+import { StyleSheet } from 'react-native'
+import hexToRgba from 'hex-to-rgba'
+import { ifIphoneX } from 'react-native-iphone-x-helper'
+
 import Fonts from './Fonts'
 import Metrics from './Metrics'
 import Colors from './Colors'
-
 // This file is for a reusable grouping of Theme items.
 // Similar to an XML fragment layout in Android
 
@@ -74,6 +77,59 @@ const ApplicationStyles = {
     borderColor: Colors.ember,
     alignItems: 'center',
     textAlign: 'center'
+  },
+  shadowWeak: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+
+    elevation: 4
+  },
+  shadowMedium: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+
+    elevation: 3
+  },
+  shadowStrong: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+    elevation: 4
+  },
+  screenTitle: {
+    color: '#fff',
+    fontSize: 30
+  },
+  screenTitleContainer: {
+    marginTop: 20,
+    padding: 0,
+    justifyContent: 'center',
+    height: Metrics.navbarHeight,
+    width: '100%'
+  },
+  bottomButtonContainer: {
+    backgroundColor: Colors.main.appBackground,
+    padding: 10,
+    borderTopColor: hexToRgba(Colors.main.primary, 0.2),
+    borderTopWidth: StyleSheet.hairlineWidth,
+    ...ifIphoneX({
+      paddingBottom: 20
+    }),
+    width: '100%'
   }
 }
 

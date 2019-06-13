@@ -1,8 +1,8 @@
-import RNFetchBlob from 'react-native-fetch-blob'
+import RNFetchBlob from 'rn-fetch-blob'
 import FileViewer from 'react-native-file-viewer'
 import moment from 'moment'
 import I18n from '../I18n/I18n'
-import {getBaseUnit} from '../Containers/AddMealModule/FoodMetrics'
+import { getBaseUnit } from '../Containers/AddMealModule/FoodMetrics'
 
 import Log from './Log'
 const log = new Log('Containers/Settings/Settings')
@@ -10,11 +10,11 @@ const log = new Log('Containers/Settings/Settings')
 export default class PDFGenerator {
   constructor () {
     this.fonts = require('../Data/PDFFonts.js')
-    const {vfs} = this.fonts.default
+    const { vfs } = this.fonts.default
     this.pdfMake = require('pdfmake/build/pdfmake')
     this.pdfMake.vfs = vfs
     this.pdfMake.fonts = {
-      'Roboto': {
+      Roboto: {
         normal: 'Roboto-Light.ttf',
         bold: 'Roboto-Light.ttf',
         italics: 'Roboto-Light.ttf',
@@ -31,39 +31,50 @@ export default class PDFGenerator {
     pdfDocGenerator.getBase64(function (base64) {
       // showModal('pdf-view', {source: base64})
       let pdfLocation = DocumentDir + '/FoodDiary.pdf'
-      fs.writeFile(pdfLocation, base64, 'base64').then(() => {
-        FileViewer.open(pdfLocation).then(() => {
-          log.info('Opened PDF successfully')
-        }).catch((error) => {
-          // TODO: Fallback solution if there is no PDF-Viewer installed?
+      fs.writeFile(pdfLocation, base64, 'base64')
+        .then(() => {
+          FileViewer.open(pdfLocation)
+            .then(() => {
+              log.info('Opened PDF successfully')
+            })
+            .catch((error) => {
+              // TODO: Fallback solution if there is no PDF-Viewer installed?
+              log.error(error)
+            })
+        })
+        .catch((error) => {
           log.error(error)
         })
-      }).catch((error) => {
-        log.error(error)
-      })
     })
   }
 
   defineHeader () {
-    return (
-        (pagenumber, pagecount) => {
-          return {
-            stack: [
-              {
-                text: [
-                  'MobileCoach Client: ',
-                  {text: I18n.t('PDFExport.title'), fontSize: 14}
-                ],
-                style: 'header'
-              },
-              {
-                canvas: [{ type: 'line', x1: 0, y1: 10, x2: 595 - 130, y2: 10, lineWidth: 0.5 }]
-              }
+    return (pagenumber, pagecount) => {
+      return {
+        stack: [
+          {
+            text: [
+              'BLV FoodTour: ',
+              { text: I18n.t('PDFExport.title'), fontSize: 14 }
             ],
-            margin: [72, 70]
+            style: 'header'
+          },
+          {
+            canvas: [
+              {
+                type: 'line',
+                x1: 0,
+                y1: 10,
+                x2: 595 - 130,
+                y2: 10,
+                lineWidth: 0.5
+              }
+            ]
           }
-        }
-    )
+        ],
+        margin: [72, 70]
+      }
+    }
   }
 
   definePDFContent (foodDiary) {
@@ -75,7 +86,14 @@ export default class PDFGenerator {
         return {
           stack: [
             {
-              text: I18n.t('PDFExport.page') + ' ' + pagenumber + ' ' + I18n.t('PDFExport.of') + ' ' + pagecount,
+              text:
+                I18n.t('PDFExport.page') +
+                ' ' +
+                pagenumber +
+                ' ' +
+                I18n.t('PDFExport.of') +
+                ' ' +
+                pagecount,
               alignment: 'right'
             }
           ],
@@ -122,7 +140,7 @@ export default class PDFGenerator {
 
   defineDays (foodDiary) {
     let daysDefinition = []
-    const {trackedDays} = foodDiary
+    const { trackedDays } = foodDiary
     for (let i = 0; i < foodDiary.trackingPeriods.length; i++) {
       daysDefinition.push({
         text: I18n.t('PDFExport.diaryNr') + (i + 1) + ': ',
@@ -138,7 +156,13 @@ export default class PDFGenerator {
           const m = moment(meals[0].mealTime)
           let dayFormat = m.format('LLLL').replace(m.format('LT'), '')
           let circumstances = I18n.t('FoodDiary.nodata')
-          if (typeof foodDiary.circumstances[meals[0].mealDate] !== 'undefined') circumstances = I18n.t('FoodDiary.' + foodDiary.circumstances[meals[0].mealDate])
+          if (
+            typeof foodDiary.circumstances[meals[0].mealDate] !== 'undefined'
+          ) {
+            circumstances = I18n.t(
+              'FoodDiary.' + foodDiary.circumstances[meals[0].mealDate]
+            )
+          }
           let dayStack = [
             {
               text: dayFormat,
@@ -173,10 +197,22 @@ export default class PDFGenerator {
           columnGap: 20,
           columns: [
             {
-              text: [I18n.t('FoodDiary.mealtype') + ': ', {text: I18n.t('FoodDiary.' + meal.mealType) + ' (' + moment(meal.mealTime).format('hh:mm') + ')'}]
+              text: [
+                I18n.t('FoodDiary.mealtype') + ': ',
+                {
+                  text:
+                    I18n.t('FoodDiary.' + meal.mealType) +
+                    ' (' +
+                    moment(meal.mealTime).format('hh:mm') +
+                    ')'
+                }
+              ]
             },
             {
-              text: [I18n.t('FoodDiary.mealplace') + ': ', {text: I18n.t('FoodDiary.' + meal.mealPlace)}]
+              text: [
+                I18n.t('FoodDiary.mealplace') + ': ',
+                { text: I18n.t('FoodDiary.' + meal.mealPlace) }
+              ]
             }
           ]
         },
@@ -200,15 +236,23 @@ export default class PDFGenerator {
   defineFood (food) {
     let foodStack = [
       [
-        {text: I18n.t('PDFExport.food'), style: 'tableHeader'},
-        {text: I18n.t('PDFExport.selectedAmount'), style: 'tableHeader'},
-        {text: I18n.t('PDFExport.calculatedGram'), style: 'tableHeader'}
+        { text: I18n.t('PDFExport.food'), style: 'tableHeader' },
+        {
+          text: I18n.t('PDFExport.selectedAmount'),
+          style: 'tableHeader'
+        },
+        {
+          text: I18n.t('PDFExport.calculatedGram'),
+          style: 'tableHeader'
+        }
       ]
     ]
     for (let i = 0; i < food.length; i++) {
       let foodRow = [
         food[i].foodnameDE,
-        food[i].selectedAmount.value + ' ' + I18n.t('FoodUnits.' + food[i].selectedAmount.unit.unitId),
+        food[i].selectedAmount.value +
+          ' ' +
+          I18n.t('FoodUnits.' + food[i].selectedAmount.unit.unitId),
         food[i].calculatedGram + ' ' + getBaseUnit(food[i])
       ]
       foodStack.push(foodRow)

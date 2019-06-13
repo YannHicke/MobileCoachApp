@@ -1,4 +1,3 @@
-
 import { takeEvery, put, select } from 'redux-saga/effects'
 
 import Common from '../Utils/Common'
@@ -16,7 +15,7 @@ export function * watchCommandToExecute (action) {
 
 // Our worker Saga: will perform the async increment task
 export function * handleCommand (action) {
-  const {command} = action
+  const { command } = action
   const parsedCommand = Common.parseCommand(command)
 
   switch (parsedCommand.command) {
@@ -28,7 +27,12 @@ export function * handleCommand (action) {
       // Only send tracked day to server if it contains meals
       if (meals.length > 0) {
         let formattedMeals = formatMealsForServer(meals)
-        yield put({ type: MessageActions.SEND_INTENTION, text: null, intention: 'add-tracked-meals', content: formattedMeals })
+        yield put({
+          type: MessageActions.SEND_INTENTION,
+          text: null,
+          intention: 'add-tracked-meals',
+          content: formattedMeals
+        })
       }
   }
 }
@@ -51,8 +55,14 @@ function formatMealsForServer (meals) {
       }
       food.pyramidStages.forEach((stage) => {
         let stageCalculation = stageCalculations[stage.fullStageName]
-        if (typeof stageCalculation === 'undefined') log.warn('Could not find Stage-Calculations for stage', stage.fullStageName, 'at Food', food.foodnameDE)
-        else {
+        if (typeof stageCalculation === 'undefined') {
+          log.warn(
+            'Could not find Stage-Calculations for stage',
+            stage.fullStageName,
+            'at Food',
+            food.foodnameDE
+          )
+        } else {
           let stageGrams = stage.stageFactor * food.calculatedGram
           let stagePortion = stageGrams / stageCalculation.portionSize
           let pyramidStage = {

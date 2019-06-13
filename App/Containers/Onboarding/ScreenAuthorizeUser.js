@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 
 import ScreenCheckQRUsage from './Authorization/ScreenCheckQRUsage'
 import ScreenScanQRCode from './Authorization/ScreenScanQRCode'
-import {codeScanMandatory} from './OnboardingNav'
+import { codeScanMandatory } from './OnboardingNav'
 import MessageActions from '../../Redux/MessageRedux'
 
 import Log from '../../Utils/Log'
@@ -51,7 +51,10 @@ class ScreenAuthorizeUser extends Component {
           <ScreenCheckQRUsage
             onQRAvailable={() => {
               // If the user has a QR-Code he/she has to scan it now
-              this.setState({checkQRCode: true, QRQuestionAnswered: true})
+              this.setState({
+                checkQRCode: true,
+                QRQuestionAnswered: true
+              })
             }}
             onNoQRAvailable={() => {
               // If the user has no QR-Code he will be navigated to the nextScreen (In this case coach-selection)
@@ -66,7 +69,10 @@ class ScreenAuthorizeUser extends Component {
             onQRInvalid={this.qrCodeIsInvalid.bind(this)}
             onBack={() => {
               // If codeScanMandatory is false the user can go back to the screen where he/she can select if he/she has a QR-Code or not
-              this.setState({checkQRCode: false, QRQuestionAnswered: false})
+              this.setState({
+                checkQRCode: false,
+                QRQuestionAnswered: false
+              })
             }}
           />
         )
@@ -83,8 +89,12 @@ class ScreenAuthorizeUser extends Component {
   }
 }
 
-const mapStateToDispatch = dispatch => ({
-  sendCodingIntention: (coding) => dispatch(MessageActions.sendIntention(null, 'coding', coding))
+const mapStateToDispatch = (dispatch) => ({
+  sendCodingIntention: (coding) =>
+    dispatch(MessageActions.sendIntention(null, 'coding', coding))
 })
 
-export default connect(null, mapStateToDispatch)(ScreenAuthorizeUser)
+export default connect(
+  null,
+  mapStateToDispatch
+)(ScreenAuthorizeUser)

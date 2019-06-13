@@ -1,5 +1,15 @@
-import React, {Component} from 'react'
-import { Text, View, TouchableWithoutFeedback, Keyboard, StyleSheet, TextInput, Picker, Platform, Alert } from 'react-native'
+import React, { Component } from 'react'
+import {
+  Text,
+  View,
+  TouchableWithoutFeedback,
+  Keyboard,
+  StyleSheet,
+  TextInput,
+  Picker,
+  Platform,
+  Alert
+} from 'react-native'
 import PropTypes from 'prop-types'
 import Button from 'react-native-button'
 import R from 'ramda'
@@ -11,7 +21,7 @@ import { Dropdown } from 'react-native-material-dropdown'
 
 import BlurView from '../../Components/BlurView'
 import Colors from '../../Themes/Colors'
-import {getBaseUnit} from './FoodMetrics'
+import { getBaseUnit } from './FoodMetrics'
 import Log from '../../Utils/Log'
 const log = new Log('AddMealModule/AddFoodStep')
 
@@ -32,43 +42,72 @@ export default class AddMealView extends Component {
   }
 
   renderPicker () {
-    const {units} = this.props.food
+    const { units } = this.props.food
     if (Platform.OS === 'ios') {
       return (
         <Picker
           style={styles.pickerStyle}
-          itemStyle={{height: 120}}
+          itemStyle={{ height: 120 }}
           selectedValue={this.state.selectedUnit}
           onValueChange={(itemValue, itemIndex) => {
             this.setState({
               selectedUnit: itemIndex
             })
-          }}>
-          {
-            units.map((unit, i) => {
-              let label = I18n.t('FoodUnits.' + unit.unitId)
-              // Add Gramm Values to label for portion-Size Units
-              if ([13, 23, 65].includes(unit.unitId)) label = label + ' (' + unit.conversionToGram + getBaseUnit(this.props.food) + ')'
-              // If its a portion value which already contains paranthesis, replace the closing paranthesis and add the gram value
-              if ([31, 40, 42, 69, 91, 92, 93].includes(unit.unitId)) label = label.replace(')', ', ' + unit.conversionToGram + getBaseUnit(this.props.food) + ')')
-              return <Picker.Item key={i} label={label} value={i} />
-            })
-          }
-        </Picker>)
+          }}
+        >
+          {units.map((unit, i) => {
+            let label = I18n.t('FoodUnits.' + unit.unitId)
+            // Add Gramm Values to label for portion-Size Units
+            if ([13, 23, 65].includes(unit.unitId)) {
+              label =
+                label +
+                ' (' +
+                unit.conversionToGram +
+                getBaseUnit(this.props.food) +
+                ')'
+            }
+            // If its a portion value which already contains paranthesis, replace the closing paranthesis and add the gram value
+            if ([31, 40, 42, 69, 91, 92, 93].includes(unit.unitId)) {
+              label = label.replace(
+                ')',
+                ', ' +
+                  unit.conversionToGram +
+                  getBaseUnit(this.props.food) +
+                  ')'
+              )
+            }
+            return <Picker.Item key={i} label={label} value={i} />
+          })}
+        </Picker>
+      )
     } else {
       let data = []
       units.forEach((unit, index) => {
         let label = I18n.t('FoodUnits.' + unit.unitId)
         // Add Gramm Values to label for portion-Size Units
-        if ([13, 23, 65].includes(unit.unitId)) label = label + ' (' + unit.conversionToGram + getBaseUnit(this.props.food) + ')'
+        if ([13, 23, 65].includes(unit.unitId)) {
+          label =
+            label +
+            ' (' +
+            unit.conversionToGram +
+            getBaseUnit(this.props.food) +
+            ')'
+        }
         // If its a portion value which already contains paranthesis, replace the closing paranthesis and add the gram value
-        if ([31, 40, 42, 69, 91, 92, 93].includes(unit.unitId)) label = label.replace(')', ', ' + unit.conversionToGram + getBaseUnit(this.props.food) + ')')
-        data.push({value: index, label})
+        if ([31, 40, 42, 69, 91, 92, 93].includes(unit.unitId)) {
+          label = label.replace(
+            ')',
+            ', ' + unit.conversionToGram + getBaseUnit(this.props.food) + ')'
+          )
+        }
+        data.push({ value: index, label })
       })
       return (
-        <View style={{
-          flexDirection: 'row'
-        }}>
+        <View
+          style={{
+            flexDirection: 'row'
+          }}
+        >
           <Dropdown
             label=''
             data={data}
@@ -80,7 +119,9 @@ export default class AddMealView extends Component {
               marginTop: 0
             }}
             baseColor={Colors.main.grey1}
-            onChangeText={(value, index, data) => this.setState({selectedUnit: index})}
+            onChangeText={(value, index, data) =>
+              this.setState({ selectedUnit: index })
+            }
           />
         </View>
       )
@@ -91,7 +132,10 @@ export default class AddMealView extends Component {
     return (
       <BlurView ref='blurview'>
         <View style={styles.container}>
-          <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+          <TouchableWithoutFeedback
+            onPress={Keyboard.dismiss}
+            accessible={false}
+          >
             {this.renderInputContainer()}
           </TouchableWithoutFeedback>
           {Platform.OS === 'ios' ? <KeyboardSpacer /> : null}
@@ -103,8 +147,15 @@ export default class AddMealView extends Component {
   renderInputContainer () {
     return (
       <Animatable.View ref='view' useNativeDriver>
-        <View style={[styles.cardSection, Platform.OS === 'ios' ? {marginBottom: 80} : null]}>
-          <Text numberOfLines={2} style={styles.headline}>{this.props.food.foodnameDE.toUpperCase()}</Text>
+        <View
+          style={[
+            styles.cardSection,
+            Platform.OS === 'ios' ? { marginBottom: 80 } : null
+          ]}
+        >
+          <Text numberOfLines={2} style={styles.headline}>
+            {this.props.food.foodnameDE.toUpperCase()}
+          </Text>
           <TextInput
             keyboardType='numeric'
             style={styles.textInput}
@@ -122,8 +173,15 @@ export default class AddMealView extends Component {
               style={styles.cancelButton}
               onPress={() => {
                 this.props.onCancel()
-              }}>
-              <Icon size={60} type='ionicon' name='ios-close' color={'#fff'} iconStyle={styles.icon} />
+              }}
+            >
+              <Icon
+                size={60}
+                type='ionicon'
+                name='ios-close'
+                color={'#fff'}
+                iconStyle={styles.icon}
+              />
             </Button>
             <Button
               activeOpacity={0.5}
@@ -132,8 +190,15 @@ export default class AddMealView extends Component {
               disabledContainerStyle={styles.addButtonDisabled}
               // regex to test if string only contains zeroes
               disabled={!this.checkInputValidity()}
-              onPress={() => this.onPressHanlder()} >
-              <Icon size={60} type='ionicon' name='ios-checkmark' color={'#fff'} iconStyle={styles.icon} />
+              onPress={() => this.onPressHanlder()}
+            >
+              <Icon
+                size={60}
+                type='ionicon'
+                name='ios-checkmark'
+                color={'#fff'}
+                iconStyle={styles.icon}
+              />
             </Button>
           </View>
         </View>
@@ -145,13 +210,9 @@ export default class AddMealView extends Component {
     if (this.checkInputValidity()) {
       this.onPressHanlder()
     } else {
-      return Alert.alert(
-        I18n.t('Common.validationError'),
-          '',
-        [
-            {text: I18n.t('Common.ok'), onPress: () => true}
-        ]
-      )
+      return Alert.alert(I18n.t('Common.validationError'), '', [
+        { text: I18n.t('Common.ok'), onPress: () => true }
+      ])
     }
   }
 
@@ -175,7 +236,13 @@ export default class AddMealView extends Component {
 
   checkInputValidity () {
     if (typeof this.state.value === 'undefined') return false
-    if (this.state.value === null || /^0*$/.test(this.state.value) || [',', '.'].includes(this.state.value.slice(-1))) return false
+    if (
+      this.state.value === null ||
+      /^0*$/.test(this.state.value) ||
+      [',', '.'].includes(this.state.value.slice(-1))
+    ) {
+      return false
+    }
     return true
   }
 
@@ -184,11 +251,21 @@ export default class AddMealView extends Component {
     let unit = units[this.state.selectedUnit]
     let value = parseFloat(this.state.value.replace(',', '.'))
     let newFood = R.clone(this.props.food)
-    newFood.selectedAmount = {value, unit: {unitNameDE: unit.unitNameDE, unitId: unit.unitId}}
+    newFood.selectedAmount = {
+      value,
+      unit: { unitNameDE: unit.unitNameDE, unitId: unit.unitId }
+    }
     newFood.calculatedGram = unit.conversionToGram * value
-    log.info('Adding new food to meal: "' + newFood.foodnameDE + '" ' +
-      'Selected Amount: ' + value + ' ' + unit.unitNameDE +
-      ', Calculated Gram: ' + newFood.calculatedGram
+    log.info(
+      'Adding new food to meal: "' +
+        newFood.foodnameDE +
+        '" ' +
+        'Selected Amount: ' +
+        value +
+        ' ' +
+        unit.unitNameDE +
+        ', Calculated Gram: ' +
+        newFood.calculatedGram
     )
     // simultaniously fadeout blurview & cardview
     this.refs.blurview.animatable().fadeOut(350)
@@ -208,11 +285,11 @@ export default class AddMealView extends Component {
             newText = newText + text[i]
             containsSeperator = true
           }
-        // If its a number, just add is
+          // If its a number, just add is
         } else newText = newText + text[i]
       }
     }
-    this.setState({value: newText})
+    this.setState({ value: newText })
   }
 }
 
@@ -270,7 +347,7 @@ const styles = StyleSheet.create({
       }
     }),
     borderColor: Colors.main.grey1,
-    borderBottomWidth: (Platform.OS === 'ios') ? 1 : 0,
+    borderBottomWidth: Platform.OS === 'ios' ? 1 : 0,
     textAlign: 'center'
   },
   pickerStyle: {

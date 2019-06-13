@@ -3,28 +3,42 @@
    ---------------------------------------------------------*/
 
 body {
-    padding: 0px 0px 0px 0px;
+  padding: 0px 0px 0px 0px;
+}
+
+.pagination-container {
+  width: 100%;
+  position: fixed;
+  text-align: center;
+  height: 48px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
 }
 
 .swiper-pagination {
-    position: fixed !important;
-    width: auto !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    padding: 15px;
-    background-color: rgba(255,255,255,1);
-    border-radius: 34px;
-    box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.4);
+  background-color: rgba(255,255,255,1);
+  border-radius: 34px;
+  box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.4);
+  padding: 15px;
+  display: inline-block;
+  position: relative;
+  width: auto!important;
+}
+
+.swiper-pagination .swiper-pagination-bullet {
+  margin: 0 4px;
 }
 
 .swiper-button-next, .swiper-button-prev {
-    position: fixed !important;
+  position: fixed !important;
 }
 
 .swiper-container {
-    padding: 20px 20px 40px 20px;
+  padding: 20px 20px 40px 20px;
 }
 
 .swiper-pagination-bullet-active {
-    background: #000000;
+  background: #000000;
 }

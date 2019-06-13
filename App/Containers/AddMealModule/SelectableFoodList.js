@@ -1,12 +1,12 @@
-import React, {Component} from 'react'
-import {View, Text, StyleSheet, FlatList} from 'react-native'
-import {List, ListItem, Icon} from 'react-native-elements'
+import React, { Component } from 'react'
+import { View, Text, StyleSheet, FlatList } from 'react-native'
+import { List, ListItem, Icon } from 'react-native-elements'
 import PropTypes from 'prop-types'
 import Button from 'react-native-button'
 import * as Animatable from 'react-native-animatable'
 import I18n from '../../I18n/I18n'
 
-import {Colors, Fonts} from '../../Themes'
+import { Colors, Fonts } from '../../Themes'
 
 // import Log from '../../Utils/Log'
 // const log = new Log('AddMealModule/SelectableFoodList')
@@ -22,17 +22,39 @@ class FoodListItem extends Component {
   }
 
   renderBrands () {
-    const {brands} = this.props.food
+    const { brands } = this.props.food
     if (brands.length > 0) {
       return (
         <Animatable.View
           ref='view'
-          style={[{overflow: 'hidden'}, this.state.brandsCollapsed ? {height: 0} : null]}
+          style={[
+            { overflow: 'hidden' },
+            this.state.brandsCollapsed ? { height: 0 } : null
+          ]}
         >
           <View style={styles.brandsWrapper}>
-            <View style={[styles.triangleCorner, this.state.brandsCollapsed ? {borderBottomColor: 'transparent'} : null]} />
-            <View style={[styles.brandsContainer, this.state.brandsCollapsed ? {backgroundColor: 'transparent', borderColor: 'transparent'} : null]}>
-              <Text style={[styles.brands, {color: Colors.main.grey1}]}>{I18n.t('FoodDiary.brandsTitle')}</Text>
+            <View
+              style={[
+                styles.triangleCorner,
+                this.state.brandsCollapsed
+                  ? { borderBottomColor: 'transparent' }
+                  : null
+              ]}
+            />
+            <View
+              style={[
+                styles.brandsContainer,
+                this.state.brandsCollapsed
+                  ? {
+                    backgroundColor: 'transparent',
+                    borderColor: 'transparent'
+                  }
+                  : null
+              ]}
+            >
+              <Text style={[styles.brands, { color: Colors.main.grey1 }]}>
+                {I18n.t('FoodDiary.brandsTitle')}
+              </Text>
               <Text style={styles.brands}>{brands.join(', ')}</Text>
             </View>
           </View>
@@ -58,15 +80,21 @@ class FoodListItem extends Component {
     return (
       <Button
         activeOpacity={0.5}
-        containerStyle={{padding: 10, position: 'absolute', right: 0, top: 5}}
-        onPress={() => this.toggleVisibility()}>
+        containerStyle={{
+          padding: 10,
+          position: 'absolute',
+          right: 0,
+          top: 5
+        }}
+        onPress={() => this.toggleVisibility()}
+      >
         <Icon name='info-with-circle' type='entypo' color={Colors.main.grey2} />
       </Button>
     )
   }
 
   render () {
-    const {food} = this.props
+    const { food } = this.props
     let selectable = true
     return (
       <ListItem
@@ -74,19 +102,37 @@ class FoodListItem extends Component {
           if (selectable) this.props.onSelectFood(food)
         }}
         id={food.id}
-        containerStyle={[selectable ? null : styles.disabled, {zIndex: 0}]}
+        containerStyle={[selectable ? null : styles.disabled, { zIndex: 0 }]}
         title={
           <View style={styles.titleView}>
-            <Text numberOfLines={1} style={[styles.title, food.brands.length > 0 ? {marginRight: 50} : null]}>{food.foodnameDE}</Text>
+            <Text
+              numberOfLines={1}
+              style={[
+                styles.title,
+                food.brands.length > 0 ? { marginRight: 50 } : null
+              ]}
+            >
+              {food.foodnameDE}
+            </Text>
           </View>
         }
         subtitle={
           <View style={styles.subtitleView}>
-            <Text numberOfLines={1} style={[styles.subTitle, food.brands.length > 0 ? {marginRight: 50} : null]}>{food.shadowDE ? food.shadowDE : food.foodGroup}</Text>
+            <Text
+              numberOfLines={1}
+              style={[
+                styles.subTitle,
+                food.brands.length > 0 ? { marginRight: 50 } : null
+              ]}
+            >
+              {food.shadowDE ? food.shadowDE : food.foodGroup}
+            </Text>
             {this.renderBrands()}
           </View>
         }
-        badge={food.brands.length > 0 ? { element: this.renderBrandsIcon() } : null}
+        badge={
+          food.brands.length > 0 ? { element: this.renderBrandsIcon() } : null
+        }
         hideChevron
       />
     )
@@ -102,17 +148,18 @@ export default class SelectableFoodList extends Component {
 
   render () {
     if (this.props.foodList.length === 0) {
-      return (
-        <Text style={styles.emptyNotice}>
-          {this.props.emptyNotice}
-        </Text>
-      )
+      return <Text style={styles.emptyNotice}>{this.props.emptyNotice}</Text>
     } else {
       return (
         <List containerStyle={styles.list}>
           <FlatList
             data={this.props.foodList}
-            renderItem={({item}) => <FoodListItem food={item} onSelectFood={(food) => this.props.onSelectFood(food)} />}
+            renderItem={({ item }) => (
+              <FoodListItem
+                food={item}
+                onSelectFood={(food) => this.props.onSelectFood(food)}
+              />
+            )}
             keyExtractor={(item, index) => index}
             keyboardShouldPersistTaps='always'
           />

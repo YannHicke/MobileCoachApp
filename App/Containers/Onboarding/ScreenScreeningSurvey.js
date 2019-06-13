@@ -1,6 +1,12 @@
 import React, { Component } from 'react'
-import { StyleSheet, View, WebView, Platform, ActivityIndicator } from 'react-native'
-import {ifIphoneX} from 'react-native-iphone-x-helper'
+import {
+  StyleSheet,
+  View,
+  WebView,
+  Platform,
+  ActivityIndicator
+} from 'react-native'
+import { ifIphoneX } from 'react-native-iphone-x-helper'
 import { connect } from 'react-redux'
 import KeyboardSpacer from 'react-native-keyboard-spacer'
 
@@ -42,7 +48,7 @@ class ScreenScreeningSurvey extends Component {
       <View style={Styles.container}>
         <WebView
           ref='web'
-          source={{uri: AppConfig.config.startup.onboardingURL}}
+          source={{ uri: AppConfig.config.startup.onboardingURL }}
           style={Styles.webView}
           scalesPageToFit={!(Platform.OS === 'ios')}
           javaScriptEnabled
@@ -54,23 +60,37 @@ class ScreenScreeningSurvey extends Component {
           startInLoadingState
           renderLoading={() => {
             return (
-              <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}} >
+              <View
+                style={{
+                  flex: 1,
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
                 <ActivityIndicator
                   animating
                   color={Colors.onboarding.loadingIndicator}
                   size='large'
-                  hidesWhenStopped />
+                  hidesWhenStopped
+                />
               </View>
             )
           }}
           renderError={(e) => {
             return (
-              <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}} >
+              <View
+                style={{
+                  flex: 1,
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
                 <ActivityIndicator
                   animating
                   color={Colors.onboarding.loadingIndicator}
                   size='large'
-                  hidesWhenStopped />
+                  hidesWhenStopped
+                />
               </View>
             )
           }}
@@ -93,7 +113,7 @@ class ScreenScreeningSurvey extends Component {
 
     switch (data) {
       case 'complete':
-        const {navigate} = this.props.navigation
+        const { navigate } = this.props.navigation
         navigate(nextScreen)
         break
       default:
@@ -107,18 +127,36 @@ class ScreenScreeningSurvey extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return {
-  }
+  return {}
 }
 
-const mapStateToDispatch = dispatch => ({
-  rememberRegistration: (deepstreamUser, deepstreamSecret) => dispatch(ServerSyncActions.rememberRegistration(deepstreamUser, deepstreamSecret)),
+const mapStateToDispatch = (dispatch) => ({
+  rememberRegistration: (deepstreamUser, deepstreamSecret) =>
+    dispatch(
+      ServerSyncActions.rememberRegistration(deepstreamUser, deepstreamSecret)
+    ),
   manuallyConnect: () => dispatch(StartupActions.manuallyConnect())
 })
 
-export default connect(mapStateToProps, mapStateToDispatch)(ScreenScreeningSurvey)
+export default connect(
+  mapStateToProps,
+  mapStateToDispatch
+)(ScreenScreeningSurvey)
 
 const Styles = StyleSheet.create({
-  container: {flex: 1, paddingLeft: 0, paddingRight: 0, backgroundColor: Colors.onboarding.background, ...ifIphoneX({ paddingTop: 40 })},
-  webView: { position: 'absolute', backgroundColor: Colors.onboarding.background, left: 0, top: 0, bottom: 0, right: 0 }
+  container: {
+    flex: 1,
+    paddingLeft: 0,
+    paddingRight: 0,
+    backgroundColor: Colors.onboarding.background,
+    ...ifIphoneX({ paddingTop: 40 })
+  },
+  webView: {
+    position: 'absolute',
+    backgroundColor: Colors.onboarding.background,
+    left: 0,
+    top: 0,
+    bottom: 0,
+    right: 0
+  }
 })
