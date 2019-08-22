@@ -3,6 +3,7 @@ package org.c4dhi.mobilecoach.client;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.reactnativecommunity.netinfo.NetInfoPackage;
 import com.lugg.ReactNativeConfig.ReactNativeConfigPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
 import com.avishayil.rnrestart.ReactNativeRestartPackage;
@@ -53,6 +54,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new NetInfoPackage(),
             new ReactNativeConfigPackage(),
             new LinearGradientPackage(),
             new SajjadBlurOverlayPackage(),
