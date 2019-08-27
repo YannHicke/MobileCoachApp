@@ -172,8 +172,10 @@ dependencies {
     implementation project(':@react-native-community_netinfo')
     implementation project(':react-native-linear-gradient')
     implementation project(':react-native-config')
+
     // ADDED FOR PUSH NOTIFICATIONS - START
     compile 'com.google.android.gms:play-services-gcm:16.0.0'
+    implementation "com.google.firebase:firebase-messaging:17.0.0"
     // ADDED FOR PUSH NOTIFICATIONS - END
 
     implementation project(':react-native-audio')
