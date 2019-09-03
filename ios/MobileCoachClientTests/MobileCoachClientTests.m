@@ -14,11 +14,11 @@
 #define TIMEOUT_SECONDS 600
 #define TEXT_TO_LOOK_FOR @"Welcome to React Native!"
 
-@interface WhitelabelAppTests : XCTestCase
+@interface MobileCoachClientTests : XCTestCase
 
 @end
 
-@implementation WhitelabelAppTests
+@implementation MobileCoachClientTests
 
 - (BOOL)findSubviewInView:(UIView *)view matching:(BOOL(^)(UIView *view))test
 {
