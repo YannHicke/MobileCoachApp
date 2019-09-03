@@ -14,7 +14,7 @@ import { Colors } from '../../Themes/'
 const nextScreen = 'ScreenCoachSelection'
 
 class ScreenLanguageSelection extends Component {
-  render () {
+  render() {
     const { changeLanguage } = this.props
     const { navigate } = this.props.navigation
 
@@ -26,35 +26,16 @@ class ScreenLanguageSelection extends Component {
             text='Deutsch'
             onPress={() => {
               changeLanguage('de-CH')
+              sendLanguageIntention('de-CH')
               navigate(nextScreen)
             }}
           />
           <NextButton
-            text='Francais'
+            text='English'
             onPress={() => {
-              Alert.alert(
-                'Under construction 👷',
-                '',
-                [{ text: 'Ok', onPress: () => true }],
-                { cancelable: false }
-              )
-
-              // changeLanguage('fr-CH')
-              // navigate('ScreenThree')
-            }}
-          />
-          <NextButton
-            text='Italiano'
-            onPress={() => {
-              Alert.alert(
-                'Under construction 👷',
-                '',
-                [{ text: 'Ok', onPress: () => true }],
-                { cancelable: false }
-              )
-
-              // changeLanguage('it-CH')
-              // navigate('ScreenThree', {language: language})
+              changeLanguage('en-GB')
+              sendLanguageIntention('en-GB')
+              navigate(nextScreen)
             }}
           />
         </View>
@@ -69,7 +50,9 @@ class ScreenLanguageSelection extends Component {
 }
 
 const mapStateToDispatch = (dispatch) => ({
-  changeLanguage: (newLang) => dispatch(SettingsActions.changeLanguage(newLang))
+  changeLanguage: (newLang) => dispatch(SettingsActions.changeLanguage(newLang)),
+  sendLanguageIntention: (language) =>
+    dispatch(MessageActions.sendIntention(null, 'language', language))
 })
 
 export default connect(
