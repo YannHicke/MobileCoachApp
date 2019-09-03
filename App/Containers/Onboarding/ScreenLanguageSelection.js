@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import NextButton from '../../Components/NextButton'
 import I18n from '../../I18n/I18n'
 import SettingsActions from '../../Redux/SettingsRedux'
+import MessageActions from '../../Redux/MessageRedux'
 import { Colors } from '../../Themes/'
 
 // Adjust to the appropriate next screen
@@ -16,6 +17,7 @@ const nextScreen = 'ScreenCoachSelection'
 class ScreenLanguageSelection extends Component {
   render() {
     const { changeLanguage } = this.props
+    const { sendLanguageIntention } = this.props
     const { navigate } = this.props.navigation
 
     return (
