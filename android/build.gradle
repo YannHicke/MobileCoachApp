@@ -28,7 +28,7 @@ allprojects {
     repositories {
 		// Add jitpack repository (added by react-native-spinkit)
 		maven {
-            url "https://jitpack.io"
+            url "https://www.jitpack.io"
         }
         mavenLocal()
         google()
