@@ -15,7 +15,7 @@ import { Colors } from '../../Themes/'
 const nextScreen = 'ScreenCoachSelection'
 
 class ScreenLanguageSelection extends Component {
-  render() {
+  render () {
     const { changeLanguage } = this.props
     const { sendLanguageIntention } = this.props
     const { navigate } = this.props.navigation
@@ -52,7 +52,8 @@ class ScreenLanguageSelection extends Component {
 }
 
 const mapStateToDispatch = (dispatch) => ({
-  changeLanguage: (newLang) => dispatch(SettingsActions.changeLanguage(newLang)),
+  changeLanguage: (newLang) =>
+    dispatch(SettingsActions.changeLanguage(newLang)),
   sendLanguageIntention: (language) =>
     dispatch(MessageActions.sendIntention(null, 'language', language))
 })
