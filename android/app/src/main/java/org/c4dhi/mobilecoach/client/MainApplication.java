@@ -5,10 +5,7 @@ import android.app.Application;
 import com.facebook.react.ReactApplication;
 import com.reactnativecommunity.netinfo.NetInfoPackage;
 import com.lugg.ReactNativeConfig.ReactNativeConfigPackage;
-import com.BV.LinearGradient.LinearGradientPackage;
 import com.avishayil.rnrestart.ReactNativeRestartPackage;
-import com.bluroverly.SajjadBlurOverlayPackage;
-import com.wheelpicker.WheelPickerPackage;
 import com.horcrux.svg.SvgPackage;
 import fr.bamlab.rnimageresizer.ImageResizerPackage;
 import com.zmxv.RNSound.RNSoundPackage;
@@ -56,9 +53,6 @@ public class MainApplication extends Application implements ReactApplication {
           new MainReactPackage(),
             new NetInfoPackage(),
             new ReactNativeConfigPackage(),
-            new LinearGradientPackage(),
-            new SajjadBlurOverlayPackage(),
-            new WheelPickerPackage(),
             new SvgPackage(),
             new ReactNativeRestartPackage(),
             new ReactNativeAudioPackage(),
