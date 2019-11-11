@@ -218,7 +218,6 @@ dependencies {
     implementation "com.facebook.react:react-native:+"  // From node_modules
 
     implementation project(':react-native-restart')
-    implementation project(':react-native-svg')
     implementation project(':lottie-react-native')
 }
 
