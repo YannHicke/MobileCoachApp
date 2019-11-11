@@ -74,7 +74,7 @@ const Styles = StyleSheet.create({
   buttonContainer: {
     marginHorizontal: 30,
     flex: 0.5,
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
     alignSelf: 'stretch'
   },
   image: { flex: 1, alignSelf: 'stretch', resizeMode: 'contain' },

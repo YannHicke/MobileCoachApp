@@ -113,7 +113,7 @@ export default {
       // Whether or not user uploads are protected with auth-tokens
       mediaUploadsWithAuthenticiation: true
     },
-    supportedLanguages: ['de', 'fr', 'it'],
+    supportedLanguages: ['de', 'en'],
     mobileCoachClient: {
       shareUrl: {
         fr: 'https://www.shareurl-fr.fr',

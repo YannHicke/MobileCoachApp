@@ -4,7 +4,7 @@
     "subtitle": "...",
     "next": "Next",
     "chooseLanguage": "Please choose the language",
-    "chooseCoach": "Please choose coach",
+    "chooseCoach": "Please choose your coach",
     "welcome": "Welcome...",
     "start": "Let's go",
     "checkQrUsageSubtitle": "How do you want to proceed?",
@@ -22,11 +22,11 @@
   },
   "DashboardChat": {
     "title": "Chat with Supervisor",
-    "placeholder": "Bitte Nachricht eingeben",
-    "send": "Senden",
+    "placeholder": "Please enter your message",
+    "send": "Send",
     "user": {
-      "1": "Teilnehmer",
-      "2": "Betreuer"
+      "1": "Participant",
+      "2": "Supervisor"
     }
   },
   "Diary": {
@@ -160,12 +160,12 @@
     "url": "https://www.Serious Care.com/"
   },
   "ConnectionStates": {
-    "connectionToCoach": "Verbindung zum Coach",
-    "offlineNotice": "Damit dein Coach erreichbar ist,\nbenötigst du eine Internetverbindung.",
-    "initialized": "Es besteht momentan keine Verbindung zum Coach. Sobald du wieder eine aktive Internetverbindung hast, wird die Verbindung wieder hergestellt.",
-    "connecting": "Verbindung zum Coach wird aufgebaut...",
-    "connected": "Es wird abgeglichen was seit der letzten Verbindung zum Coach passiert ist...",
-    "synchronized": "Du bist mit dem Coach verbunden."
+    "connectionToCoach": "Connection to the coach",
+    "offlineNotice": "To reach your coach,\nyou need an internet connection.",
+    "initialized": "There is currently no connection to the coach. As soon as you have an active internet connection again, the connection will be re-established.",
+    "connecting": "Connection to the coach in progress...",
+    "connected": "It checks what's happened since the last connection to the coach...",
+    "synchronized": "You're connected to the coach."
   },
   "FoodUnits": {
     "0": "Gramm",
@@ -534,16 +534,16 @@
     "calculatedGram": "Menge (in g oder ml)"
   },
   "Recipes": {
-    "header": "Rezepte",
-    "vegetarian": "vegetarisch"
+    "header": "Recipe",
+    "vegetarian": "vegetarian"
   },
   "Reminder": {
-    "title": "Erinnerung",
-    "done": "Erledigt",
-    "ignore": "Ignorieren",
-    "any": "Heute",
-    "memories": "Erinnerung ({{for}} von {{of}})",
-    "measurementRecord": "Messung erfassen"
+    "title": "Reminder",
+    "done": "Done",
+    "ignore": "Ignore",
+    "any": "Today",
+    "memories": "Reminder ({{for}} by {{of}})",
+    "measurementRecord": "Record measurement"
   },
   "Schedule": {
     "emptyStates": {
@@ -800,27 +800,27 @@
     }
   },
   "Settings": {
-    "language": "Sprache",
-    "title": "Sprache wählen",
-    "header": "Einstellungen",
-    "personalTitle": "Persönlich",
-    "impressumTitle": "Impressum",
-    "restart": "Tour neu starten",
-    "reallyRestart": "Wirklich neu starten. Alle Daten werden gelöscht.",
-    "yes": "Ja, sicher",
-    "no": "Nein",
-    "exportDiary": "Tagebuch exportieren",
-    "recommend": "App weiter empfehlen",
+    "language": "Language",
+    "title": "Select language",
+    "header": "Settings",
+    "personalTitle": "Personal",
+    "impressumTitle": "Legal Disclosure",
+    "restart": "Restart tour",
+    "reallyRestart": "Really restart? All data will be deleted.",
+    "yes": "Yes",
+    "no": "No",
+    "exportDiary": "Export diary",
+    "recommend": "Recommend App",
     "impressumText": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
-    "debugReport": "Fehlerhaften Stand melden",
+    "debugReport": "Report incorrect status",
     "feedbackForm": {
       "title": "Feedback",
-      "emailInput": "Email Adresse für Rückfragen (optional)",
-      "feedbackInput": "Feedback/Fehlerbeschreibung",
+      "emailInput": "Email address for further questions (optional)",
+      "feedbackInput": "Feedback/error description",
       "nameInput": "Name (optional)",
-      "submit": "Senden",
-      "submitMessage": "Merci. Ihr Feedback hilft uns dabei, die App weiter zu verbessern.",
-      "errorMessage": "Bitte ein Feedback eingeben."
+      "submit": "Submit",
+      "submitMessage": "Thanks. Your feedback helps us to further improve the app.",
+      "errorMessage": "Please enter your feedback."
     },
     "impressum": {
       "title1": "Text 1",
@@ -834,17 +834,17 @@
     }
   },
   "Backpack": {
-    "header": "Bibliothek"
+    "header": "Library"
   },
   "MediaLibrary": {
     "tabs": {
-      "infocards": "Infokarten",
+      "infocards": "Info cards",
       "video": "Videos"
     },
-    "header": "Mediathek",
-    "noDataTitle": "Noch keine Einträge",
-    "noBackpackData": "Hier werden deine gesammelten Informationen in Form von Infokarten gespeichert. Dein Coach wird hier bald erste Informationen für dich ablegen.",
-    "noVideoData": "Hier werden deine gesammelten Videos gespeichert."
+    "header": "Media Library",
+    "noDataTitle": "No entries yet",
+    "noBackpackData": "Here your collected information is stored in the form of info cards. Your coach will soon file the first information for you here.",
+    "noVideoData": "This is where your collected videos are stored."
   },
   "ServiceChannel": {
     "title": "Serious Care News",
@@ -854,70 +854,70 @@
     "topButtonURL": "https://www.sc.com/kontakt.html"
   },
   "Menu": {
-    "Chat": "Chat mit {{coach}}",
-    "DashboardChat": "Chat mit Betreuer",
-    "Tour": "Karte",
-    "Backpack": "Bibliothek",
-    "MediaLibrary": "Mediathek",
-    "Diary": "Tagebuch",
-    "Settings": "Einstellungen",
-    "Recipes": "Rezepte",
+    "Chat": "Chat with {{coach}}",
+    "DashboardChat": "Chat with Supervisor",
+    "Tour": "Tour",
+    "Backpack": "Library",
+    "MediaLibrary": "Media Library",
+    "Diary": "Diary",
+    "Settings": "Settings",
+    "Recipes": "Recipes",
     "Disabled": "Disabled"
   },
   "Tabbar": {
-    "Levels": "Fortschritt",
-    "Library": "Mediathek",
+    "Levels": "Levels",
+    "Library": "Library",
     "Coach": "Coach",
     "Diary": "Blutdruck",
     "ActionButton": "Tagesplan",
-    "Me": "Ich"
+    "Me": "Me"
   },
   "Common": {
-    "yes": "ja",
-    "no": "nein",
-    "noData": "keine Daten",
+    "yes": "yes",
+    "no": "no",
+    "noData": "no data",
     "optional": "optional",
-    "proceed": "Fortfahren",
-    "date": "Datum",
-    "time": "Uhrzeit",
-    "information": "Information",
-    "selectManyTitle": "Antwortoptionen auswählen",
-    "selectManySubtitle": "Bitte wähle alle zutreffenden Antworten aus:",
-    "abort": "Abbrechen",
-    "answerExpired": "Antwort nicht mehr möglich",
-    "backButton": "Zweimal drücken zum Beenden der App",
-    "back": "Zurück",
-    "error": "Fehler",
-    "confirm": "Bestätigen",
-    "invalid": "Ungültiger Wert",
-    "incomplete": "Angaben unvollständig",
-    "incompleteNotice": "Bitte ergänze die fehlenden Werte.",
-    "validationError": "Bitte trage einen gültigen Wert ein.",
-    "expiryNotice": "Diese Frage kann nicht mehr beantwortet werden.",
+    "proceed": "Proceed",
+    "date": "date",
+    "time": "time",
+    "information": "information",
+    "selectManyTitle": "Select answer options",
+    "selectManySubtitle": "Please select all matching answers:",
+    "abort": "Abort",
+    "answerExpired": "Answer no longer possible",
+    "backButton": "Press twice to exit the app",
+    "back": "Back",
+    "error": "Error",
+    "confirm": "Confirm",
+    "invalid": "Invalid value",
+    "incomplete": "Incomplete information",
+    "incompleteNotice": "Please complete the missing values.",
+    "validationError": "Please enter a valid value.",
+    "expiryNotice": "This question can no longer be answered.",
     "ok": "OK",
-    "close": "Schliessen",
-    "chooseAtLeastOne": "Bitte wähle die passende Anzahl an Antworten.",
-    "chooseDate": "Datum auswählen",
-    "today": "heute",
-    "all": "alle",
-    "none": "keine",
-    "save": "Übernehmen",
-    "thanks": "Vielen Dank!",
-    "yesterday": "gestern",
-    "and": "und",
+    "close": "Close",
+    "chooseAtLeastOne": "Please select the appropriate number of answers.",
+    "chooseDate": "Choose date",
+    "today": "today",
+    "all": "all",
+    "none": "none",
+    "save": "Save",
+    "thanks": "Thanks!",
+    "yesterday": "yesterday",
+    "and": "and",
     "datePicker": {
-      "outOfRange": "Bitte wähle einen Zeitpunkt zwischen"
+      "outOfRange": "Please choose a time between"
     },
-    "recordPhoto": "Foto machen",
-    "recordAudio": "Aufnahme starten",
-    "recordVideo": "Video aufnehmen",
-    "scanQRCode": "QR-Code scannen",
-    "confirmPhoto": "Foto bestätigen",
-    "confirmVideo": "Video bestätigen",
-    "permissionsAudio": "Zur Aufzeichnung von Audio-Aufnahmen werden Zugriffsrechte auf das Mikrofon benötigt",
-    "retry": "Wiederholen",
-    "pressToRecord": "Drücke um zu starten",
-    "pressToStop": "Drücke um zu stoppen",
+    "recordPhoto": "Record photo",
+    "recordAudio": "Record audio",
+    "recordVideo": "Record video",
+    "scanQRCode": "Scan QR code",
+    "confirmPhoto": "Confirm photo",
+    "confirmVideo": "Confirm video",
+    "permissionsAudio": "Access rights to the microphone are required to record audio recordings",
+    "retry": "Retry",
+    "pressToRecord": "Press to record",
+    "pressToStop": "Press to stop",
     "Information": "Information"
   }
 }
