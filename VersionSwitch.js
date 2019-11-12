@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import { AsyncStorage, View, Alert } from 'react-native'
+import { View, Alert } from 'react-native'
 import { ImageCacheProvider } from 'react-native-cached-image'
+import AsyncStorage from '@react-native-community/async-storage'
 
 // Import Root Components
 // Caution: The order of imports decides which i18n-file will be used (because I18n.translation will be set when importing the files)

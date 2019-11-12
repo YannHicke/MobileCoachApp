@@ -1,6 +1,6 @@
-import { AsyncStorage } from 'react-native'
 import { persistStore } from 'redux-persist'
 import createEncryptor from 'redux-persist-transform-encrypt'
+import AsyncStorage from '@react-native-community/async-storage'
 
 import AppConfig from '../Config/AppConfig'
 import StartupActions from '../Redux/StartupRedux'

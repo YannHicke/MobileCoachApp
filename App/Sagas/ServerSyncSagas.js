@@ -1,9 +1,11 @@
-import { NetInfo, Platform, AsyncStorage } from 'react-native'
+import { Platform } from 'react-native'
 import { call, select, put, take } from 'redux-saga/effects'
 import { delay } from 'redux-saga'
 import createDeepstream from 'deepstream.io-client-js'
 import axios from 'axios'
 import mime from 'react-native-mime-types'
+import NetInfo from "@react-native-community/netinfo"
+import AsyncStorage from '@react-native-community/async-storage'
 
 import Common from '../Utils/Common'
 import AppConfig from '../Config/AppConfig'
