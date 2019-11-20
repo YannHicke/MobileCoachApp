@@ -13,7 +13,6 @@ import com.rnim.rn.audio.ReactNativeAudioPackage;
 import org.reactnative.camera.RNCameraPackage;
 import com.kishanjvaghela.cardview.RNCardViewPackage;
 import com.github.wumke.RNExitApp.RNExitAppPackage;
-import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.smixx.fabric.FabricPackage;
 import com.react.rnspinkit.RNSpinkitPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
@@ -59,7 +58,6 @@ public class MainApplication extends Application implements ReactApplication {
             new RNCameraPackage(),
             new RNCardViewPackage(),
             new RNExitAppPackage(),
-            new RNDeviceInfo(),
             new FabricPackage(),
             new RNSpinkitPackage(),
             new RNFetchBlobPackage(),

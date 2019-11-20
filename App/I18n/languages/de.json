@@ -139,26 +139,6 @@
     },
     "bloodPressureInvalid": "Bitte prüfe deine Angabe: Der systolische Wert muss immer über dem diastolischen Wert liegen."
   },
-  "Verification": {
-    "title": "Serious Care Anmeldung",
-    "info": "Damit Sie die App vollumfänglich nutzen können, müssen Sie sich als Serious Care Kunde identifizieren.\n\nBitte geben Sie Ihre Serious Care Kundennummer und Ihr Geburtsdatum ein.",
-    "dateOfBirth": "Geburtsdatum",
-    "dateOfBirthPlaceholder": "TT.MM.JJ",
-    "userNumber": "Kundennummer",
-    "userNumberPlaceholder": "8-stellige Kundennummer",
-    "register": "Anmelden",
-    "pleaseWait": "Bitte warten...",
-    "succeeded": "Die Anmeldung war erfolgreich!",
-    "failed": "Die Anmeldung ist fehlgeschlagen. Bitte prüfen Sie Ihre Angaben und probieren Sie es dann erneut.",
-    "dateOfBirthError": "Die Angabe des Geburtsdatum ist zwingend.",
-    "userNumberError": "Die Angabe der Kundennummer (8-stellig) ist zwingend und darf nur Ziffern, Punkte und Bindestriche enthalten.",
-    "customer": "Anmeldung als Serious Care Kunde",
-    "noCustomer": "Ich bin kein Serious Care Kunde",
-    "noCustomerTitle": "Nutzungshinweis",
-    "noCustomerInfo": "Die weitere Nutzung der Serious Care Coach App ist nur für Serious Care Versicherte möglich. Wenn Sie nicht bei der Serious Care versichert sind, ist Ihre Nutzungsberechtigung an dieser Stelle beendet.\n\nWenn Sie die Serious Care Coach App weiterhin nutzen möchten, erhalten Sie Informationen über Serious Care Versicherungen über die Serious Care Website.",
-    "website": "Zur Website",
-    "url": "https://www.Serious Care.com/"
-  },
   "ConnectionStates": {
     "connectionToCoach": "Verbindung zum Coach",
     "offlineNotice": "Damit dein Coach erreichbar ist,\nbenötigst du eine Internetverbindung.",
@@ -415,114 +395,6 @@
     "brandsTitle": "Beispiele sind:",
     "trackingPeriodIncompleteNotice": "Deine Tagebuch-Periode ist noch nicht abgeschlossen."
   },
-  "Me": {
-    "addMedication": {
-      "rhythm": {
-        "daily": "Täglich",
-        "selected_days": "Ausgewählte Wochentage",
-        "weekdays": "Wochentage"
-      },
-      "dosage": {
-        "title": "Menge (Wie viel?)",
-        "pills": "Tabletten",
-        "drops": "Tropfen",
-        "spray": "Spray",
-        "plaster": "Pflaster",
-        "solution": "Lösung",
-        "ampulls": "Ampullen",
-        "quantity": "Menge eingeben"
-      },
-      "medication": "Medikament (Was?)",
-      "name": "Name eintragen",
-      "rhythmus": "Rhythmus (Wie oft?)",
-      "time": "Uhrzeit",
-      "times": "Uhrzeiten/Einnahmen (Wann?)",
-      "ingestion": "Einnahme",
-      "addIngestion": "Einnahme hinzufügen",
-      "addMedication": "Medikament hinzufügen",
-      "editMedication": "Medikament bearbeiten",
-      "validation": {
-        "missingName": "Bitte gib den Namen des Medikaments an.",
-        "missingDose": "Bitte trage eine Zahl ein.",
-        "selectDay": "Bitte wähle mindestens einen Tag.",
-        "missingTime": "Bitte gib eine Uhrzeit an.",
-        "doseValueOutOfRange": "Bitte gib einen Wert zwischen 0,01 und 100 an."
-      }
-    },
-    "personalData": {
-      "noData": "Hier kannst du deine wichtigsten Daten sehen. Aktuell sind noch keine erfasst.",
-      "noDataTitle": "Noch keine Einträge",
-      "syncHeartAge": "Herzalter",
-      "syncHeartAgeInfo": "Das Herzalter basiert auf einem Vergleich mit einer Person gleichen Alters und Geschlechts mit Risikofaktoren im Normbereich.",
-      "title": "Profil",
-      "name": "Name",
-      "systemUniqueId": "Datenschlüssel",
-      "syncHeight": "Grösse",
-      "syncWeight": "Gewicht",
-      "syncBMI": "BMI",
-      "birthday": "Geburtsdatum",
-      "syncMedicationCompliance": "Medikamenteneinnahme",
-      "syncMedicationComplianceInfo": "Anteil der Medikamente, die du erfasst hast in der letzten Periode.",
-      "syncMedication": "Blutdrucksenkende Medikamente",
-      "syncSmoker": "Raucher",
-      "syncDiabetes": "Diabetes",
-      "survey": "Übersicht",
-      "information": "Meine Angaben",
-      "weightExpression": "{{value}} kg",
-      "heightExpression": "{{value}} cm",
-      "syncMedicationComplianceResult": "{{value}} %"
-    },
-    "impressum": {
-      "title": "Hinweise",
-      "sectionOneTitle": "Impressum",
-      "sectionOneTextPartOne": "C4DHI",
-      "sectionOneTextPartTwo": "Strasse",
-      "sectionOneTextPartThree": "PLZ Ort",
-      "sectionOneTextPartFour": "Schweiz",
-      "sectionOneSubTitle": "Kontaktadresse",
-      "sectionTwoSubTitle": "Vertretungsberechtigung",
-      "sectionTwoText": "ABC DEF",
-      "sectionThreeSubTitle": "Handelsregistereintrag",
-      "sectionThreeTextPartOne": "Eingetragener Firmenname:<br/>C4DHI",
-      "sectionThreeTextPartTwo": "Nummer: CHE-123",
-      "sectionFourSubTitle": "Mehrwertsteuernummer",
-      "sectionFourText": "CHE-123 MWST",
-      "btnOneTitle": "Datenschutz",
-      "btnOneText": "Datenschutzerklärung",
-      "btnTwoTitle": "Nutzungsbedingungen",
-      "btnTwoText": "Nutzungsbedingungen",
-      "btnThreeTitle": "Lizenzen",
-      "btnThreeText": "Lizenzen anzeigen"
-    },
-    "support": {
-      "title": "Support",
-      "text1": "Bei Fragen, Problemen oder Feedback senden Sie uns eine E-Mail an",
-      "text2": "Ihre Anfrage (insbesondere Ihre E-Mail-Adresse) wird nicht mit Ihren Daten aus der App in Verbindung gebracht. Falls wir Ihre Daten zur Lösung eines Problems benötigen, werden wir Sie explizit um eine Bestätigung bitten.",
-      "text3": "Der folgende Button öffnet den E-Mail Client Ihres Smartphones mit vorausgefüllten Informationen.",
-      "btnTitle": "Supportanfrage",
-      "btnText": "Anfrage stellen"
-    },
-    "sources": {
-      "title": "Quellen",
-      "textSectionOne": "Die Struktur und Inhalte der App wurden in Zusammenarbeit mit Fachexperten im Bereich Kardiologie entwickelt und basieren im Wesentlichen auf den europäischen Leitlinien zu Bluthochdruck:",
-      "textSectionTwoPartOne": "Williams, Bryan, et al. “2018 ESC/ESH Guidelines for the management of arterial hypertension.” European heart journal 39.33 (2018): 3021-3104. Verfügbar unter",
-      "textSectionTwoPartTwo": "(zuletzt abgerufen am 06.05.2019).",
-      "textSectionThree": "Diese Leitlinien beinhalten den aktuellen Stand der wissenschaftlichen Erkenntnisse zum Thema Bluthochdruck. Die vorliegende App orientiert sich an diesen Leitlinien, gibt diese aber nicht unbedingt in voller Ausführlichkeit und im Original bzw. im Wortlaut wieder.",
-      "textSectionFourPartOne": "Die Inhalte der App orientieren sich zudem an Informationen und Inhalten aufbereitet von der Deutschen Hochdruckliga",
-      "textSectionFourPartTwo": "und den folgenden Publikationen/Quellen:",
-      "btnText": "Quellen anzeigen"
-    },
-    "homeScreen": {
-      "me": "Ich",
-      "myData": "Meine Daten",
-      "dailyPlan": "Tagesplan",
-      "sources": "Quellen",
-      "medication": "Medikamente",
-      "support": "Support",
-      "imprint": "Hinweise",
-      "participantSince": "Dabei seit"
-    }
-  },
   "PDFExport": {
     "title": "Was ich gegessen und getrunken habe",
     "diaryNr": "Tagebuch Nr.",
@@ -649,46 +521,6 @@
       "add-topics": "Zusätzliche Themen",
       "tour-end": "Tour Ende"
     }
-  },
-  "Triage": {
-    "header": "Basisdaten erfassen",
-    "page": "Seite",
-    "personal": "Persönliches",
-    "additionalInfo": "Weitere Angaben",
-    "smoking": "Rauchen",
-    "diseases": "Erkrankungen",
-    "diseasesLabel": "Wurde bei dir eine oder mehrere der folgenden Erkrankungen diagnostiziert? (zutreffendes markieren)",
-    "diseasesOther": "Weitere Gesundheitsdaten",
-    "diseasesOtherLabel": "Bitte markiere alle zutreffenden Aussagen.",
-    "missingValue": "Angaben unvollständig",
-    "missingValueMessage": "Bitte ergänze die folgenden Angaben:",
-    "invalidWeight": "Bitte gib einen Wert zwischen {{min}} und {{max}} ein.",
-    "invalidHeight": "Bitte gib einen Wert zwischen {{min}} und {{max}} ein.",
-    "fields": {
-      "birthday": "Geburtsdatum",
-      "syncWeight": "Gewicht",
-      "syncHeight": "Grösse",
-      "syncWaist": "Taillenumfang",
-      "syncSmoker": "Bist du Raucher?",
-      "syncMedication": "Nimmst du blutdrucksenkende Medikamente?",
-      "syncHypertension": "Hypertonie",
-      "syncDiabetes": "Leidest du an Diabetes?",
-      "syncHeartDisease": "Chronische Herzschwäche",
-      "syncKidneyDisease": "Leidest du an einer chronischen Nierenkrankheit?",
-      "syncHeartDiseasesFamily": "Es traten Herz-/Gefässerkrankungen in meiner Familie auf (direkte Verwandte).",
-      "syncBloodFatIncreased": "Bei mir wurden erhöhte Blutfettwerte festgestellt (Cholesterin LDL/ HDL, Triglyceride).",
-      "syncBloodVesselDisorder": "Ich habe eine Blutgefässerkrankung.",
-      "syncWalkingProblems": "Ich habe wegen der Blutgefässerkrankung Laufprobleme.",
-      "syncStroke": "Ich hatte einen Schlaganfall bzw. Durchblutungsstörungen im Gehirn.",
-      "syncHeartAttack": "Ich hatte einen Herzinfarkt."
-    },
-    "placeholder": {
-      "birthday": "Geburtsdatum eingeben",
-      "syncWeight": "Gewicht in kg",
-      "syncHeight": "Grösse in cm",
-      "syncWaist": "Taillenumfang in cm"
-    },
-    "submit": "Abschliessen"
   },
   "Levels": {
     "title": "Mein Fortschritt",

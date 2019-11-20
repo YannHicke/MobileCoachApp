@@ -19,8 +19,6 @@ include ':react-native-cardview'
 project(':react-native-cardview').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-cardview/android')
 include ':react-native-exit-app'
 project(':react-native-exit-app').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-exit-app/android')
-include ':react-native-device-info'
-project(':react-native-device-info').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-device-info/android')
 include ':react-native-fabric'
 project(':react-native-fabric').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-fabric/android')
 include ':react-native-spinkit'

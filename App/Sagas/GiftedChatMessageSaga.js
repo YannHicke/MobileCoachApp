@@ -635,17 +635,6 @@ function convertServerMessageToGiftedChatMessages (
           }
           break
         }
-        // Show Triage-Form
-        case 'show-triage': {
-          message.type = 'open-component'
-          message.custom = {
-            ...message.custom,
-            // Component to be opened on Tap
-            component: 'triage',
-            buttonTitle: parsedCommand.content
-          }
-          break
-        }
         // Show new Measurement-Form
         case 'add-measurement': {
           message.type = 'open-component'
@@ -698,20 +687,6 @@ function convertServerMessageToGiftedChatMessages (
             // Component to be opened on Tap
             component: 'pyramid',
             buttonTitle: parsedCommand.content
-          }
-          break
-        }
-        // Show Verification Command
-        case 'show-verification': {
-          message.type = 'open-component'
-          message.custom = {
-            ...message.custom,
-            // Component to be opened on Tap
-            component: 'verification',
-            buttonTitle: I18n.t('Verification.customer'),
-            secondButton: true,
-            secondButtonAction: 'verification-info',
-            secondButtonTitle: I18n.t('Verification.noCustomer')
           }
           break
         }

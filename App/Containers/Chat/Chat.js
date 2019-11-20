@@ -717,25 +717,6 @@ class Chat extends Component {
         this.props.sendIntention(null, 'select-many-modal-closed', null)
         break
       }
-      case 'triage-closed': {
-        log.debug('Triage closed sent')
-        this.props.sendIntention(null, 'triage-closed', null)
-        break
-      }
-      case 'triage-completed': {
-        let relatedMessageId = currentMessage._id.substring(
-          0,
-          currentMessage._id.lastIndexOf('-')
-        )
-        log.debug(
-          'Triage closed and completed sent for message',
-          relatedMessageId
-        )
-        this.props.markMessageAsDisabled(relatedMessageId)
-        this.props.sendIntention(null, 'triage-closed', null)
-        this.props.sendIntention(null, 'triage-completed', null)
-        break
-      }
       case 'new-measurement-closed': {
         log.debug('add-measurement closed sent')
         this.props.sendIntention(null, 'add-measurement-closed', null)
@@ -753,25 +734,6 @@ class Chat extends Component {
         this.props.markMessageAsDisabled(relatedMessageId)
         this.props.sendIntention(null, 'add-measurement-closed', null)
         this.props.sendIntention(null, 'add-measurement-completed', null)
-        break
-      }
-      case 'verification-closed': {
-        log.debug('verification closed sent')
-        this.props.sendIntention(null, 'verification-closed', null)
-        break
-      }
-      case 'verification-completed': {
-        let relatedMessageId = currentMessage._id.substring(
-          0,
-          currentMessage._id.lastIndexOf('-')
-        )
-        log.debug(
-          'verification closed and completed sent for message',
-          relatedMessageId
-        )
-        this.props.markMessageAsDisabled(relatedMessageId)
-        this.props.sendIntention(null, 'verification-closed', null)
-        this.props.sendIntention(null, 'verification-completed', null)
         break
       }
     }
@@ -833,14 +795,6 @@ class Chat extends Component {
         this.props.visitScreen('tour')
         break
       }
-      case 'triage': {
-        let onClose = (completed) => {
-          if (completed) this.notifyServer('triage-completed', currentMessage)
-          else this.notifyServer('triage-closed')
-        }
-        showModal(component, {}, onClose)
-        break
-      }
       case 'new-measurement': {
         let onClose = (completed) => {
           if (completed) {
@@ -870,31 +824,6 @@ class Chat extends Component {
         navigation.navigate('FoodDiary', { initialTab: 1 })
         // remember that user visited that scree for intentions
         this.props.visitScreen('pyramid')
-        break
-      }
-      case 'verification': {
-        if (clickedButton === 0) {
-          let onClose = (completed) => {
-            if (completed) {
-              this.notifyServer('verification-completed', currentMessage)
-            } else this.notifyServer('verification-closed')
-          }
-          showModal(component, {}, onClose)
-        } else {
-          Alert.alert(
-            I18n.t('Verification.noCustomerTitle'),
-            I18n.t('Verification.noCustomerInfo'),
-            [
-              { text: I18n.t('Common.ok'), onPress: () => null },
-              {
-                text: I18n.t('Verification.website'),
-                onPress: () => {
-                  Linking.openURL(I18n.t('Verification.url'))
-                }
-              }
-            ]
-          )
-        }
         break
       }
       case 'select-many-modal': {

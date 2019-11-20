@@ -1,11 +1,4 @@
 jest
-  .mock('react-native-device-info', () => {
-    return {
-      isTablet: jest.fn(() => {
-        return false
-      })
-    }
-  })
   // exclude react-native-fabric from tests (as it would cause errors)
   .mock('react-native-fabric', () => {
     return {

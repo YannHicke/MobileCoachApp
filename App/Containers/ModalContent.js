@@ -14,7 +14,6 @@ import CameraComponent from './../Components/CameraComponent'
 import RecordAudioComponent from './../Components/RecordAudioComponent'
 import SelectManyModal from './../Components/SelectManyModal'
 import FeedbackForm from './Settings/FeedbackForm'
-import Verification from '../Containers/Verification'
 import ServerMessageActions from '../Redux/MessageRedux'
 import GUIActions from '../Redux/GUIRedux'
 import { Metrics } from '../Themes'
@@ -33,7 +32,6 @@ import ServiceChannel from '../Containers/ServiceChannel/ServiceChannel'
 //   'level-view',
 //   'schedule',
 //   'new-measurement',
-//   'triage'
 // ]
 
 class ModalContent extends Component {
@@ -205,13 +203,6 @@ class ModalContent extends Component {
           <RecordAudioComponent
             onClose={this.props.onClose}
             onSubmitMedia={this.props.content.onSubmitMedia}
-          />
-        )
-      case 'verification':
-        return (
-          <Verification
-            onClose={() => this.props.onClose(false)}
-            onSubmit={() => this.props.onClose(true)}
           />
         )
       case 'service-channel':

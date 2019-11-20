@@ -191,9 +191,6 @@ dependencies {
     }
     implementation project(':react-native-cardview')
     implementation project(':react-native-exit-app')
-    implementation (project(':react-native-device-info'), {
-        exclude group: "com.google.android.gms"
-    })
     implementation('com.crashlytics.sdk.android:crashlytics:2.9.9@aar') {
         transitive = true;
     }
