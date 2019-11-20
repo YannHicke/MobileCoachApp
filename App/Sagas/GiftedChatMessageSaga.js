@@ -646,17 +646,6 @@ function convertServerMessageToGiftedChatMessages (
           }
           break
         }
-        // Show Tour Command
-        case 'show-tour': {
-          message.type = 'open-component'
-          message.custom = {
-            ...message.custom,
-            // Component to be opened on Tap
-            component: 'tour',
-            buttonTitle: parsedCommand.content
-          }
-          break
-        }
         // Show Backpack Command
         case 'show-backpack': {
           message.type = 'open-component'

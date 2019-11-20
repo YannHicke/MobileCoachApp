@@ -227,8 +227,6 @@ class ReduxNavigation extends Component {
     }
     // if same screen we do not do anything
     if (nav.routes[nav.index].routeName === screen) return
-    // if only implemented for specific platform yet
-    // if (screen === 'Tour' && Platform.OS === 'android') return this.refs.toast.show('Android Tour View is coming soon 😄', DURATION.LENGTH_LONG)
 
     // if should be shown as modal window
     if (modal) {

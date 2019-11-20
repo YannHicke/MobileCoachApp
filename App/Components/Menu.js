@@ -46,17 +46,6 @@ class Menu extends Component {
         modal: false,
         badge: () => this.getDashboardChatBadge()
       },
-      tour: {
-        name: 'Tour',
-        label: 'Menu.Tour',
-        leftIcon: (
-          <View style={styles.circle}>
-            <Icon name='ios-nutrition' style={styles.actionButtonIcon} />
-          </View>
-        ),
-        subtitle: '',
-        modal: false
-      },
       backpack: {
         name: 'Backpack',
         label: 'Menu.Backpack',
@@ -178,8 +167,6 @@ class Menu extends Component {
     let list = [this.screens.chat]
     // backpackActivated: false,
     // diaryActivated: false,
-    // tourActivated: false
-    if (storyProgress.tourActivated === true) list.push(this.screens.tour)
     if (storyProgress.dashboardChatActivated === true) {
       list.push(this.screens.dashboardChat)
     }
@@ -202,7 +189,6 @@ class Menu extends Component {
     if (screen.name === 'DashboardChat') this.props.visitScreen('dashboardChat')
     if (screen.name === 'Backpack') this.props.visitScreen('backpack')
     if (screen.name === 'FoodDiary') this.props.visitScreen('diary')
-    if (screen.name === 'Tour') this.props.visitScreen('tour')
     this.props.onItemSelected({
       screen: screen.name,
       modal: screen.modal,

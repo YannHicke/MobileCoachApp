@@ -5,7 +5,6 @@ import { Animated, Easing } from 'react-native'
 // import all screens here
 import Chat from '../Containers/Chat/Chat'
 import DashboardChat from '../Containers/Chat/DashboardChat'
-import Tour from '../Containers/Tour/Tour'
 import Backpack from '../Containers/Backpack/Backpack'
 import MediaLibrary from '../Containers/MediaLibrary/MediaLibrary'
 import Recipes from '../Containers/Recipes/Recipes'
@@ -33,10 +32,6 @@ const DrawerNavigation = DrawerNavigator(
       path: '/dashboardChat',
       screen: DashboardChat,
       test: 'test'
-    },
-    Tour: {
-      path: '/tour',
-      screen: Tour
     },
     Backpack: {
       path: '/backpack',

@@ -33,7 +33,6 @@ export const INITIAL_STATE = Immutable({
   backpackActivated: true,
   mediaLibraryActivated: true,
   diaryActivated: false,
-  tourActivated: false,
   recipesActivated: false,
   actionButtonActive: false,
   disabledActivated: false,
@@ -109,11 +108,6 @@ export const handleProgressCommand = (
       return {
         ...state,
         recipesActivated: true
-      }
-    case 'activate-tour':
-      return {
-        ...state,
-        tourActivated: true
       }
     case 'activate-diary':
       return {

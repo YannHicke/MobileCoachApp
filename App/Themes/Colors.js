@@ -160,9 +160,6 @@ const colors = {
     dashboardChat: {
       date: Brand.colors.grey2
     },
-    tour: {
-      background: Brand.colors.background2
-    },
     backpack: {
       infoBackground: button.background,
       infoText: button.text

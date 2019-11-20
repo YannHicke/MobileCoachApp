@@ -761,12 +761,6 @@ class Chat extends Component {
         Linking.openURL(content)
         break
       }
-      case 'tour': {
-        navigation.navigate('Tour')
-        // remember that user visited that scree for intentions
-        this.props.visitScreen('tour')
-        break
-      }
       case 'new-measurement': {
         let onClose = (completed) => {
           if (completed) {

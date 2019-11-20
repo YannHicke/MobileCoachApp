@@ -500,28 +500,6 @@
     "intake": "Einnahme",
     "missedIntake": "Versäumte Einnahme"
   },
-  "Tour": {
-    "header": "Tour Karte",
-    "chat": "Zurück zum Chat",
-    "infoIconHeader": "Der rote Punkt markiert deinen aktuellen Fortschritt in der Tour",
-    "infoText": "Wenn du scrollst, siehst du den weiteren Verlauf der Tour. Durch Tippen auf die Tour gelangst du zurück zum Chat.",
-    "stepsWithNames": {
-      "begin": "",
-      "tour-start": "Tour ist vorbereitet",
-      "diary": "Tagebuch",
-      "pyramid": "Lebensmittelpyramide",
-      "my-pyramid": "Meine Pyramide",
-      "optimal-plate": "Optimaler Teller",
-      "meals": "Mahlzeiten",
-      "shopping": "Einkaufen",
-      "labels": "Kennzeichnung",
-      "preparation": "Zubereitung",
-      "storage": "Aufbewahrung",
-      "balanced-diet": "Ausgewogen und nachhaltig",
-      "add-topics": "Zusätzliche Themen",
-      "tour-end": "Tour Ende"
-    }
-  },
   "Levels": {
     "title": "Mein Fortschritt",
     "bloodPressure": "Blutdruck",
@@ -637,7 +615,6 @@
     "header": "Settings",
     "personalTitle": "Personal",
     "impressumTitle": "Legal Disclosure",
-    "restart": "Restart tour",
     "reallyRestart": "Really restart? All data will be deleted.",
     "yes": "Yes",
     "no": "No",
@@ -681,7 +658,6 @@
   "Menu": {
     "Chat": "Chat with {{coach}}",
     "DashboardChat": "Chat with Supervisor",
-    "Tour": "Tour",
     "Backpack": "Library",
     "MediaLibrary": "Media Library",
     "Diary": "Diary",
