@@ -17,8 +17,7 @@ const { Types, Creators } = createActions({
   setInfoCardAnimationPlayed: ['info'],
   addBackpackInfo: ['backpackInfoMessage'],
   incrementUnreadDashboardMessages: [],
-  clearUnreadDashboardMessages: [],
-  clearUnreadServiceMessages: ['serviceChannel']
+  clearUnreadDashboardMessages: []
 })
 
 export const StoryProgressActions = Types
@@ -42,7 +41,6 @@ export const INITIAL_STATE = Immutable({
   backpackInfo: {},
   mediaLibrary: {},
   unreadDashboardMessages: 0,
-  serviceChannel: []
 })
 
 /* ------------- Reducers ------------- */
@@ -184,30 +182,6 @@ export const handleProgressCommand = (
         ...state,
         disabledActivated: true
       }
-    case 'service-channel-news':
-      const newItem = JSON.parse(parsedCommand.content)
-      newItem.image = media
-      newItem.read = false
-      newItem.timestamp = timestamp
-
-      const index = state.serviceChannel.findIndex(
-        (item) => item.id === newItem.id
-      )
-      if (index >= 0) {
-        const updatedServiceChannel = [...state.serviceChannel]
-        newItem.read = state.serviceChannel[index].read
-        newItem.deleted = state.serviceChannel[index].deleted
-        updatedServiceChannel[index] = newItem
-        return {
-          ...state,
-          serviceChannel: updatedServiceChannel
-        }
-      } else {
-        return {
-          ...state,
-          serviceChannel: [newItem, ...state.serviceChannel]
-        }
-      }
     default:
       return state
   }
@@ -239,13 +213,6 @@ export const incrementUnreadDashboardMessages = (state) => {
   }
 }
 
-export const clearUnreadServiceMessages = (state, { serviceChannel }) => {
-  return {
-    ...state,
-    serviceChannel
-  }
-}
-
 export const clearUnreadDashboardMessages = (state) => {
   return {
     ...state,
@@ -266,6 +233,5 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.SET_VIDEO_CARD_ANIMATION_PLAYED]: setVideoCardAnimationPlayed,
   [Types.SET_INFO_CARD_ANIMATION_PLAYED]: setInfoCardAnimationPlayed,
   [Types.INCREMENT_UNREAD_DASHBOARD_MESSAGES]: incrementUnreadDashboardMessages,
-  [Types.CLEAR_UNREAD_DASHBOARD_MESSAGES]: clearUnreadDashboardMessages,
-  [Types.CLEAR_UNREAD_SERVICE_MESSAGES]: clearUnreadServiceMessages
+  [Types.CLEAR_UNREAD_DASHBOARD_MESSAGES]: clearUnreadDashboardMessages
 })

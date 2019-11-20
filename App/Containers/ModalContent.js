@@ -18,7 +18,6 @@ import ServerMessageActions from '../Redux/MessageRedux'
 import GUIActions from '../Redux/GUIRedux'
 import { Metrics } from '../Themes'
 import I18n from '../I18n/I18n'
-import ServiceChannel from '../Containers/ServiceChannel/ServiceChannel'
 
 // In specific cases, using the real Modal can cause issues.
 // E.g. when using panResponder (see: https://github.com/facebook/react-native/issues/14295)
@@ -203,13 +202,6 @@ class ModalContent extends Component {
           <RecordAudioComponent
             onClose={this.props.onClose}
             onSubmitMedia={this.props.content.onSubmitMedia}
-          />
-        )
-      case 'service-channel':
-        return (
-          <ServiceChannel
-            onClose={() => this.props.onClose(false)}
-            onSubmit={() => this.props.onClose(true)}
           />
         )
       default:

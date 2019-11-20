@@ -37,7 +37,6 @@ import PMTextBubble from '../../Components/CustomMessages/PMTextBubble'
 import BlankMessage from '../../Components/CustomMessages/BlankMessage'
 import BlankBubble from '../../Components/CustomMessages/BlankBubble'
 import InfoMessage from '../../Components/InfoMessage'
-import ServiceChannelButton from '../../Components/ServiceChannelButton'
 // Config
 import AppConfig from '../../Config/AppConfig'
 // Styles & Themes
@@ -537,12 +536,7 @@ class Chat extends Component {
    * The Camera Button is just for Debugging
    */
   renderNavigationbar () {
-    const { hideNavigationBar, coach, serviceChannel } = this.props
-    const serviceChannelUnreadCounter =
-      serviceChannel &&
-      serviceChannel.filter((item) => !item.read && !item.deleted).length
-    const serviceChannelCounter = serviceChannel && serviceChannel.length
-
+    const { hideNavigationBar, coach } = this.props
     if (hideNavigationBar) return null
     else {
       let title = I18n.t('Chat.title', {
@@ -551,30 +545,8 @@ class Chat extends Component {
       return (
         <PMNavigationBar
           title={title}
-          rightButton={this.renderServiceChannelButton(
-            serviceChannelUnreadCounter,
-            serviceChannelCounter
-          )}
           props={this.props}
         />
-      )
-    }
-  }
-
-  renderServiceChannelButton (
-    serviceChannelUnreadCounter,
-    serviceChannelCounter
-  ) {
-    if (serviceChannelCounter > 0) {
-      return (
-        <View style={{ justifyContent: 'center' }}>
-          <ServiceChannelButton
-            badgeCounter={serviceChannelUnreadCounter}
-            onPress={() => {
-              this.showModal('service-channel')
-            }}
-          />
-        </View>
       )
     }
   }
@@ -1011,7 +983,6 @@ const mapStateToProps = (state) => {
     storyProgress: state.storyProgress,
     connectionState: state.serverSyncStatus.connectionState,
     versionInfo: state.serverSyncSettings.versionInfo,
-    serviceChannel: state.storyProgress.serviceChannel
   }
 }
 

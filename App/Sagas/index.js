@@ -38,10 +38,7 @@ import {
 } from './ServerSyncSagas'
 import { updateLanguage } from './SettingsSagas'
 import { watchCommandToExecute } from './FoodDiarySaga'
-import {
-  watchAddDashboardMessages,
-  watchServiceChannelNews
-} from './StoryProgressSagas'
+import { watchAddDashboardMessages } from './StoryProgressSagas'
 
 /* ------------- API ------------- */
 
@@ -81,7 +78,6 @@ export default function * root () {
       DashboardMessageActions.ADD_OR_UPDATE_DASHBOARD_MESSAGE,
       watchAddDashboardMessages
     ),
-    takeEvery(MessageActions.COMMAND_TO_EXECUTE, watchServiceChannelNews),
 
     // GiftedChat (top layer)
     takeEvery(StartupActions.STARTUP, initializeGiftedChat, {

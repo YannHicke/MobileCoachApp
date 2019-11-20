@@ -678,13 +678,6 @@
     "noBackpackData": "Hier werden deine gesammelten Informationen in Form von Infokarten gespeichert. Dein Coach wird hier bald erste Informationen für dich ablegen.",
     "noVideoData": "Hier werden deine gesammelten Videos gespeichert."
   },
-  "ServiceChannel": {
-    "title": "Serious Care News",
-    "newItem": "Neue Serious Care News:",
-    "topDescription": "Haben Sie Fragen oder Anliegen\nzu Ihrer Serious Care Versicherung?",
-    "topButtonLabel": "Kontakt Serious Care",
-    "topButtonURL": "https://www.sc.com/kontakt.html"
-  },
   "Menu": {
     "Chat": "Chat mit {{coach}}",
     "DashboardChat": "Chat mit Betreuer",

@@ -185,11 +185,6 @@ const colors = {
         text: Brand.colors.primary
       }
     },
-    serviceChannel: {
-      title: Brand.colors.primaryText,
-      text: Brand.colors.primaryText,
-      categoryTitle: Brand.colors.grey1
-    },
     diary: {
       calendar: {
         monthTitle: {

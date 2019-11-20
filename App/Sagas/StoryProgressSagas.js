@@ -20,25 +20,3 @@ export function * watchAddDashboardMessages (action) {
     })
   }
 }
-
-/* --- Show notifications for new service channel news --- */
-export function * watchServiceChannelNews (action) {
-  const { command } = action
-  const parsedCommand = Common.parseCommand(command)
-
-  if (parsedCommand.command === 'service-channel-news') {
-    const newItem = JSON.parse(parsedCommand.content)
-    if (!newItem.deleted) {
-      // if (newItem.popup) {
-      //   // TODO: Show reminder
-      // } else {
-      //   // Show notification
-      DropDownHolder.getDropDown().alertWithType(
-        'info',
-        I18n.t('ServiceChannel.newItem'),
-        newItem.category.toUpperCase() + ': ' + newItem.title
-      )
-      // }
-    }
-  }
-}
