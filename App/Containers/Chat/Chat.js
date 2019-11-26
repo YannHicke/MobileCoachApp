@@ -21,7 +21,6 @@ import { ifIphoneX } from 'react-native-iphone-x-helper'
 import SelectOneButton from '../../Components/CustomMessages/SelectOneButton'
 import RepeatingBackgroundImage from '../../Components/RepeatingBackgroundImage'
 import PMMessageText from '../../Components/CustomMessages/PMMessageText'
-import AddMealActionButton from '../AddMealModule/AddMealActionButton'
 import OpenComponent from '../../Components/CustomMessages/OpenComponent'
 import TextOrNumberInputBubble from '../../Components/CustomMessages/TextOrNumberInputBubble'
 import MediaInput from '../../Components/CustomMessages/MediaInput'
@@ -503,15 +502,6 @@ class Chat extends Component {
             progress={parseInt(currentMessage.custom.progress)}
           />
         )
-      case 'speedometer':
-        const { systolic, diastolic, medication } = currentMessage.custom
-        return (
-          <SpeedometerMessage
-            systolic={systolic}
-            diastolic={diastolic}
-            medication={medication}
-          />
-        )
       default:
         return (
           <PMMessageText
@@ -776,22 +766,6 @@ class Chat extends Component {
         this.props.visitScreen('backpack')
         break
       }
-      case 'diary': {
-        navigation.navigate('FoodDiary')
-        // remember that user visited that scree for intentions
-        this.props.visitScreen('diary')
-        break
-      }
-      case 'pyramid': {
-        const navigation = addNavigationHelpers({
-          dispatch: this.props.navigation.dispatch,
-          state: this.props.nav
-        })
-        navigation.navigate('FoodDiary', { initialTab: 1 })
-        // remember that user visited that scree for intentions
-        this.props.visitScreen('pyramid')
-        break
-      }
       case 'select-many-modal': {
         let onClose = (submitted) => {
           // if no answer was selected, notify server to enable serverside reactions
@@ -896,14 +870,6 @@ class Chat extends Component {
     )
   }
 
-  renderActionButton () {
-    if (this.props.storyProgress.actionButtonActive) {
-      return <AddMealActionButton showModal={this.showModal} />
-    } else {
-      return null
-    }
-  }
-
   renderLoadingIndicator () {
     return (
       <EmptyChatIndicator
@@ -960,7 +926,6 @@ class Chat extends Component {
           {Platform.OS === 'android' ? (
             <KeyboardSpacer topSpacing={-60} />
           ) : null}
-          {this.renderActionButton()}
         </RepeatingBackgroundImage>
       </View>
     )

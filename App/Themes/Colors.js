@@ -164,38 +164,6 @@ const colors = {
       infoBackground: button.background,
       infoText: button.text
     },
-    recipes: {
-      background: Brand.colors.background2,
-      text: Brand.colors.text2
-    },
-    foodDiary: {
-      items: {
-        background: Brand.colors.background1,
-        backgroundActive: Brand.colors.background1,
-        text: Brand.colors.grey2,
-        textActive: Brand.colors.background2,
-        border: '#fff'
-      },
-      tabs: {
-        background: Brand.colors.grey3,
-        indicator: Brand.colors.primary,
-        text: Brand.colors.primary
-      }
-    },
-    diary: {
-      calendar: {
-        monthTitle: {
-          background: Brand.colors.grey3,
-          text: Brand.colors.primary
-        },
-        month: {
-          background: '#fff'
-        },
-        dayCircle: {
-          background: Brand.colors.grey3
-        }
-      }
-    }
   }
 }
 

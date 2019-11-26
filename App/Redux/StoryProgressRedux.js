@@ -26,14 +26,11 @@ export default Creators
 /* ------------- Initial State ------------- */
 
 export const INITIAL_STATE = Immutable({
-  foodTutorialActive: true,
   visitedScreens: [],
   registrationTimestamp: moment().valueOf(),
   dashboardChatActivated: true,
   backpackActivated: true,
   mediaLibraryActivated: true,
-  diaryActivated: false,
-  recipesActivated: false,
   actionButtonActive: false,
   disabledActivated: false,
   taskActionButtonActive: false,
@@ -84,11 +81,6 @@ export const handleProgressCommand = (
 ) => {
   const parsedCommand = Common.parseCommand(command)
   switch (parsedCommand.command) {
-    case 'complete-tutorial':
-      return {
-        ...state,
-        foodTutorialActive: false
-      }
     case 'activate-dashboard-chat':
       return {
         ...state,
@@ -103,16 +95,6 @@ export const handleProgressCommand = (
       return {
         ...state,
         mediaLibraryActivated: true
-      }
-    case 'activate-recipes':
-      return {
-        ...state,
-        recipesActivated: true
-      }
-    case 'activate-diary':
-      return {
-        ...state,
-        diaryActivated: true
       }
     case 'tracking-period-started':
       return {

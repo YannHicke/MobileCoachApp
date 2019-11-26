@@ -7,9 +7,7 @@ import Chat from '../Containers/Chat/Chat'
 import DashboardChat from '../Containers/Chat/DashboardChat'
 import Backpack from '../Containers/Backpack/Backpack'
 import MediaLibrary from '../Containers/MediaLibrary/MediaLibrary'
-import Recipes from '../Containers/Recipes/Recipes'
 import Settings from '../Containers/Settings/Settings'
-import FoodDiary from '../Containers/FoodDiary/FoodDiary'
 
 // https://github.com/react-community/react-navigation/issues/1254
 const noTransitionConfig = () => ({
@@ -44,14 +42,6 @@ const DrawerNavigation = DrawerNavigator(
     Settings: {
       path: '/settings',
       screen: Settings
-    },
-    FoodDiary: {
-      path: '/diary',
-      screen: FoodDiary
-    },
-    Recipes: {
-      path: '/recipes',
-      screen: Recipes
     }
   },
   {

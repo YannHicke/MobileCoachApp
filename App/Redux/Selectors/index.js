@@ -41,36 +41,8 @@ export const getGiftedChatMessages = createSelector(
   }
 )
 
-export const getActiveTrackingPeriod = (state) => {
-  return state.fooddiary.trackingPeriods[state.fooddiary.activeTrackingPeriod]
-}
-
-export const getMealsOfDate = (state, date) => {
-  let meals = []
-  state.fooddiary.trackingPeriods.forEach((trackingPeriod) => {
-    meals = [...meals, ...trackingPeriod.meals]
-  })
-  return meals.filter((meal) => {
-    return meal.mealDate === date
-  })
-}
-
 export const getActiveScreen = (state) => {
   return state.nav.routes[state.nav.index].routeName
-}
-
-// returns all days that have either been finally marked complete or incomplete
-export const getNonEditableDays = (state) => {
-  let nonEditableDays = []
-  state.fooddiary.trackingPeriods.forEach((trackingPeriod) => {
-    // concat arrays of non-editable days while removing duplicates (even though there shouldn't be any..)
-    nonEditableDays = [
-      ...nonEditableDays,
-      ...trackingPeriod.trackedDaysComplete,
-      ...trackingPeriod.trackedDaysIncomplete
-    ]
-  })
-  return nonEditableDays
 }
 
 const getCommandMessages = createSelector(

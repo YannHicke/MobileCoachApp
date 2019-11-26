@@ -21,7 +21,6 @@ export default (encryptionKey) => {
 
     // Project-specific reducers
     cachedText: resettable(require('./CachedTextRedux').reducer),
-    fooddiary: resettable(require('./FoodDiaryRedux').reducer),
 
     // Blacklisted reducers (will not be stored persistent, so also reset it not necessary)
     nav: require('./NavigationRedux').reducer,

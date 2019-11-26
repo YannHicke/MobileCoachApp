@@ -38,8 +38,7 @@ class MultiChannelChat extends Component {
   )
 
   _handleIndexChange = (index) => {
-    if (index === 1) this.props.visitScreen('pyramid')
-    this.setState({ index })
+      this.setState({ index })
   }
 
   _renderHeader = (props) => {

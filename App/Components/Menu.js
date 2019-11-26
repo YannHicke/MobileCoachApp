@@ -68,32 +68,9 @@ class Menu extends Component {
         subtitle: '',
         modal: false
       },
-      diary: {
-        name: 'FoodDiary',
-        label: 'Menu.Diary',
-        leftIcon: (
-          <View style={styles.circle}>
-            <Icon name='ios-nutrition' style={styles.actionButtonIcon} />
-          </View>
-        ),
-        subtitle: '',
-        modal: false,
-        navigationOptions: { initialTab: 0 }
-      },
       settings: {
         name: 'Settings',
         label: 'Menu.Settings',
-        leftIcon: (
-          <View style={styles.circle}>
-            <Icon name='ios-nutrition' style={styles.actionButtonIcon} />
-          </View>
-        ),
-        subtitle: '',
-        modal: false
-      },
-      recipes: {
-        name: 'Recipes',
-        label: 'Menu.Recipes',
         leftIcon: (
           <View style={styles.circle}>
             <Icon name='ios-nutrition' style={styles.actionButtonIcon} />
@@ -166,7 +143,6 @@ class Menu extends Component {
     const { storyProgress } = this.props
     let list = [this.screens.chat]
     // backpackActivated: false,
-    // diaryActivated: false,
     if (storyProgress.dashboardChatActivated === true) {
       list.push(this.screens.dashboardChat)
     }
@@ -176,8 +152,6 @@ class Menu extends Component {
     if (storyProgress.mediaLibraryActivated === true) {
       list.push(this.screens.mediaLibrary)
     }
-    if (storyProgress.recipesActivated === true) list.push(this.screens.recipes)
-    if (storyProgress.diaryActivated === true) list.push(this.screens.diary)
     list.push(this.screens.settings)
     // list.push(this.screens.disabled)
     return list
@@ -188,7 +162,6 @@ class Menu extends Component {
     // Store the screen in visited screens
     if (screen.name === 'DashboardChat') this.props.visitScreen('dashboardChat')
     if (screen.name === 'Backpack') this.props.visitScreen('backpack')
-    if (screen.name === 'FoodDiary') this.props.visitScreen('diary')
     this.props.onItemSelected({
       screen: screen.name,
       modal: screen.modal,

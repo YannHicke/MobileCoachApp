@@ -20,7 +20,6 @@ import I18n from '../../I18n/I18n'
 import { Card } from 'react-native-elements'
 import NextButton from '../../Components/NextButton'
 import ServerMessageActions from '../../Redux/MessageRedux'
-import PDFGenerator from '../../Utils/PDFGenerator'
 import AppConfig from '../../Config/AppConfig'
 import FeedbackForm from './FeedbackForm'
 // import SendDebugStateButton from './SendDebugStateButton'
@@ -34,14 +33,6 @@ class Settings extends Component {
     return (
       <PMNavigationBar title={title} props={props} rightButton={<View />} />
     )
-  }
-
-  onExportDiary () {
-    log.info('User started PDFExport')
-    log.action('App', 'DiaryExport')
-    // const { hideLoadingOverlay, showLoadingOverlay } = this.props.screenProps
-    let pdfGenerator = new PDFGenerator()
-    pdfGenerator.createPDF(this.props.foodDiary)
   }
 
   onSendFeedback (name, email, feedback) {
@@ -213,7 +204,6 @@ class Settings extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    foodDiary: state.fooddiary,
     wholeState: state
   }
 }

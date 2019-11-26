@@ -22,9 +22,6 @@ jest
       DocumentDir: () => {}
     }
   })
-  .mock('react-native-file-viewer', () => {
-    return {}
-  })
   .mock('react-native-cached-image', () => {
     return {
       fs: () => {},

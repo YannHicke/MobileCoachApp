@@ -657,28 +657,6 @@ function convertServerMessageToGiftedChatMessages (
           }
           break
         }
-        // Show Backpack Command
-        case 'show-diary': {
-          message.type = 'open-component'
-          message.custom = {
-            ...message.custom,
-            // Component to be opened on Tap
-            component: 'diary',
-            buttonTitle: parsedCommand.content
-          }
-          break
-        }
-        // Show Backpack Command
-        case 'show-pyramid': {
-          message.type = 'open-component'
-          message.custom = {
-            ...message.custom,
-            // Component to be opened on Tap
-            component: 'pyramid',
-            buttonTitle: parsedCommand.content
-          }
-          break
-        }
         // Show Link Command
         case 'show-link': {
           message.type = 'open-component'
@@ -687,17 +665,6 @@ function convertServerMessageToGiftedChatMessages (
             component: 'link',
             buttonTitle: parsedCommand.contentWithoutFirstValue,
             content: parsedCommand.value
-          }
-          break
-        }
-        // Speedometer Command
-        case 'show-speedometer': {
-          message.type = 'speedometer'
-          message.custom = {
-            ...message.custom,
-            medication: parsedCommand.values[0] === '1',
-            systolic: parsedCommand.values[1] * 1,
-            diastolic: parsedCommand.values[2] * 1
           }
           break
         }

@@ -17,7 +17,7 @@ export default {
   // Configuration of the project
   config: {
     dev: {
-      purgeStoreAtStartup: false,
+      purgeStoreAtStartup: true,
       fakeDeviceAlwaysOnlineForOfflineDev: false,
       fakeQRCodeScanWithURL: null,
       allowDebugKeyboard: false,
@@ -43,21 +43,13 @@ export default {
       trackingURL: 'https://---/piwik/piwik.php',
       trackingId: 5,
       loggerLevels: {
-        'AddMealModule/AddMealPreStep': 'INFO',
-        'AddMealModule/AddFoodStep': 'INFO',
-        'AddMealModule/AddMealContainer': 'INFO',
-        'AddMealModule/SelectableFoodList': 'INFO',
-        'AddMealModule/FoodMetrics': 'INFO',
         'Components/CameraComponent': 'INFO',
         'Components/RecordAudioComponent': 'INFO',
         'Components/CustomMessages/MediaInput': 'INFO',
-        'Containers/AddMealModule/FoodMetrics': 'WARN',
-        'FoodDiary/DiaryView': 'INFO',
         'Navigation/ReduxNavigation': 'INFO',
         'Redux/MessageRedux': 'INFO',
         'Redux/ServerSyncRedux': 'INFO',
         'Redux/StoryProgressRedux': 'INFO',
-        'Sagas/FoodDiarySaga': 'INFO',
         'Sagas/GiftedChatMessageSaga': 'INFO',
         'Sagas/MessageSagas': 'INFO',
         'Sagas/ServerSyncSagas': 'INFO',
@@ -101,15 +93,15 @@ export default {
       clientVersion: 1,
       role: 'participant', // Can be: participant, supervisor, observer, or team-manager
       defaultNickname: 'MobileCoach Client User',
-      interventionPattern: 'Intervention x',
-      interventionPassword: 'abc123',
+      interventionPattern: 'Tests',
+      interventionPassword: 'tests',
       androidSenderId: '1234567890',
       localDeepstreamURL: 'ws://127.0.0.1:8082/deepstream',
       localRestURL: 'http://127.0.0.1:8080/PMCP/api/v02/',
       localMediaURL: 'http://127.0.0.1:8080/PMCP/files/',
-      remoteDeepstreamURL: 'wss://---/deepstream',
-      remoteRestURL: 'https://---/PMCP/api/v02/',
-      remoteMediaURL: 'https://---/PMCP/files/',
+      remoteDeepstreamURL: 'wss://workshop-cdhi.ethz.ch/deepstream',
+      remoteRestURL: 'https://workshop-cdhi.ethz.ch/PMCP/api/v02/',
+      remoteMediaURL: 'https://workshop-cdhi.ethz.ch/PMCP/files/',
       // Whether or not user uploads are protected with auth-tokens
       mediaUploadsWithAuthenticiation: true
     },
@@ -119,38 +111,7 @@ export default {
         fr: 'https://www.shareurl-fr.fr',
         it: 'https://www.shareurl-it.it',
         de: 'https://www.shareurl-de.de'
-      },
-      tourSteps: [
-        'begin',
-        'tour-start',
-        'period-1-day-1',
-        'period-1-day-2',
-        'period-1-day-3',
-        'was-ich-esse-1',
-        'lmp-1',
-        'lmp-2',
-        'lmp-3',
-        'lmp-4',
-        'lmp-5',
-        'lmp-6',
-        'lmp-final',
-        'lmp-evaluation',
-        'lmp-advice',
-        'optimal-plate',
-        'meals',
-        'shopping',
-        'labels',
-        'preparation',
-        'storage',
-        'balanced-diet',
-        'period-2-day-1',
-        'period-2-day-2',
-        'period-2-day-3',
-        'was-ich-esse-2',
-        'add-topics',
-        'tour-end'
-      ],
-      tourFile: 'tour/tour.json'
+      }
     }
   }
 }

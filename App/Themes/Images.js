@@ -10,14 +10,8 @@ const images = {
   ],
   coachGeneric: require('../Images/Coaches/coach_generic.png'),
   chatBg: Brand.images.chatBackground,
-  custom: {
-    pyramidBg: require('../Images/Coaches/coach_generic.png'),
-    pyramidFood: require('../Images/Coaches/coach_generic.png')
-  },
   welcomeQr: require('./../Images/Onboarding/welcomeQR.png'),
   icons: {
-    bloodPressure: require('../Images/Coaches/coach_generic.png'),
-    bloodPressureColored: require('../Images/Coaches/coach_generic.png'),
     robot: require('../Images/Coaches/coach_generic.png')
   },
   misc: {

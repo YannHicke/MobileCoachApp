@@ -37,7 +37,6 @@ import {
   watchOutgoingMessageChannel
 } from './ServerSyncSagas'
 import { updateLanguage } from './SettingsSagas'
-import { watchCommandToExecute } from './FoodDiarySaga'
 import { watchAddDashboardMessages } from './StoryProgressSagas'
 
 /* ------------- API ------------- */
@@ -69,9 +68,6 @@ export default function * root () {
   yield all([
     // Settings Saga
     takeEvery(SettingsActions.CHANGE_LANGUAGE, updateLanguage),
-
-    // FoodDiary Saga
-    fork(watchCommandToExecute),
 
     // StoryProgress Saga
     takeEvery(

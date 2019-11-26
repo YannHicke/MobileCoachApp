@@ -77,28 +77,7 @@ export const createSchedule = function (currentTasks, currentTime, idCounter) {
 const getNotificationStrings = function (task) {
   let title = I18n.t('Reminder.title')
   let message = task.title
-
   const { id } = task
-  // 'regular' level-tasks
-  if (id.split && id.split('.').length === 2) {
-    const levelId = id.split('.')[0]
-    const taskId = id.split('.')[1]
-    // id: 1 === knowledge task (shouldn't have reminders anyway!)
-    if (taskId !== '1') {
-      title = I18n.t(`Levels.tasks.${levelId}.${taskId}.title`, {
-        defaultValue: I18n.t('Reminder.title')
-      })
-      message = I18n.t(`Levels.tasks.${levelId}.${taskId}.reminder`, {
-        defaultValue: task.title
-      })
-    }
-  }
-  if (task.type === TASK_TYPES.MEDICATION) {
-    title = `${task.title} (${task.dosis.value} ${I18n.t(
-      `Me.addMedication.dosage.${task.dosis.unit}`
-    )})`
-    message = I18n.t('Tasks.medicationPushText')
-  }
 
   return { title, message }
 }

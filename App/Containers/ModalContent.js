@@ -4,8 +4,6 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import * as Animatable from 'react-native-animatable'
 
-import AddMealContainer from './AddMealModule/AddMealContainer'
-import FoodDiary from './FoodDiary/FoodDiary'
 import WebRichContent from '../Components/WebRichContent'
 import WebViewContent from '../Components/WebViewContent'
 import Lightbox from '../Components/Lightbox'
@@ -126,15 +124,6 @@ class ModalContent extends Component {
             {this.props.content.url}
           </WebViewContent>
         )
-      case 'add-meal':
-        return (
-          <AddMealContainer
-            mealType={this.props.content.mealType}
-            onPress={this.props.onClose}
-          />
-        )
-      case 'food-diary':
-        return <FoodDiary onPress={this.props.onClose} />
       case 'image-lightbox':
         return (
           <Lightbox
