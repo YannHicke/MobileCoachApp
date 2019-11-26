@@ -361,12 +361,12 @@ const styles = StyleSheet.create({
   title: {
     textAlign: 'center',
     fontSize: normalize(14),
-    color: Colors.modules.backpack.infoText
+    color: Colors.modules.infoCardsLibrary.infoText
   },
   subtitle: {
     marginTop: 10,
     textAlign: 'center',
     fontSize: normalize(12),
-    color: Colors.modules.backpack.infoText
+    color: Colors.modules.infoCardsLibrary.infoText
   }
 })

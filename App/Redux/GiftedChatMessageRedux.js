@@ -127,8 +127,8 @@ export const giftedChatUpdateMessages = (state, { serverMessage }) => {
 }
 
 // Definition Disabled / Deactivated:
-// For answer formats (e.g. select-one) both states are eqaul, but for other Components (e.g. Backpack, WebViews, etc.) the following applies:
-// Deactivated: User may still press Button and open Modals (e.g. Backpack), but no intentions will be triggered.
+// For answer formats (e.g. select-one) both states are eqaul, but for other Components (e.g. InfoCardsLibrary, WebViews, etc.) the following applies:
+// Deactivated: User may still press Button and open Modals (e.g. InfoCardsLibrary), but no intentions will be triggered.
 // Disabled: Button will be disabled completely
 export const deactivatePreviousMessages = (state, { timestamp }) => {
   for (let i = 0; i < state.messageIds.length; i++) {

@@ -15,7 +15,7 @@ const { Types, Creators } = createActions({
   resetVisitedScreens: [],
   setVideoCardAnimationPlayed: ['video'],
   setInfoCardAnimationPlayed: ['info'],
-  addBackpackInfo: ['backpackInfoMessage'],
+  addInfoCardsLibraryInfo: ['infoCardsLibraryInfoMessage'],
   incrementUnreadDashboardMessages: [],
   clearUnreadDashboardMessages: []
 })
@@ -29,12 +29,12 @@ export const INITIAL_STATE = Immutable({
   visitedScreens: [],
   registrationTimestamp: moment().valueOf(),
   dashboardChatActivated: true,
-  backpackActivated: true,
+  infoCardsLibraryActivated: true,
   mediaLibraryActivated: true,
   actionButtonActive: false,
   disabledActivated: false,
   taskActionButtonActive: false,
-  backpackInfo: {},
+  infoCardsLibraryInfo: {},
   mediaLibrary: {},
   unreadDashboardMessages: 0,
 })
@@ -42,13 +42,13 @@ export const INITIAL_STATE = Immutable({
 /* ------------- Reducers ------------- */
 
 export const setInfoCardAnimationPlayed = (state, { info }) => {
-  let newLibrary = R.clone(state.backpackInfo)
+  let newLibrary = R.clone(state.infoCardsLibraryInfo)
   // Only set if video really exists! (Prevent this reducer from accidentally adding new Videocard!)
   if (newLibrary[info]) {
     newLibrary[info].appearAnimationPlayed = true
     return {
       ...state,
-      backpackInfo: newLibrary
+      infoCardsLibraryInfo: newLibrary
     }
   } else {
     log.warn(
@@ -86,10 +86,10 @@ export const handleProgressCommand = (
         ...state,
         dashboardChatActivated: true
       }
-    case 'activate-backpack':
+    case 'activate-infoCardsLibrary':
       return {
         ...state,
-        backpackActivated: true
+        infoCardsLibraryActivated: true
       }
     case 'activate-medialibrary':
       return {
@@ -111,22 +111,22 @@ export const handleProgressCommand = (
         ...state,
         taskActionButtonActive: true
       }
-    case 'show-backpack-info':
+    case 'show-infoCardsLibrary-info':
       const info = Common.formatInfoMessage(content, timestamp)
-      let newBackpackInfo = R.clone(state.backpackInfo)
+      let newInfoCardsLibraryInfo = R.clone(state.infoCardsLibraryInfo)
       const id = parsedCommand.value
       // Add new info under the given ID
-      if (id) newBackpackInfo[id] = info
+      if (id) newInfoCardsLibraryInfo[id] = info
       else {
         log.warn(
-          'Could not add BackpackInfo to Redux-Store, because no ID was defined. (Info-Title: ' +
+          'Could not add InfoCardsLibraryInfo to Redux-Store, because no ID was defined. (Info-Title: ' +
             info.title +
             ')'
         )
       }
       return {
         ...state,
-        backpackInfo: newBackpackInfo
+        infoCardsLibraryInfo: newInfoCardsLibraryInfo
       }
     case 'add-video':
       const uri = content.uri

@@ -479,7 +479,7 @@ class Chat extends Component {
 
   getAppropriateIcon (type, field) {
     switch (type) {
-      case 'show-backpack-info':
+      case 'show-infoCardsLibrary-info':
         return ['info-with-circle', 'entypo', 'left'][field]
       case 'show-link':
         return ['external-link', 'feather', 'right'][field]
@@ -633,26 +633,26 @@ class Chat extends Component {
         }
         break
       }
-      case 'backpack-info-opened': {
+      case 'infoCardsLibrary-info-opened': {
         if (currentMessage.custom.content) {
           let intention = 'info-' + currentMessage.custom.content + '-opened'
           this.props.sendIntention(null, intention, null)
         } else {
           log.warn(
-            'Cannot send backpack info-opened-notification for message: ' +
+            'Cannot send infoCardsLibrary info-opened-notification for message: ' +
               currentMessage.text +
               ', because "content" is undefined.'
           )
         }
         break
       }
-      case 'backpack-info-closed': {
+      case 'infoCardsLibrary-info-closed': {
         if (currentMessage.custom.content) {
           let intention = 'info-' + currentMessage.custom.content + '-closed'
           this.props.sendIntention(null, intention, null)
         } else {
           log.warn(
-            'Cannot send backpack info-closed-notification for message: ' +
+            'Cannot send infoCardsLibrary info-closed-notification for message: ' +
               currentMessage.text +
               ', because "content" is undefined.'
           )
@@ -721,15 +721,15 @@ class Chat extends Component {
         showModal(component, { htmlMarkup: content }, onClose)
         break
       }
-      case 'backpack-info': {
+      case 'infoCardsLibrary-info': {
         let onClose = () => {
-          this.notifyServer('backpack-info-closed', currentMessage)
+          this.notifyServer('infoCardsLibrary-info-closed', currentMessage)
         }
-        this.notifyServer('backpack-info-opened', currentMessage)
+        this.notifyServer('infoCardsLibrary-info-opened', currentMessage)
         showModal(
           'rich-text',
           {
-            htmlMarkup: this.props.storyProgress.backpackInfo[content].content
+            htmlMarkup: this.props.storyProgress.infoCardsLibraryInfo[content].content
           },
           onClose
         )
@@ -760,10 +760,10 @@ class Chat extends Component {
         showModal(component, {}, onClose)
         break
       }
-      case 'backpack': {
-        navigation.navigate('Backpack')
+      case 'infoCardsLibrary': {
+        navigation.navigate('InfoCardsLibrary')
         // remember that user visited that scree for intentions
-        this.props.visitScreen('backpack')
+        this.props.visitScreen('infoCardsLibrary')
         break
       }
       case 'select-many-modal': {

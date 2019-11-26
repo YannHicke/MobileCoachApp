@@ -12,10 +12,10 @@ import * as Animatable from 'react-native-animatable'
 import _ from 'lodash'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 
-import ServerMessageActions from './../../Redux/MessageRedux'
+import ServerMessageActions from '../../Redux/MessageRedux'
 import StoryProgressRedux from '../../Redux/StoryProgressRedux'
 import { connect } from 'react-redux'
-import { Colors, Metrics } from '../../Themes/'
+import { Colors, Metrics } from '../../Themes'
 import PMNavigationBar from '../../Components/Navbar'
 import I18n from '../../I18n/I18n'
 import Common, { normalize } from '../../Utils/Common'
@@ -86,7 +86,7 @@ class Item extends Component {
   }
 }
 
-class Backpack extends Component {
+class InfoCardsLibrary extends Component {
   constructor (props) {
     super(props)
     // Remember all info-cards which need to be marked as shown
@@ -95,12 +95,12 @@ class Backpack extends Component {
   }
 
   mount () {
-    const { backpackInfo } = this.props
+    const { infoCardsLibraryInfo } = this.props
     // Mark all info-cards as shown in Component-Will-Unmount to prevent unnessecary re-renders (props will change!).
     // (These updates are only from next mount-cycle!)
     let delay = INITIAL_DELAY
-    Object.keys(backpackInfo).map((key, index) => {
-      const infoItem = backpackInfo[key]
+    Object.keys(infoCardsLibraryInfo).map((key, index) => {
+      const infoItem = infoCardsLibraryInfo[key]
       let itemDelay = delay
       let appearAnimation
       // increment delay for every unplayed animation
@@ -158,20 +158,20 @@ class Backpack extends Component {
   }
 
   renderNavigationbar (props) {
-    let title = I18n.t('MediaLibrary.header')
+    let title = I18n.t('InfoCardsLibrary.header')
     return (
       <PMNavigationBar title={title} props={props} rightButton={<View />} />
     )
   }
 
   render () {
-    const { backpackInfo, hideTitle } = this.props
+    const { infoCardsLibrary, hideTitle } = this.props
 
     return (
       <View style={styles.container}>
         {hideTitle ? null : this.renderNavigationbar(this.props)}
         <View style={styles.content}>
-          {_.isEmpty(backpackInfo)
+          {_.isEmpty(infoCardsLibrary)
             ? this.renderEmptyNotice()
             : this.renderContent()}
         </View>
@@ -233,7 +233,7 @@ class Backpack extends Component {
             textAlign: 'center'
           }}
         >
-          {I18n.t('MediaLibrary.noDataTitle').toUpperCase()}
+          {I18n.t('InfoCardsLibrary.noDataTitle').toUpperCase()}
         </Text>
         <Text
           style={{
@@ -242,7 +242,7 @@ class Backpack extends Component {
             textAlign: 'center'
           }}
         >
-          {I18n.t('MediaLibrary.noBackpackData')}
+          {I18n.t('InfoCardsLibrary.noInfoCardsData')}
         </Text>
       </View>
     )
@@ -251,7 +251,7 @@ class Backpack extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    backpackInfo: state.storyProgress.backpackInfo,
+    infoCardsLibrary: state.storyProgress.infoCardsLibraryInfo,
     currentScreen: state.guistate.currentScreen
   }
 }
@@ -266,7 +266,7 @@ const mapStateToDispatch = (dispatch) => ({
 export default connect(
   mapStateToProps,
   mapStateToDispatch
-)(Backpack)
+)(InfoCardsLibrary)
 
 const styles = StyleSheet.create({
   container: {
@@ -305,7 +305,7 @@ const styles = StyleSheet.create({
   },
   cardContainer: {
     // iOS shadow
-    backgroundColor: Colors.modules.backpack.infoBackground,
+    backgroundColor: Colors.modules.infoCardsLibrary.infoBackground,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -320,12 +320,12 @@ const styles = StyleSheet.create({
   title: {
     textAlign: 'center',
     fontSize: normalize(14),
-    color: Colors.modules.backpack.infoText
+    color: Colors.modules.infoCardsLibrary.infoText
   },
   subtitle: {
     marginTop: 10,
     textAlign: 'center',
     fontSize: normalize(12),
-    color: Colors.modules.backpack.infoText
+    color: Colors.modules.infoCardsLibrary.infoText
   }
 })

@@ -46,9 +46,9 @@ class Menu extends Component {
         modal: false,
         badge: () => this.getDashboardChatBadge()
       },
-      backpack: {
-        name: 'Backpack',
-        label: 'Menu.Backpack',
+      infoCardsLibrary: {
+        name: 'InfoCardsLibrary',
+        label: 'Menu.InfoCardsLibrary',
         leftIcon: (
           <View style={styles.circle}>
             <Icon name='ios-nutrition' style={styles.actionButtonIcon} />
@@ -142,12 +142,12 @@ class Menu extends Component {
   getList () {
     const { storyProgress } = this.props
     let list = [this.screens.chat]
-    // backpackActivated: false,
+    // infoCardsLibraryActivated: false,
     if (storyProgress.dashboardChatActivated === true) {
       list.push(this.screens.dashboardChat)
     }
-    if (storyProgress.backpackActivated === true) {
-      list.push(this.screens.backpack)
+    if (storyProgress.infoCardsLibraryActivated === true) {
+      list.push(this.screens.infoCardsLibrary)
     }
     if (storyProgress.mediaLibraryActivated === true) {
       list.push(this.screens.mediaLibrary)
@@ -161,7 +161,7 @@ class Menu extends Component {
     log.action('GUI', 'ScreenChange', screen.name)
     // Store the screen in visited screens
     if (screen.name === 'DashboardChat') this.props.visitScreen('dashboardChat')
-    if (screen.name === 'Backpack') this.props.visitScreen('backpack')
+    if (screen.name === 'InfoCardsLibrary') this.props.visitScreen('infoCardsLibrary')
     this.props.onItemSelected({
       screen: screen.name,
       modal: screen.modal,

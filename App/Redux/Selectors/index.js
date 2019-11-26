@@ -61,13 +61,13 @@ const getCommandMessages = createSelector(
   }
 )
 
-// show-backpack-info
-export const getBackpackInformation = createSelector(
+// show-infoCardsLibrary-info
+export const getInfoCardsLibraryInformation = createSelector(
   [getCommandMessages],
   (commandMessages) => {
     let information = []
     let filtered = commandMessages.filter(
-      (message) => message['server-message'] === 'show-backpack-info'
+      (message) => message['server-message'] === 'show-infoCardsLibrary-info'
     )
     filtered.forEach((serverMessage) => {
       let content = serverMessage.content // .replace(/\\n/g, '')

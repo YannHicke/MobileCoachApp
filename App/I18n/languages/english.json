@@ -76,23 +76,20 @@
       "copytext4": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum."
     }
   },
-  "Backpack": {
-    "header": "Library"
+  "InfoCardsLibrary": {
+    "header": "Infocards",
+    "noDataTitle": "No entries yet",
+    "noInfoCardsData": "Here your collected information is stored in the form of info cards. Your coach will soon file the first information for you here."
   },
   "MediaLibrary": {
-    "tabs": {
-      "infocards": "Info cards",
-      "video": "Videos"
-    },
     "header": "Media Library",
     "noDataTitle": "No entries yet",
-    "noBackpackData": "Here your collected information is stored in the form of info cards. Your coach will soon file the first information for you here.",
     "noVideoData": "This is where your collected videos are stored."
   },
   "Menu": {
     "Chat": "Chat with {{coach}}",
     "DashboardChat": "Chat with Supervisor",
-    "Backpack": "Library",
+    "InfoCardsLibrary": "Infocards",
     "MediaLibrary": "Media Library",
     "Settings": "Settings",
     "Disabled": "Disabled"

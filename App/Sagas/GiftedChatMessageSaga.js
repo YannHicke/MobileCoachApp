@@ -576,7 +576,7 @@ function convertServerMessageToGiftedChatMessages (
 
       switch (parsedCommand.command) {
         // Show Info Command
-        case 'show-backpack-info':
+        case 'show-infoCardsLibrary-info':
         case 'show-info': {
           message.type = 'open-component'
           // Default title
@@ -598,11 +598,11 @@ function convertServerMessageToGiftedChatMessages (
             infoId: parsedCommand.value,
             buttonTitle: buttonTitle
           }
-          // Only remember backpack infos
-          if (parsedCommand.command === 'show-backpack-info') {
+          // Only remember infoCardsLibrary infos
+          if (parsedCommand.command === 'show-infoCardsLibrary-info') {
             if (parsedCommand.value === null) {
               log.warn(
-                'Received show-backpack-info without id! Command: ' +
+                'Received show-infoCardsLibrary-info without id! Command: ' +
                   serverMessage['server-message']
               )
             } else {
@@ -615,7 +615,7 @@ function convertServerMessageToGiftedChatMessages (
                 serverMessage['client-id'] + '-' + subId++
               messages.push(addInfoCommandMessage)
 
-              message.custom.component = 'backpack-info'
+              message.custom.component = 'infoCardsLibrary-info'
               message.custom.content = parsedCommand.value
             }
           }
@@ -646,13 +646,13 @@ function convertServerMessageToGiftedChatMessages (
           }
           break
         }
-        // Show Backpack Command
-        case 'show-backpack': {
+        // Show InfoCardsLibrary Command
+        case 'show-infoCardsLibrary': {
           message.type = 'open-component'
           message.custom = {
             ...message.custom,
             // Component to be opened on Tap
-            component: 'backpack',
+            component: 'infoCardsLibrary',
             buttonTitle: parsedCommand.content
           }
           break
