@@ -91,6 +91,7 @@
     "DashboardChat": "Chat with Supervisor",
     "InfoCardsLibrary": "Infocards",
     "MediaLibrary": "Media Library",
+    "Faq": "Frequently Asked Questions",
     "Settings": "Settings",
     "Disabled": "Disabled"
   },
@@ -141,5 +142,27 @@
     "pressToRecord": "Press to record",
     "pressToStop": "Press to stop",
     "Information": "Information"
+  },
+  "Faq": {
+    "header": "FAQ",
+    "faqTitle": "Frequently asked questions to XY",
+    "questions": {
+      "1": {
+        "title": "Test question 1?",
+        "answer": "Test answer 1"
+      },
+      "2": {
+        "title": "Test question 2?",
+        "answer": "Test answer 2"
+      },
+      "3": {
+        "title": "Test question 3?",
+        "answer": "Test answer 3"
+      },
+      "4": {
+        "title": "Test question 4?",
+        "answer": "Test answer 4"
+      }
+    }
   }
 }

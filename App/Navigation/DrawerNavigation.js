@@ -8,6 +8,7 @@ import DashboardChat from '../Containers/Chat/DashboardChat'
 import InfoCardsLibrary from '../Containers/InfoCardsLibrary/InfoCardsLibrary'
 import MediaLibrary from '../Containers/MediaLibrary/MediaLibrary'
 import Settings from '../Containers/Settings/Settings'
+import Faq from '../Containers/FAQ/Faq'
 
 // https://github.com/react-community/react-navigation/issues/1254
 const noTransitionConfig = () => ({
@@ -38,6 +39,10 @@ const DrawerNavigation = DrawerNavigator(
     MediaLibrary: {
       path: '/medialibrary',
       screen: MediaLibrary
+    },
+    Faq: {
+      path: '/faq',
+      screen: Faq
     },
     Settings: {
       path: '/settings',

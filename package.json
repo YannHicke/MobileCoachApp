@@ -46,6 +46,7 @@
     "react-native-button": "2.2.0",
     "react-native-cached-image": "https://github.com/afiller/react-native-cached-image.git#master",
     "react-native-camera": "1.12.0",
+    "react-native-collapsible": "^1.5.1",
     "react-native-config": "0.11.7",
     "react-native-datepicker": "1.7.2",
     "react-native-dialog": "5.1.0",

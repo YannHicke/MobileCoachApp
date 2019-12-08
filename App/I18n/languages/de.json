@@ -90,6 +90,7 @@
     "Chat": "Chat mit {{coach}}",
     "DashboardChat": "Chat mit Betreuer",
     "InfoCardsLibrary": "Infokarten",
+    "Faq": "Häufige Fragen",
     "MediaLibrary": "Mediathek",
     "Settings": "Einstellungen",
     "Disabled": "Disabled"
@@ -141,5 +142,27 @@
     "pressToRecord": "Drücke um zu starten",
     "pressToStop": "Drücke um zu stoppen",
     "Information": "Information"
+  },
+  "Faq": {
+    "header": "Häufige Fragen",
+    "faqTitle": "Häufige Fragen an XY",
+    "questions": {
+      "1": {
+        "title": "Test Frage 1?",
+        "answer": "Test Antwort 1"
+      },
+      "2": {
+        "title": "Test Frage 2?",
+        "answer": "Test Antwort 2"
+      },
+      "3": {
+        "title": "Test Frage 3?",
+        "answer": "Test Antwort 3"
+      },
+      "4": {
+        "title": "Test Frage 4?",
+        "answer": "Test Antwort 4"
+      }
+    }
   }
 }

@@ -68,6 +68,17 @@ class Menu extends Component {
         subtitle: '',
         modal: false
       },
+      faq: {
+        name: 'Faq',
+        label: 'Menu.Faq',
+        leftIcon: (
+          <View style={styles.circle}>
+            <Icon name='ios-nutrition' style={styles.actionButtonIcon} />
+          </View>
+        ),
+        subtitle: '',
+        modal: false
+      },
       settings: {
         name: 'Settings',
         label: 'Menu.Settings',
@@ -152,6 +163,7 @@ class Menu extends Component {
     if (storyProgress.mediaLibraryActivated === true) {
       list.push(this.screens.mediaLibrary)
     }
+    list.push(this.screens.faq)
     list.push(this.screens.settings)
     // list.push(this.screens.disabled)
     return list
