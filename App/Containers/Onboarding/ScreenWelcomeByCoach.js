@@ -126,7 +126,7 @@ const Styles = StyleSheet.create({
     alignItems: 'center'
   },
   coachImage: {
-    width: Metrics.screenWidth * (2 / 3) - 20,
-    height: Metrics.screenWidth * (2 / 3) - 20
+    width: Metrics.screenWidth * (2 / 3) - 4,
+    height: Metrics.screenWidth * (2 / 3) - 4
   }
 })

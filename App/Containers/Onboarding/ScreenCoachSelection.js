@@ -94,8 +94,8 @@ const Styles = StyleSheet.create({
     alignItems: 'center'
   },
   coachImage: {
-    width: Metrics.screenWidth / 3 - 20,
-    height: Metrics.screenWidth / 3 - 20
+    width: Metrics.screenWidth / 3 - 4,
+    height: Metrics.screenWidth / 3 - 4
   },
   coachText: {
     color: Colors.onboarding.text,

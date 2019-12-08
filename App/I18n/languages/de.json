@@ -1,11 +1,11 @@
 {
   "Onboarding": {
-    "title": "MobileCoach Client",
-    "subtitle": "...",
+    "title": "MC Mobile App",
+    "subtitle": "Herzlich willkommen!",
     "next": "Weiter",
     "chooseLanguage": "Bitte wähle deine bevorzugte Sprache",
-    "chooseCoach": "Suche dir einen Guide aus",
-    "welcome": "Herzlich willkommen bei ...",
+    "chooseCoach": "Suche dir einen Coach aus",
+    "welcome": "Tolle Wahl!\n\nIch freue mich, dich als dein digitaler Coach begleiten zu dürfen.",
     "start": "Los geht's",
     "checkQrUsageSubtitle": "Hast du einen OR-Code, wie oben abgebildet erhalten, um diese App zu nutzen?",
     "qrAvailable": "Ja, ich habe einen QR-Code",
