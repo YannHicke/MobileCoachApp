@@ -119,16 +119,8 @@ class MediaLibrary extends Component {
     this.videoArray = []
   }
 
-  componentWillReceiveProps (newProps) {
-    if (newProps.currentScreen !== this.props.currentScreen) {
-      if (newProps.currentScreen === 'Library') {
-        // Navigating to library screen
-        this.mount()
-      } else {
-        // Navigating away from library screen
-        this.unmount()
-      }
-    }
+  componentWillUnmount() {
+    this.unmount();
   }
 
   mount () {
@@ -138,35 +130,37 @@ class MediaLibrary extends Component {
     let delay = INITIAL_DELAY
 
     Object.keys(mediaLibrary).map((key, index) => {
-      const videoItem = mediaLibrary[key]
+      if(!_.some(this.videoArray, videoItem)) {
+        const videoItem = mediaLibrary[key]
 
-      let mediaInfo = MediaInfo.default
-      if (MediaInfo[videoItem.medianame]) {
-        mediaInfo = MediaInfo[videoItem.medianame]
-      }
+        let mediaInfo = MediaInfo.default
+        if (MediaInfo[videoItem.medianame]) {
+          mediaInfo = MediaInfo[videoItem.medianame]
+        }
 
-      let itemDelay = delay
-      let appearAnimation
-      // increment delay for every unplayed animation
-      if (
-        videoItem.appearAnimationPlayed === undefined ||
-        !videoItem.appearAnimationPlayed
-      ) {
-        delay = delay + DELAY
-        appearAnimation = 'bounceIn'
-        // also remember this video card so it's animation can be marked as played
-        this.videosToBeMarkedAsShown.push(key)
-      }
+        let itemDelay = delay
+        let appearAnimation
+        // increment delay for every unplayed animation
+        if (
+          videoItem.appearAnimationPlayed === undefined ||
+          !videoItem.appearAnimationPlayed
+        ) {
+          delay = delay + DELAY
+          appearAnimation = 'bounceIn'
+          // also remember this video card so it's animation can be marked as played
+          this.videosToBeMarkedAsShown.push(key)
+        }
 
-      const video = {
-        ...videoItem,
-        thumbnail: mediaInfo.thumbnail,
-        title: mediaInfo.title,
-        key,
-        appearAnimation,
-        delay: itemDelay
+        const video = {
+          ...videoItem,
+          thumbnail: mediaInfo.thumbnail,
+          title: mediaInfo.title,
+          key,
+          appearAnimation,
+          delay: itemDelay
+        }
+        this.videoArray.push(video)
       }
-      this.videoArray.push(video)
     })
 
     // Sort Array from timestamp
@@ -217,6 +211,7 @@ class MediaLibrary extends Component {
 
   renderContent () {
     const { showModal } = this.props.screenProps
+    this.mount();
     return (
       <ScrollView style={styles.grid} indicatorStyle='white'>
         <SuperGridSectionList
@@ -233,7 +228,8 @@ class MediaLibrary extends Component {
             return (
               <Item
                 thumbnail={item.thumbnail}
-                title={item.mediaTitle}
+                title={item.title}
+                subtitle={item.subtitle}
                 appearAnimation={item.appearAnimation}
                 delay={item.delay}
                 onPress={() => {
