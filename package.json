@@ -77,6 +77,7 @@
     "react-native-progress": "3.5.0",
     "react-native-push-notification": "https://github.com/afiller/react-native-push-notification.git#foreground-fix",
     "react-native-reanimated": "1.0.0-alpha.12",
+    "react-native-rename": "^2.4.1",
     "react-native-render-html": "4.1.1",
     "react-native-restart": "0.0.10",
     "react-native-sensitive-info": "^5.5.0",
