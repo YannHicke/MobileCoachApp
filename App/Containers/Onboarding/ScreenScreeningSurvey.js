@@ -2,13 +2,13 @@ import React, { Component } from 'react'
 import {
   StyleSheet,
   View,
-  WebView,
   Platform,
   ActivityIndicator
 } from 'react-native'
 import { ifIphoneX } from 'react-native-iphone-x-helper'
 import { connect } from 'react-redux'
 import KeyboardSpacer from 'react-native-keyboard-spacer'
+import { WebView } from 'react-native-webview';
 
 import AppConfig from '../../Config/AppConfig'
 import { Colors } from '../../Themes/'
@@ -52,6 +52,7 @@ class ScreenScreeningSurvey extends Component {
           style={Styles.webView}
           scalesPageToFit={!(Platform.OS === 'ios')}
           javaScriptEnabled
+          useWebKit={true}
           domStorageEnabled={false}
           onMessage={this.onEvent.bind(this)}
           // onLoadEnd={this.onLoadEnd}

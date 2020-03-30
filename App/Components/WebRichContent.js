@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import { View, WebView, StyleSheet, Platform } from 'react-native'
+import { View, StyleSheet, Platform } from 'react-native'
 import KeyboardSpacer from 'react-native-keyboard-spacer'
+import { WebView } from 'react-native-webview';
 import { connect } from 'react-redux'
 
 import I18n from '../I18n/I18n'
@@ -135,6 +136,7 @@ class WebRichContent extends Component {
                   baseUrl: this.baseUrl
                 }}
                 originWhitelist={['file://']}
+                useWebKit={true}
                 style={styles.webView}
                 scalesPageToFit={!(Platform.OS === 'ios')}
                 javaScriptEnabled
@@ -154,6 +156,7 @@ class WebRichContent extends Component {
                 baseUrl: this.baseUrl
               }}
               originWhitelist={['file://']}
+              useWebKit={true}
               style={styles.webView}
               scalesPageToFit={!(Platform.OS === 'ios')}
               javaScriptEnabled
