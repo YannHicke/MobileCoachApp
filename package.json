@@ -92,6 +92,7 @@
     "react-native-true-sight": "https://github.com/afiller/react-native-true-sight.git#master",
     "react-native-vector-icons": "6.3.0",
     "react-native-video": "https://github.com/afiller/react-native-video.git#ios-10-lower-fix",
+    "react-native-webview": "^9.0.1",
     "react-navigation": "1.0.0-beta.27",
     "react-redux": "5.1.1",
     "redux": "3.7.2",

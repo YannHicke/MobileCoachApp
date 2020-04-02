@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import {
   View,
-  WebView,
   StyleSheet,
   Platform,
   ActivityIndicator
 } from 'react-native'
 import { connect } from 'react-redux'
 import KeyboardSpacer from 'react-native-keyboard-spacer'
+import { WebView } from 'react-native-webview';
 
 import I18n from '../I18n/I18n'
 import HeaderBar from './HeaderBar'
@@ -45,6 +45,7 @@ class WebViewContent extends Component {
             style={styles.webView}
             scalesPageToFit={!(Platform.OS === 'ios')}
             javaScriptEnabled
+            useWebKit={true}
             domStorageEnabled={false}
             onMessage={this.onEvent.bind(this)}
             // onLoadEnd={this.onLoadEnd}
