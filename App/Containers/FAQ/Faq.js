@@ -85,12 +85,14 @@ class Faq extends Component {
               {
                 questions.map((question, i) =>
                   <CollapsibleView key={i} title={(i + 1) + '. ' + I18n.t(question.title)}>
-                    <ParsedText
-                      style={styles.paragraph}
-                      parse={[{type: 'email', style: styles.url, onPress: (mail) => openURL('mailto:' + mail)}]}
-                    >
-                      {I18n.t(question.answer)}
-                    </ParsedText>
+                    <View style={{ flex: 1 }}>
+                      <ParsedText
+                        style={styles.paragraph}
+                        parse={[{type: 'email', style: styles.url, onPress: (mail) => openURL('mailto:' + mail)}]}
+                      >
+                        {I18n.t(question.answer)}
+                      </ParsedText>
+                    </View>
                   </CollapsibleView>
                 )
               }
