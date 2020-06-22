@@ -491,33 +491,19 @@ class Chat extends Component {
   }
 
   renderMessageText (props) {
-    const { currentMessage } = props
-    switch (currentMessage.type) {
-      case 'level-progress':
-        const taskId = currentMessage.custom.task
-        const levelId = currentMessage.custom.level
-        return (
-          <TaskProgressMessage
-            taskId={taskId}
-            levelId={levelId}
-            progress={parseInt(currentMessage.custom.progress)}
-          />
-        )
-      default:
-        return (
-          <PMMessageText
-            {...props}
-            linkStyle={TextBubbleStyle.textStyle.link}
-            currentMessage={props.currentMessage}
-            onPress={() =>
-              this.openComponent({
-                custom: { component: 'progress' }
-              })
-            }
-          />
-        )
-    }
-  }
+    return (
+      <PMMessageText
+        {...props}
+        linkStyle={TextBubbleStyle.textStyle.link}
+        currentMessage={props.currentMessage}
+        onPress={() =>
+          this.openComponent({
+            custom: { component: 'progress' }
+          })
+        }
+      />
+    )
+}
 
   renderTicks (currentMessage) {
     return <Ticks currentMessage={currentMessage} />

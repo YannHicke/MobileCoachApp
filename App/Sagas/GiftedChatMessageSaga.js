@@ -657,17 +657,6 @@ function convertServerMessageToGiftedChatMessages (
           }
           break
         }
-        // Show level-progress Command
-        case 'show-level-progress': {
-          message.type = 'level-progress'
-          message.custom = {
-            ...message.custom,
-            level: parsedCommand.values[0],
-            task: parsedCommand.values[1],
-            progress: parsedCommand.values[2]
-          }
-          break
-        }
         // Other command not related to chat
         default:
           message.type = 'hidden-command'
