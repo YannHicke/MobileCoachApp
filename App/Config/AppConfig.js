@@ -40,7 +40,6 @@ export default {
       // Levels: 'DEBUG', 'INFO', 'WARN', 'ERROR', 'OFF', 'CRASHLYTICS'
       defaultLevel: 'DEBUG', // 'OFF' to deactivate the WHOLE logger (also exceptions)
       trackActivities: false,
-      trackingURL: 'https://---/piwik/piwik.php',
       trackingId: 5,
       loggerLevels: {
         'Components/CameraComponent': 'INFO',

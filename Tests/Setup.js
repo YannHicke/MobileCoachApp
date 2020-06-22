@@ -76,13 +76,6 @@ jest
       IsAndroid: () => false
     }
   })
-  .mock('react-native-piwik', () => {
-    return {
-      Piwik: {
-        initTracker: () => {}
-      }
-    }
-  })
   .mock('@expo/react-native-action-sheet', () => {})
   .mock('react-native-i18n', () => {
     const english = require('../App/I18n/languages/english.json')

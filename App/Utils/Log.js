@@ -2,7 +2,6 @@ import { Platform } from 'react-native'
 import AppConfig from '../Config/AppConfig'
 import { Crashlytics } from 'react-native-fabric'
 import 'babel-polyfill'
-import Piwik from 'react-native-piwik'
 
 const LEVEL_TEXTS = {
   DEBUG: 'DEBUG',
@@ -65,7 +64,6 @@ export default class Log {
     if (AppConfig.config.logger.trackActivities) {
       trackActivities = true
       const id = AppConfig.config.logger.trackingId
-      Piwik.initTracker(AppConfig.config.logger.trackingURL, id)
       this.info('Activated activity tracker with id', id)
     }
   }
@@ -112,11 +110,6 @@ export default class Log {
           '[TRACKING] Problem: ' + action + ' ' + label + ' ' + value
         )
       }
-      try {
-        Piwik.trackEvent('Problem', action + '', label + '', value * 1)
-      } catch (e) {
-        // Don't do anything
-      }
     }
   }
   // Example: GUIAction, ToggleMenu, false[, 0]
@@ -144,11 +137,6 @@ export default class Log {
             ' ' +
             value
         )
-      }
-      try {
-        Piwik.trackEvent(category, action + '', label + '', value * 1)
-      } catch (e) {
-        // Don't do anything
       }
     }
   }

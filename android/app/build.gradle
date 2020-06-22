@@ -200,7 +200,6 @@ dependencies {
     implementation project(':react-native-fs')
     implementation project(':react-native-image-resizer')
     implementation project(':react-native-i18n')
-    implementation project(':react-native-piwik')
     implementation project(':react-native-push-notification')
     implementation project(':react-native-sound')
     implementation project(':react-native-gesture-handler')
