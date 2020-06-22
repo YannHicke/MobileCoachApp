@@ -28,7 +28,6 @@ import I18n from '../I18n/I18n'
 //   'fullscreen-video',
 //   'level-view',
 //   'schedule',
-//   'new-measurement',
 // ]
 
 class ModalContent extends Component {

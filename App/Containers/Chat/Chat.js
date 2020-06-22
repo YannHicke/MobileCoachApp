@@ -720,25 +720,6 @@ class Chat extends Component {
         this.props.sendIntention(null, 'select-many-modal-closed', null)
         break
       }
-      case 'new-measurement-closed': {
-        log.debug('add-measurement closed sent')
-        this.props.sendIntention(null, 'add-measurement-closed', null)
-        break
-      }
-      case 'new-measurement-completed': {
-        let relatedMessageId = currentMessage._id.substring(
-          0,
-          currentMessage._id.lastIndexOf('-')
-        )
-        log.debug(
-          'new-measurement closed and completed sent for message',
-          relatedMessageId
-        )
-        this.props.markMessageAsDisabled(relatedMessageId)
-        this.props.sendIntention(null, 'add-measurement-closed', null)
-        this.props.sendIntention(null, 'add-measurement-completed', null)
-        break
-      }
     }
   }
 
@@ -790,15 +771,6 @@ class Chat extends Component {
       }
       case 'link': {
         Linking.openURL(content)
-        break
-      }
-      case 'new-measurement': {
-        let onClose = (completed) => {
-          if (completed) {
-            this.notifyServer('new-measurement-completed', currentMessage)
-          } else this.notifyServer('new-measurement-closed')
-        }
-        showModal(component, {}, onClose)
         break
       }
       case 'infoCardsLibrary': {

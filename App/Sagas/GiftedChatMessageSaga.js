@@ -635,17 +635,6 @@ function convertServerMessageToGiftedChatMessages (
           }
           break
         }
-        // Show new Measurement-Form
-        case 'add-measurement': {
-          message.type = 'open-component'
-          message.custom = {
-            ...message.custom,
-            // Component to be opened on Tap
-            component: 'new-measurement',
-            buttonTitle: parsedCommand.content
-          }
-          break
-        }
         // Show InfoCardsLibrary Command
         case 'show-infoCardsLibrary': {
           message.type = 'open-component'

@@ -38,12 +38,7 @@
     "synchronized": "You're connected to the coach."
   },
   "Reminder": {
-    "title": "Reminder",
-    "done": "Done",
-    "ignore": "Ignore",
-    "any": "Today",
-    "memories": "Reminder ({{for}} by {{of}})",
-    "measurementRecord": "Record measurement"
+    "title": "Reminder"
   },
   "Settings": {
     "language": "Language",
