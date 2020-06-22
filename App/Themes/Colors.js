@@ -48,7 +48,8 @@ const colors = {
     background: Brand.colors.backgroundMain,
     buttonBackground: Brand.colors.backgroundMain,
     text: Brand.colors.textMain,
-    textDisabled: Brand.colors.grey2
+    textDisabled: Brand.colors.grey2,
+    actionButton: Brand.colors.primary
   },
   tabBar: {
     text: Brand.colors.textMain,

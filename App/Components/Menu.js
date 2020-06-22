@@ -28,8 +28,8 @@ class Menu extends Component {
         name: 'Chat',
         label: 'Menu.Chat',
         leftIcon: (
-          <View style={styles.circle}>
-            <Icon name='ios-nutrition' style={styles.actionButtonIcon} />
+          <View>
+            <Icon name='ios-chatbubbles' type='ionicon' style={styles.actionButtonIcon} />
           </View>
         ),
         modal: false,
@@ -39,8 +39,8 @@ class Menu extends Component {
         name: 'DashboardChat',
         label: 'Menu.DashboardChat',
         leftIcon: (
-          <View style={styles.circle}>
-            <Icon name='ios-nutrition' style={styles.actionButtonIcon} />
+          <View>
+            <Icon name='ios-chatbubbles' type='ionicon' style={styles.actionButtonIcon} />
           </View>
         ),
         modal: false,
@@ -50,8 +50,8 @@ class Menu extends Component {
         name: 'InfoCardsLibrary',
         label: 'Menu.InfoCardsLibrary',
         leftIcon: (
-          <View style={styles.circle}>
-            <Icon name='ios-nutrition' style={styles.actionButtonIcon} />
+          <View>
+            <Icon name='ios-information-circle' style={styles.actionButtonIcon} />
           </View>
         ),
         subtitle: '',
@@ -61,8 +61,8 @@ class Menu extends Component {
         name: 'MediaLibrary',
         label: 'Menu.MediaLibrary',
         leftIcon: (
-          <View style={styles.circle}>
-            <Icon name='ios-nutrition' style={styles.actionButtonIcon} />
+          <View>
+            <Icon name='ios-play-circle' style={styles.actionButtonIcon} />
           </View>
         ),
         subtitle: '',
@@ -72,8 +72,8 @@ class Menu extends Component {
         name: 'Faq',
         label: 'Menu.Faq',
         leftIcon: (
-          <View style={styles.circle}>
-            <Icon name='ios-nutrition' style={styles.actionButtonIcon} />
+          <View>
+            <Icon name='ios-help-circle' type='ionicon' style={styles.actionButtonIcon} />
           </View>
         ),
         subtitle: '',
@@ -83,8 +83,8 @@ class Menu extends Component {
         name: 'Settings',
         label: 'Menu.Settings',
         leftIcon: (
-          <View style={styles.circle}>
-            <Icon name='ios-nutrition' style={styles.actionButtonIcon} />
+          <View>
+            <Icon name='ios-settings' type='ionicon' style={styles.actionButtonIcon} />
           </View>
         ),
         subtitle: '',
@@ -99,7 +99,7 @@ class Menu extends Component {
         name: 'Disabled',
         label: 'Menu.Disabled',
         leftIcon: (
-          <View style={styles.circle}>
+          <View>
             <Icon name='ios-nutrition' style={styles.actionButtonIcon} />
           </View>
         ),
@@ -197,7 +197,7 @@ class Menu extends Component {
         <ListItem
           // roundAvatar
           onPress={() => this.onPressHandler(l)}
-          // leftIcon={l.leftIcon}
+          leftIcon={l.leftIcon}
           key={i}
           title={this.getTitle(l.label)}
           // subtitle={l.subtitle}
@@ -318,18 +318,8 @@ const styles = StyleSheet.create({
   actionButtonIcon: {
     fontSize: 20,
     height: 22,
-    color: '#bbb'
+    color: Colors.sideMenu.actionButton,
   },
-  circle: {
-    width: 35,
-    height: 35,
-    borderWidth: 1,
-    borderRadius: 35 / 2,
-    borderColor: '#bbb',
-    backgroundColor: 'transparent',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 15
-  },
+
   image: { flex: 1, alignSelf: 'stretch', resizeMode: 'contain' }
 })
