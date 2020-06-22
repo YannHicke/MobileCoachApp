@@ -3,6 +3,7 @@ import { View, Alert, Linking, Platform } from 'react-native'
 import { GiftedChat, LoadEarlier, Message, Day } from 'react-native-gifted-chat'
 import PMNavigationBar from '../../Components/Navbar'
 import { addNavigationHelpers } from 'react-navigation'
+import ConnectionStateButton from '../../Components/ConnectionStateButton'
 // import {Icon} from 'react-native-elements'
 // Actions
 import ServerMessageActions from './../../Redux/MessageRedux'
@@ -526,7 +527,7 @@ class Chat extends Component {
    * The Camera Button is just for Debugging
    */
   renderNavigationbar () {
-    const { hideNavigationBar, coach } = this.props
+    const { hideNavigationBar, coach, connectionState } = this.props
     if (hideNavigationBar) return null
     else {
       let title = I18n.t('Chat.title', {
@@ -536,6 +537,16 @@ class Chat extends Component {
         <PMNavigationBar
           title={title}
           props={this.props}
+          rightButton={
+          <View>
+            <ConnectionStateButton
+              onPress={() => {
+                this.showConnectionStateMessage(connectionState)
+              }}
+              connectionState={connectionState}
+            />
+          </View>
+          }
         />
       )
     }
@@ -590,6 +601,36 @@ class Chat extends Component {
         break
       }
     }
+  }
+
+  showConnectionStateMessage = (connectionState) => {
+    log.action('GUI', 'ConnectionCheck', connectionState)
+
+    let alertMessage = null
+    switch (connectionState) {
+      case ConnectionStates.INITIALIZING:
+      case ConnectionStates.INITIALIZED:
+        alertMessage = I18n.t('ConnectionStates.initialized')
+        break
+      case ConnectionStates.CONNECTING:
+      case ConnectionStates.RECONNECTING:
+        alertMessage = I18n.t('ConnectionStates.connecting')
+        break
+      case ConnectionStates.CONNECTED:
+      case ConnectionStates.SYNCHRONIZATION:
+        alertMessage = I18n.t('ConnectionStates.connected')
+        break
+      case ConnectionStates.SYNCHRONIZED:
+        alertMessage = I18n.t('ConnectionStates.synchronized')
+        break
+    }
+
+    Alert.alert(
+      I18n.t('ConnectionStates.connectionToCoach'),
+      alertMessage,
+      [{ text: I18n.t('Common.ok'), onPress: () => true }],
+      { cancelable: false }
+    )
   }
 
   notifyServer (component, currentMessage = null) {
