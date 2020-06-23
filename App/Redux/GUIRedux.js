@@ -30,10 +30,6 @@ const { Types, Creators } = createActions({
   enableSidemenuGestures: [],
   addUnreadMessage: ['count'],
   clearUnreadMessages: [],
-  toggleTaskList: [],
-  hideTaskList: [],
-  clearOpenReminders: [],
-  setOpenReminders: ['openReminders']
 })
 
 export const GUIActions = Types
@@ -47,12 +43,9 @@ export const INITIAL_STATE = Immutable({
   showLoadEarlier: false,
   sideMenuOpen: false,
   sideMenuGestures: false,
-  actionButtonUnlocked: false,
   unreadMessages: 0,
   // TODO: initial screen shoud not be hardcoded
   currentScreen: 'LoadingContainer',
-  taskListVisible: false,
-  openReminders: []
 })
 
 /* ------------- Reducers ------------- */
@@ -70,22 +63,6 @@ export const hideCoachIsTyping = (state) => {
   return {
     ...state,
     coachIsTyping: false
-  }
-}
-
-// hide Coach is Typing message
-export const clearOpenReminders = (state) => {
-  return {
-    ...state,
-    openReminders: []
-  }
-}
-
-// show Reminder Screen
-export const setOpenReminders = (state, { openReminders }) => {
-  return {
-    ...state,
-    openReminders
   }
 }
 
@@ -175,20 +152,6 @@ export const setCurrentScreen = (state, { routeName }) => {
   }
 }
 
-export const toggleTaskList = (state) => {
-  return {
-    ...state,
-    taskListVisible: !state.taskListVisible
-  }
-}
-
-export const hideTaskList = (state) => {
-  return {
-    ...state,
-    taskListVisible: false
-  }
-}
-
 /* ------------- Hookup Reducers To Actions ------------- */
 
 export const reducer = createReducer(INITIAL_STATE, {
@@ -202,10 +165,6 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.DISABLE_SIDEMENU_GESTURES]: disableSidemenuGestures,
   [Types.ENABLE_SIDEMENU_GESTURES]: enableSidemenuGestures,
   [Types.CLEAR_UNREAD_MESSAGES]: clearUnreadMessages,
-  [Types.TOGGLE_TASK_LIST]: toggleTaskList,
-  [Types.HIDE_TASK_LIST]: hideTaskList,
-  [Types.SET_OPEN_REMINDERS]: setOpenReminders,
-  [Types.CLEAR_OPEN_REMINDERS]: clearOpenReminders,
   [Types.ADD_UNREAD_MESSAGE]: addUnreadMessage,
   [NavigationActions.navigate]: setCurrentScreen
 })

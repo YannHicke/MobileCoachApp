@@ -11,7 +11,6 @@ import { isIphoneX } from 'react-native-iphone-x-helper'
 import TabBarIcon from './TabBarIcon'
 import { Colors } from '../Themes'
 import CoachButton from './CoachButton'
-import { TaskActionContent } from '../Containers/TaskModule/TaskActionButton'
 
 const majorVersion = parseInt(Platform.Version, 10)
 const isIos = Platform.OS === 'ios'
@@ -196,7 +195,6 @@ class TabBarBottom extends PureComponent {
             right: 0
           }}
         >
-          <TaskActionContent showModal={this.props.screenProps.showModal} />
         </View>
         {this.renderBump()}
         <Animated.View style={[styles.wrapper, animateStyle]}>

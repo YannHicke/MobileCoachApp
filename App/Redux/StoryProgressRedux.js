@@ -31,9 +31,7 @@ export const INITIAL_STATE = Immutable({
   dashboardChatActivated: true,
   infoCardsLibraryActivated: true,
   mediaLibraryActivated: true,
-  actionButtonActive: false,
   disabledActivated: false,
-  taskActionButtonActive: false,
   infoCardsLibraryInfo: {},
   mediaLibrary: {},
   unreadDashboardMessages: 0,
@@ -95,21 +93,6 @@ export const handleProgressCommand = (
       return {
         ...state,
         mediaLibraryActivated: true
-      }
-    case 'tracking-period-started':
-      return {
-        ...state,
-        actionButtonActive: true
-      }
-    case 'tracking-period-complete':
-      return {
-        ...state,
-        actionButtonActive: false
-      }
-    case 'activate-action-button':
-      return {
-        ...state,
-        taskActionButtonActive: true
       }
     case 'show-infoCardsLibrary-info':
       const info = Common.formatInfoMessage(content, timestamp)
