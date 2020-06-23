@@ -200,7 +200,6 @@ class MediaLibrary extends Component {
       <View style={styles.container}>
         {hideTitle ? null : this.renderNavigationbar(this.props)}
         <View style={styles.content}>
-          {/* <Image source={require('../../Images/Backpack/backpack.jpg')} style={styles.backgroundImage} /> */}
           {_.isEmpty(mediaLibrary)
             ? this.renderEmptyNotice()
             : this.renderContent()}

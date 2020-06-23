@@ -13,9 +13,6 @@ const images = {
   welcomeQr: require('./../Images/Onboarding/welcomeQR.png'),
   icons: {
     robot: require('../Images/Coaches/coach_generic.png')
-  },
-  misc: {
-    panelToggle: require('./../Images/Misc/paneltoggle.png')
   }
 }
 
