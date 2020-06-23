@@ -21,7 +21,6 @@ import {
   sendIntention,
   sendVariableValue,
   sendVariableValues,
-  sendChangedSyncedSetting,
   disableMessage,
   executeCommand,
   watchMessageUpdateChannel
@@ -88,7 +87,6 @@ export default function * root () {
     takeEvery(MessageActions.SEND_INTENTION, sendIntention),
     takeEvery(MessageActions.SEND_VARIABLE_VALUE, sendVariableValue),
     takeEvery(MessageActions.SEND_VARIABLE_VALUES, sendVariableValues),
-    takeEvery(SettingsActions.CHANGE_SYNCED_SETTING, sendChangedSyncedSetting),
     takeEvery(MessageActions.DISABLE_MESSAGE, disableMessage),
     takeEvery(MessageActions.EXECUTE_COMMAND, executeCommand),
 

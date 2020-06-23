@@ -191,24 +191,6 @@ export function * sendVariableValues (action) {
   })
 }
 
-/* --- Send changed synced setting as variable value or intention --- */
-export function * sendChangedSyncedSetting (action) {
-  log.info('Send changed synced setting...')
-
-  const { variable, value, asIntention } = action
-
-  if (asIntention) {
-    yield put({
-      type: MessageActions.SEND_INTENTION,
-      text: null,
-      intention: 'settings',
-      content: JSON.stringify({ variable, value })
-    })
-  } else {
-    yield put({ type: MessageActions.SEND_VARIABLE_VALUE, variable, value })
-  }
-}
-
 /* --- Disable message --- */
 export function * disableMessage (action) {
   log.info('Disabling message...')
