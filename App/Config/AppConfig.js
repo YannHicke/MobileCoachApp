@@ -56,11 +56,11 @@ export default {
       }
     },
     typingIndicator: {
-      fastMode: true,
+      fastMode: false,
       // typing speed (words/minute)
-      coachTypingSpeed: 200,
+      coachTypingSpeed: 400,
       // max delay for larger msgs (in ms)
-      maxTypingDelay: 15000,
+      maxTypingDelay: 5000,
       // delay before active elements (in ms)
       interactiveElementDelay: 300
     },
@@ -105,12 +105,5 @@ export default {
       mediaUploadsWithAuthenticiation: true
     },
     supportedLanguages: ['de', 'en'],
-    mobileCoachClient: {
-      shareUrl: {
-        fr: 'https://www.shareurl-fr.fr',
-        it: 'https://www.shareurl-it.it',
-        de: 'https://www.shareurl-de.de'
-      }
-    }
   }
 }
