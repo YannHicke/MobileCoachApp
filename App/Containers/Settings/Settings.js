@@ -18,11 +18,8 @@ import { Colors } from '../../Themes/'
 import PMNavigationBar from '../../Components/Navbar'
 import I18n from '../../I18n/I18n'
 import { Card } from 'react-native-elements'
-import NextButton from '../../Components/NextButton'
 import ServerMessageActions from '../../Redux/MessageRedux'
-import AppConfig from '../../Config/AppConfig'
 import FeedbackForm from './FeedbackForm'
-// import SendDebugStateButton from './SendDebugStateButton'
 
 import Log from '../../Utils/Log'
 const log = new Log('Containers/Settings/Settings')
@@ -64,39 +61,6 @@ class Settings extends Component {
       <View style={styles.container}>
         {this.renderNavigationbar(this.props)}
         <ScrollView style={styles.content} indicatorStyle='white'>
-          <Card
-            title={I18n.t('Settings.personalTitle')}
-            titleStyle={styles.cardTitle}
-          >
-            <View key={1}>
-              <NextButton
-                styleButton={styles.button}
-                styleText={styles.buttonText}
-                text={I18n.t('Settings.recommend')}
-                onPress={() => {
-                  const shareUrl =
-                    AppConfig.config[AppConfig.project].shareUrl[
-                      I18n.locale.toLowerCase()
-                    ]
-                  // TODO: Update URL
-                  Share.share(
-                    {
-                      message: I18n.t('Settings.share.text') + ': ' + shareUrl,
-                      url: shareUrl,
-                      title: I18n.t('Settings.share.title')
-                    },
-                    {
-                      // Android only:
-                      dialogTitle: I18n.t('Settings.share.title'),
-                      // iOS only:
-                      excludedActivityTypes: []
-                    }
-                  )
-                }}
-              />
-            </View>
-          </Card>
-
           <Card
             title={I18n.t('Settings.impressumTitle')}
             titleStyle={styles.cardTitle}
@@ -183,18 +147,6 @@ class Settings extends Component {
               }}
             />
           </Card>
-          {/* <Card
-            title={'SEND DEBUG STATE'}
-            titleStyle={styles.cardTitle}
-            containerStyle={{marginBottom: 20}}
-            >
-            <SendDebugStateButton>
-              <View>
-                <Text>Send Debug state</Text>
-              </View>
-            </SendDebugStateButton>
-          </Card>
-          */}
         </ScrollView>
         {Platform.OS === 'ios' ? <KeyboardSpacer /> : null}
       </View>
