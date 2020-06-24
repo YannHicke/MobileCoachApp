@@ -86,7 +86,6 @@
     "react-native-spinkit": "1.4.1",
     "react-native-splash-screen": "3.2.0",
     "react-native-super-grid": "2.4.4",
-    "react-native-tab-view": "2.2.0",
     "react-native-true-sight": "https://github.com/afiller/react-native-true-sight.git#master",
     "react-native-vector-icons": "6.3.0",
     "react-native-video": "https://github.com/afiller/react-native-video.git#ios-10-lower-fix",
