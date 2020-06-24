@@ -41,16 +41,12 @@
     "title": "Erinnerung"
   },
   "Settings": {
-    "language": "Sprache",
-    "title": "Sprache wählen",
     "header": "Einstellungen",
     "personalTitle": "Persönlich",
     "impressumTitle": "Impressum",
     "yes": "Ja, sicher",
     "no": "Nein",
     "recommend": "App weiter empfehlen",
-    "impressumText": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
-    "debugReport": "Fehlerhaften Stand melden",
     "feedbackForm": {
       "title": "Feedback",
       "emailInput": "Email Adresse für Rückfragen (optional)",
@@ -91,11 +87,6 @@
     "Disabled": "Disabled"
   },
   "Common": {
-    "yes": "ja",
-    "no": "nein",
-    "noData": "keine Daten",
-    "optional": "optional",
-    "proceed": "Fortfahren",
     "date": "Datum",
     "time": "Uhrzeit",
     "information": "Information",
@@ -105,23 +96,16 @@
     "answerExpired": "Antwort nicht mehr möglich",
     "backButton": "Zweimal drücken zum Beenden der App",
     "back": "Zurück",
-    "error": "Fehler",
     "confirm": "Bestätigen",
     "invalid": "Ungültiger Wert",
-    "incomplete": "Angaben unvollständig",
-    "incompleteNotice": "Bitte ergänze die fehlenden Werte.",
     "validationError": "Bitte trage einen gültigen Wert ein.",
     "expiryNotice": "Diese Frage kann nicht mehr beantwortet werden.",
     "ok": "OK",
     "close": "Schliessen",
     "chooseAtLeastOne": "Bitte wähle die passende Anzahl an Antworten.",
     "chooseDate": "Datum auswählen",
-    "today": "heute",
-    "all": "alle",
-    "none": "keine",
     "save": "Übernehmen",
     "thanks": "Vielen Dank!",
-    "yesterday": "gestern",
     "and": "und",
     "datePicker": {
       "outOfRange": "Bitte wähle einen Zeitpunkt zwischen"
