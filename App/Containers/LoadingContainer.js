@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { View } from 'react-native'
 import { connect } from 'react-redux'
-// import FullScreenImage from '../Components/FullScreenImage'
 import { NavigationActions } from 'react-navigation'
 
 // import LoadingOverlay from '../Components/LoadingOverlay'
@@ -71,12 +70,6 @@ class LoadingContainer extends Component {
   render () {
     return (
       <View style={styles.fullScreenStyle}>
-        {/*
-        <LoadingOverlay />
-        <FullScreenImage source={{uri: 'LaunchImage'}}>
-           <Loading text="Loading" transparent={true} textColor="black"/>
-        </FullScreenImage>
-        */}
       </View>
     )
   }

@@ -309,11 +309,6 @@ class Chat extends Component {
   }
 
   renderCustomView (props) {
-    // const {currentMessage} = props
-    // return (
-    //   <CustomView message={currentMessage} />
-    // )
-    // // )
     const { currentMessage } = props
     switch (currentMessage.type) {
       case 'intention':
