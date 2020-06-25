@@ -5,8 +5,6 @@ import android.app.Application;
 import com.facebook.react.ReactApplication;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.reactnativecommunity.netinfo.NetInfoPackage;
-import com.lugg.ReactNativeConfig.ReactNativeConfigPackage;
-import com.avishayil.rnrestart.ReactNativeRestartPackage;
 import fr.bamlab.rnimageresizer.ImageResizerPackage;
 import com.zmxv.RNSound.RNSoundPackage;
 import com.rnim.rn.audio.ReactNativeAudioPackage;
@@ -20,8 +18,6 @@ import fr.bamlab.rnimageresizer.ImageResizerPackage;
 import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.zmxv.RNSound.RNSoundPackage;
-import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
-import com.swmansion.reanimated.ReanimatedPackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.brentvatne.react.ReactVideoPackage;
@@ -49,8 +45,6 @@ public class MainApplication extends Application implements ReactApplication {
           new MainReactPackage(),
             new AsyncStoragePackage(),
             new NetInfoPackage(),
-            new ReactNativeConfigPackage(),
-            new ReactNativeRestartPackage(),
             new ReactNativeAudioPackage(),
             new RNCameraPackage(),
             new RNExitAppPackage(),
@@ -62,8 +56,6 @@ public class MainApplication extends Application implements ReactApplication {
             new RNI18nPackage(),
             new ReactNativePushNotificationPackage(),
             new RNSoundPackage(),
-            new RNGestureHandlerPackage(),
-            new ReanimatedPackage(),
             new SplashScreenReactPackage(),
             new VectorIconsPackage(),
             new ReactVideoPackage(),
