@@ -55,6 +55,7 @@
     "react-native-fabric": "0.5.2",
     "react-native-formik": "1.7.5",
     "react-native-fs": "2.13.3",
+    "react-native-gesture-handler": "^1.0.16",
     "react-native-gifted-chat": "https://github.com/afiller/react-native-gifted-chat.git#fork-0-3-0-for-app",
     "react-native-global-props": "1.1.5",
     "react-native-html-parser": "0.0.5",
