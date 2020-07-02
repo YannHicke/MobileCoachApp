@@ -96,30 +96,28 @@
     "url": "0.11.0"
   },
   "devDependencies": {
-    "babel-core": "7.0.0-bridge.0",
+    "@babel/core": "^7.4.5",
+    "@babel/runtime": "^7.4.5",
     "babel-eslint": "7.1.1",
-    "babel-jest": "24.1.0",
+    "babel-jest": "^24.8.0",
     "babel-preset-es2015": "6.24.0",
     "babel-preset-react-native": "4.0.0",
     "enzyme": "3.9.0",
     "husky": "2.4.0",
-    "jest": "^24.9.0",
+    "jest": "^24.8.0",
     "jest-cli": "^25.0.0",
     "jetifier": "^1.6.4",
-    "metro-react-native-babel-preset": "0.52.0",
+    "metro-react-native-babel-preset": "^0.54.1",
     "mockery": "2.1.0",
     "prettierx": "0.6.0",
     "react-addons-test-utils": "15.6.2",
     "react-dom": "16.8.3",
-    "react-test-renderer": "16.6.3",
+    "react-test-renderer": "16.8.3",
     "snazzy": "7.1.1",
     "standard": "10.0.3"
   },
   "husky": {
-    "hooks": {
-      "pre-commit": "npm run git-hook-commit",
-      "pre-push": "npm run git-hook-push"
-    }
+    "hooks": {}
   },
   "rnpm": {
     "assets": [
