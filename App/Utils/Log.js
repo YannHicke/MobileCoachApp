@@ -1,6 +1,5 @@
 import { Platform } from 'react-native'
 import AppConfig from '../Config/AppConfig'
-import { Crashlytics } from 'react-native-fabric'
 import 'babel-polyfill'
 
 const LEVEL_TEXTS = {
@@ -166,6 +165,7 @@ export default class Log {
     }
 
     // Care for CRASHLYTICS logging
+    /*
     if (defaultLevel === LEVEL_VALUES.CRASHLYTICS) {
       if (!userIdSharedWithCrashlytics && Log.userId !== undefined) {
         userIdSharedWithCrashlytics = true
@@ -199,7 +199,7 @@ export default class Log {
       }
 
       return
-    }
+    } */
 
     // Care for regular logging levels
     if (level >= compareLevel) {

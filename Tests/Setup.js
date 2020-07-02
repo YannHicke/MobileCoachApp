@@ -1,22 +1,4 @@
 jest
-  // exclude react-native-fabric from tests (as it would cause errors)
-  .mock('react-native-fabric', () => {
-    return {
-      Crashlytics: {
-        crash: () => {},
-        log: () => {}
-      },
-      Answers: {
-        logCustom: () => {},
-        logContentView: () => {}
-      }
-    }
-  })
-  // .mock('react-native-fetch-blob', () => {
-  //   return {
-  //     DocumentDir: () => {}
-  //   }
-  // })
   .mock('rn-fetch-blob', () => {
     return {
       DocumentDir: () => {}
@@ -60,7 +42,6 @@ jest
     }
   })
   .mock('react-native-camera', () => {})
-  .mock('react-native-audio', () => {})
   // .mock('moment/locale/en-gb', () => {})
   // .mock('moment/locale/de', () => {})
   // .mock('moment/locale/fr', () => {})
@@ -76,7 +57,6 @@ jest
       IsAndroid: () => false
     }
   })
-  .mock('@expo/react-native-action-sheet', () => {})
   .mock('react-native-i18n', () => {
     const english = require('../App/I18n/languages/english.json')
     const keys = require('ramda')

@@ -4,14 +4,12 @@ import android.app.Application;
 
 import com.facebook.react.ReactApplication;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
+import com.github.wumke.RNExitApp.RNExitAppPackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.reactnativecommunity.netinfo.NetInfoPackage;
 import fr.bamlab.rnimageresizer.ImageResizerPackage;
 import com.zmxv.RNSound.RNSoundPackage;
-import com.rnim.rn.audio.ReactNativeAudioPackage;
 import org.reactnative.camera.RNCameraPackage;
-import com.github.wumke.RNExitApp.RNExitAppPackage;
-import com.smixx.fabric.FabricPackage;
 import com.react.rnspinkit.RNSpinkitPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import com.rnfs.RNFSPackage;
@@ -45,12 +43,10 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
             new RNGestureHandlerPackage(),
+            new RNExitAppPackage(),
             new AsyncStoragePackage(),
             new NetInfoPackage(),
-            new ReactNativeAudioPackage(),
             new RNCameraPackage(),
-            new RNExitAppPackage(),
-            new FabricPackage(),
             new RNSpinkitPackage(),
             new RNFetchBlobPackage(),
             new RNFSPackage(),

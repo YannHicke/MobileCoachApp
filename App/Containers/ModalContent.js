@@ -9,7 +9,7 @@ import WebViewContent from '../Components/WebViewContent'
 import Lightbox from '../Components/Lightbox'
 import FullscreenVideo from '../Components/Video/FullscreenVideo'
 import CameraComponent from './../Components/CameraComponent'
-import RecordAudioComponent from './../Components/RecordAudioComponent'
+//import RecordAudioComponent from './../Components/RecordAudioComponent'
 import SelectManyModal from './../Components/SelectManyModal'
 import FeedbackForm from './Settings/FeedbackForm'
 import ServerMessageActions from '../Redux/MessageRedux'
@@ -184,13 +184,13 @@ class ModalContent extends Component {
             title={I18n.t('Common.scanQRCode')}
           />
         )
-      case 'record-audio':
+      /*case 'record-audio':
         return (
           <RecordAudioComponent
             onClose={this.props.onClose}
             onSubmitMedia={this.props.content.onSubmitMedia}
           />
-        )
+        )*/
       default:
         return null
     }
