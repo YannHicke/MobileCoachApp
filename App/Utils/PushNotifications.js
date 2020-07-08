@@ -1,6 +1,7 @@
-import { AppState, Alert, Platform, PushNotificationIOS } from 'react-native'
+import { AppState, Alert, Platform } from 'react-native'
 import CryptoJS from 'crypto-js'
 import store from 'react-native-simple-store'
+import PushNotificationIOS from '@react-native-community/push-notification-ios'
 
 import Log from './Log'
 const log = new Log('Utils/PushNotifications')
