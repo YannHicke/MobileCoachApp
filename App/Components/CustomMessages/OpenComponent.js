@@ -11,6 +11,7 @@ import CommonUtils from './../../Utils/Common'
 export default class OpenComponent extends Component {
   static propTypes = {
     currentMessage: PropTypes.object,
+    previousMessage: PropTypes.object,
     onPress: PropTypes.func,
     onPressSecondButton: PropTypes.func,
     setAnimationShown: PropTypes.func,
@@ -27,6 +28,7 @@ export default class OpenComponent extends Component {
   render () {
     const {
       currentMessage,
+      previousMessage,
       onPress,
       onPressSecondButton,
       icon,
@@ -35,6 +37,8 @@ export default class OpenComponent extends Component {
     } = this.props
     const editable = CommonUtils.userCanEdit(currentMessage)
     const secondButton = currentMessage.custom.secondButton
+    console.log(previousMessage)
+    console.log(currentMessage)
     return (
       <Animatable.View
         useNativeDriver
@@ -42,7 +46,7 @@ export default class OpenComponent extends Component {
         duration={this.props.duration}
         style={[
           styles.container,
-          currentMessage.previousMessage.type === 'open-component'
+          previousMessage.type === 'open-component'
             ? { marginTop: 0 }
             : null
         ]}

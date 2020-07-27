@@ -463,6 +463,7 @@ class Chat extends Component {
         onPress={() => this.openComponent(props.currentMessage)}
         onPressSecondButton={() => this.openComponent(props.currentMessage, 1)}
         currentMessage={props.currentMessage}
+        previousMessage={props.previousMessage}
         fadeInAnimation='fadeInRight'
         duration={350}
         setAnimationShown={(id) => this.props.markAnimationAsShown(id)}
