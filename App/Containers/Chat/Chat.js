@@ -125,7 +125,7 @@ class Chat extends Component {
       // Render-Methods for various other components
       loadEarlier: this.props.guistate.showLoadEarlier,
       onLoadEarlier: this.props.loadEarlier,
-      renderFooter: this.renderFooter,
+      renderChatFooter: this.renderFooter,
       renderLoadEarlier: this.renderLoadEarlier,
       renderTicks: this.renderTicks,
       showModal: this.showModal,
