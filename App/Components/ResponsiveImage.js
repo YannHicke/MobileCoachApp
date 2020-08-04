@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { Image, View, ViewPropTypes, ActivityIndicator } from 'react-native'
-import resolveAssetSource from 'resolveAssetSource'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
 import Common, { authTokenUri } from '../Utils/Common'
@@ -70,7 +69,7 @@ export default class ResponsiveImage extends Component {
       }
       // get size of static images
     } else {
-      const { width, height } = resolveAssetSource(source)
+      const { width, height } = Image.resolveAssetSource(source)
       this.updateDimensions(width, height)
     }
   }
