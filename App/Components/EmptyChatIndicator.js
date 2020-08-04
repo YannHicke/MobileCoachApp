@@ -55,7 +55,8 @@ export default class EmptyChatIndicator extends Component {
     } else this.setState({ shouldRender: false })
   }
 
-  componentWillReceiveProps (nextProps) {
+  // TODO: Needs to be refactored
+  UNSAFE_componentWillReceiveProps (nextProps) {
     // If active prop changed
     if (nextProps.active !== this.props.active) {
       if (nextProps.active) {

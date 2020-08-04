@@ -14,12 +14,14 @@ class LoadingContainer extends Component {
     this.didJump = false
   }
 
-  componentWillMount () {
+  // TODO: Needs to be refactored
+  UNSAFE_componentWillMount () {
     const { hydrationCompleted } = this.props.hydrationCompleted
     this.setState({ hydrationCompleted })
   }
 
-  componentWillReceiveProps (nextProps) {
+  // TODO: Needs to be refactored
+  UNSAFE_componentWillReceiveProps (nextProps) {
     const { hydrationCompleted } = nextProps.hydrationCompleted
     this.setState({ hydrationCompleted })
   }

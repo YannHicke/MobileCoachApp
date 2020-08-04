@@ -40,7 +40,8 @@ export default class PlayAudioFile extends Component {
   }
 
   // this.audioFile = new Sound(this.props.source, '', (err) => log.warn(err))
-  componentWillMount () {
+  // TODO: Needs to be refactored
+  UNSAFE_componentWillMount () {
     const { source } = this.props
     // Check if it's a local or remote/web file
     // if it's a web url...

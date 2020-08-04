@@ -82,7 +82,8 @@ class Chat extends Component {
     this.props.clearUnreadMessages()
   }
 
-  componentWillReceiveProps (newProps) {
+  // TODO: Needs to be refactored
+  UNSAFE_componentWillReceiveProps (newProps) {
     const oldScreen = this.props.guistate.currentScreen
     const newScreen = newProps.guistate.currentScreen
     if (oldScreen !== newScreen && newScreen === 'Chat') {

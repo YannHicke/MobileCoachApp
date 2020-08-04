@@ -133,7 +133,8 @@ class InfoCardsLibrary extends Component {
     })
   }
 
-  componentWillReceiveProps (newProps) {
+  // TODO: Needs to be refactored
+  UNSAFE_componentWillReceiveProps (newProps) {
     if (newProps.currentScreen !== this.props.currentScreen) {
       if (newProps.currentScreen === 'Library') {
         // Navigating to library screen

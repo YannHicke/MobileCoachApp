@@ -51,7 +51,8 @@ class ModalContent extends Component {
   }
 
   // TODO: Maybe theres a more perfomant way?
-  componentWillReceiveProps (nextProps) {
+  // TODO: Needs to be refactored
+  UNSAFE_componentWillReceiveProps (nextProps) {
     // We only need to update disableGestures manually for fakeModal-Screens,
     // on the real modal we can use onShow / onDismiss
     // if (fakeModalTypes.includes(nextProps.type)) {

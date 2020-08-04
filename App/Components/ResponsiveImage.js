@@ -33,8 +33,9 @@ export default class ResponsiveImage extends Component {
     }
   }
 
-  // Chek for dimension-Changes to notify callbacks
-  componentWillUpdate (nextProps, nextState) {
+  // Check for dimension-Changes to notify callbacks
+  // TODO: Needs to be refactored
+  UNSAFE_componentWillUpdate (nextProps, nextState) {
     if (nextState !== this.state || nextProps.scale !== this.props.scale) {
       this.onDimensionsChangedCallback(
         nextState.width * nextProps.scale,
@@ -56,7 +57,8 @@ export default class ResponsiveImage extends Component {
     }
   }
 
-  componentWillMount () {
+  // TODO: Needs to be refactored
+  UNSAFE_componentWillMount () {
     const { source, cached } = this.props
     // get size of network image
     if (source.uri) {
@@ -98,7 +100,8 @@ export default class ResponsiveImage extends Component {
       })
   }
 
-  componentWillReceiveProps (nextProps) {
+  // TODO: Needs to be refactored
+  UNSAFE_componentWillReceiveProps (nextProps) {
     if (this.props.cached && !_.isEqual(this.props.source, nextProps.source)) {
       // if a new source is passed, process & cache it
       this.processSource(nextProps.source)

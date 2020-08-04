@@ -95,7 +95,8 @@ class MediaInput extends Component {
     }
   }
 
-  componentWillMount () {
+  // TODO: Needs to be refactored
+  UNSAFE_componentWillMount () {
     const { uploadPath } = this.props.currentMessage.custom
     const { fs } = RNFetchBlob
     // If uploadPath is set (Media was recorded already, but not uploaded)...

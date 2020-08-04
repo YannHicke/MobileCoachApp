@@ -25,8 +25,6 @@ const log = new Log('Components/WebViewContent')
  */
 
 class WebViewContent extends Component {
-  componentWillMount () {}
-
   render () {
     log.debug('Opening web:', this.props.children)
 

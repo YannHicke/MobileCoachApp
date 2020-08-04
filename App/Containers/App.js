@@ -70,7 +70,8 @@ class App extends Component {
     this.appStateHandler = this.appStateHandler.bind(this)
   }
 
-  componentWillMount () {
+  // TODO: Needs to be refactored
+  UNSAFE_componentWillMount () {
     // Disable Yellowbox if set in AppConfig
     if (AppConfig.config.dev.disableYellowbox) console.disableYellowBox = true
     if (!initialized) {

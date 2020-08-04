@@ -17,7 +17,8 @@ class RootContainer extends Component {
     this.popupMenu = ref
   }
 
-  componentWillReceiveProps (newProps) {
+  // TODO: Needs to be refactored
+  UNSAFE_componentWillReceiveProps (newProps) {
     const oldScreen = this.props ? this.props.currentScreen : null
     const newScreen = newProps.guistate ? newProps.guistate.currentScreen : null
 

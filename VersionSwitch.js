@@ -45,7 +45,8 @@ export default class VersionSwitch extends Component {
     }
   }
 
-  componentWillMount () {
+  // TODO: Needs to be refactored
+  UNSAFE_componentWillMount () {
     // Check the serverSyncSettings to device wheter or not legacy version of the app should be used
     AsyncStorage.getItem('CLIENT_VERSION')
       .then((result) => {

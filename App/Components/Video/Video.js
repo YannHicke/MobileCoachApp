@@ -45,7 +45,8 @@ export default class Video extends Component {
     this.getPaused = () => this.refs.player.getPaused()
   }
 
-  componentWillMount () {
+  // TODO: Needs to be refactored
+  UNSAFE_componentWillMount () {
     const { source } = this.props
     // Check if it's a local or remote/web file
     // if it's a web url...
