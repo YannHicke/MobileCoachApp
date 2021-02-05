@@ -52,19 +52,9 @@ export default class Video extends Component {
     // if it's a web url...
     let urlPattern = /^https?:\/\//i
     if (urlPattern.test(source)) {
-      // ...check if there is a cached version of the video
-      const cacheManager = Common.getImageCacheManager()
       // attach auth tokens
       const authTokenUrl = authTokenUri(source)
-      cacheManager.queryUrl(source).then((result) => {
-        // if the video url isn't cached, just use the url as source
-        if (result === null) {
-          this.setState({ source: authTokenUrl })
-          // if there is a cached version, use to local file!
-        } else {
-          this.setState({ source: result })
-        }
-      })
+      this.setState({ source: authTokenUrl })
     } else {
       // if it's a local file, check if the filepath exists...
       RNFS.exists(source).then((exists) => {

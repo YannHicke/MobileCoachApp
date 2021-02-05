@@ -4,12 +4,6 @@ jest
       DocumentDir: () => {}
     }
   })
-  .mock('react-native-cached-image', () => {
-    return {
-      fs: () => {},
-      ImageCacheManager: () => {}
-    }
-  })
   .mock('../App/Containers/App', () => {
     return {
       getState: () => {}

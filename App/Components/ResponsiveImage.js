@@ -62,42 +62,14 @@ export default class ResponsiveImage extends Component {
     const { source, cached } = this.props
     // get size of network image
     if (source.uri) {
-      if (cached && source.uri.startsWith('http')) {
-        this.processSourceCaching(source)
-      } else {
-        Image.getSize(source.uri, (width, height) => {
-          this.updateDimensions(width, height)
-        })
-      }
+      Image.getSize(source.uri, (width, height) => {
+        this.updateDimensions(width, height)
+      })
       // get size of static images
     } else {
       const { width, height } = Image.resolveAssetSource(source)
       this.updateDimensions(width, height)
     }
-  }
-
-  processSourceCaching (source) {
-    const url = _.get(source, ['uri'], null)
-    const authTokenUrl = authTokenUri(url)
-    const imageCacheManager = Common.getImageCacheManager()
-    // Fortunatley, ImageCacheManager doesn't use Query strings (e.g. authToken) for cache-key (see: 'useQueryParamsInCacheKey' option).
-    imageCacheManager
-      .downloadAndCacheUrl(authTokenUrl)
-      .then((cachedImagePath) => {
-        this.setState({
-          cachedImagePath
-        })
-        Image.getSize('file://' + cachedImagePath, (width, height) => {
-          this.updateDimensions(width, height)
-        })
-      })
-      .catch((err) => {
-        log.warn(err)
-        this.setState({
-          cachedImagePath: null,
-          isCacheable: false
-        })
-      })
   }
 
   // TODO: Needs to be refactored

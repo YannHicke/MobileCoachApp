@@ -49,25 +49,11 @@ export default class PlayAudioFile extends Component {
     if (urlPattern.test(source)) {
       // attach auth tokens
       const authTokenUrl = authTokenUri(source)
-      // ...check if there is a cached version of the audiofile
-      const cacheManager = Common.getImageCacheManager()
-      cacheManager.queryUrl(source).then((result) => {
-        // if the url record isn't cached, just use the url as source
-        if (result === null) {
-          log.info(
-            'Initialized audio using web-version from url: ' + authTokenUrl
-          )
-          this.audioFile = new Sound(
-            authTokenUrl,
-            '',
-            this.initialize.bind(this)
-          )
-          // if there is a cached version, use to local file!
-        } else {
-          log.info('Retrieved audio file from local cache: ' + source)
-          this.audioFile = new Sound(result, '', this.initialize.bind(this))
-        }
-      })
+      this.audioFile = new Sound(
+        authTokenUrl,
+        '',
+        this.initialize.bind(this)
+      )
     } else {
       // if it's a local file, check if the filepath exists...
       RNFS.exists(source).then((exists) => {

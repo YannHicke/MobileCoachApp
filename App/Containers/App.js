@@ -4,7 +4,6 @@ import { setCustomText } from 'react-native-global-props'
 import { Provider } from 'react-redux'
 import { isIphoneX } from 'react-native-iphone-x-helper'
 import SInfo from 'react-native-sensitive-info'
-import { ImageCacheProvider } from 'react-native-cached-image'
 
 import '../I18n/I18n' // import this before RootContainer as RootContainer is using react-native-i18n, and I18n.js needs to be initialized before that!
 import RootContainer from './RootContainer'
@@ -127,9 +126,7 @@ class App extends Component {
     if (storeReady) {
       return (
         <Provider store={store}>
-          <ImageCacheProvider>
             <RootContainer />
-          </ImageCacheProvider>
         </Provider>
       )
     } else {

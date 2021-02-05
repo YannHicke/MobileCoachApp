@@ -1,15 +1,10 @@
 import React, { Component } from 'react'
 import { View, Alert } from 'react-native'
-import { ImageCacheProvider } from 'react-native-cached-image'
 import AsyncStorage from '@react-native-community/async-storage'
 
 // Import Root Components
 // Caution: The order of imports decides which i18n-file will be used (because I18n.translation will be set when importing the files)
 // -> Second import (= translation files from new App-Version) will override first one.
-// TODO: manually set translation files to be certain?
-// import AppLegacy from './AppLegacy/Containers/App'
-// import LegacyConfig from './AppLegacy/Config/AppConfig'
-// import PushNotificationsLegacy from './AppLegacy/Utils/PushNotifications'
 
 import App from './App/Containers/App'
 import AppConfig from './App/Config/AppConfig'
@@ -27,11 +22,6 @@ const VERSIONS = {
     appConfig: AppConfig,
     pushManager: PushNotifications
   }
-  // LEGACY: {
-  //   component: <AppLegacy />,
-  //   appConfig: LegacyConfig,
-  //   pushManager: PushNotificationsLegacy
-  // }
 }
 
 const LATEST_VERSION = 1
@@ -76,11 +66,6 @@ export default class VersionSwitch extends Component {
     const { appConfig, pushManager } = VERSIONS[appToBoot]
 
     const { clientVersion } = appConfig.config.serverSync
-
-    // Reset image cache at startup (if necessary)
-    if (appConfig.config.dev.purgeStoreAtStartup) {
-      new ImageCacheProvider().getImageCacheManager().clearCache()
-    }
 
     // Initialize push notifications
     pushManager
