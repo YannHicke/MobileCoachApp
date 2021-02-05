@@ -1,6 +1,20 @@
 module.exports = {
-    bracketSpacing: false,
-    jsxBracketSameLine: true,
-    singleQuote: true,
-    trailingComma: 'all',
-  }
+  printWidth: 80,
+  tabWidth: 2,
+  useTabs: false,
+  semi: false,
+  singleQuote: true,
+  jsxSingleQuote: true,
+  trailingComma: "none",
+  bracketSpacing: true,
+  jsxBracketSameLine: false,
+  arrowParens: "always",
+  proseWrap: "always",
+  htmlWhitespaceSensitivity: "css",
+  endOfLine: "lf",
+  alignObjectProperties: false,
+  spaceBeforeFunctionParen: true,
+  generatorStarSpacing: true,
+  yieldStarSpacing: true,
+  alignTernaryLines: false
+}
