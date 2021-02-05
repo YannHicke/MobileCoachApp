@@ -134,24 +134,9 @@ export function * initializeServerSync (action) {
 
   log.debug('Care for connection status of device...')
 
-  // START of workaround for problems with network connection state on some android devices
-  const onInitialNetConnection = (isConnected) => {
-    NetInfo.isConnected.removeEventListener(onInitialNetConnection)
-  }
-
-  NetInfo.isConnected.addEventListener(
-    'connectionChange',
-    onInitialNetConnection
-  )
-  // END of workaround
-
-  yield NetInfo.isConnected.fetch().then((isConnected) => {
-    handleDeviceConnectivity(isConnected)
+  const unsubscribe = NetInfo.addEventListener(state => { // TODO fabian: properly unsubscribe also check for internet connection using isInternetReachable. Hence check what was the old APIs behaviour in react-native/netinfo
+    handleDeviceConnectivity(state.isConnected)
   })
-  NetInfo.isConnected.addEventListener(
-    'connectionChange',
-    handleDeviceConnectivity
-  )
 
   let settings = yield select(selectServerSyncSettings)
 
