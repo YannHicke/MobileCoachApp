@@ -19,7 +19,7 @@
     "lint": "prettierx --check '**/**.{js,jsx,json,html,css,md}'",
     "fix": "standard --fix || true &&  prettierx --write '**/**.{js,jsx,json,html,css,md}'",
     "fixfile": "prettierx --write",
-    "postinstall": "npx jetify"
+    "postinstall": "patch-package && npx jetify"
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.6.2",
