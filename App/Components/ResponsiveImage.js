@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { Image, View, ViewPropTypes, ActivityIndicator } from 'react-native'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
-import Common, { authTokenUri } from '../Utils/Common'
 
 import Log from '../Utils/Log'
 const log = new Log('Components/ResponsiveImage')
@@ -72,14 +71,6 @@ export default class ResponsiveImage extends Component {
     }
   }
 
-  // TODO: Needs to be refactored
-  UNSAFE_componentWillReceiveProps (nextProps) {
-    if (this.props.cached && !_.isEqual(this.props.source, nextProps.source)) {
-      // if a new source is passed, process & cache it
-      this.processSource(nextProps.source)
-    }
-  }
-
   updateDimensions (width, height) {
     if (this.props.width && !this.props.height) {
       this.setState({
@@ -146,41 +137,7 @@ export default class ResponsiveImage extends Component {
   }
 
   renderContent () {
-    const { cached } = this.props
-    // Just render Image immediately for the following cases:
-    // 1. 'cached' flag is set to false
-    // 2. source doesn't have an 'uri' prop => image-asset source already, no url given (e.g. required static image source)
-    // 3. source has a uri, but doesn't start with 'http' => local file uri!
-    if (
-      !cached ||
-      !this.props.source.uri ||
-      !this.props.source.uri.startsWith('http')
-    ) {
-      return this.renderImage(this.props.source)
-    }
-    // ...else, if image source is remove source:
-    else {
-      // check if source is cachable
-      if (this.state.isCacheable) {
-        // ...if cachable, but there is no cachedImagePath, just show loader
-        if (
-          !this.state.cachedImagePath ||
-          this.state.cachedImagePath === null
-        ) {
-          return null
-          // else use cachedImagePath...
-        } else {
-          const source = {
-            uri: 'file://' + this.state.cachedImagePath
-          }
-          return this.renderImage(source)
-        }
-        // Fallback, if source isn't cachable, use the source given in props
-      } else {
-        const { source } = this.props
-        return this.renderImage(source)
-      }
-    }
+    return this.renderImage(this.props.source)
   }
 
   render () {
