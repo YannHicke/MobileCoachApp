@@ -1,21 +1,23 @@
 # MobileCoach Client Template
 
+## Install Dependencies
+
+    yarn
 ## Run
 
-    react-native run-ios
+    yarn android
 
 or
 
-    react-native run-android
+    yarn ios
 
-## Cleanup
+## Clean Native Projects
 
-    ./cleanup.sh
+    yarn clean:android 
 
-If still problems occur:
+or
 
-    ./cleanup.sh hard
-
+    yarn clean:ios
 ## Customization
 
 ```
