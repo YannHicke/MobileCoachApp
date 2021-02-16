@@ -8,7 +8,6 @@ export default StyleSheet.create({
     flex: 1
   },
   footerContainer: {
-    paddingBottom: 85,
     paddingRight: 8
   },
   coachImage: {
