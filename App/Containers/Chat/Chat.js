@@ -861,7 +861,7 @@ class Chat extends Component {
             />
           )
         })}
-        <OfflineStatusIndicator active={showOfflineIndicator} />
+        {/*<OfflineStatusIndicator active={showOfflineIndicator} />*/}
       </View>
     )
   }
