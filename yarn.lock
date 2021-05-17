@@ -9167,9 +9167,9 @@ react-native-progress@3.5.0:
   dependencies:
     prop-types "^15.5.8"
 
-"react-native-push-notification@https://github.com/afiller/react-native-push-notification.git#rn-60-fix":
+"react-native-push-notification@https://github.com/afiller/react-native-push-notification.git#rn-60-with-pm-adjustments":
   version "3.1.9"
-  resolved "https://github.com/afiller/react-native-push-notification.git#b4ea8fbf4b9443be186c5ee9fa8f77dc07905961"
+  resolved "https://github.com/afiller/react-native-push-notification.git#5a69a2dcc9cd4164065a5e700dfc7b9465370a59"
   dependencies:
     "@react-native-community/push-notification-ios" "^1.0.1"
 

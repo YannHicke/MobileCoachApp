@@ -63,7 +63,7 @@
     "react-native-parsed-text": "0.0.21",
     "react-native-popup-menu": "0.15.5",
     "react-native-progress": "3.5.0",
-    "react-native-push-notification": "https://github.com/afiller/react-native-push-notification.git#rn-60-fix",
+    "react-native-push-notification": "https://github.com/afiller/react-native-push-notification.git#rn-60-with-pm-adjustments",
     "react-native-rename": "^2.4.1",
     "react-native-render-html": "4.1.1",
     "react-native-sensitive-info": "^5.5.0",
