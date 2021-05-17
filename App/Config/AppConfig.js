@@ -91,16 +91,16 @@ export default {
       sendRecordedMediaLengthValues: 'lastRecordLength',
       clientVersion: 1,
       role: 'participant', // Can be: participant, supervisor, observer, or team-manager
-      defaultNickname: 'MobileCoach Client User',
-      interventionPattern: 'Tests',
-      interventionPassword: 'tests',
-      androidSenderId: '1234567890',
+      defaultNickname: 'new-participant',
+      interventionPattern: 'SweetGoals',
+      interventionPassword: 'dartmouth2020',
+      androidSenderId: '953992098955',
       localDeepstreamURL: 'ws://127.0.0.1:8082/deepstream',
       localRestURL: 'http://127.0.0.1:8080/PMCP/api/v02/',
       localMediaURL: 'http://127.0.0.1:8080/PMCP/files/',
-      remoteDeepstreamURL: 'wss://workshop-cdhi.ethz.ch/deepstream',
-      remoteRestURL: 'https://workshop-cdhi.ethz.ch/PMCP/api/v02/',
-      remoteMediaURL: 'https://workshop-cdhi.ethz.ch/PMCP/files/',
+      remoteDeepstreamURL: 'wss://sweetgoals.dartmouth.edu/deepstream',
+      remoteRestURL: 'https://sweetgoals.dartmouth.edu/PMCP/api/v02/',
+      remoteMediaURL: 'https://sweetgoals.dartmouth.edu/PMCP/files/',
       // Whether or not user uploads are protected with auth-tokens
       mediaUploadsWithAuthenticiation: true
     },

@@ -891,7 +891,7 @@ class Chat extends Component {
         <RepeatingBackgroundImage source={Images.chatBg}>
           {this.renderLoadingIndicator()}
           {this.renderNavigationbar()}
-          <GiftedChat {...this.getChatProperties()} />
+          <GiftedChat {...this.getChatProperties()} extraData={this.props.guistate.coachIsTyping}/>
           {this.props.versionInfo &&
           this.props.versionInfo.level === 'orange' ? (
             <InfoMessage
