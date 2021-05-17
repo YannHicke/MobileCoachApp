@@ -3,7 +3,6 @@ import React, { Component } from 'react'
 import { GiftedChat, Day } from 'react-native-gifted-chat' // import { GiftedChat, LoadEarlier, Message } from 'react-native-gifted-chat'
 import PMNavigationBar from '../../Components/Navbar'
 import ConnectionStateButton from '../../Components/ConnectionStateButton'
-// import { addNavigationHelpers } from 'react-navigation'
 // Actions
 import DashboardMessageRedux from './../../Redux/DashboardMessageRedux'
 import StoryProgressRedux from './../../Redux/StoryProgressRedux'

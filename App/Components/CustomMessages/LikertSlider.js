@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { StyleSheet, View, Text } from 'react-native'
-import Slider from 'react-native-slider'
+import Slider from '@react-native-community/slider'
 import Button from 'react-native-button'
 import PropTypes from 'prop-types'
 // import { Icon } from 'react-native-elements'

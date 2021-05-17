@@ -1,4 +1,4 @@
-import { StackNavigator } from 'react-navigation'
+import { createStackNavigator } from 'react-navigation-stack'
 
 import ScreenStartWithLogo from './ScreenStartWithLogo'
 import ScreenLanguageSelection from './ScreenLanguageSelection'
@@ -13,7 +13,7 @@ export const initialRouteName = 'ScreenStartWithLogo'
 export const codeScanMandatory = false
 
 // Manifest of possible screens
-const OnboardingNav = StackNavigator(
+const OnboardingNav = createStackNavigator(
   {
     // Start screen with logo
     ScreenStartWithLogo: {

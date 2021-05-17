@@ -92,7 +92,7 @@ export default {
       clientVersion: 1,
       role: 'participant', // Can be: participant, supervisor, observer, or team-manager
       defaultNickname: 'MobileCoach Client User',
-      interventionPattern: 'Tests',
+      interventionPattern: 'Test-components',
       interventionPassword: 'tests',
       androidSenderId: '1234567890',
       localDeepstreamURL: 'ws://127.0.0.1:8082/deepstream',

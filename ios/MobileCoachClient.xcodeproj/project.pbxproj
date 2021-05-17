@@ -10,18 +10,18 @@
 		00E356F31AD99517003FC87E /* MobileCoachClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* MobileCoachClientTests.m */; };
 		0FE44B3CC46040B08187A892 /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 94232A14BDA34927BB1CC62C /* Roboto-Bold.ttf */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
-		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		140ED2AC1D01E1AD002B40FF /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
-		4B7CA18C655F590D319F0784 /* libPods-MobileCoachClientTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 11C2FF8D98A81512900DC68D /* libPods-MobileCoachClientTests.a */; };
 		59389B1C2227F1A300976FF3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 59389B1E2227F1A300976FF3 /* InfoPlist.strings */; };
 		599CF45F2227E7D9001BD50A /* Web in Resources */ = {isa = PBXBuildFile; fileRef = 599CF45E2227E7D9001BD50A /* Web */; };
 		5F0968EB94D74601B843D03B /* Roboto-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = ED7E43E956174310B641079C /* Roboto-Italic.ttf */; };
 		80EB48CA828B46ADB1926785 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E4E0BFF65EA143DEB759BCA4 /* Roboto-Regular.ttf */; };
+		891A06B525DAE00A007417AE /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 891A06B325DAE00A007417AE /* LaunchScreen.xib */; };
 		9898149DCF7E483FA9839E4B /* Roboto-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E89B09585BD644EFB0EBFA91 /* Roboto-BoldItalic.ttf */; };
 		CCF0B36455B239347361D278 /* libPods-MobileCoachClient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 77C77ACF5C4E2B264F0126AE /* libPods-MobileCoachClient.a */; };
 		ED297163215061F000B7C4FE /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED297162215061F000B7C4FE /* JavaScriptCore.framework */; };
+		F37880C50A441F77504E05D3 /* libPods-MobileCoachClient-MobileCoachClientTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 926071756D324FE64CA5051C /* libPods-MobileCoachClient-MobileCoachClientTests.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -303,13 +303,11 @@
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* MobileCoachClientTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MobileCoachClientTests.m; sourceTree = "<group>"; };
 		0AD27D26BA224884B38338FE /* datepicker.app */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = wrapper.application; path = datepicker.app; sourceTree = "<group>"; };
-		11C2FF8D98A81512900DC68D /* libPods-MobileCoachClientTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MobileCoachClientTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		139105B61AF99BAD00B5F7CC /* RCTSettings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTSettings.xcodeproj; path = "../node_modules/react-native/Libraries/Settings/RCTSettings.xcodeproj"; sourceTree = "<group>"; };
 		139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTWebSocket.xcodeproj; path = "../node_modules/react-native/Libraries/WebSocket/RCTWebSocket.xcodeproj"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* MobileCoachClient.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MobileCoachClient.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = MobileCoachClient/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = MobileCoachClient/AppDelegate.m; sourceTree = "<group>"; };
-		13B07FB21A68108700A75B9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = MobileCoachClient/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = MobileCoachClient/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = MobileCoachClient/main.m; sourceTree = "<group>"; };
@@ -317,11 +315,8 @@
 		28BD62FD2EFB6169B0507DD9 /* Pods-MobileCoachClient.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileCoachClient.release.xcconfig"; path = "Target Support Files/Pods-MobileCoachClient/Pods-MobileCoachClient.release.xcconfig"; sourceTree = "<group>"; };
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		59389B1D2227F1A300976FF3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		59389B1F2227F30000976FF3 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		59389B202227F30000976FF3 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		59389B212227F31500976FF3 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		59389B222227F31500976FF3 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		59389B232227F33200976FF3 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		59389B242227F33200976FF3 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		599CF45E2227E7D9001BD50A /* Web */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Web; path = ../Web; sourceTree = "<group>"; };
 		59F4C8972226E8F800A7C795 /* RCTPushNotification.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTPushNotification.xcodeproj; path = "../node_modules/react-native/Libraries/PushNotificationIOS/RCTPushNotification.xcodeproj"; sourceTree = "<group>"; };
@@ -329,8 +324,12 @@
 		77C77ACF5C4E2B264F0126AE /* libPods-MobileCoachClient.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MobileCoachClient.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
+		891A06B425DAE00A007417AE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = MobileCoachClient/Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		89B34B0C25D6FFA300AB2B56 /* MobileCoachClient-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MobileCoachClient-Bridging-Header.h"; sourceTree = "<group>"; };
 		8A215BBCF031847D97103388 /* Pods-MobileCoachClientTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileCoachClientTests.debug.xcconfig"; path = "Target Support Files/Pods-MobileCoachClientTests/Pods-MobileCoachClientTests.debug.xcconfig"; sourceTree = "<group>"; };
+		926071756D324FE64CA5051C /* libPods-MobileCoachClient-MobileCoachClientTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MobileCoachClient-MobileCoachClientTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		94232A14BDA34927BB1CC62C /* Roboto-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Bold.ttf"; path = "../Web/fonts-also-app/Roboto-Bold.ttf"; sourceTree = "<group>"; };
+		AAC40DD40694837EF13BE30A /* Pods-MobileCoachClient-MobileCoachClientTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileCoachClient-MobileCoachClientTests.release.xcconfig"; path = "Target Support Files/Pods-MobileCoachClient-MobileCoachClientTests/Pods-MobileCoachClient-MobileCoachClientTests.release.xcconfig"; sourceTree = "<group>"; };
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
 		B76A5DCEB260FB0A198ADBF5 /* Pods-MobileCoachClient.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileCoachClient.debug.xcconfig"; path = "Target Support Files/Pods-MobileCoachClient/Pods-MobileCoachClient.debug.xcconfig"; sourceTree = "<group>"; };
 		C87C1A940FBA48DAADA5D5B7 /* datepicker.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = datepicker.xcodeproj; path = "../node_modules/react-native-datepicker/ios/datepicker.xcodeproj"; sourceTree = "<group>"; };
@@ -338,23 +337,9 @@
 		D15A7EAD78B982D9EE14C484 /* Pods-MobileCoachClientTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileCoachClientTests.release.xcconfig"; path = "Target Support Files/Pods-MobileCoachClientTests/Pods-MobileCoachClientTests.release.xcconfig"; sourceTree = "<group>"; };
 		E1AE847C2230238F00C4A3B3 /* MobileCoachClient.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = MobileCoachClient.entitlements; path = MobileCoachClient/MobileCoachClient.entitlements; sourceTree = "<group>"; };
 		E4E0BFF65EA143DEB759BCA4 /* Roboto-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Regular.ttf"; path = "../Web/fonts-also-app/Roboto-Regular.ttf"; sourceTree = "<group>"; };
+		E56C05BD1FF374EF0E086324 /* Pods-MobileCoachClient-MobileCoachClientTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileCoachClient-MobileCoachClientTests.debug.xcconfig"; path = "Target Support Files/Pods-MobileCoachClient-MobileCoachClientTests/Pods-MobileCoachClient-MobileCoachClientTests.debug.xcconfig"; sourceTree = "<group>"; };
 		E89B09585BD644EFB0EBFA91 /* Roboto-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-BoldItalic.ttf"; path = "../Web/fonts-also-app/Roboto-BoldItalic.ttf"; sourceTree = "<group>"; };
 		EB4485EF24B5E9C600B690EC /* main.jsbundle */ = {isa = PBXFileReference; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
-		EBC5773E24B639F300054326 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome5_Brands.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
-		EBC5773F24B639F300054326 /* Feather.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
-		EBC5774024B639F300054326 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome5_Solid.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; };
-		EBC5774124B639F300054326 /* Entypo.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
-		EBC5774224B639F300054326 /* Ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
-		EBC5774324B639F300054326 /* AntDesign.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = AntDesign.ttf; path = "../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
-		EBC5774424B639F300054326 /* Octicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
-		EBC5774524B639F300054326 /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
-		EBC5774624B639F300054326 /* Zocial.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
-		EBC5774724B639F300054326 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
-		EBC5774824B639F300054326 /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
-		EBC5774924B639F300054326 /* Foundation.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
-		EBC5774A24B639F300054326 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = SimpleLineIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
-		EBC5774B24B639F300054326 /* EvilIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
-		EBC5774C24B639F300054326 /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome5_Regular.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		ED7E43E956174310B641079C /* Roboto-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Italic.ttf"; path = "../Web/fonts-also-app/Roboto-Italic.ttf"; sourceTree = "<group>"; };
@@ -366,7 +351,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				140ED2AC1D01E1AD002B40FF /* libReact.a in Frameworks */,
-				4B7CA18C655F590D319F0784 /* libPods-MobileCoachClientTests.a in Frameworks */,
+				F37880C50A441F77504E05D3 /* libPods-MobileCoachClient-MobileCoachClientTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -462,16 +447,17 @@
 		13B07FAE1A68108700A75B9A /* MobileCoachClient */ = {
 			isa = PBXGroup;
 			children = (
+				891A06B325DAE00A007417AE /* LaunchScreen.xib */,
 				EBC5773D24B6399E00054326 /* Fonts */,
 				E1AE847C2230238F00C4A3B3 /* MobileCoachClient.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
-				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				59389B1E2227F1A300976FF3 /* InfoPlist.strings */,
 				EB4485EF24B5E9C600B690EC /* main.jsbundle */,
+				89B34B0C25D6FFA300AB2B56 /* MobileCoachClient-Bridging-Header.h */,
 			);
 			name = MobileCoachClient;
 			sourceTree = "<group>";
@@ -506,6 +492,8 @@
 				28BD62FD2EFB6169B0507DD9 /* Pods-MobileCoachClient.release.xcconfig */,
 				8A215BBCF031847D97103388 /* Pods-MobileCoachClientTests.debug.xcconfig */,
 				D15A7EAD78B982D9EE14C484 /* Pods-MobileCoachClientTests.release.xcconfig */,
+				E56C05BD1FF374EF0E086324 /* Pods-MobileCoachClient-MobileCoachClientTests.debug.xcconfig */,
+				AAC40DD40694837EF13BE30A /* Pods-MobileCoachClient-MobileCoachClientTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -517,7 +505,7 @@
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
 				2D16E6891FA4F8E400B85C8A /* libReact.a */,
 				77C77ACF5C4E2B264F0126AE /* libPods-MobileCoachClient.a */,
-				11C2FF8D98A81512900DC68D /* libPods-MobileCoachClientTests.a */,
+				926071756D324FE64CA5051C /* libPods-MobileCoachClient-MobileCoachClientTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -638,21 +626,6 @@
 		EBC5773D24B6399E00054326 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
-				EBC5774324B639F300054326 /* AntDesign.ttf */,
-				EBC5774124B639F300054326 /* Entypo.ttf */,
-				EBC5774B24B639F300054326 /* EvilIcons.ttf */,
-				EBC5773F24B639F300054326 /* Feather.ttf */,
-				EBC5774524B639F300054326 /* FontAwesome.ttf */,
-				EBC5773E24B639F300054326 /* FontAwesome5_Brands.ttf */,
-				EBC5774C24B639F300054326 /* FontAwesome5_Regular.ttf */,
-				EBC5774024B639F300054326 /* FontAwesome5_Solid.ttf */,
-				EBC5774924B639F300054326 /* Foundation.ttf */,
-				EBC5774224B639F300054326 /* Ionicons.ttf */,
-				EBC5774724B639F300054326 /* MaterialCommunityIcons.ttf */,
-				EBC5774824B639F300054326 /* MaterialIcons.ttf */,
-				EBC5774424B639F300054326 /* Octicons.ttf */,
-				EBC5774A24B639F300054326 /* SimpleLineIcons.ttf */,
-				EBC5774624B639F300054326 /* Zocial.ttf */,
 			);
 			name = Fonts;
 			sourceTree = "<group>";
@@ -668,6 +641,7 @@
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
+				CFC9FCA87887DA366B016503 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -706,7 +680,7 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 940;
+				LastUpgradeCheck = 1240;
 				ORGANIZATIONNAME = Facebook;
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
@@ -715,6 +689,7 @@
 					};
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = 97MLQDT253;
+						LastSwiftMigration = 1240;
 						SystemCapabilities = {
 							com.apple.Push = {
 								enabled = 1;
@@ -1074,10 +1049,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				599CF45F2227E7D9001BD50A /* Web in Resources */,
 				59389B1C2227F1A300976FF3 /* InfoPlist.strings in Resources */,
 				0FE44B3CC46040B08187A892 /* Roboto-Bold.ttf in Resources */,
+				891A06B525DAE00A007417AE /* LaunchScreen.xib in Resources */,
 				9898149DCF7E483FA9839E4B /* Roboto-BoldItalic.ttf in Resources */,
 				5F0968EB94D74601B843D03B /* Roboto-Italic.ttf in Resources */,
 				80EB48CA828B46ADB1926785 /* Roboto-Regular.ttf in Resources */,
@@ -1155,11 +1130,61 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-MobileCoachClientTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-MobileCoachClient-MobileCoachClientTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CFC9FCA87887DA366B016503 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MobileCoachClient-MobileCoachClientTests/Pods-MobileCoachClient-MobileCoachClientTests-resources.sh",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Feather.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Fontisto.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Foundation.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Octicons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Zocial.ttf",
+				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/AccessibilityResources.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AntDesign.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Entypo.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EvilIcons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Feather.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome5_Brands.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome5_Regular.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome5_Solid.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Fontisto.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Foundation.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Ionicons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialCommunityIcons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Octicons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/SimpleLineIcons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Zocial.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AccessibilityResources.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MobileCoachClient-MobileCoachClientTests/Pods-MobileCoachClient-MobileCoachClientTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		D2DC8CF3510D631C3ED3C5AF /* [CP] Copy Pods Resources */ = {
@@ -1177,6 +1202,7 @@
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Fontisto.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Foundation.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf",
@@ -1184,6 +1210,7 @@
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Octicons.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Zocial.ttf",
+				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/AccessibilityResources.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
@@ -1195,6 +1222,7 @@
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome5_Brands.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome5_Regular.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome5_Solid.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Fontisto.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Foundation.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Ionicons.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialCommunityIcons.ttf",
@@ -1202,6 +1230,7 @@
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Octicons.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/SimpleLineIcons.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Zocial.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AccessibilityResources.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1239,18 +1268,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		13B07FB11A68108700A75B9A /* LaunchScreen.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				13B07FB21A68108700A75B9A /* Base */,
-				59389B1F2227F30000976FF3 /* de */,
-				59389B212227F31500976FF3 /* fr */,
-				59389B232227F33200976FF3 /* it */,
-			);
-			name = LaunchScreen.xib;
-			path = MobileCoachClient;
-			sourceTree = "<group>";
-		};
 		59389B1E2227F1A300976FF3 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1262,12 +1279,20 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
+		891A06B325DAE00A007417AE /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				891A06B425DAE00A007417AE /* Base */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8A215BBCF031847D97103388 /* Pods-MobileCoachClientTests.debug.xcconfig */;
+			baseConfigurationReference = E56C05BD1FF374EF0E086324 /* Pods-MobileCoachClient-MobileCoachClientTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -1301,7 +1326,7 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D15A7EAD78B982D9EE14C484 /* Pods-MobileCoachClientTests.release.xcconfig */;
+			baseConfigurationReference = AAC40DD40694837EF13BE30A /* Pods-MobileCoachClient-MobileCoachClientTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
@@ -1336,6 +1361,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = MobileCoachClient/MobileCoachClient.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
@@ -1362,6 +1388,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.c4dhi.mobilecoach.client;
 				PRODUCT_NAME = MobileCoachClient;
+				SWIFT_OBJC_BRIDGING_HEADER = "MobileCoachClient-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -1372,6 +1401,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = MobileCoachClient/MobileCoachClient.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 97MLQDT253;
@@ -1397,6 +1427,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.c4dhi.mobilecoach.client;
 				PRODUCT_NAME = MobileCoachClient;
+				SWIFT_OBJC_BRIDGING_HEADER = "MobileCoachClient-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
@@ -1424,6 +1456,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -1449,6 +1482,11 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
+					"\"$(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)\"",
+					"\"$(inherited)\"",
+				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -1480,6 +1518,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;

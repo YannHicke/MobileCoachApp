@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import * as PropTypes from 'prop-types'
-import Slider from 'react-native-slider'
+import Slider from '@react-native-community/slider'
 import { Colors } from '../../Themes/'
 import { Icon } from 'react-native-elements'
 

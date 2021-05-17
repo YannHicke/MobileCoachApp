@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { View, Alert, Linking, Platform } from 'react-native'
 import { GiftedChat, LoadEarlier, Message, Day } from 'react-native-gifted-chat'
 import PMNavigationBar from '../../Components/Navbar'
-import { addNavigationHelpers } from 'react-navigation'
 import ConnectionStateButton from '../../Components/ConnectionStateButton'
 // import {Icon} from 'react-native-elements'
 // Actions
@@ -711,10 +710,6 @@ class Chat extends Component {
   openComponent (currentMessage, clickedButton = 0) {
     const { showModal } = this.props.screenProps
     const { component, content } = currentMessage.custom
-    const navigation = addNavigationHelpers({
-      dispatch: this.props.navigation.dispatch,
-      state: this.props.nav
-    })
     // Component specific Logic (e.g. show Modal)
     switch (component) {
       case 'rich-text': {
@@ -937,7 +932,7 @@ const mapStateToProps = (state) => {
     guistate: state.guistate,
     storyProgress: state.storyProgress,
     connectionState: state.serverSyncStatus.connectionState,
-    versionInfo: state.serverSyncSettings.versionInfo,
+    // versionInfo: state.serverSyncSettings.versionInfo, // TODO fabian: not needed?
   }
 }
 

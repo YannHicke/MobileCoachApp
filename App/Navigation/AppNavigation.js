@@ -1,10 +1,10 @@
 import { Animated, Easing } from 'react-native'
 
 import DrawerNavigation from './DrawerNavigation'
-import { StackNavigator } from 'react-navigation'
+import { createAppContainer } from 'react-navigation'
+import { createStackNavigator } from 'react-navigation-stack'
 import OnboardingNav from '../Containers/Onboarding/OnboardingNav'
 import LoadingContainer from '../Containers/LoadingContainer'
-
 const Navigation = DrawerNavigation
 
 // https://github.com/react-community/react-navigation/issues/1254
@@ -16,7 +16,7 @@ const noTransitionConfig = () => ({
   }
 })
 
-const PrimaryNav = StackNavigator(
+const PrimaryNav = createStackNavigator(
   {
     LoadingContainer: {
       path: '/loading',
@@ -41,4 +41,4 @@ const PrimaryNav = StackNavigator(
   }
 )
 
-export default PrimaryNav
+export default createAppContainer(PrimaryNav)

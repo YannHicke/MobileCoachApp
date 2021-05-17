@@ -1,9 +1,6 @@
 import { put, select } from 'redux-saga/effects'
 
 import { StoryProgressActions } from '../Redux/StoryProgressRedux'
-import DropDownHolder from '../Components/DropDownAlertHolder'
-import Common from '../Utils/Common'
-import I18n from '../I18n/I18n'
 
 import Log from '../Utils/Log'
 const log = new Log('Sagas/StoryProgressSagas')

@@ -7,7 +7,7 @@ import moment from 'moment'
 import { Metrics } from '../Themes/'
 import I18n from '../I18n/I18n'
 import AppConfig from '../Config/AppConfig'
-import { getState } from '../Containers/App'
+import { getState } from '../Containers/App' // TODO fabian: cyclic dependency for passing down getState. Root of all evil
 import * as PerfLog from './PerfLog'
 
 import Log from './Log'

@@ -1,4 +1,4 @@
-import { DrawerNavigator } from 'react-navigation'
+import { createDrawerNavigator } from 'react-navigation-drawer'
 
 import { Animated, Easing } from 'react-native'
 
@@ -20,7 +20,7 @@ const noTransitionConfig = () => ({
 })
 
 // Manifest of possible screens
-const DrawerNavigation = DrawerNavigator(
+const DrawerNavigation = createDrawerNavigator(
   {
     Chat: {
       path: '/chat',
@@ -58,7 +58,7 @@ const DrawerNavigation = DrawerNavigator(
     // mode: 'modal'
     navigationOptions: {
       gesturesEnabled: false,
-      drawerLockMode: 'locked-closed' // turn of the drawer: we use our own side-menu component
+      drawerLockMode: 'locked-closed' // TODO fabian: Remove this
       // headerStyle: styles.header
     }
   }

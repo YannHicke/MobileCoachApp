@@ -1,10 +1,3 @@
-/**
- * Copyright (c) Facebook, Inc. and its affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
 
@@ -14,11 +7,11 @@
 #define TIMEOUT_SECONDS 600
 #define TEXT_TO_LOOK_FOR @"Welcome to React"
 
-@interface MobileCoachClientTests : XCTestCase
+@interface RnDiffAppTests : XCTestCase
 
 @end
 
-@implementation MobileCoachClientTests
+@implementation RnDiffAppTests
 
 - (BOOL)findSubviewInView:(UIView *)view matching:(BOOL(^)(UIView *view))test
 {
@@ -40,13 +33,13 @@
   BOOL foundElement = NO;
 
   __block NSString *redboxError = nil;
-  #ifdef DEBUG
+#ifdef DEBUG
   RCTSetLogFunction(^(RCTLogLevel level, RCTLogSource source, NSString *fileName, NSNumber *lineNumber, NSString *message) {
     if (level >= RCTLogLevelError) {
       redboxError = message;
     }
   });
-  #endif
+#endif
 
   while ([date timeIntervalSinceNow] > 0 && !foundElement && !redboxError) {
     [[NSRunLoop mainRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.1]];

@@ -23,8 +23,8 @@ jest
   .mock('react-navigation', () => {
     return {
       withNavigation: (component) => component,
-      StackNavigator: () => {},
-      DrawerNavigator: () => {},
+      createStackNavigator: () => {},
+      createDrawerNavigator: () => {},
       NavigationActions: {
         navigate: 'default'
       }

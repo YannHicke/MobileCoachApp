@@ -1,36 +1,24 @@
 import React, { Component } from 'react'
-import { addNavigationHelpers } from 'react-navigation'
 import { View, BackHandler, Linking, Animated } from 'react-native'
 import { connect } from 'react-redux'
-import Toast, { DURATION } from 'react-native-easy-toast'
-import SideMenu from 'react-native-side-menu'
+import Toast from 'react-native-easy-toast'
 import RNExitApp from 'react-native-exit-app'
-import DropdownAlert from 'react-native-dropdownalert'
 
 import AppConfig from '../Config/AppConfig'
 import AppNavigation from './AppNavigation'
 import GUIActions from '../Redux/GUIRedux'
 import { Colors } from '../Themes'
-import Menu from '../Components/Menu'
 import ModalContent from '../Containers/ModalContent'
 import { initialRouteName } from '../Containers/Onboarding/OnboardingNav'
 import I18n from '../I18n/I18n'
 import LoadingOverlay from '../Components/LoadingOverlay'
 import StoryProgressActions from '../Redux/StoryProgressRedux'
 import ServerMessageActions from '../Redux/MessageRedux'
-import DropDownAlertHolder from '../Components/DropDownAlertHolder'
 
 import Log from '../Utils/Log'
 const log = new Log('Navigation/ReduxNavigation')
 
 const WWW_URL_PATTERN = /^www\./i
-
-const sideMenuAnimation = (prop, value) =>
-  Animated.spring(prop, {
-    toValue: value,
-    friction: 8,
-    useNativeDriver: true
-  })
 
 // here is our redux-aware our smart component
 class ReduxNavigation extends Component {
@@ -83,10 +71,6 @@ class ReduxNavigation extends Component {
     const { dispatch } = this.props
     const { nav } = this.props
 
-    const navigation = addNavigationHelpers({
-      dispatch,
-      state: nav
-    })
     let currentScreen = this._getCurrentRouteName(nav)
     log.info('Hardware Back-Button has been pressed in', currentScreen)
     if (this.state.modal.visible) {
@@ -208,73 +192,18 @@ class ReduxNavigation extends Component {
     )
   }
 
-  onMenuItemSelected = ({
-    screen = null,
-    modal = true,
-    navigationOptions = {}
-  }) => {
-    const { dispatch, nav } = this.props
-    const navigation = addNavigationHelpers({
-      dispatch,
-      state: nav
-    })
-
-    dispatch(GUIActions.closeSideMenu())
-
-    // if no screen provided
-    if (!screen) {
-      return this.refs.toast.show('Under construction 😄', DURATION.LENGTH_LONG)
-    }
-    // if same screen we do not do anything
-    if (nav.routes[nav.index].routeName === screen) return
-
-    // if should be shown as modal window
-    if (modal) {
-      this.setModal(!this.state.modal.visible, screen)
-    } else {
-      navigation.navigate(screen, navigationOptions)
-    }
-  }
-
   renderLoadingOverlay () {
     if (this.state.loading) return <LoadingOverlay />
     else return null
   }
 
   render () {
-    const {
-      dispatch,
-      nav,
-      sideMenuOpen,
-      sideMenuGestures,
-      language
-    } = this.props
+    const { language } = this.props
     I18n.locale = language // make sure that this is set before sidemenu is loaded
     const { modal } = this.state
-    const navigation = addNavigationHelpers({
-      dispatch,
-      state: nav
-    })
-    const menu = (
-      <Menu
-        onItemSelected={this.onMenuItemSelected}
-        navigator={this.props.navigator}
-      />
-    )
 
     return (
       <View style={{ flex: 1, backgroundColor: Colors.main.appBackground }}>
-        <SideMenu
-          menu={menu}
-          animationFucntion={sideMenuAnimation}
-          disableGestures={!sideMenuGestures}
-          isOpen={sideMenuOpen}
-          onChange={(isOpen) => {
-            if (!isOpen) {
-              dispatch(GUIActions.closeSideMenu()) // somehow this is needed?
-            }
-          }}
-        >
           <ModalContent
             visible={modal.visible}
             type={modal.type}
@@ -290,7 +219,6 @@ class ReduxNavigation extends Component {
             }}
           >
             <AppNavigation
-              navigation={navigation}
               screenProps={{
                 openURL: (url) => this.openURL(url),
                 showModal: (type, content, onClose) =>
@@ -313,17 +241,6 @@ class ReduxNavigation extends Component {
             textStyle={{ color: Colors.toast.text }}
           />
           {this.renderLoadingOverlay()}
-        </SideMenu>
-        <DropdownAlert
-          translucent
-          successImageSrc={require('./../Images/icon_check.png')}
-          updateStatusBar={false}
-          errorColor={Colors.main.error}
-          warnColor={Colors.main.warn}
-          infoColor={Colors.main.primary}
-          successColor={Colors.main.success}
-          ref={(ref) => DropDownAlertHolder.setDropDown(ref)}
-        />
       </View>
     )
   }
