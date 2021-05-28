@@ -18,9 +18,7 @@
       "coverage": "jest --coverage && open coverage/lcov-report/index.html || xdg-open coverage/lcov-report/index.html",
       "git-hook-commit": "yarn lint -s && yarn test -s",
       "git-hook-push": "yarn lint -s && yarn test -s",
-      "lint": "prettierx --check '**/**.{js,jsx,json,html,css,md}'",
-      "fix": "standard --fix || true &&  prettierx --write '**/**.{js,jsx,json,html,css,md}'",
-      "fixfile": "prettierx --write",
+      "lint": "eslint .",
       "postinstall": "npx patch-package && npx jetify && npx pod-install"
     },
     "dependencies": {
@@ -100,25 +98,22 @@
     "devDependencies": {
       "@babel/core": "^7.8.4",
       "@babel/runtime": "^7.8.4",
-      "@react-native-community/eslint-config": "^1.1.0",
+      "@react-native-community/eslint-config": "^2.0.0",
       "babel-eslint": "7.1.1",
       "babel-jest": "^25.1.0",
       "babel-preset-es2015": "6.24.0",
       "enzyme": "3.9.0",
-      "eslint": "^6.5.1",
+      "eslint": "^7.27.0",
       "husky": "2.4.0",
       "jest": "^25.1.0",
       "jest-cli": "^25.1.0",
       "jetifier": "^1.6.4",
       "metro-react-native-babel-preset": "^0.59.0",
       "mockery": "2.1.0",
-      "prettierx": "0.6.0",
       "react-addons-test-utils": "15.6.2",
       "react-devtools": "^3",
       "react-dom": "16.8.3",
-      "react-test-renderer": "16.13.1",
-      "snazzy": "7.1.1",
-      "standard": "10.0.3"
+      "react-test-renderer": "16.13.1"
     },
     "husky": {
       "hooks": {}
@@ -145,26 +140,6 @@
         "\\.(css|less)$": "<rootDir>/Tests/AssetTransformer.js"
       }
     },
-    "config": {},
-    "standard": {
-      "parser": "babel-eslint",
-      "globals": [
-        "describe",
-        "test",
-        "jest",
-        "expect",
-        "fetch",
-        "navigator",
-        "__DEV__",
-        "XMLHttpRequest",
-        "FormData",
-        "React$Element"
-      ],
-      "ignore": [
-        "/Access_Keys/**",
-        "/Web/js/sliderPage.js",
-        "/App/Fixtures/ChartsWrapperLibFix/**"
-      ]
-    }
+    "config": {}
   }
   
