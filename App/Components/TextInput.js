@@ -1,15 +1,15 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import {
   StyleSheet,
   View,
   TextInput as RNTextInput,
   Platform,
-  Text
-} from 'react-native'
-import PropTypes from 'prop-types'
+  Text,
+} from 'react-native';
+import PropTypes from 'prop-types';
 
-import { Colors } from '../Themes'
-import { withFormikControl } from 'react-native-formik'
+import { Colors } from '../Themes';
+import { withFormikControl } from 'react-native-formik';
 // import console = require('console');
 
 class TextInput extends Component {
@@ -20,18 +20,18 @@ class TextInput extends Component {
     value: PropTypes.string,
     setFieldValue: PropTypes.func,
     error: PropTypes.string,
-    setFieldTouched: PropTypes.func
-  }
+    setFieldTouched: PropTypes.func,
+  };
 
   state = {
-    text: ''
-  }
+    text: '',
+  };
 
   focus = () => {
-    console.log('focus')
-  }
+    console.log('focus');
+  };
 
-  render () {
+  render() {
     const {
       placeholder,
       labelStyle,
@@ -42,27 +42,27 @@ class TextInput extends Component {
       error,
       value,
       setFieldValue,
-      label
-    } = this.props
+      label,
+    } = this.props;
 
     return (
       <View style={[styles.textInputContainer, containerStyle]}>
         {label ? <Text style={[styles.label, labelStyle]}>{label}</Text> : null}
         <RNTextInput
           ref={(ref) => {
-            this.textInput = ref
+            this.textInput = ref;
           }}
           // value={this.state.text}
           value={value}
           placeholder={placeholder}
-          placeholderTextColor='rgba(0,0,0,0.5)'
-          underlineColorAndroid='transparent'
+          placeholderTextColor="rgba(0,0,0,0.5)"
+          underlineColorAndroid="transparent"
           name={name}
           style={[
             styles.textInput,
             textInputStyle,
             invalid ? { borderColor: 'red', borderWidth: 1 } : null,
-            error ? { borderColor: 'red', borderWidth: 1 } : null
+            error ? { borderColor: 'red', borderWidth: 1 } : null,
           ]}
           // onChangeText={text =>
           //   this.setState({ text }, () => {
@@ -72,15 +72,15 @@ class TextInput extends Component {
           onChangeText={setFieldValue}
         />
       </View>
-    )
+    );
   }
 }
 
-export default withFormikControl(TextInput)
+export default withFormikControl(TextInput);
 
 const styles = StyleSheet.create({
   textInputContainer: {
-    width: '100%'
+    width: '100%',
   },
   textInput: {
     color: Colors.main.paragraph,
@@ -92,14 +92,14 @@ const styles = StyleSheet.create({
       ios: {
         minHeight: 50,
         paddingTop: 15,
-        paddingBottom: 15
-      }
+        paddingBottom: 15,
+      },
     }),
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
   },
   label: {
     color: 'rgba(35, 38, 43, 0.8)',
     fontSize: 12,
-    alignSelf: 'flex-start'
-  }
-})
+    alignSelf: 'flex-start',
+  },
+});

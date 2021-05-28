@@ -1,21 +1,21 @@
-import AsyncStorage from '@react-native-community/async-storage'
-import debugState from '../Fixtures/debugState.json'
+import AsyncStorage from '@react-native-community/async-storage';
+import debugState from '../Fixtures/debugState.json';
 
 const safeDebugState = debugState.state
   ? {
-    ...debugState.state,
-    // Don't load deepstream credentials from debug state
-    serverSyncSettings: {
-      ...debugState.state.serverSyncSettings,
-      deepstreamUser: 'user', // null,
-      deepstreamSecret: 'secret', // null,
-      restUser: null,
-      restToken: null,
-      pushPlatform: null,
-      pushToken: null
+      ...debugState.state,
+      // Don't load deepstream credentials from debug state
+      serverSyncSettings: {
+        ...debugState.state.serverSyncSettings,
+        deepstreamUser: 'user', // null,
+        deepstreamSecret: 'secret', // null,
+        restUser: null,
+        restToken: null,
+        pushPlatform: null,
+        pushToken: null,
+      },
     }
-  }
-  : null
+  : null;
 
 // const safeDebugState = {
 //   ...debugState,
@@ -37,20 +37,20 @@ const JSONStorage = {
   ...AsyncStorage,
   getItem: function (key, callback) {
     // redux-persist is searching for keys like 'reduxPersist:settings'
-    const propName = key.replace('reduxPersist:', '')
+    const propName = key.replace('reduxPersist:', '');
     return new Promise((resolve, reject) => {
       if (safeDebugState[propName]) {
-        let serialized = JSON.stringify(safeDebugState[propName])
-        callback && callback(null, serialized)
-        resolve(serialized)
+        let serialized = JSON.stringify(safeDebugState[propName]);
+        callback && callback(null, serialized);
+        resolve(serialized);
       } else {
-        reject(new Error('Could not find key: ' + propName))
+        reject(new Error('Could not find key: ' + propName));
       }
-    })
+    });
   },
   isEmpty: function () {
-    return JSON.stringify(debugState) === JSON.stringify({})
-  }
-}
+    return JSON.stringify(debugState) === JSON.stringify({});
+  },
+};
 
-export default JSONStorage
+export default JSONStorage;

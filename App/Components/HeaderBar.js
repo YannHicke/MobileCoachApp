@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import {
   View,
   Text,
@@ -6,18 +6,18 @@ import {
   TouchableOpacity,
   Alert,
   ViewPropTypes,
-  Platform
-} from 'react-native'
-import I18n from '../I18n/I18n'
-import PropTypes from 'prop-types'
-import { Icon } from 'react-native-elements'
-import { Colors, Metrics } from '../Themes/'
-import { ifIphoneX } from 'react-native-iphone-x-helper'
+  Platform,
+} from 'react-native';
+import I18n from '../I18n/I18n';
+import PropTypes from 'prop-types';
+import { Icon } from 'react-native-elements';
+import { Colors, Metrics } from '../Themes/';
+import { ifIphoneX } from 'react-native-iphone-x-helper';
 
 const iconProps = {
   size: 30,
-  color: Colors.navigationBar.text
-}
+  color: Colors.navigationBar.text,
+};
 
 export default class HeaderBar extends Component {
   static propTypes = {
@@ -25,36 +25,34 @@ export default class HeaderBar extends Component {
     onBack: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
     onClose: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
     confirmClose: PropTypes.string,
-    containerStyle: ViewPropTypes.style
-  }
+    containerStyle: ViewPropTypes.style,
+  };
 
-  renderBackIcon () {
+  renderBackIcon() {
     if (this.props.onBack) {
       return (
         <TouchableOpacity
           style={styles.backButton}
-          onPress={() => this.props.onBack()}
-        >
-          <Icon name='arrow-back' type='material' {...iconProps} />
+          onPress={() => this.props.onBack()}>
+          <Icon name="arrow-back" type="material" {...iconProps} />
         </TouchableOpacity>
-      )
+      );
     }
   }
 
-  renderCloseIcon () {
+  renderCloseIcon() {
     if (this.props.onClose) {
       return (
         <TouchableOpacity
           style={styles.closeButton}
-          onPress={() => this.onCloseHandler()}
-        >
-          <Icon name='md-close' type='ionicon' {...iconProps} />
+          onPress={() => this.onCloseHandler()}>
+          <Icon name="md-close" type="ionicon" {...iconProps} />
         </TouchableOpacity>
-      )
+      );
     }
   }
 
-  onCloseHandler () {
+  onCloseHandler() {
     if (this.props.confirmClose) {
       Alert.alert(
         this.props.confirmClose,
@@ -63,19 +61,21 @@ export default class HeaderBar extends Component {
           {
             text: I18n.t('Settings.no'),
             onPress: () => {},
-            style: 'cancel'
+            style: 'cancel',
           },
           {
             text: I18n.t('Settings.yes'),
-            onPress: this.props.onClose
-          }
+            onPress: this.props.onClose,
+          },
         ],
-        { cancelable: false }
-      )
-    } else this.props.onClose()
+        { cancelable: false },
+      );
+    } else {
+      this.props.onClose();
+    }
   }
 
-  render () {
+  render() {
     return (
       <View style={styles.wrapper}>
         <View style={[styles.container, this.props.containerStyle]}>
@@ -86,7 +86,7 @@ export default class HeaderBar extends Component {
           </View>
         </View>
       </View>
-    )
+    );
   }
 }
 
@@ -98,13 +98,13 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2
+      height: 2,
     },
     shadowRadius: 2,
     shadowOpacity: 0.25,
     // Android shadow
     elevation: 2,
-    zIndex: 100
+    zIndex: 100,
   },
   container: {
     zIndex: 10,
@@ -112,10 +112,10 @@ const styles = StyleSheet.create({
       ios: {
         marginTop: 20,
         ...ifIphoneX({
-          marginTop: 41
-        })
-      }
-    })
+          marginTop: 41,
+        }),
+      },
+    }),
   },
   header: {
     height: Metrics.navbarHeight,
@@ -124,23 +124,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderColor: 'transparent',
     borderBottomWidth: 1,
-    borderTopWidth: 1
+    borderTopWidth: 1,
   },
   title: {
     fontWeight: '500',
     fontSize: 17,
     color: Colors.navigationBar.text,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   backButton: {
     // fontSize: 30,
     position: 'absolute',
     left: 5,
-    padding: 8
+    padding: 8,
   },
   closeButton: {
     position: 'absolute',
     right: 15,
-    padding: 8
-  }
-})
+    padding: 8,
+  },
+});

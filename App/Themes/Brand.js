@@ -15,13 +15,13 @@ const brand = {
     text2: '#fff',
     grey1: '#525252',
     grey2: '#9B9B9B',
-    grey3: '#F8F8F8'
+    grey3: '#F8F8F8',
   },
   images: {
     logo: require('../Images/app_logo.png'),
     poweredBy: require('../Images/powered_by.png'),
-    chatBackground: require('../Images/Chat/bg.png')
-  }
-}
+    chatBackground: require('../Images/Chat/bg.png'),
+  },
+};
 
-export default brand
+export default brand;

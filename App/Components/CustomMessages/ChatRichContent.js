@@ -1,11 +1,11 @@
-import React, { PureComponent } from 'react'
-import { Dimensions, View } from 'react-native'
-import HTML from 'react-native-render-html'
+import React, { PureComponent } from 'react';
+import { Dimensions, View } from 'react-native';
+import HTML from 'react-native-render-html';
 
-import { Colors } from '../../Themes/'
+import { Colors } from '../../Themes/';
 
 class ChatRichContent extends PureComponent {
-  render () {
+  render() {
     return (
       <View style={{ paddingHorizontal: 10, flexDirection: 'row' }}>
         <HTML
@@ -13,16 +13,16 @@ class ChatRichContent extends PureComponent {
           imagesMaxWidth={Dimensions.get('window').width}
           tagsStyles={{
             web: {
-              color: Colors.messageBubbles.left.text
-            }
+              color: Colors.messageBubbles.left.text,
+            },
           }}
           classesStyles={{}}
           containerStyle={{}}
           baseFontStyle={{ fontSize: 16 }}
         />
       </View>
-    )
+    );
   }
 }
 
-export default ChatRichContent
+export default ChatRichContent;

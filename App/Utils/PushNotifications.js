@@ -1,113 +1,113 @@
-import { AppState, Alert, Platform } from 'react-native'
-import CryptoJS from 'crypto-js'
-import store from 'react-native-simple-store'
-import PushNotificationIOS from '@react-native-community/push-notification-ios'
+import { AppState, Alert, Platform } from 'react-native';
+import CryptoJS from 'crypto-js';
+import store from 'react-native-simple-store';
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
 
-import Log from './Log'
-const log = new Log('Utils/PushNotifications')
+import Log from './Log';
+const log = new Log('Utils/PushNotifications');
 
-let instance = null
+let instance = null;
 
-let PushNotificationsHandler = null
+let PushNotificationsHandler = null;
 
-const STORE_NAME = 'push-notification-store'
+const STORE_NAME = 'push-notification-store';
 
-let handlers = []
+let handlers = [];
 
-let initialized = false
+let initialized = false;
 
-let encKey = null
-let parsedEncKey = null
+let encKey = null;
+let parsedEncKey = null;
 
-let token = null
-let platform = null
+let token = null;
+let platform = null;
 
-let badges = 0
-let appInBackground = true
+let badges = 0;
+let appInBackground = true;
 
-let handler = () => null
+let handler = () => null;
 
 export const setHandler = function (cb) {
-  handler = cb
-}
+  handler = cb;
+};
 
 export default class PushNotifications {
-  static getInstance () {
+  static getInstance() {
     if (instance == null) {
-      instance = new PushNotifications()
+      instance = new PushNotifications();
     }
 
-    return instance
+    return instance;
   }
 
-  init (resetStore, androidSenderId, requestPermissions) {
-    log.debug('Init push notifications...')
+  init(resetStore, androidSenderId, requestPermissions) {
+    log.debug('Init push notifications...');
     if (!initialized) {
       // Reset store if required
       if (resetStore) {
-        this.reset()
+        this.reset();
       }
 
       // Sender ID
       if (Platform.OS === 'android') {
-        log.debug('Sender ID:', androidSenderId)
+        log.debug('Sender ID:', androidSenderId);
       }
 
       // Create instance
-      PushNotificationsHandler = require('react-native-push-notification')
+      PushNotificationsHandler = require('react-native-push-notification');
 
       // Function to be called for encrypted notifications
       var decryptIfNecessaryAndShow = function (data, message) {
-        let messageToShow = ''
+        let messageToShow = '';
         if (message === null) {
-          log.debug('Decrypt and show notification')
-          const iv = CryptoJS.enc.Utf8.parse('4537823546456123')
+          log.debug('Decrypt and show notification');
+          const iv = CryptoJS.enc.Utf8.parse('4537823546456123');
           const decrypted = CryptoJS.AES.decrypt(data, parsedEncKey, {
             iv: iv,
-            padding: CryptoJS.pad.ZeroPadding
-          })
-          messageToShow = decrypted.toString(CryptoJS.enc.Utf8)
+            padding: CryptoJS.pad.ZeroPadding,
+          });
+          messageToShow = decrypted.toString(CryptoJS.enc.Utf8);
         } else {
-          log.debug('Show notification')
-          messageToShow = message
+          log.debug('Show notification');
+          messageToShow = message;
         }
 
         PushNotificationsHandler.localNotification({
           message: messageToShow,
           playSound: true,
-          soundName: 'default'
-        })
-      }
+          soundName: 'default',
+        });
+      };
 
       var resetBadges = function () {
-        badges = 0
-        PushNotificationsHandler.setApplicationIconBadgeNumber(badges)
+        badges = 0;
+        PushNotificationsHandler.setApplicationIconBadgeNumber(badges);
 
         // Commented out to not destroy local push-schedule (see: LocalNotifications.js)
         // PushNotificationsHandler.cancelAllLocalNotifications()
-        log.debug('Reset badges to 0')
-      }
+        log.debug('Reset badges to 0');
+      };
 
       // Reset badges
-      PushNotificationsHandler.setApplicationIconBadgeNumber(badges)
+      PushNotificationsHandler.setApplicationIconBadgeNumber(badges);
 
       // Initialize push notifications
       PushNotificationsHandler.configure({
         // (optional) Called when Token is generated (iOS and Android)
         onRegister: function (data) {
-          log.debug('Push token', data.token, 'on platform', data.os)
+          log.debug('Push token', data.token, 'on platform', data.os);
 
-          PushNotifications.getInstance().rememberToken(data.token, data.os)
+          PushNotifications.getInstance().rememberToken(data.token, data.os);
         },
 
         // (required) Called when a remote or local notification is opened or received
         onNotification: function (notification) {
-          log.debug('Push notification:', notification)
-          log.debug('Current badges:', badges)
+          log.debug('Push notification:', notification);
+          log.debug('Current badges:', badges);
 
           // Only care for push notifications when app is active (and prevent inifinte loop)
-          let data = null
-          let key = null
+          let data = null;
+          let key = null;
 
           if (
             notification.data !== undefined &&
@@ -117,8 +117,8 @@ export default class PushNotifications {
             notification.data.key !== undefined &&
             notification.data.key !== null
           ) {
-            data = notification.data.blob
-            key = notification.data.key
+            data = notification.data.blob;
+            key = notification.data.key;
           }
 
           if (
@@ -127,9 +127,9 @@ export default class PushNotifications {
           ) {
             // Set badges for encrypted push notifications
             if (data !== null && data.remote) {
-              badges++
-              PushNotificationsHandler.setApplicationIconBadgeNumber(badges)
-              log.debug('Set badges (for encrypted notifications) to', badges)
+              badges++;
+              PushNotificationsHandler.setApplicationIconBadgeNumber(badges);
+              log.debug('Set badges (for encrypted notifications) to', badges);
             }
 
             // Set badges for unencrypted push notifications on Android
@@ -139,9 +139,12 @@ export default class PushNotifications {
               notification.badge !== undefined &&
               notification.badge !== null
             ) {
-              badges = parseInt(notification.badge)
-              PushNotificationsHandler.setApplicationIconBadgeNumber(badges)
-              log.debug('Set badges (for unencrypted notifications) to', badges)
+              badges = parseInt(notification.badge);
+              PushNotificationsHandler.setApplicationIconBadgeNumber(badges);
+              log.debug(
+                'Set badges (for unencrypted notifications) to',
+                badges,
+              );
             }
 
             // Show local notification for encrypted push notifications
@@ -152,62 +155,62 @@ export default class PushNotifications {
                   if (encKey === null) {
                     store.get(STORE_NAME).then((res) => {
                       // Show notification after retrieving encKey and calculating parsedEncKey and confirm
-                      const encKeyEncrypted = res.encKey
+                      const encKeyEncrypted = res.encKey;
 
-                      const iv = CryptoJS.enc.Utf8.parse('4537823546456123')
+                      const iv = CryptoJS.enc.Utf8.parse('4537823546456123');
                       const decrypted = CryptoJS.AES.decrypt(
                         encKeyEncrypted,
                         CryptoJS.enc.Utf8.parse(key),
                         {
                           iv: iv,
-                          padding: CryptoJS.pad.ZeroPadding
-                        }
-                      )
-                      encKey = decrypted.toString(CryptoJS.enc.Utf8)
+                          padding: CryptoJS.pad.ZeroPadding,
+                        },
+                      );
+                      encKey = decrypted.toString(CryptoJS.enc.Utf8);
 
-                      parsedEncKey = CryptoJS.enc.Utf8.parse(encKey)
-                      decryptIfNecessaryAndShow(data, null)
+                      parsedEncKey = CryptoJS.enc.Utf8.parse(encKey);
+                      decryptIfNecessaryAndShow(data, null);
                       if (Platform.OS === 'ios') {
                         notification.finish(
-                          PushNotificationIOS.FetchResult.NoData
-                        )
+                          PushNotificationIOS.FetchResult.NoData,
+                        );
                       }
-                    })
+                    });
                   } else {
                     // Show notification after calculating parsedEncKey and confirm
-                    parsedEncKey = CryptoJS.enc.Utf8.parse(encKey)
-                    decryptIfNecessaryAndShow(data, null)
+                    parsedEncKey = CryptoJS.enc.Utf8.parse(encKey);
+                    decryptIfNecessaryAndShow(data, null);
                     if (Platform.OS === 'ios') {
                       notification.finish(
-                        PushNotificationIOS.FetchResult.NoData
-                      )
+                        PushNotificationIOS.FetchResult.NoData,
+                      );
                     }
                   }
                 } else {
                   // Show notification with already available parsedEncKey and confirm
-                  decryptIfNecessaryAndShow(data, null)
+                  decryptIfNecessaryAndShow(data, null);
                   if (Platform.OS === 'ios') {
-                    notification.finish(PushNotificationIOS.FetchResult.NoData)
+                    notification.finish(PushNotificationIOS.FetchResult.NoData);
                   }
                 }
               } else if (badges === 2) {
                 // Show ... and confirm
-                decryptIfNecessaryAndShow(null, '...')
+                decryptIfNecessaryAndShow(null, '...');
                 if (Platform.OS === 'ios') {
-                  notification.finish(PushNotificationIOS.FetchResult.NoData)
+                  notification.finish(PushNotificationIOS.FetchResult.NoData);
                 }
               }
             } else {
               // No notification to show, but confirm
               if (Platform.OS === 'ios') {
-                notification.finish(PushNotificationIOS.FetchResult.NoData)
+                notification.finish(PushNotificationIOS.FetchResult.NoData);
               }
             }
             // When App is running, trigger cb-function
           } else {
-            handler()
+            handler();
             if (Platform.OS === 'ios') {
-              notification.finish(PushNotificationIOS.FetchResult.NoData)
+              notification.finish(PushNotificationIOS.FetchResult.NoData);
             }
           }
         },
@@ -219,7 +222,7 @@ export default class PushNotifications {
         permissions: {
           alert: true,
           badge: true,
-          sound: true
+          sound: true,
         },
 
         // Should the initial notification be popped automatically
@@ -231,149 +234,149 @@ export default class PushNotifications {
          * - Specified if permissions (ios) and token (android and ios) will requested or not,
          * - if not, you must call PushNotificationsHandler.requestPermissions() later
          */
-        requestPermissions: false
-      })
+        requestPermissions: false,
+      });
 
       // automatically request permissions (if defined this way)
       if (requestPermissions) {
-        this.requestPermissions()
+        this.requestPermissions();
       }
 
       // Care about app state changes
       AppState.addEventListener('change', function (newAppState) {
-        log.debug('New app state:', newAppState)
+        log.debug('New app state:', newAppState);
 
         // Remove badge icon on resume of app
         if (newAppState === 'active') {
           if (appInBackground) {
-            resetBadges()
+            resetBadges();
           }
 
-          appInBackground = false
+          appInBackground = false;
         } else if (newAppState === 'inactive') {
           // No change
         } else if (newAppState === 'background') {
           if (!appInBackground) {
-            resetBadges()
+            resetBadges();
           }
 
-          appInBackground = true
+          appInBackground = true;
         }
-      })
+      });
 
       if (AppState.currentState === 'active') {
-        appInBackground = false
+        appInBackground = false;
       }
 
       log.debug(
         'Current app state:',
-        appInBackground ? 'background' : 'foreground'
-      )
+        appInBackground ? 'background' : 'foreground',
+      );
 
-      initialized = true
-      log.debug('Init push notifications done')
+      initialized = true;
+      log.debug('Init push notifications done');
     }
   }
 
-  reset () {
-    log.debug('Resetting store')
-    store.delete(STORE_NAME)
+  reset() {
+    log.debug('Resetting store');
+    store.delete(STORE_NAME);
   }
 
-  getToken () {
-    log.debug('Get token', token)
-    return token
+  getToken() {
+    log.debug('Get token', token);
+    return token;
   }
 
-  getPlatform () {
-    log.debug('Get platform', platform)
-    return platform
+  getPlatform() {
+    log.debug('Get platform', platform);
+    return platform;
   }
 
-  requestPermissions () {
+  requestPermissions() {
     try {
-      PushNotificationsHandler.requestPermissions()
+      PushNotificationsHandler.requestPermissions();
     } catch (error) {
-      log.warn('Error at requesting push permissions:', error)
+      log.warn('Error at requesting push permissions:', error);
     }
   }
 
-  rememberToken (tokenToRemember, platformToRemember) {
+  rememberToken(tokenToRemember, platformToRemember) {
     log.debug(
       'Remember token',
       tokenToRemember,
       'for platform',
-      platformToRemember
-    )
-    token = tokenToRemember
-    platform = platformToRemember
+      platformToRemember,
+    );
+    token = tokenToRemember;
+    platform = platformToRemember;
 
-    this.fireRegistration(token, platform)
+    this.fireRegistration(token, platform);
   }
 
-  setEncryptionKey (encKeyToStore, passwordForKeyStore) {
-    log.debug('Storing encrypted encryption key')
-    encKey = encKeyToStore
+  setEncryptionKey(encKeyToStore, passwordForKeyStore) {
+    log.debug('Storing encrypted encryption key');
+    encKey = encKeyToStore;
 
-    const iv = CryptoJS.enc.Utf8.parse('4537823546456123')
+    const iv = CryptoJS.enc.Utf8.parse('4537823546456123');
     const encrypted = CryptoJS.AES.encrypt(
       encKeyToStore,
       CryptoJS.enc.Utf8.parse(passwordForKeyStore),
-      { iv: iv, padding: CryptoJS.pad.ZeroPadding }
-    )
-    const encKeyEncrypted = encrypted.toString()
+      { iv: iv, padding: CryptoJS.pad.ZeroPadding },
+    );
+    const encKeyEncrypted = encrypted.toString();
 
-    store.update(STORE_NAME, { encKey: encKeyEncrypted })
+    store.update(STORE_NAME, { encKey: encKeyEncrypted });
   }
 
-  subscribeRegistration (fn) {
-    log.debug('New subscription for push notifications')
+  subscribeRegistration(fn) {
+    log.debug('New subscription for push notifications');
     if (handlers.indexOf(fn) === -1) {
-      handlers.push(fn)
+      handlers.push(fn);
     }
 
     if (token !== null && platform !== null) {
-      fn(token, platform)
+      fn(token, platform);
     }
   }
 
-  unsubscribeRegistration (fn) {
-    log.debug('Removing subscription for push notifications')
+  unsubscribeRegistration(fn) {
+    log.debug('Removing subscription for push notifications');
     handlers = handlers.filter(function (item) {
       if (item !== fn) {
-        return item
+        return item;
       }
-    })
+    });
   }
 
-  fireRegistration (token, platform) {
-    log.debug('Inform listeners about push notification token registration')
+  fireRegistration(token, platform) {
+    log.debug('Inform listeners about push notification token registration');
     handlers.forEach(function (item) {
-      item.call(this, token, platform)
-    })
+      item.call(this, token, platform);
+    });
   }
 
-  localNotification (notification) {
-    PushNotificationsHandler.localNotification(notification)
+  localNotification(notification) {
+    PushNotificationsHandler.localNotification(notification);
   }
 
-  scheduleLocalNotification (notification) {
-    log.info(`Scheduled local notification (title: ${notification.title})`)
-    PushNotificationsHandler.localNotificationSchedule(notification)
+  scheduleLocalNotification(notification) {
+    log.info(`Scheduled local notification (title: ${notification.title})`);
+    PushNotificationsHandler.localNotificationSchedule(notification);
   }
 
-  cancelLocalNotification (notificationId) {
-    log.info(`Cancel notification (id: ${notificationId})`)
+  cancelLocalNotification(notificationId) {
+    log.info(`Cancel notification (id: ${notificationId})`);
     PushNotificationsHandler.cancelLocalNotifications({
-      id: notificationId
-    })
+      id: notificationId,
+    });
   }
 
-  cancelAllLocalNotifications () {
-    PushNotificationsHandler.cancelAllLocalNotifications()
+  cancelAllLocalNotifications() {
+    PushNotificationsHandler.cancelAllLocalNotifications();
   }
 
-  alert (text) {
-    Alert.alert(text, '', [{ text: 'Ok', onPress: () => true }])
+  alert(text) {
+    Alert.alert(text, '', [{ text: 'Ok', onPress: () => true }]);
   }
 }

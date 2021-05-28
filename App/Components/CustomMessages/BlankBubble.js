@@ -4,21 +4,21 @@
  * want anything displayed but your custom-view.
  **/
 
-import React, { Component } from 'react'
-import { Bubble } from 'react-native-gifted-chat'
-import PropTypes from 'prop-types'
+import React, { Component } from 'react';
+import { Bubble } from 'react-native-gifted-chat';
+import PropTypes from 'prop-types';
 
 export default class BlankBubble extends Component {
   static propTypes = {
     renderTime: PropTypes.bool,
-    renderText: PropTypes.bool
-  }
+    renderText: PropTypes.bool,
+  };
   static defaultProps = {
     renderTime: false,
-    renderText: false
-  }
+    renderText: false,
+  };
 
-  render () {
+  render() {
     // let containerStyle
     // if the avatar should not be rendered, also some margins need to be removed
     // if (!this.props.renderAvatar) containerStyle = {left: {marginLeft: 0, marginBottom: 2, marginRight: 0}, right: {marginLeft: 0, marginBottom: 2, marginRight: 0}}
@@ -29,7 +29,7 @@ export default class BlankBubble extends Component {
         renderMessageText={this.props.renderText ? undefined : () => null}
         wrapperStyle={styles.wrapperStyle}
       />
-    )
+    );
   }
 }
 
@@ -38,12 +38,12 @@ const styles = {
     left: {
       backgroundColor: 'transparent',
       alignSelf: 'stretch',
-      marginRight: 0
+      marginRight: 0,
     },
     right: {
       backgroundColor: 'transparent',
       alignSelf: 'stretch',
-      marginLeft: 0
-    }
-  }
-}
+      marginLeft: 0,
+    },
+  },
+};

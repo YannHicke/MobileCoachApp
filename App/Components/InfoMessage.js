@@ -1,49 +1,49 @@
-import React, { Component } from 'react'
-import { Text, TouchableOpacity } from 'react-native'
-import { Icon } from 'react-native-elements'
-import propTypes from 'prop-types'
-import * as Animatable from 'react-native-animatable'
+import React, { Component } from 'react';
+import { Text, TouchableOpacity } from 'react-native';
+import { Icon } from 'react-native-elements';
+import propTypes from 'prop-types';
+import * as Animatable from 'react-native-animatable';
 
-import { Colors } from '../Themes'
+import { Colors } from '../Themes';
 
 export default class InfoMessage extends Component {
   static propTypes = {
     onPress: propTypes.func,
-    onClose: propTypes.func
-  }
+    onClose: propTypes.func,
+  };
 
-  constructor (props) {
-    super(props)
+  constructor(props) {
+    super(props);
     this.state = {
-      visible: true
-    }
+      visible: true,
+    };
   }
 
-  render () {
-    const { message } = this.props
+  render() {
+    const { message } = this.props;
     if (this.state.visible) {
       return (
         <Animatable.View
-          ref='container'
+          ref="container"
           style={[styles.container, this.props.containerStyle]}
-          useNativeDriver
-        >
+          useNativeDriver>
           <TouchableOpacity
             style={styles.messageContainer}
-            onPress={this.props.onPress}
-          >
+            onPress={this.props.onPress}>
             <Icon
-              name='info-with-circle'
-              type='entypo'
-              color='#fff'
+              name="info-with-circle"
+              type="entypo"
+              color="#fff"
               containerStyle={{ marginHorizontal: 10 }}
               size={18}
             />
             <Text style={styles.messageText}>{message}</Text>
           </TouchableOpacity>
         </Animatable.View>
-      )
-    } else return null
+      );
+    } else {
+      return null;
+    }
   }
 }
 
@@ -58,17 +58,17 @@ const styles = {
     shadowOpacity: 0.3,
     shadowRadius: 2,
     shadowOffset: {
-      height: 2
-    }
+      height: 2,
+    },
   },
   messageContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     marginRight: 15,
-    flex: 1
+    flex: 1,
   },
   messageText: {
     color: '#fff',
-    justifyContent: 'center'
-  }
-}
+    justifyContent: 'center',
+  },
+};

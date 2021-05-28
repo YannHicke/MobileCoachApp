@@ -1,20 +1,20 @@
-import { takeEvery, all, fork, call, actionChannel } from 'redux-saga/effects'
-import { channel, buffers } from 'redux-saga'
+import { takeEvery, all, fork, call, actionChannel } from 'redux-saga/effects';
+import { channel, buffers } from 'redux-saga';
 
 /* ------------- Actions ------------- */
 
-import { StartupActions } from '../Redux/StartupRedux'
-import { GUIActions } from '../Redux/GUIRedux'
-import { MessageActions } from '../Redux/MessageRedux'
-import { DashboardMessageActions } from '../Redux/DashboardMessageRedux'
-import { SettingsActions } from '../Redux/SettingsRedux'
+import { StartupActions } from '../Redux/StartupRedux';
+import { GUIActions } from '../Redux/GUIRedux';
+import { MessageActions } from '../Redux/MessageRedux';
+import { DashboardMessageActions } from '../Redux/DashboardMessageRedux';
+import { SettingsActions } from '../Redux/SettingsRedux';
 
 /* ------------- Sagas ------------- */
 
 import {
   initializeGiftedChat,
-  loadEarlierMessages
-} from './GiftedChatMessageSaga'
+  loadEarlierMessages,
+} from './GiftedChatMessageSaga';
 import {
   sendMessage,
   sendInvisibleMessage,
@@ -23,9 +23,9 @@ import {
   sendVariableValues,
   disableMessage,
   executeCommand,
-  watchMessageUpdateChannel
-} from './MessageSagas'
-import { sendDashboardMessage } from './DashboardMessageSagas'
+  watchMessageUpdateChannel,
+} from './MessageSagas';
+import { sendDashboardMessage } from './DashboardMessageSagas';
 import {
   setChannels,
   initializeServerSync,
@@ -33,10 +33,10 @@ import {
   handleNewClientCreatedMessages,
   watchConnectionStateChannel,
   watchIncomingMessageChannel,
-  watchOutgoingMessageChannel
-} from './ServerSyncSagas'
-import { updateLanguage } from './SettingsSagas'
-import { watchAddDashboardMessages } from './StoryProgressSagas'
+  watchOutgoingMessageChannel,
+} from './ServerSyncSagas';
+import { updateLanguage } from './SettingsSagas';
+import { watchAddDashboardMessages } from './StoryProgressSagas';
 
 /* ------------- API ------------- */
 
@@ -46,23 +46,23 @@ import { watchAddDashboardMessages } from './StoryProgressSagas'
 
 /* ------------- Connect Actions To Sagas ------------- */
 
-export default function * root () {
+export default function* root() {
   // Server Messages
-  const connectionStateChannel = yield call(channel, buffers.expanding())
-  const incomingMessageChannel = yield call(channel, buffers.expanding())
-  const outgoingMessageChannel = yield call(channel, buffers.expanding())
+  const connectionStateChannel = yield call(channel, buffers.expanding());
+  const incomingMessageChannel = yield call(channel, buffers.expanding());
+  const outgoingMessageChannel = yield call(channel, buffers.expanding());
   setChannels(
     connectionStateChannel,
     incomingMessageChannel,
-    outgoingMessageChannel
-  )
+    outgoingMessageChannel,
+  );
 
   // GiftedChat Messages
-  const buffer = buffers.expanding()
+  const buffer = buffers.expanding();
   const newOrUpdatedMessagesChannel = yield actionChannel(
     MessageActions.NEW_OR_UPDATED_MESSAGE_FOR_GIFTED_CHAT,
-    buffer
-  )
+    buffer,
+  );
 
   yield all([
     // Settings Saga
@@ -71,13 +71,13 @@ export default function * root () {
     // StoryProgress Saga
     takeEvery(
       DashboardMessageActions.ADD_OR_UPDATE_DASHBOARD_MESSAGE,
-      watchAddDashboardMessages
+      watchAddDashboardMessages,
     ),
 
     // GiftedChat (top layer)
     takeEvery(StartupActions.STARTUP, initializeGiftedChat, {
       buffer,
-      newOrUpdatedMessagesChannel
+      newOrUpdatedMessagesChannel,
     }),
     takeEvery(GUIActions.LOAD_EARLIER, loadEarlierMessages),
 
@@ -92,7 +92,7 @@ export default function * root () {
 
     takeEvery(
       DashboardMessageActions.SEND_DASHBOARD_MESSAGE,
-      sendDashboardMessage
+      sendDashboardMessage,
     ),
 
     yield fork(watchMessageUpdateChannel),
@@ -103,11 +103,11 @@ export default function * root () {
     takeEvery(MessageActions.COMMAND_TO_EXECUTE, handleCommands),
     takeEvery(
       MessageActions.ADD_OR_UPDATE_MESSAGE,
-      handleNewClientCreatedMessages
+      handleNewClientCreatedMessages,
     ),
     takeEvery(
       DashboardMessageActions.ADD_OR_UPDATE_DASHBOARD_MESSAGE,
-      handleNewClientCreatedMessages
+      handleNewClientCreatedMessages,
     ),
 
     // // User triggered App-Update
@@ -115,6 +115,6 @@ export default function * root () {
 
     yield fork(watchConnectionStateChannel),
     yield fork(watchIncomingMessageChannel),
-    yield fork(watchOutgoingMessageChannel)
-  ])
+    yield fork(watchOutgoingMessageChannel),
+  ]);
 }

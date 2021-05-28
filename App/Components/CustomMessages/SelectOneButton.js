@@ -1,12 +1,12 @@
-import React, { Component } from 'react'
-import { StyleSheet, View } from 'react-native'
-import Button from 'react-native-button'
-import PropTypes from 'prop-types'
-import * as Animatable from 'react-native-animatable'
+import React, { Component } from 'react';
+import { StyleSheet, View } from 'react-native';
+import Button from 'react-native-button';
+import PropTypes from 'prop-types';
+import * as Animatable from 'react-native-animatable';
 
-import CommonUtils, { tapBlockingHandlers } from './../../Utils/Common'
-import { Colors } from '../../Themes/'
-import { inputMessageStyles } from './Styles/CommonStyles'
+import CommonUtils, { tapBlockingHandlers } from './../../Utils/Common';
+import { Colors } from '../../Themes/';
+import { inputMessageStyles } from './Styles/CommonStyles';
 
 class Option extends Component {
   static propTypes = {
@@ -17,29 +17,28 @@ class Option extends Component {
     setMessageProperties: PropTypes.func,
     fadeInAnimation: PropTypes.string,
     delay: PropTypes.number,
-    duration: PropTypes.number
+    duration: PropTypes.number,
+  };
+
+  constructor(props) {
+    super(props);
+    this.shouldAnimate = true;
   }
 
-  constructor (props) {
-    super(props)
-    this.shouldAnimate = true
-  }
-
-  render () {
-    const { title, value, currentMessage, containerStyle } = this.props
-    const disabled = !CommonUtils.userCanEdit(currentMessage)
+  render() {
+    const { title, value, currentMessage, containerStyle } = this.props;
+    const disabled = !CommonUtils.userCanEdit(currentMessage);
     return (
       <Animatable.View
         {...(disabled ? tapBlockingHandlers : null)}
-        ref='view'
+        ref="view"
         useNativeDriver
         animation={this.shouldAnimate ? this.props.fadeInAnimation : null}
         delay={this.props.delay}
         duration={this.props.duration}
         onAnimationEnd={() => {
-          this.shouldAnimate = false
-        }}
-      >
+          this.shouldAnimate = false;
+        }}>
         <Button
           value={value}
           containerStyle={[styles.buttonContainer, containerStyle]}
@@ -47,25 +46,24 @@ class Option extends Component {
           disabled={!CommonUtils.userCanEdit(currentMessage)}
           style={styles.button}
           title={title}
-          onPress={() => this.props.onPress(this.props.optionKey)}
-        >
+          onPress={() => this.props.onPress(this.props.optionKey)}>
           {title}
         </Button>
       </Animatable.View>
-    )
+    );
   }
 
   animatable = () => {
-    return this.refs.view
-  }
+    return this.refs.view;
+  };
 }
 
 export default class SelectOneButton extends Component {
-  constructor (props) {
-    super(props)
-    this.tapped = false
-    this.animatableRefs = {}
-    this.shouldAnimate = this.props.currentMessage.custom.shouldAnimate
+  constructor(props) {
+    super(props);
+    this.tapped = false;
+    this.animatableRefs = {};
+    this.shouldAnimate = this.props.currentMessage.custom.shouldAnimate;
   }
   static propTypes = {
     currentMessage: PropTypes.object,
@@ -74,23 +72,23 @@ export default class SelectOneButton extends Component {
     fadeOutAnimation: PropTypes.string,
     fadeOutSelectedAnimation: PropTypes.string,
     delayOffset: PropTypes.number,
-    duration: PropTypes.number
-  }
+    duration: PropTypes.number,
+  };
 
-  onPressHandler (message, text, value, selectedOptionKey) {
+  onPressHandler(message, text, value, selectedOptionKey) {
     // Only handle click the first time (to prevent unwanted "double-taps")
     if (!this.tapped) {
       let relatedMessageId = message._id.substring(
         0,
-        message._id.lastIndexOf('-')
-      )
+        message._id.lastIndexOf('-'),
+      );
       this.props.onPress(
         message.custom.intention,
         text,
         value,
-        relatedMessageId
-      )
-      this.tapped = true
+        relatedMessageId,
+      );
+      this.tapped = true;
 
       // Apparently, the "Animation-Finished" callback is called quite delayed,
       // which causes a disruptive break between fadeOut-Animation of input-Option and fadeIn-Animation of answer message
@@ -124,16 +122,16 @@ export default class SelectOneButton extends Component {
     }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     // notify redux that animationw as shown after first render
-    const { currentMessage } = this.props
+    const { currentMessage } = this.props;
     if (currentMessage.custom.shouldAnimate) {
-      this.props.setAnimationShown(currentMessage._id)
+      this.props.setAnimationShown(currentMessage._id);
     }
   }
 
-  render () {
-    const { options } = this.props.currentMessage.custom
+  render() {
+    const { options } = this.props.currentMessage.custom;
 
     return (
       <View style={inputMessageStyles.container}>
@@ -150,12 +148,14 @@ export default class SelectOneButton extends Component {
                   this.props.currentMessage,
                   item.button,
                   item.value,
-                  optionKey
+                  optionKey,
                 )
               }
               ref={(ref) => {
                 // Apparently, this callback is often called with "null"-values..
-                if (ref !== null) this.animatableRefs[index] = ref
+                if (ref !== null) {
+                  this.animatableRefs[index] = ref;
+                }
               }}
               containerStyle={
                 options.length > 4 ? styles.buttonContainerSmall : undefined
@@ -167,10 +167,10 @@ export default class SelectOneButton extends Component {
               delay={index * this.props.delayOffset}
               duration={this.props.duration}
             />
-          )
+          );
         })}
       </View>
-    )
+    );
   }
 }
 const styles = StyleSheet.create({
@@ -184,17 +184,17 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     borderRadius: 16,
     backgroundColor: Colors.buttons.selectOne.background,
-    marginBottom: 2
+    marginBottom: 2,
   },
   buttonContainerSmall: {
-    minHeight: 40
+    minHeight: 40,
   },
   buttonContainerDisabled: {
-    backgroundColor: Colors.buttons.selectOne.disabled
+    backgroundColor: Colors.buttons.selectOne.disabled,
   },
   button: {
     fontSize: 16,
     color: Colors.buttons.selectOne.text,
-    fontWeight: 'normal'
-  }
-})
+    fontWeight: 'normal',
+  },
+});

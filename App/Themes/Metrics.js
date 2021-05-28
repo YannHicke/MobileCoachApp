@@ -1,9 +1,9 @@
-import { AppState, Dimensions, Platform, StatusBar } from 'react-native'
+import { AppState, Dimensions, Platform, StatusBar } from 'react-native';
 
-import Log from '../Utils/Log'
-const log = new Log('Themes/Metrics')
+import Log from '../Utils/Log';
+const log = new Log('Themes/Metrics');
 
-const { width, height } = Dimensions.get('window')
+const { width, height } = Dimensions.get('window');
 
 // Used via Metrics.baseMargin
 const metrics = {
@@ -25,52 +25,52 @@ const metrics = {
     small: 20,
     medium: 30,
     large: 45,
-    xl: 50
+    xl: 50,
   },
   images: {
     small: 20,
     medium: 40,
     large: 60,
-    logo: 200
+    logo: 200,
   },
   appInBackground: false,
   lastBackgroundTimestamp: new Date(),
   androidStatusBarTranslucent: false,
-  statusBarMargin: 0
-}
+  statusBarMargin: 0,
+};
 
-metrics.aspectRatio = metrics.screenWidth / metrics.screenHeight
+metrics.aspectRatio = metrics.screenWidth / metrics.screenHeight;
 if (Platform.OS === 'android' && metrics.androidStatusBarTranslucent) {
   metrics.statusBarMargin = StatusBar.currentHeight
     ? StatusBar.currentHeight
-    : 21
+    : 21;
 }
 
 // Care about app state changes
 AppState.addEventListener('change', function (newAppState) {
-  log.debug('New app state:', newAppState)
+  log.debug('New app state:', newAppState);
 
   if (newAppState === 'active') {
     if (metrics.appInBackground) {
-      log.action('App', 'Resume', 'Timestamp', new Date())
-      log.action('GUI', 'AppInForeground', true)
-      metrics.lastBackgroundTimestamp = new Date()
-      metrics.appInBackground = false
+      log.action('App', 'Resume', 'Timestamp', new Date());
+      log.action('GUI', 'AppInForeground', true);
+      metrics.lastBackgroundTimestamp = new Date();
+      metrics.appInBackground = false;
     }
   } else {
     if (!metrics.appInBackground) {
-      const newTimestamp = new Date()
+      const newTimestamp = new Date();
       log.action(
         'App',
         'Usage',
         'Millis',
-        newTimestamp - metrics.lastBackgroundTimestamp
-      )
-      log.action('GUI', 'AppInForeground', false)
-      metrics.lastBackgroundTimestamp = newTimestamp
-      metrics.appInBackground = true
+        newTimestamp - metrics.lastBackgroundTimestamp,
+      );
+      log.action('GUI', 'AppInForeground', false);
+      metrics.lastBackgroundTimestamp = newTimestamp;
+      metrics.appInBackground = true;
     }
   }
-})
+});
 
-export default metrics
+export default metrics;

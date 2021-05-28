@@ -1,12 +1,12 @@
-import React, { Component } from 'react'
-import { View, StyleSheet, ScrollView, Text } from 'react-native'
-import { connect } from 'react-redux'
+import React, { Component } from 'react';
+import { View, StyleSheet, ScrollView, Text } from 'react-native';
+import { connect } from 'react-redux';
 
-import I18n from '../I18n/I18n'
-import HeaderBar from './HeaderBar'
-import ServerMessageActions from '../Redux/MessageRedux'
-import SelectManyComponent from './CustomMessages/SelectManyComponent'
-import { Colors } from '../Themes'
+import I18n from '../I18n/I18n';
+import HeaderBar from './HeaderBar';
+import ServerMessageActions from '../Redux/MessageRedux';
+import SelectManyComponent from './CustomMessages/SelectManyComponent';
+import { Colors } from '../Themes';
 
 // import Log from '../Utils/Log'
 // const log = new Log('Components/SelectManyModal')
@@ -19,8 +19,8 @@ import { Colors } from '../Themes'
  */
 
 class SelectManyModal extends Component {
-  render () {
-    const { currentMessage, answerAction } = this.props
+  render() {
+    const { currentMessage, answerAction } = this.props;
     return (
       <View style={styles.container}>
         <HeaderBar
@@ -34,48 +34,45 @@ class SelectManyModal extends Component {
             </Text>
             <SelectManyComponent
               onPress={(intention, text, value, relatedMessageId) => {
-                answerAction(intention, text, value, relatedMessageId)
-                this.props.onClose(true)
+                answerAction(intention, text, value, relatedMessageId);
+                this.props.onClose(true);
               }}
               currentMessage={currentMessage}
               containerStyle={{
                 marginLeft: 0,
                 marginRight: 0,
-                paddingBottom: 10
+                paddingBottom: 10,
               }}
             />
           </View>
         </ScrollView>
       </View>
-    )
+    );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
   contentContainer: {
     flex: 1,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
   },
   headline: {
     fontSize: 16,
-    color: Colors.main.headline
-  }
-})
+    color: Colors.main.headline,
+  },
+});
 
 const mapStateToProps = (state) => {
-  return {}
-}
+  return {};
+};
 
 const mapStateToDispatch = (dispatch) => ({
   sendVariableValue: (variable, value) =>
-    dispatch(ServerMessageActions.sendVariableValue(variable, value))
-})
+    dispatch(ServerMessageActions.sendVariableValue(variable, value)),
+});
 
-export default connect(
-  mapStateToProps,
-  mapStateToDispatch
-)(SelectManyModal)
+export default connect(mapStateToProps, mapStateToDispatch)(SelectManyModal);

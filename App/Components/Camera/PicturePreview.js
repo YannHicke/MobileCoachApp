@@ -1,11 +1,11 @@
-import React from 'react'
-import { View, Image, TouchableWithoutFeedback } from 'react-native'
-import Icon from 'react-native-vector-icons/MaterialIcons'
+import React from 'react';
+import { View, Image, TouchableWithoutFeedback } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import HeaderBar from './../HeaderBar'
+import HeaderBar from './../HeaderBar';
 
 const PicturePreview = (props) => {
-  const { onConfirm, onAbort, onBack, imageSource, title } = props
+  const { onConfirm, onAbort, onBack, imageSource, title } = props;
   return (
     <View style={{ flex: 1 }}>
       <HeaderBar title={title} onBack={onBack} />
@@ -14,19 +14,18 @@ const PicturePreview = (props) => {
           flex: 1,
           alignItems: 'center',
           justifyContent: 'center',
-          position: 'relative'
-        }}
-      >
+          position: 'relative',
+        }}>
         <Image
           style={{
             position: 'absolute',
             top: 0,
             right: 0,
             bottom: 0,
-            left: 0
+            left: 0,
           }}
           source={{ uri: imageSource }}
-          resizeMode='cover'
+          resizeMode="cover"
         />
       </View>
 
@@ -40,9 +39,8 @@ const PicturePreview = (props) => {
           alignItems: 'center',
           justifyContent: 'center',
           backgroundColor: 'rgba(0,0,0,0.8)',
-          paddingVertical: 10
-        }}
-      >
+          paddingVertical: 10,
+        }}>
         <TouchableWithoutFeedback onPress={onAbort}>
           <View style={{ paddingHorizontal: 25 }}>
             <Icon
@@ -63,7 +61,7 @@ const PicturePreview = (props) => {
         </TouchableWithoutFeedback>
       </View>
     </View>
-  )
-}
+  );
+};
 
-export default PicturePreview
+export default PicturePreview;

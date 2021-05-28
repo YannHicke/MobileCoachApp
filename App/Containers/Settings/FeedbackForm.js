@@ -1,34 +1,37 @@
 // TODO for improvement check: https://github.com/idibidiart/react-native-responsive-grid/blob/master/UniversalTiles.md
 
-import React, { Component } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
-import I18n from '../../I18n/I18n'
-import PropTypes from 'prop-types'
-import { Input, FormValidationMessage } from 'react-native-elements'
+import React, { Component } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import I18n from '../../I18n/I18n';
+import PropTypes from 'prop-types';
+import { Input, FormValidationMessage } from 'react-native-elements';
 
-import NextButton from '../../Components/NextButton'
-import { Colors } from '../../Themes/'
+import NextButton from '../../Components/NextButton';
+import { Colors } from '../../Themes/';
 
 export default class FeedbackForm extends Component {
   static propTypes = {
     onSubmit: PropTypes.func.isRequired,
-    onFeedbackFocus: PropTypes.func
-  }
+    onFeedbackFocus: PropTypes.func,
+  };
 
   state = {
     name: '',
     email: '',
     errorDescription: '',
     submitPressed: false,
-    submitted: false
+    submitted: false,
+  };
+
+  render() {
+    if (!this.state.submitted) {
+      return this.renderForm();
+    } else {
+      return this.renderSuccessMessage();
+    }
   }
 
-  render () {
-    if (!this.state.submitted) return this.renderForm()
-    else return this.renderSuccessMessage()
-  }
-
-  renderForm () {
+  renderForm() {
     return (
       <View>
         <Input
@@ -68,33 +71,37 @@ export default class FeedbackForm extends Component {
           onPress={() => this.onSubmitHandler()}
         />
       </View>
-    )
+    );
   }
 
-  renderSuccessMessage () {
+  renderSuccessMessage() {
     return (
       <View>
         <Text style={styles.headline}>{I18n.t('Common.thanks')}</Text>
         <Text>{I18n.t('Settings.feedbackForm.submitMessage')}</Text>
       </View>
-    )
+    );
   }
 
-  onSubmitHandler () {
+  onSubmitHandler() {
     if (this.inputValid()) {
       this.setState({ submitted: true }, () =>
         this.props.onSubmit(
           this.state.name,
           this.state.email,
-          this.state.errorDescription
-        )
-      )
-    } else this.setState({ submitPressed: true })
+          this.state.errorDescription,
+        ),
+      );
+    } else {
+      this.setState({ submitPressed: true });
+    }
   }
 
-  inputValid () {
-    if (this.state.errorDescription !== '') return true
-    return false
+  inputValid() {
+    if (this.state.errorDescription !== '') {
+      return true;
+    }
+    return false;
   }
 }
 
@@ -103,30 +110,30 @@ const styles = StyleSheet.create({
     marginLeft: 0,
     marginRight: 0,
     width: undefined,
-    color: Colors.main.paragraph
+    color: Colors.main.paragraph,
   },
   inputContainer: {
     marginLeft: 0,
-    marginRight: 0
+    marginRight: 0,
   },
   headline: {
     color: Colors.main.headline,
     fontWeight: 'bold',
     marginTop: 20,
-    marginBottom: 10
+    marginBottom: 10,
   },
   labelStyle: {
     marginLeft: 0,
     marginRight: 0,
     width: undefined,
     color: Colors.main.paragraph,
-    fontWeight: 'normal'
+    fontWeight: 'normal',
   },
   button: {
     backgroundColor: Colors.buttons.common.background,
     borderRadius: 20,
     marginVertical: 10,
-    marginTop: 30
+    marginTop: 30,
   },
-  buttonText: { color: Colors.buttons.common.text, fontSize: 16 }
-})
+  buttonText: { color: Colors.buttons.common.text, fontSize: 16 },
+});

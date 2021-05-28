@@ -1,15 +1,15 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import {
   Text,
   View,
   TouchableOpacity,
   StyleSheet,
-  Platform
-} from 'react-native'
-import { Colors } from '../Themes'
+  Platform,
+} from 'react-native';
+import { Colors } from '../Themes';
 
 export default class NextButton extends Component {
-  render ({ onPress, styleButton, styleText } = this.props) {
+  render({ onPress, styleButton, styleText } = this.props) {
     if (Platform.OS === 'ios') {
       return (
         <TouchableOpacity onPress={onPress}>
@@ -19,7 +19,7 @@ export default class NextButton extends Component {
             </Text>
           </View>
         </TouchableOpacity>
-      )
+      );
     } else {
       // Hacky solution to mimic a border with radius on android, because a real borderradius causes buggy layouts with touchableOpacity
       return (
@@ -32,7 +32,7 @@ export default class NextButton extends Component {
             </View>
           </View>
         </TouchableOpacity>
-      )
+      );
     }
   }
 }
@@ -42,33 +42,33 @@ const Styles = StyleSheet.create({
   border: {
     backgroundColor: Colors.onboarding.text,
     borderRadius: 52,
-    padding: 2
+    padding: 2,
   },
   nextButton: {
     color: Colors.onboarding.text,
-    fontSize: 30
+    fontSize: 30,
   },
   // Button container
   button: {
     borderRadius: 50,
     ...Platform.select({
       ios: {
-        borderWidth: 2
+        borderWidth: 2,
       },
       android: {
         borderWidth: 0,
-        backgroundColor: Colors.onboarding.background
-      }
+        backgroundColor: Colors.onboarding.background,
+      },
     }),
     borderColor: Colors.onboarding.text,
     paddingHorizontal: 50,
     paddingVertical: 10,
-    alignSelf: 'stretch'
+    alignSelf: 'stretch',
   },
   // Button text
   buttonText: {
     color: Colors.onboarding.text,
     textAlign: 'center',
-    fontSize: 20
-  }
-})
+    fontSize: 20,
+  },
+});

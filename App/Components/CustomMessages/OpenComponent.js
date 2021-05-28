@@ -1,12 +1,12 @@
-import React, { Component } from 'react'
-import { StyleSheet, View } from 'react-native'
-import Button from 'react-native-button'
-import PropTypes from 'prop-types'
-import { Colors } from '../../Themes/'
-import { Icon } from 'react-native-elements'
-import * as Animatable from 'react-native-animatable'
+import React, { Component } from 'react';
+import { StyleSheet, View } from 'react-native';
+import Button from 'react-native-button';
+import PropTypes from 'prop-types';
+import { Colors } from '../../Themes/';
+import { Icon } from 'react-native-elements';
+import * as Animatable from 'react-native-animatable';
 
-import CommonUtils from './../../Utils/Common'
+import CommonUtils from './../../Utils/Common';
 
 export default class OpenComponent extends Component {
   static propTypes = {
@@ -17,15 +17,15 @@ export default class OpenComponent extends Component {
     setAnimationShown: PropTypes.func,
     icon: PropTypes.string,
     iconType: PropTypes.string,
-    iconPosition: PropTypes.string
+    iconPosition: PropTypes.string,
+  };
+
+  constructor(props) {
+    super(props);
+    this.shouldAnimate = this.props.currentMessage.custom.shouldAnimate;
   }
 
-  constructor (props) {
-    super(props)
-    this.shouldAnimate = this.props.currentMessage.custom.shouldAnimate
-  }
-
-  render () {
+  render() {
     const {
       currentMessage,
       previousMessage,
@@ -33,12 +33,12 @@ export default class OpenComponent extends Component {
       onPressSecondButton,
       icon,
       iconType,
-      iconPosition
-    } = this.props
-    const editable = CommonUtils.userCanEdit(currentMessage)
-    const secondButton = currentMessage.custom.secondButton
-    console.log(previousMessage)
-    console.log(currentMessage)
+      iconPosition,
+    } = this.props;
+    const editable = CommonUtils.userCanEdit(currentMessage);
+    const secondButton = currentMessage.custom.secondButton;
+    console.log(previousMessage);
+    console.log(currentMessage);
     return (
       <Animatable.View
         useNativeDriver
@@ -46,30 +46,26 @@ export default class OpenComponent extends Component {
         duration={this.props.duration}
         style={[
           styles.container,
-          previousMessage.type === 'open-component'
-            ? { marginTop: 0 }
-            : null
+          previousMessage.type === 'open-component' ? { marginTop: 0 } : null,
         ]}
         onAnimationEnd={() => {
-          this.shouldAnimate = false
-        }}
-      >
+          this.shouldAnimate = false;
+        }}>
         <Button
           containerStyle={[
             styles.buttonContainer,
-            secondButton ? styles.buttonContainerSeveralButtons : null
+            secondButton ? styles.buttonContainerSeveralButtons : null,
           ]}
           disabledContainerStyle={[styles.buttonDisabled]}
           disabled={!editable}
           style={[
             styles.button,
             iconPosition === 'left' ? { paddingLeft: 30 } : null,
-            iconPosition === 'right' ? { paddingRight: 30 } : null
+            iconPosition === 'right' ? { paddingRight: 30 } : null,
           ]}
           onPress={() => {
-            onPress(currentMessage.custom.component)
-          }}
-        >
+            onPress(currentMessage.custom.component);
+          }}>
           {icon && iconPosition === 'left' ? (
             <Icon
               name={icon}
@@ -95,15 +91,14 @@ export default class OpenComponent extends Component {
           <Button
             containerStyle={[
               styles.buttonContainer,
-              secondButton ? styles.buttonContainerSeveralButtons : null
+              secondButton ? styles.buttonContainerSeveralButtons : null,
             ]}
             disabledContainerStyle={[styles.buttonDisabled]}
             disabled={!editable}
             style={[styles.button, icon ? { paddingLeft: 30 } : null]}
             onPress={() => {
-              onPressSecondButton(currentMessage.custom.component)
-            }}
-          >
+              onPressSecondButton(currentMessage.custom.component);
+            }}>
             {icon && iconPosition === 'left' ? (
               <Icon
                 name={icon}
@@ -112,7 +107,7 @@ export default class OpenComponent extends Component {
                 color={Colors.buttons.openComponent.text}
                 containerStyle={{
                   position: 'absolute',
-                  left: 0
+                  left: 0,
                 }}
               />
             ) : null}
@@ -125,7 +120,7 @@ export default class OpenComponent extends Component {
                 color={Colors.buttons.openComponent.text}
                 containerStyle={{
                   position: 'absolute',
-                  left: 0
+                  left: 0,
                 }}
               />
             ) : null}
@@ -133,25 +128,25 @@ export default class OpenComponent extends Component {
           </Button>
         ) : null}
       </Animatable.View>
-    )
+    );
   }
 
-  componentDidMount () {
+  componentDidMount() {
     // notify redux that animationw as shown after first render
-    const { currentMessage } = this.props
+    const { currentMessage } = this.props;
     if (currentMessage.custom.shouldAnimate) {
-      this.props.setAnimationShown(currentMessage._id)
+      this.props.setAnimationShown(currentMessage._id);
     }
   }
 
   // Possible icons: asterisk, mountains, alert-octagram
-  renderInteractionBadge () {
+  renderInteractionBadge() {
     // const {currentMessage, onPress} = this.props
     return (
       <View style={styles.badgeContainer}>
-        <Icon name='asterisk' type='font-awesome' size={15} color='#fff' />
+        <Icon name="asterisk" type="font-awesome" size={15} color="#fff" />
       </View>
-    )
+    );
   }
 }
 
@@ -164,13 +159,13 @@ const styles = StyleSheet.create({
     width: 11,
     borderColor: '#EC5352',
     borderWidth: 11,
-    borderRadius: 11
+    borderRadius: 11,
   },
   container: {
     marginVertical: 20,
     flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   buttonContainer: {
     justifyContent: 'center',
@@ -181,17 +176,17 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     borderRadius: 16,
     backgroundColor: Colors.buttons.openComponent.background,
-    marginBottom: 2
+    marginBottom: 2,
   },
   buttonContainerSeveralButtons: {
-    width: 250
+    width: 250,
   },
   button: {
     fontSize: 16,
     color: Colors.buttons.openComponent.text,
-    fontWeight: 'normal'
+    fontWeight: 'normal',
   },
   buttonDisabled: {
-    backgroundColor: Colors.buttons.openComponent.disabled
-  }
-})
+    backgroundColor: Colors.buttons.openComponent.disabled,
+  },
+});

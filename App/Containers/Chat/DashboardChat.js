@@ -1,42 +1,42 @@
-import { View, Alert, Platform } from 'react-native'
-import React, { Component } from 'react'
-import { GiftedChat, Day } from 'react-native-gifted-chat' // import { GiftedChat, LoadEarlier, Message } from 'react-native-gifted-chat'
-import PMNavigationBar from '../../Components/Navbar'
-import ConnectionStateButton from '../../Components/ConnectionStateButton'
+import { View, Alert, Platform } from 'react-native';
+import React, { Component } from 'react';
+import { GiftedChat, Day } from 'react-native-gifted-chat'; // import { GiftedChat, LoadEarlier, Message } from 'react-native-gifted-chat'
+import PMNavigationBar from '../../Components/Navbar';
+import ConnectionStateButton from '../../Components/ConnectionStateButton';
 // Actions
-import DashboardMessageRedux from './../../Redux/DashboardMessageRedux'
-import StoryProgressRedux from './../../Redux/StoryProgressRedux'
+import DashboardMessageRedux from './../../Redux/DashboardMessageRedux';
+import StoryProgressRedux from './../../Redux/StoryProgressRedux';
 // Helpers
-import I18n from '../../I18n/I18n'
-import { connect } from 'react-redux'
-import uuid from 'uuid'
-import KeyboardSpacer from 'react-native-keyboard-spacer'
+import I18n from '../../I18n/I18n';
+import { connect } from 'react-redux';
+import uuid from 'uuid';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 
-import Ticks from '../../Components/CustomMessages/Ticks'
-import PMTextBubble from '../../Components/CustomMessages/PMTextBubble'
-import RepeatingBackgroundImage from '../../Components/RepeatingBackgroundImage'
-import Styles, { TextBubbleStyle } from './Styles'
-import { Images, Colors } from '../../Themes'
-import InputToolbar from '../../Components/InputToolbar'
-import { ConnectionStates } from '../../Redux/ServerSyncRedux'
-import AppConfig from '../../Config/AppConfig'
+import Ticks from '../../Components/CustomMessages/Ticks';
+import PMTextBubble from '../../Components/CustomMessages/PMTextBubble';
+import RepeatingBackgroundImage from '../../Components/RepeatingBackgroundImage';
+import Styles, { TextBubbleStyle } from './Styles';
+import { Images, Colors } from '../../Themes';
+import InputToolbar from '../../Components/InputToolbar';
+import { ConnectionStates } from '../../Redux/ServerSyncRedux';
+import AppConfig from '../../Config/AppConfig';
 
-import Log from '../../Utils/Log'
-const log = new Log('Containers/Chat/DashboardChat')
+import Log from '../../Utils/Log';
+const log = new Log('Containers/Chat/DashboardChat');
 
 const getGiftedChatMessages = (messages) => {
-  const messagesArray = Object.values(messages).reverse()
-  const giftedChatMessages = []
+  const messagesArray = Object.values(messages).reverse();
+  const giftedChatMessages = [];
   messagesArray.map((message) =>
-    giftedChatMessages.push(message.giftedChatMessage)
-  )
-  return giftedChatMessages
-}
+    giftedChatMessages.push(message.giftedChatMessage),
+  );
+  return giftedChatMessages;
+};
 
 class Chat extends Component {
-  componentDidMount () {
+  componentDidMount() {
     // clear Unread-Messages badge
-    this.props.clearUnreadDashboardMessages()
+    this.props.clearUnreadDashboardMessages();
   }
 
   getChatProperties = () => {
@@ -48,7 +48,7 @@ class Chat extends Component {
       minInputToolbarHeight: 0,
       user: { _id: 1 },
       onLongPress: () => {
-        return null
+        return null;
       },
       onPressAvatar: () => {}, // { this.showModal('image-lightbox', {source: Images.coaches[this.props.coach]}) },
       keyboardShouldPersistTaps: 'always',
@@ -76,41 +76,41 @@ class Chat extends Component {
       placeholder: I18n.t('DashboardChat.placeholder'),
       label: I18n.t('DashboardChat.send'),
       // textInputProps: {blurOnSubmit: true},
-      renderInputToolbar: () => null
+      renderInputToolbar: () => null,
       // OnSend: Callback when user sends a message (not relevant because no input)
       // onSend: (messages) => this.onSend(messages)
-    }
+    };
+  };
+
+  onSend(message) {
+    const { role } = AppConfig.config.serverSync;
+    log.debug('Sending message:', message);
+    const id = uuid.v4();
+    this.props.sendMessageToServer(id, message, new Date(), role);
   }
 
-  onSend (message) {
-    const { role } = AppConfig.config.serverSync
-    log.debug('Sending message:', message)
-    const id = uuid.v4()
-    this.props.sendMessageToServer(id, message, new Date(), role)
+  renderTicks(currentMessage) {
+    return <Ticks currentMessage={currentMessage} />;
   }
 
-  renderTicks (currentMessage) {
-    return <Ticks currentMessage={currentMessage} />
-  }
-
-  renderBubble (props) {
-    const { currentMessage } = props
-    currentMessage.user['avatar'] = Images.coachGeneric
-    currentMessage.user['name'] = I18n.t(
-      'DashboardChat.user.' + currentMessage.user._id
-    )
+  renderBubble(props) {
+    const { currentMessage } = props;
+    currentMessage.user.avatar = Images.coachGeneric;
+    currentMessage.user.name = I18n.t(
+      'DashboardChat.user.' + currentMessage.user._id,
+    );
 
     return (
       <PMTextBubble
         chatProps={props}
         wrapperStyle={TextBubbleStyle.wrapperStyle}
         textStyle={TextBubbleStyle.textStyle}
-        appearInAnimationLeft='bounceIn'
+        appearInAnimationLeft="bounceIn"
       />
-    )
+    );
   }
 
-  renderFooter () {
+  renderFooter() {
     return (
       <View style={[Styles.footerContainer, { paddingBottom: 10 }]}>
         <InputToolbar
@@ -119,67 +119,67 @@ class Chat extends Component {
         />
         {Platform.OS === 'android' ? <KeyboardSpacer /> : null}
       </View>
-    )
+    );
   }
 
   showConnectionStateMessage = (connectionState) => {
-    log.action('GUI', 'ConnectionCheck', connectionState)
+    log.action('GUI', 'ConnectionCheck', connectionState);
 
-    let alertMessage = null
+    let alertMessage = null;
     switch (connectionState) {
       case ConnectionStates.INITIALIZING:
       case ConnectionStates.INITIALIZED:
-        alertMessage = I18n.t('ConnectionStates.initialized')
-        break
+        alertMessage = I18n.t('ConnectionStates.initialized');
+        break;
       case ConnectionStates.CONNECTING:
       case ConnectionStates.RECONNECTING:
-        alertMessage = I18n.t('ConnectionStates.connecting')
-        break
+        alertMessage = I18n.t('ConnectionStates.connecting');
+        break;
       case ConnectionStates.CONNECTED:
       case ConnectionStates.SYNCHRONIZATION:
-        alertMessage = I18n.t('ConnectionStates.connected')
-        break
+        alertMessage = I18n.t('ConnectionStates.connected');
+        break;
       case ConnectionStates.SYNCHRONIZED:
-        alertMessage = I18n.t('ConnectionStates.synchronized')
-        break
+        alertMessage = I18n.t('ConnectionStates.synchronized');
+        break;
     }
 
     Alert.alert(
       I18n.t('ConnectionStates.connectionToCoach'),
       alertMessage,
       [{ text: I18n.t('Common.ok'), onPress: () => true }],
-      { cancelable: false }
-    )
-  }
+      { cancelable: false },
+    );
+  };
 
-  renderDay (props) {
+  renderDay(props) {
     return (
       <Day
         {...props}
         textStyle={{ color: Colors.modules.dashboardChat.date }}
       />
-    )
+    );
   }
 
-  render () {
+  render() {
     return (
       <View style={Styles.chatContainer}>
         <RepeatingBackgroundImage source={Images.chatBg}>
           {this.renderNavigationbar(this.props)}
           <GiftedChat
             ref={(ref) => {
-              this.giftedChat = ref
+              this.giftedChat = ref;
             }}
             {...this.getChatProperties(this.props)}
           />
         </RepeatingBackgroundImage>
       </View>
-    )
+    );
   }
 
-  renderNavigationbar (props) {
-    const { connectionState } = props
-    let title = I18n.t('DashboardChat.title')
+  renderNavigationbar(props) {
+    const { connectionState } = props;
+    let title = I18n.t('DashboardChat.title');
     return (
       <PMNavigationBar
         title={title}
@@ -187,7 +187,7 @@ class Chat extends Component {
           <View>
             <ConnectionStateButton
               onPress={() => {
-                this.showConnectionStateMessage(connectionState)
+                this.showConnectionStateMessage(connectionState);
               }}
               connectionState={connectionState}
             />
@@ -195,7 +195,7 @@ class Chat extends Component {
         }
         props={props}
       />
-    )
+    );
   }
 }
 
@@ -205,21 +205,18 @@ const mapStateToProps = (state) => {
     messages: getGiftedChatMessages(state.dashboardMessages),
     guistate: state.guistate,
     storyProgress: state.storyProgress,
-    connectionState: state.serverSyncStatus.connectionState
-  }
-}
+    connectionState: state.serverSyncStatus.connectionState,
+  };
+};
 
 // TODO: Do we still need messageAnsweredByGiftedChat?
 const mapStateToDispatch = (dispatch) => ({
   sendMessageToServer: (id, text, timestamp) =>
     dispatch(DashboardMessageRedux.sendDashboardMessage(id, text, timestamp)),
   clearUnreadDashboardMessages: (messageId) =>
-    dispatch(StoryProgressRedux.clearUnreadDashboardMessages())
+    dispatch(StoryProgressRedux.clearUnreadDashboardMessages()),
   // loadEarlier: () => dispatch(GUIActions.loadEarlier()),
   // markAnimationAsShown: (messageId) => clearUnreadMessages: (messageId) => dispatch(GUIActions.clearUnreadMessages())
-})
+});
 
-export default connect(
-  mapStateToProps,
-  mapStateToDispatch
-)(Chat)
+export default connect(mapStateToProps, mapStateToDispatch)(Chat);

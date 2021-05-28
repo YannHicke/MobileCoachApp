@@ -1,31 +1,31 @@
-import React, { Component } from 'react'
-import { ImageBackground, Image, Platform, View } from 'react-native'
-import { Metrics } from '../Themes/'
+import React, { Component } from 'react';
+import { ImageBackground, Image, Platform, View } from 'react-native';
+import { Metrics } from '../Themes/';
 
 export default class RepeatingBackgroundImage extends Component {
   static propTypes = {
-    source: Image.propTypes.source
-  }
+    source: Image.propTypes.source,
+  };
 
-  constructor (props) {
-    super(props)
+  constructor(props) {
+    super(props);
     // Unfortunatley, resizeMode repeat is only available for ios, so we need to use a hacky solution for Android
     // calculate the image-Matrix in constructor so it doesn't need to be recalculated on every render
     if (Platform.OS === 'android' && props.source) {
-      const { source } = this.props
-      const { width, height } = Image.resolveAssetSource(source)
+      const { source } = this.props;
+      const { width, height } = Image.resolveAssetSource(source);
 
-      this.imageMatrix = []
+      this.imageMatrix = [];
       for (let j = 0; j < Math.ceil(Metrics.screenHeight / width); j++) {
-        let imageRow = []
+        let imageRow = [];
         for (let i = 0; i < Math.ceil(Metrics.screenWidth / height); i++) {
           imageRow.push(
             <Image
               key={i}
               style={{ width: width, height: height }}
               source={source}
-            />
-          )
+            />,
+          );
         }
         this.imageMatrix.push(
           <View
@@ -34,36 +34,34 @@ export default class RepeatingBackgroundImage extends Component {
               flex: 1,
               flexDirection: 'row',
               position: 'absolute',
-              top: j * height
-            }}
-          >
+              top: j * height,
+            }}>
             {imageRow.map((img, i) => {
-              return img
+              return img;
             })}
-          </View>
-        )
+          </View>,
+        );
       }
     }
   }
 
-  render () {
-    const { source } = this.props
+  render() {
+    const { source } = this.props;
     if (source) {
       if (Platform.OS === 'ios') {
         return (
           <ImageBackground
-            resizeMode='repeat'
+            resizeMode="repeat"
             source={source}
-            style={{ flex: 1 }}
-          >
+            style={{ flex: 1 }}>
             {this.props.children}
           </ImageBackground>
-        )
+        );
       } else {
         return (
           <View style={{ flex: 1, flexDirection: 'column' }}>
             {this.imageMatrix.map((imgRow, i) => {
-              return imgRow
+              return imgRow;
             })}
             <View
               style={{
@@ -72,13 +70,12 @@ export default class RepeatingBackgroundImage extends Component {
                 top: 0,
                 bottom: 0,
                 left: 0,
-                right: 0
-              }}
-            >
+                right: 0,
+              }}>
               {this.props.children}
             </View>
           </View>
-        )
+        );
       }
     } else {
       return (
@@ -90,12 +87,11 @@ export default class RepeatingBackgroundImage extends Component {
             top: 0,
             bottom: 0,
             left: 0,
-            right: 0
-          }}
-        >
+            right: 0,
+          }}>
           {this.props.children}
         </View>
-      )
+      );
     }
   }
 }

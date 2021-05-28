@@ -1,19 +1,19 @@
-import React, { Component } from 'react'
-import { View, Platform, ActivityIndicator } from 'react-native'
-import RNFetchBlob from 'rn-fetch-blob'
-import RNFS from 'react-native-fs'
-import PropTypes from 'prop-types'
-import { Colors } from '../../Themes/'
-import BottomControls from './BottomControls'
-import VideoPlayer from 'react-native-true-sight'
-import Common, { authTokenUri } from '../../Utils/Common'
+import React, { Component } from 'react';
+import { View, Platform, ActivityIndicator } from 'react-native';
+import RNFetchBlob from 'rn-fetch-blob';
+import RNFS from 'react-native-fs';
+import PropTypes from 'prop-types';
+import { Colors } from '../../Themes/';
+import BottomControls from './BottomControls';
+import VideoPlayer from 'react-native-true-sight';
+import Common, { authTokenUri } from '../../Utils/Common';
 
-import Log from '../../Utils/Log'
-const log = new Log('CustomMessages/ChatVideo')
+import Log from '../../Utils/Log';
+const log = new Log('CustomMessages/ChatVideo');
 
 const renderLoader = () => (
-  <ActivityIndicator color={Colors.video.activityIndicator} size='large' />
-)
+  <ActivityIndicator color={Colors.video.activityIndicator} size="large" />
+);
 
 export default class Video extends Component {
   /*
@@ -30,118 +30,122 @@ export default class Video extends Component {
     fullscreenMode: PropTypes.bool,
     initialPosition: PropTypes.number,
     autoStart: PropTypes.bool,
-    useIOSNativeFullscreen: PropTypes.bool
-  }
+    useIOSNativeFullscreen: PropTypes.bool,
+  };
   static defaultProps = {
     initialPosition: 0,
-    autoStart: false
-  }
-  constructor (props) {
-    super(props)
+    autoStart: false,
+  };
+  constructor(props) {
+    super(props);
     this.state = {
-      source: null
-    }
-    this.getCurrentTime = () => this.refs.player.getCurrentTime()
-    this.getPaused = () => this.refs.player.getPaused()
+      source: null,
+    };
+    this.getCurrentTime = () => this.refs.player.getCurrentTime();
+    this.getPaused = () => this.refs.player.getPaused();
   }
 
   // TODO: Needs to be refactored
-  UNSAFE_componentWillMount () {
-    const { source } = this.props
+  UNSAFE_componentWillMount() {
+    const { source } = this.props;
     // Check if it's a local or remote/web file
     // if it's a web url...
-    let urlPattern = /^https?:\/\//i
+    let urlPattern = /^https?:\/\//i;
     if (urlPattern.test(source)) {
       // attach auth tokens
-      const authTokenUrl = authTokenUri(source)
-      this.setState({ source: authTokenUrl })
+      const authTokenUrl = authTokenUri(source);
+      this.setState({ source: authTokenUrl });
     } else {
       // if it's a local file, check if the filepath exists...
       RNFS.exists(source).then((exists) => {
         if (exists) {
           // ...set the source instantly
-          this.setState({ source })
+          this.setState({ source });
         } else {
           // If the file doesn't exist, find the absolute file-path first
           if (Platform.OS === 'ios') {
-            this.baseDir = RNFetchBlob.fs.dirs.MainBundleDir + source
+            this.baseDir = RNFetchBlob.fs.dirs.MainBundleDir + source;
             // on android, the video needs to be decompressed first
             // TODO: Maybe it's possible to use the Android Expansion File for this? -> see: https://github.com/react-native-community/react-native-video#android-expansion-file-usage
           } else if (Platform.OS === 'android') {
             // destination path for uncompressed video, this will be overridden each time
-            const dest = `${RNFS.DocumentDirectoryPath}/tempVideo.mp4`
+            const dest = `${RNFS.DocumentDirectoryPath}/tempVideo.mp4`;
             // decompress and copy to destination...
             RNFS.copyFileAssets(source, dest)
               .then(() => {
-                this.setState({ source: dest })
+                this.setState({ source: dest });
               })
               .catch((err) => {
                 log.warn(
                   'Could not uncompress video from local android assets: ' +
-                    err.toString()
-                )
-              })
+                    err.toString(),
+                );
+              });
           }
         }
-      })
+      });
     }
   }
 
-  render () {
-    let width = this.props.width
-    let height = this.props.height
-    if (!height) height = 0.5625 * width
-    let style = { width, height }
+  render() {
+    let width = this.props.width;
+    let height = this.props.height;
+    if (!height) {
+      height = 0.5625 * width;
+    }
+    let style = { width, height };
     if (this.props.fullscreenMode) {
       style = {
         position: 'absolute',
         top: 0,
         left: 0,
         bottom: 0,
-        right: 0
-      }
+        right: 0,
+      };
     }
     return (
       <View style={[style, { backgroundColor: 'black' }]}>
         {this.renderVideo()}
       </View>
-    )
+    );
   }
 
   // Callback to be handled when fullscreen is closed
-  closeFullscreenCallback (currentTime, paused) {
-    this.refs.player.setPosition(currentTime)
-    if (!paused) this.refs.player.setPlaying()
+  closeFullscreenCallback(currentTime, paused) {
+    this.refs.player.setPosition(currentTime);
+    if (!paused) {
+      this.refs.player.setPlaying();
+    }
   }
 
-  renderVideo () {
+  renderVideo() {
     if (this.state.source) {
-      const bottomControls = (props) => <BottomControls {...props} />
+      const bottomControls = (props) => <BottomControls {...props} />;
       // TODO: Maybe we can pull things out of render for performance
       let onToggleFullscreen = () => {
-        let paused = this.refs.player.getPaused()
+        let paused = this.refs.player.getPaused();
         // Pause current player
-        this.refs.player.setPaused()
+        this.refs.player.setPaused();
         // then call fullscreen callback with current time
         this.props.onToggleFullscreen(
           this.state.source,
           this.refs.player.getCurrentTime(),
           paused,
           (currentTime, paused) =>
-            this.closeFullscreenCallback(currentTime, paused)
-        )
-      }
+            this.closeFullscreenCallback(currentTime, paused),
+        );
+      };
       // If useIOSNativeFullscreen is set, override fullscreen-callback with openplayer function
       if (this.props.useIOSNativeFullscreen && Platform.OS === 'ios') {
-        onToggleFullscreen = () => this.refs.player.openIOSFullscreenPlayer()
+        onToggleFullscreen = () => this.refs.player.openIOSFullscreenPlayer();
       }
       let controlProps = {
         onToggleFullscreen,
-        inFullscreen: this.props.fullscreenMode
-      }
+        inFullscreen: this.props.fullscreenMode,
+      };
       return (
         <VideoPlayer
-          ref='player'
+          ref="player"
           bottomControlsBar={bottomControls}
           autoStart={this.props.autoStart}
           source={this.state.source}
@@ -149,19 +153,18 @@ export default class Video extends Component {
           middleControlsBarProps={controlProps}
           loader={renderLoader}
         />
-      )
+      );
     } else {
       return (
         <View
           style={{
             flex: 1,
             justifyContent: 'center',
-            alignItems: 'center'
-          }}
-        >
+            alignItems: 'center',
+          }}>
           {renderLoader()}
         </View>
-      )
+      );
     }
   }
 }

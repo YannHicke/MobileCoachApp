@@ -4,5 +4,5 @@ export default {
   ezLogin: false,
   yellowBox: false, // __DEV__,
   reduxLogging: __DEV__,
-  includeExamples: __DEV__
-}
+  includeExamples: __DEV__,
+};

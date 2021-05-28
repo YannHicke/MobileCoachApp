@@ -1,28 +1,28 @@
-import { createStackNavigator } from 'react-navigation-stack'
+import { createStackNavigator } from 'react-navigation-stack';
 
-import ScreenStartWithLogo from './ScreenStartWithLogo'
-import ScreenLanguageSelection from './ScreenLanguageSelection'
+import ScreenStartWithLogo from './ScreenStartWithLogo';
+import ScreenLanguageSelection from './ScreenLanguageSelection';
 // import ScreenAuthorizeUser from './ScreenAuthorizeUser'
 // import ScreenScreeningSurvey from './ScreenScreeningSurvey'
-import ScreenCoachSelection from './ScreenCoachSelection'
-import ScreenWelcomeByCoach from './ScreenWelcomeByCoach'
+import ScreenCoachSelection from './ScreenCoachSelection';
+import ScreenWelcomeByCoach from './ScreenWelcomeByCoach';
 
-export const onboardingNav = 'OnboardingNav'
-export const initialRouteName = 'ScreenStartWithLogo'
+export const onboardingNav = 'OnboardingNav';
+export const initialRouteName = 'ScreenStartWithLogo';
 
-export const codeScanMandatory = false
+export const codeScanMandatory = false;
 
 // Manifest of possible screens
 const OnboardingNav = createStackNavigator(
   {
     // Start screen with logo
     ScreenStartWithLogo: {
-      screen: ScreenStartWithLogo
+      screen: ScreenStartWithLogo,
     },
     // Language selection
     // Optional: Comment out if not needed and adjust jump in former Screen
     ScreenLanguageSelection: {
-      screen: ScreenLanguageSelection
+      screen: ScreenLanguageSelection,
     },
     // Authorize User
     // Optional: Comment out if not needed and adjust jump in former Screen
@@ -37,20 +37,20 @@ const OnboardingNav = createStackNavigator(
     // Coach selection
     // Optional: Comment out if not needed and adjust jump in former Screen
     ScreenCoachSelection: {
-      screen: ScreenCoachSelection
+      screen: ScreenCoachSelection,
     },
     // Personal welcome by coach
     ScreenWelcomeByCoach: {
-      screen: ScreenWelcomeByCoach
-    }
+      screen: ScreenWelcomeByCoach,
+    },
   },
   {
     headerMode: 'none',
     initialRouteName,
     navigationOptions: {
-      gesturesEnabled: false
-    }
-  }
-)
+      gesturesEnabled: false,
+    },
+  },
+);
 
-export default OnboardingNav
+export default OnboardingNav;

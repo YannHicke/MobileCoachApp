@@ -1,6 +1,6 @@
-import { Platform } from 'react-native'
-import AppConfig from '../Config/AppConfig'
-import 'babel-polyfill'
+import { Platform } from 'react-native';
+import AppConfig from '../Config/AppConfig';
+import 'babel-polyfill';
 
 const LEVEL_TEXTS = {
   DEBUG: 'DEBUG',
@@ -8,75 +8,75 @@ const LEVEL_TEXTS = {
   WARN: 'WARN',
   ERROR: 'ERROR',
   OFF: 'OFF',
-  CRASHLYTICS: 'CRASHLYTICS'
-}
+  CRASHLYTICS: 'CRASHLYTICS',
+};
 const LEVEL_VALUES = {
   DEBUG: 0,
   INFO: 1,
   WARN: 2,
   ERROR: 3,
   OFF: 4,
-  CRASHLYTICS: 5
-}
+  CRASHLYTICS: 5,
+};
 
-const loggerLength = 20
+const loggerLength = 20;
 
-const loggingCache = []
-const loggingCacheSize = 500
-let loggingCacheIndex = 0
-let loggingCacheCount = 0
+const loggingCache = [];
+const loggingCacheSize = 500;
+let loggingCacheIndex = 0;
+let loggingCacheCount = 0;
 
 const defaultLevel =
   LEVEL_VALUES[
     AppConfig.config.logger.defaultLevel === undefined
       ? 'OFF'
       : AppConfig.config.logger.defaultLevel
-  ]
+  ];
 const loggerLevels =
   AppConfig.config.logger.loggerLevels === undefined
     ? {}
-    : AppConfig.config.logger.loggerLevels
+    : AppConfig.config.logger.loggerLevels;
 
-const logTrackingEvents = false
+const logTrackingEvents = false;
 
-let trackActivities = false
+let trackActivities = false;
 
-let userIdSharedWithCrashlytics = false
-let userIdSharedWithUserTracking = false
+let userIdSharedWithCrashlytics = false;
+let userIdSharedWithUserTracking = false;
 
 export default class Log {
-  constructor (name) {
+  constructor(name) {
     if (name === undefined) {
-      this.loggerName = 'GLOBAL'
+      this.loggerName = 'GLOBAL';
     } else {
-      this.loggerName = name
+      this.loggerName = name;
     }
   }
 
-  setUser (userRole, userId) {
-    Log.userRole = userRole
-    Log.userId = userId
+  setUser(userRole, userId) {
+    Log.userRole = userRole;
+    Log.userId = userId;
   }
 
-  enableUserTracking () {
+  enableUserTracking() {
     // Only activate when tracking is switched on in general
     if (AppConfig.config.logger.trackActivities) {
-      trackActivities = true
-      const id = AppConfig.config.logger.trackingId
-      this.info('Activated activity tracker with id', id)
+      trackActivities = true;
+      const id = AppConfig.config.logger.trackingId;
+      this.info('Activated activity tracker with id', id);
     }
   }
 
-  debug (message) {
-    Log.writeLog(this.loggerName, LEVEL_VALUES.DEBUG, arguments)
+  debug(message) {
+    Log.writeLog(this.loggerName, LEVEL_VALUES.DEBUG, arguments);
   }
-  info (message) {
-    Log.writeLog(this.loggerName, LEVEL_VALUES.INFO, arguments)
+  info(message) {
+    Log.writeLog(this.loggerName, LEVEL_VALUES.INFO, arguments);
   }
-  warn (message) {
-    Log.writeLog(this.loggerName, LEVEL_VALUES.WARN, arguments)
+  warn(message) {
+    Log.writeLog(this.loggerName, LEVEL_VALUES.WARN, arguments);
   }
-  error (message) {
+  error(message) {
     this.problem(
       'ErrorOccured',
       Log.formatMessage(
@@ -85,44 +85,44 @@ export default class Log {
         null,
         arguments !== undefined && arguments !== null
           ? Array.prototype.slice.call(arguments)
-          : null
-      )
-    )
-    Log.writeLog(this.loggerName, LEVEL_VALUES.ERROR, arguments)
+          : null,
+      ),
+    );
+    Log.writeLog(this.loggerName, LEVEL_VALUES.ERROR, arguments);
   }
 
-  getCache () {
-    return loggingCache
+  getCache() {
+    return loggingCache;
   }
 
   // Example: ProblemState, JSON...[, 0]
-  problem (action = 'UNKNOWN', label = 'UNKNOWN', value = 0) {
+  problem(action = 'UNKNOWN', label = 'UNKNOWN', value = 0) {
     if (trackActivities) {
       if (!userIdSharedWithUserTracking && Log.userId !== undefined) {
-        userIdSharedWithUserTracking = true
-        this.action('User', 'Identifier', Log.userId)
-        this.action('User', 'Role', Log.userRole)
+        userIdSharedWithUserTracking = true;
+        this.action('User', 'Identifier', Log.userId);
+        this.action('User', 'Role', Log.userRole);
       }
 
       if (logTrackingEvents) {
         console.info(
-          '[TRACKING] Problem: ' + action + ' ' + label + ' ' + value
-        )
+          '[TRACKING] Problem: ' + action + ' ' + label + ' ' + value,
+        );
       }
     }
   }
   // Example: GUIAction, ToggleMenu, false[, 0]
-  action (
+  action(
     category = 'UNDEFINED',
     action = 'UNKNOWN',
     label = 'UNKNOWN',
-    value = 0
+    value = 0,
   ) {
     if (trackActivities) {
       if (!userIdSharedWithUserTracking && Log.userId !== undefined) {
-        userIdSharedWithUserTracking = true
-        this.action('User', 'Identifier', Log.userId)
-        this.action('User', 'Role', Log.userRole)
+        userIdSharedWithUserTracking = true;
+        this.action('User', 'Identifier', Log.userId);
+        this.action('User', 'Role', Log.userRole);
       }
 
       if (logTrackingEvents) {
@@ -134,32 +134,32 @@ export default class Log {
             ' ' +
             label +
             ' ' +
-            value
-        )
+            value,
+        );
       }
     }
   }
 
-  static writeLog (logger, level, messageArguments) {
+  static writeLog(logger, level, messageArguments) {
     if (messageArguments === undefined || messageArguments === null) {
-      messageArguments = []
+      messageArguments = [];
     }
 
     // Logger is switched off
     if (defaultLevel === LEVEL_VALUES.OFF) {
-      return
+      return;
     }
 
     // Set compare level to default level or to level specifically defined for the appropriate logger
-    let compareLevel = defaultLevel
+    let compareLevel = defaultLevel;
     if (loggerLevels[logger] !== undefined) {
-      compareLevel = LEVEL_VALUES[loggerLevels[logger]]
+      compareLevel = LEVEL_VALUES[loggerLevels[logger]];
     }
 
-    let method = null
+    let method = null;
     try {
-      const stackTrace = Log.getStackTrace()
-      method = stackTrace.split('\n')[4].split(' ')[5]
+      const stackTrace = Log.getStackTrace();
+      method = stackTrace.split('\n')[4].split(' ')[5];
     } catch (error) {
       // do nothing
     }
@@ -203,64 +203,64 @@ export default class Log {
 
     // Care for regular logging levels
     if (level >= compareLevel) {
-      let messages = null
+      let messages = null;
       switch (level) {
         case LEVEL_VALUES.DEBUG:
-          messages = Array.prototype.slice.call(messageArguments)
+          messages = Array.prototype.slice.call(messageArguments);
           console.log(
-            Log.formatMessage(logger, LEVEL_TEXTS.DEBUG, method, messages)
-          )
-          break
+            Log.formatMessage(logger, LEVEL_TEXTS.DEBUG, method, messages),
+          );
+          break;
         case LEVEL_VALUES.INFO:
-          messages = Array.prototype.slice.call(messageArguments)
+          messages = Array.prototype.slice.call(messageArguments);
           console.log(
-            Log.formatMessage(logger, LEVEL_TEXTS.INFO, method, messages)
-          )
-          break
+            Log.formatMessage(logger, LEVEL_TEXTS.INFO, method, messages),
+          );
+          break;
         case LEVEL_VALUES.WARN:
-          messages = Array.prototype.slice.call(messageArguments)
+          messages = Array.prototype.slice.call(messageArguments);
           console.warn(
-            Log.formatMessage(logger, LEVEL_TEXTS.WARN, method, messages)
-          )
-          break
+            Log.formatMessage(logger, LEVEL_TEXTS.WARN, method, messages),
+          );
+          break;
         case LEVEL_VALUES.ERROR:
-          messages = Array.prototype.slice.call(messageArguments)
+          messages = Array.prototype.slice.call(messageArguments);
           console.error(
-            Log.formatMessage(logger, LEVEL_TEXTS.ERROR, method, messages)
-          )
-          break
+            Log.formatMessage(logger, LEVEL_TEXTS.ERROR, method, messages),
+          );
+          break;
         case LEVEL_VALUES.OFF:
-          break
+          break;
       }
     }
   }
 
-  static formatMessage (logger, level, method, messages) {
-    let concatMessage = ''
+  static formatMessage(logger, level, method, messages) {
+    let concatMessage = '';
 
     if (messages !== undefined && messages !== null) {
       for (let i = 0; i < messages.length; i++) {
-        const message = messages[i]
-        const type = Log.getType(message)
-        let messagePart = ''
+        const message = messages[i];
+        const type = Log.getType(message);
+        let messagePart = '';
 
         switch (type) {
           case 'array':
-            messagePart = '[Array] ' + message.toString()
-            break
+            messagePart = '[Array] ' + message.toString();
+            break;
           case 'object':
-            messagePart = '[JSON] ' + JSON.stringify(message)
-            break
+            messagePart = '[JSON] ' + JSON.stringify(message);
+            break;
           case 'other':
             try {
               if (typeof message === 'undefined') {
-                messagePart = '[undefined]'
+                messagePart = '[undefined]';
               } else {
-                const messageToDisplay = JSON.stringify(message)
+                const messageToDisplay = JSON.stringify(message);
                 if (messageToDisplay === undefined) {
-                  messagePart = '[Other] ' + message.toString()
+                  messagePart = '[Other] ' + message.toString();
                 } else {
-                  messagePart = '[Other] ' + messageToDisplay
+                  messagePart = '[Other] ' + messageToDisplay;
                 }
               }
             } catch (error) {
@@ -269,48 +269,48 @@ export default class Log {
                 message !== null &&
                 (message.toString !== undefined || message.toString !== null)
               ) {
-                messagePart = '[Other] ' + message.toString()
+                messagePart = '[Other] ' + message.toString();
               } else {
-                messagePart = '[Other] <non stringifyable object>'
+                messagePart = '[Other] <non stringifyable object>';
               }
             }
 
-            break
+            break;
           default:
             if (message === undefined) {
-              messagePart = 'undefined'
+              messagePart = 'undefined';
             } else if (message === null) {
-              messagePart = 'null'
+              messagePart = 'null';
             } else {
-              messagePart = message
+              messagePart = message;
             }
-            break
+            break;
         }
 
         if (concatMessage.length === 0) {
-          concatMessage += messagePart
+          concatMessage += messagePart;
         } else {
-          concatMessage += ', ' + messagePart
+          concatMessage += ', ' + messagePart;
         }
       }
     }
 
-    let loggerString = ''
+    let loggerString = '';
     if (defaultLevel < 4) {
       if (logger.length > loggerLength) {
-        loggerString = logger.substr(logger.length - loggerLength)
+        loggerString = logger.substr(logger.length - loggerLength);
       } else {
-        loggerString = logger.padStart(loggerLength, ' ')
+        loggerString = logger.padStart(loggerLength, ' ');
       }
     } else {
-      loggerString = logger
+      loggerString = logger;
     }
 
-    const levelString = level.padEnd(5, ' ')
+    const levelString = level.padEnd(5, ' ');
 
-    let methodString = ''
+    let methodString = '';
     if (method !== null) {
-      methodString = ' (@' + method + ')'
+      methodString = ' (@' + method + ')';
     }
 
     return (
@@ -321,18 +321,23 @@ export default class Log {
       ': ' +
       concatMessage +
       methodString
-    )
+    );
   }
 
-  static getType (element) {
-    if (Array.isArray(element)) return 'array'
-    else if (typeof element === 'string') return 'string'
-    else if (element !== null && typeof p === 'object') return 'object'
-    else return 'other'
+  static getType(element) {
+    if (Array.isArray(element)) {
+      return 'array';
+    } else if (typeof element === 'string') {
+      return 'string';
+    } else if (element !== null && typeof p === 'object') {
+      return 'object';
+    } else {
+      return 'other';
+    }
   }
 
-  static getStackTrace () {
-    let error = new Error()
-    return error.stack
+  static getStackTrace() {
+    let error = new Error();
+    return error.stack;
   }
 }

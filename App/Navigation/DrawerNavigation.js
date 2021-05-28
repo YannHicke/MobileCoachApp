@@ -1,23 +1,23 @@
-import { createDrawerNavigator } from 'react-navigation-drawer'
+import { createDrawerNavigator } from 'react-navigation-drawer';
 
-import { Animated, Easing } from 'react-native'
+import { Animated, Easing } from 'react-native';
 
 // import all screens here
-import Chat from '../Containers/Chat/Chat'
-import DashboardChat from '../Containers/Chat/DashboardChat'
-import InfoCardsLibrary from '../Containers/InfoCardsLibrary/InfoCardsLibrary'
-import MediaLibrary from '../Containers/MediaLibrary/MediaLibrary'
-import Settings from '../Containers/Settings/Settings'
-import Faq from '../Containers/FAQ/Faq'
+import Chat from '../Containers/Chat/Chat';
+import DashboardChat from '../Containers/Chat/DashboardChat';
+import InfoCardsLibrary from '../Containers/InfoCardsLibrary/InfoCardsLibrary';
+import MediaLibrary from '../Containers/MediaLibrary/MediaLibrary';
+import Settings from '../Containers/Settings/Settings';
+import Faq from '../Containers/FAQ/Faq';
 
 // https://github.com/react-community/react-navigation/issues/1254
 const noTransitionConfig = () => ({
   transitionSpec: {
     duration: 0,
     timing: Animated.timing,
-    easing: Easing.step0
-  }
-})
+    easing: Easing.step0,
+  },
+});
 
 // Manifest of possible screens
 const DrawerNavigation = createDrawerNavigator(
@@ -25,29 +25,29 @@ const DrawerNavigation = createDrawerNavigator(
     Chat: {
       path: '/chat',
       screen: Chat,
-      test: 'test'
+      test: 'test',
     },
     DashboardChat: {
       path: '/dashboardChat',
       screen: DashboardChat,
-      test: 'test'
+      test: 'test',
     },
     InfoCardsLibrary: {
       path: '/infoCardsLibrary',
-      screen: InfoCardsLibrary
+      screen: InfoCardsLibrary,
     },
     MediaLibrary: {
       path: '/medialibrary',
-      screen: MediaLibrary
+      screen: MediaLibrary,
     },
     Faq: {
       path: '/faq',
-      screen: Faq
+      screen: Faq,
     },
     Settings: {
       path: '/settings',
-      screen: Settings
-    }
+      screen: Settings,
+    },
   },
   {
     // Default config for all screens
@@ -58,10 +58,10 @@ const DrawerNavigation = createDrawerNavigator(
     // mode: 'modal'
     navigationOptions: {
       gesturesEnabled: false,
-      drawerLockMode: 'locked-closed' // TODO fabian: Remove this
+      drawerLockMode: 'locked-closed', // TODO fabian: Remove this
       // headerStyle: styles.header
-    }
-  }
-)
+    },
+  },
+);
 
-export default DrawerNavigation
+export default DrawerNavigation;

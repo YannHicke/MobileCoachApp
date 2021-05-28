@@ -1,41 +1,37 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 
-import { StyleSheet, View } from 'react-native'
-import { Button, Icon } from 'react-native-elements'
+import { StyleSheet, View } from 'react-native';
+import { Button, Icon } from 'react-native-elements';
 
-import I18n from '../../I18n/I18n'
-import Video from './Video.js'
-import { Metrics } from '../../Themes'
+import I18n from '../../I18n/I18n';
+import Video from './Video.js';
+import { Metrics } from '../../Themes';
 
 // TODO: define proptypes
 export default class FullscreenVideo extends Component {
   state = {
-    horizontalMode: false
-  }
+    horizontalMode: false,
+  };
 
-  componentDidMount () {
+  componentDidMount() {
     // unlock to all Orientations
     // Orientation.unlockAllOrientations()
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     // Lock Ortientation to protrait again when leaving fullscreen-player!
     // Orientation.lockToPortrait()
   }
 
-  render () {
-    const {
-      source,
-      initialPosition,
-      paused,
-      closeFullscreenCallback
-    } = this.props
-    const { horizontalMode } = this.state
+  render() {
+    const { source, initialPosition, paused, closeFullscreenCallback } =
+      this.props;
+    const { horizontalMode } = this.state;
     const orientationStyle = {
       width: horizontalMode ? Metrics.screenHeight : Metrics.screenWidth,
       height: horizontalMode ? Metrics.screenWidth : Metrics.screenHeight,
-      transform: horizontalMode ? [{ rotate: '90deg' }] : []
-    }
+      transform: horizontalMode ? [{ rotate: '90deg' }] : [],
+    };
     return (
       <View style={[styles.mask]}>
         <View style={orientationStyle}>
@@ -47,11 +43,10 @@ export default class FullscreenVideo extends Component {
               left: 0,
               right: 0,
               alignItems: 'center',
-              justifyContent: 'center'
-            }}
-          >
+              justifyContent: 'center',
+            }}>
             <Video
-              ref='player'
+              ref="player"
               orientation={'LANDSCAPE'}
               initialPosition={initialPosition}
               fullscreenMode
@@ -59,9 +54,9 @@ export default class FullscreenVideo extends Component {
               onToggleFullscreen={() => {
                 closeFullscreenCallback(
                   this.refs.player.getCurrentTime() + 1,
-                  this.refs.player.getPaused()
-                )
-                this.props.onClose()
+                  this.refs.player.getPaused(),
+                );
+                this.props.onClose();
               }}
               source={source}
             />
@@ -75,22 +70,22 @@ export default class FullscreenVideo extends Component {
                   height: 40,
                   borderRadius: 20,
                   padding: 0,
-                  paddingHorizontal: 0
-                }
+                  paddingHorizontal: 0,
+                },
               ]}
               titleStyle={styles.buttonTitle}
               iconRight
               icon={
                 <Icon
-                  name='rotate-3d'
-                  type='material-community'
-                  color='#fff'
+                  name="rotate-3d"
+                  type="material-community"
+                  color="#fff"
                   size={30}
                 />
               }
               onPress={() =>
                 this.setState({
-                  horizontalMode: !this.state.horizontalMode
+                  horizontalMode: !this.state.horizontalMode,
                 })
               }
             />
@@ -99,21 +94,21 @@ export default class FullscreenVideo extends Component {
               titleStyle={styles.buttonTitle}
               iconRight
               icon={
-                <Icon name='md-close' type='ionicon' color='#fff' size={30} />
+                <Icon name="md-close" type="ionicon" color="#fff" size={30} />
               }
               title={I18n.t('Common.close')}
               onPress={() => {
                 closeFullscreenCallback(
                   this.refs.player.getCurrentTime() + 1,
-                  this.refs.player.getPaused()
-                )
-                this.props.onClose()
+                  this.refs.player.getPaused(),
+                );
+                this.props.onClose();
               }}
             />
           </View>
         </View>
       </View>
-    )
+    );
   }
 }
 
@@ -126,7 +121,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     backgroundColor: 'rgba(0, 0, 0, 0.9)',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   controls: {
     position: 'absolute',
@@ -134,17 +129,17 @@ const styles = StyleSheet.create({
     left: 20,
     right: 20,
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   button: {
     padding: 5,
     paddingHorizontal: 10,
     borderRadius: 6,
-    backgroundColor: 'rgba(255,255,255,0.1)'
+    backgroundColor: 'rgba(255,255,255,0.1)',
   },
   buttonTitle: {
     fontSize: 20,
     color: '#fff',
-    paddingRight: 5
-  }
-})
+    paddingRight: 5,
+  },
+});

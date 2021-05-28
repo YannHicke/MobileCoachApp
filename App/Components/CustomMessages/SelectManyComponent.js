@@ -1,95 +1,95 @@
-import React, { Component } from 'react'
-import { StyleSheet, Alert } from 'react-native'
-import { Colors, Fonts } from '../../Themes/'
-import Button from 'react-native-button'
-import CustomMultiPicker from './CustomMultiPicker'
-import I18n from '../../I18n/I18n'
-import * as Animatable from 'react-native-animatable'
+import React, { Component } from 'react';
+import { StyleSheet, Alert } from 'react-native';
+import { Colors, Fonts } from '../../Themes/';
+import Button from 'react-native-button';
+import CustomMultiPicker from './CustomMultiPicker';
+import I18n from '../../I18n/I18n';
+import * as Animatable from 'react-native-animatable';
 
-import CommonUtils, { tapBlockingHandlers } from './../../Utils/Common'
-import { inputMessageStyles } from './Styles/CommonStyles'
+import CommonUtils, { tapBlockingHandlers } from './../../Utils/Common';
+import { inputMessageStyles } from './Styles/CommonStyles';
 
-import Log from '../../Utils/Log'
-const log = new Log('Components/CustomMessages')
+import Log from '../../Utils/Log';
+const log = new Log('Components/CustomMessages');
 
 export default class SelectManyComponent extends Component {
-  constructor (props) {
-    super(props)
+  constructor(props) {
+    super(props);
     this.state = {
       res: [],
-      selectedKeys: []
+      selectedKeys: [],
       // disabled: props.disabled || false
-    }
-    this.tapped = false
-    this.shouldAnimate = this.props.currentMessage.custom.shouldAnimate
+    };
+    this.tapped = false;
+    this.shouldAnimate = this.props.currentMessage.custom.shouldAnimate;
   }
 
-  onPressHandler () {
+  onPressHandler() {
     // Only handle click the first time (to prevent unwanted "double-taps")
     if (!this.tapped) {
-      const { options, min, max } = this.props.currentMessage.custom
-      const { currentMessage } = this.props
+      const { options, min, max } = this.props.currentMessage.custom;
+      const { currentMessage } = this.props;
       if (this.checkCorrectSelectionCount(min, max)) {
-        this.setState({ disabled: true })
+        this.setState({ disabled: true });
         // transform to correct exchange format
-        const result = []
-        let resultMessage = ''
+        const result = [];
+        let resultMessage = '';
         this.state.res.forEach((item, index) => {
           if (item !== '') {
-            const label = options[index].label
+            const label = options[index].label;
             resultMessage =
               resultMessage +
               '- ' +
               (label.startsWith('! ') ? label.substring(2) : label) +
-              '\n---\n'
-            result.push(options[index].value)
+              '\n---\n';
+            result.push(options[index].value);
           } else {
-            result.push('')
+            result.push('');
           }
-        })
-        log.debug('returning multiples value', this.state.res)
+        });
+        log.debug('returning multiples value', this.state.res);
         let relatedMessageId = currentMessage._id.substring(
           0,
-          currentMessage._id.lastIndexOf('-')
-        )
-        this.tapped = true
+          currentMessage._id.lastIndexOf('-'),
+        );
+        this.tapped = true;
         this.props.onPress(
           currentMessage.custom.intention,
           resultMessage,
           result.toString(),
-          relatedMessageId
-        )
-        return
+          relatedMessageId,
+        );
+        return;
       }
 
       return Alert.alert(I18n.t('Common.chooseAtLeastOne'), '', [
-        { text: 'OK', onPress: () => true }
-      ])
+        { text: 'OK', onPress: () => true },
+      ]);
     }
   }
 
-  checkCorrectSelectionCount (min, max) {
-    let selectionCount = 0
+  checkCorrectSelectionCount(min, max) {
+    let selectionCount = 0;
     this.state.res.forEach((item) => {
       if (item !== '') {
-        selectionCount++
+        selectionCount++;
       }
-    })
+    });
     if (selectionCount < min || (max > -1 && selectionCount > max)) {
-      return false
+      return false;
     } else {
-      return true
+      return true;
     }
   }
 
-  render () {
-    const multipleSelect = true
-    const { currentMessage } = this.props
-    const { options } = currentMessage.custom
-    const selectedItems = [] // ['C', 'E']
+  render() {
+    const multipleSelect = true;
+    const { currentMessage } = this.props;
+    const { options } = currentMessage.custom;
+    const selectedItems = []; // ['C', 'E']
     // const message = currentMessage.text // 'Bitte auswählen. Könnte auch ein längerer Text sein!'
-    const confirmText = I18n.t('Common.confirm')
-    const editable = CommonUtils.userCanEdit(currentMessage)
+    const confirmText = I18n.t('Common.confirm');
+    const editable = CommonUtils.userCanEdit(currentMessage);
     return (
       <Animatable.View
         {...(editable ? null : tapBlockingHandlers)}
@@ -99,12 +99,11 @@ export default class SelectManyComponent extends Component {
         style={[
           inputMessageStyles.container,
           { alignItems: 'stretch' },
-          this.props.containerStyle
+          this.props.containerStyle,
         ]}
         onAnimationEnd={() => {
-          this.shouldAnimate = false
-        }}
-      >
+          this.shouldAnimate = false;
+        }}>
         {/* <Text style={{marginBottom: 10}}>{message}</Text> */}
         <CustomMultiPicker
           slim={
@@ -116,7 +115,7 @@ export default class SelectManyComponent extends Component {
           multiple={multipleSelect}
           returnValue={'value'} // label or value or index
           callback={(res, selectedKeys) => {
-            this.setState({ res, selectedKeys })
+            this.setState({ res, selectedKeys });
           }} // callback, array of selected items
           rowBackgroundColor={'white'}
           // rowHeight={40}
@@ -141,20 +140,19 @@ export default class SelectManyComponent extends Component {
           style={styles.button}
           disabled={!CommonUtils.userCanEdit(currentMessage)}
           onPress={() => {
-            this.onPressHandler()
-          }}
-        >
+            this.onPressHandler();
+          }}>
           {confirmText}
         </Button>
       </Animatable.View>
-    )
+    );
   }
 
-  componentDidMount () {
+  componentDidMount() {
     // notify redux that animationw as shown after first render
-    const { currentMessage } = this.props
+    const { currentMessage } = this.props;
     if (currentMessage.custom.shouldAnimate) {
-      this.props.setAnimationShown(currentMessage._id)
+      this.props.setAnimationShown(currentMessage._id);
     }
   }
 }
@@ -169,13 +167,13 @@ const styles = StyleSheet.create({
     minHeight: 35,
     borderRadius: 16,
     backgroundColor: Colors.buttons.selectMany.submitButton.background,
-    marginBottom: 4
+    marginBottom: 4,
   },
   button: {
     fontSize: Fonts.size.regular,
-    color: Colors.buttons.selectMany.submitButton.text
+    color: Colors.buttons.selectMany.submitButton.text,
   },
   disabled: {
-    backgroundColor: Colors.buttons.selectMany.submitButton.disabled
-  }
-})
+    backgroundColor: Colors.buttons.selectMany.submitButton.disabled,
+  },
+});

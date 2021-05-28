@@ -1,53 +1,51 @@
-import { persistStore } from 'redux-persist'
-import createEncryptor from 'redux-persist-transform-encrypt'
-import AsyncStorage from '@react-native-community/async-storage'
+import { persistStore } from 'redux-persist';
+import createEncryptor from 'redux-persist-transform-encrypt';
+import AsyncStorage from '@react-native-community/async-storage';
 
-import AppConfig from '../Config/AppConfig'
-import StartupActions from '../Redux/StartupRedux'
-import HydrateActions from '../Redux/HydrateRedux'
-import immutablePersistenceTransform from '../Services/ImmutablePersistenceTransform'
-import JSONStorage from '../Utils/JSONStorage'
+import AppConfig from '../Config/AppConfig';
+import StartupActions from '../Redux/StartupRedux';
+import HydrateActions from '../Redux/HydrateRedux';
+import immutablePersistenceTransform from '../Services/ImmutablePersistenceTransform';
+import JSONStorage from '../Utils/JSONStorage';
 
-import Log from '../Utils/Log'
-const log = new Log('Services/RehydrationServices')
+import Log from '../Utils/Log';
+const log = new Log('Services/RehydrationServices');
 
-function updateReducers (reduxStore: Object, encryptionKey) {
-  const {
-    encryptedReduxStorage,
-    reduxStorageBlacklist
-  } = AppConfig.config.storage
+function updateReducers(reduxStore: Object, encryptionKey) {
+  const { encryptedReduxStorage, reduxStorageBlacklist } =
+    AppConfig.config.storage;
 
-  const startup = () => reduxStore.dispatch(StartupActions.startup())
+  const startup = () => reduxStore.dispatch(StartupActions.startup());
   const signalStorageLoaded = () =>
-    reduxStore.dispatch(HydrateActions.signalStorageLoaded(true))
+    reduxStore.dispatch(HydrateActions.signalStorageLoaded(true));
 
-  let reduxConfig = null
-  let encryptor = null
+  let reduxConfig = null;
+  let encryptor = null;
 
-  const useJSONStorage = !JSONStorage.isEmpty()
+  const useJSONStorage = !JSONStorage.isEmpty();
 
   if (encryptedReduxStorage) {
     // Encrypted storage
-    log.debug('Creating encryptor...')
+    log.debug('Creating encryptor...');
     encryptor = createEncryptor({
       secretKey: encryptionKey,
       onError: function (error) {
-        log.error('Error with encryptor:', error)
-      }
-    })
+        log.error('Error with encryptor:', error);
+      },
+    });
 
     reduxConfig = {
       storage: useJSONStorage ? JSONStorage : AsyncStorage,
       blacklist: reduxStorageBlacklist,
-      transforms: [immutablePersistenceTransform, encryptor]
-    }
+      transforms: [immutablePersistenceTransform, encryptor],
+    };
   } else {
     // UNencrypted storage
     reduxConfig = {
       storage: useJSONStorage ? JSONStorage : AsyncStorage,
       blacklist: reduxStorageBlacklist,
-      transforms: [immutablePersistenceTransform]
-    }
+      transforms: [immutablePersistenceTransform],
+    };
   }
 
   // Check for required reset of the store
@@ -55,20 +53,20 @@ function updateReducers (reduxStore: Object, encryptionKey) {
     // Purge store
     persistStore(reduxStore, reduxConfig, () => {
       if (AppConfig.config.dev.purgeStoreAtStartup) {
-        log.debug('Purging store...')
-        reduxStore.dispatch({ type: 'RESET' })
+        log.debug('Purging store...');
+        reduxStore.dispatch({ type: 'RESET' });
       }
 
-      signalStorageLoaded()
-      startup()
-    })
+      signalStorageLoaded();
+      startup();
+    });
   } else {
     // Regular store startup
     persistStore(reduxStore, reduxConfig, () => {
-      signalStorageLoaded()
-      startup()
-    })
+      signalStorageLoaded();
+      startup();
+    });
   }
 }
 
-export default { updateReducers }
+export default { updateReducers };

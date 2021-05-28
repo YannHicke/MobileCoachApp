@@ -1,22 +1,22 @@
-import React, { Component } from 'react'
-import { StyleSheet, View, TextInput, Platform, Text } from 'react-native'
-import PropTypes from 'prop-types'
-import { Button } from 'react-native-elements'
+import React, { Component } from 'react';
+import { StyleSheet, View, TextInput, Platform, Text } from 'react-native';
+import PropTypes from 'prop-types';
+import { Button } from 'react-native-elements';
 
-import { Colors } from '../Themes/'
+import { Colors } from '../Themes/';
 
 export default class InputToolbar extends Component {
   static propTypes = {
     placeholder: PropTypes.string,
-    onSubmit: PropTypes.func
-  }
+    onSubmit: PropTypes.func,
+  };
 
   state = {
-    text: ''
-  }
+    text: '',
+  };
 
-  render () {
-    const { onSubmit, placeholder } = this.props
+  render() {
+    const { onSubmit, placeholder } = this.props;
     return (
       <View style={styles.container}>
         <View style={styles.primary}>
@@ -25,12 +25,12 @@ export default class InputToolbar extends Component {
               multiline
               blurOnSubmit
               ref={(ref) => {
-                this.textInput = ref
+                this.textInput = ref;
               }}
               value={this.state.text}
               placeholder={placeholder}
-              placeholderTextColor='rgba(255,255,255,0.5)'
-              underlineColorAndroid='transparent'
+              placeholderTextColor="rgba(255,255,255,0.5)"
+              underlineColorAndroid="transparent"
               style={styles.textInput}
               onChangeText={(text) => this.setState({ text })}
             />
@@ -40,36 +40,36 @@ export default class InputToolbar extends Component {
               type: 'font-awesome',
               name: 'send',
               color: Colors.buttons.common.text,
-              size: 23
+              size: 23,
             }}
             color={Colors.buttons.common.text}
             disabled={this.state.text === ''}
             disabledStyle={{
-              backgroundColor: Colors.buttons.common.disabled
+              backgroundColor: Colors.buttons.common.disabled,
             }}
             backgroundColor={Colors.buttons.common.background}
             buttonStyle={{
               borderRadius: 25,
               width: 50,
-              height: 50
+              height: 50,
             }}
             containerViewStyle={styles.buttonContainer}
             onPress={() => {
-              this.textInput.blur()
-              onSubmit(this.state.text)
-              this.setState({ text: '' })
+              this.textInput.blur();
+              onSubmit(this.state.text);
+              this.setState({ text: '' });
             }}
           />
         </View>
       </View>
-    )
+    );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    position: 'relative'
+    position: 'relative',
   },
   primary: {
     padding: 5,
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    flex: 1
+    flex: 1,
   },
   textInputContainer: {
     flex: 1,
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     paddingTop: 0,
     paddingBottom: 0,
     borderRadius: 15,
-    backgroundColor: Colors.buttons.freeText.background
+    backgroundColor: Colors.buttons.freeText.background,
   },
   textInput: {
     color: Colors.buttons.freeText.text,
@@ -96,14 +96,14 @@ const styles = StyleSheet.create({
       ios: {
         minHeight: 50,
         paddingTop: 15,
-        paddingBottom: 15
-      }
-    })
+        paddingBottom: 15,
+      },
+    }),
   },
   buttonContainer: {
     position: 'absolute',
     right: 0,
     bottom: 5,
-    marginRight: 0
-  }
-})
+    marginRight: 0,
+  },
+});

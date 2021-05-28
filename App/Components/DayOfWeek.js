@@ -1,8 +1,8 @@
-import React from 'react'
-import { View, Text, StyleSheet, TouchableWithoutFeedback } from 'react-native'
-import PropTypes from 'prop-types'
-import moment from 'moment'
-import { Colors } from '../Themes'
+import React from 'react';
+import { View, Text, StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import PropTypes from 'prop-types';
+import moment from 'moment';
+import { Colors } from '../Themes';
 
 const DayOfWeek = (props) => {
   const {
@@ -12,8 +12,8 @@ const DayOfWeek = (props) => {
     textStyle,
     onSelected,
     index,
-    active
-  } = props
+    active,
+  } = props;
 
   return (
     <TouchableWithoutFeedback onPress={() => onSelected(index)}>
@@ -21,22 +21,20 @@ const DayOfWeek = (props) => {
         style={[
           styles.container,
           containerStyles,
-          active ? { backgroundColor: Colors.main.primary } : null
-        ]}
-      >
+          active ? { backgroundColor: Colors.main.primary } : null,
+        ]}>
         <Text
           style={[
             { color: Colors.main.paragraph },
             textStyle,
-            active ? { color: '#fff' } : null
-          ]}
-        >
+            active ? { color: '#fff' } : null,
+          ]}>
           {date.format(format).toUpperCase()}
         </Text>
       </View>
     </TouchableWithoutFeedback>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -44,13 +42,13 @@ const styles = StyleSheet.create({
     height: 56,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: Colors.main.grey3
-  }
-})
+    backgroundColor: Colors.main.grey3,
+  },
+});
 
 DayOfWeek.propTypes = {
   date: PropTypes.instanceOf(moment).isRequired,
-  format: PropTypes.string
-}
+  format: PropTypes.string,
+};
 
-export default DayOfWeek
+export default DayOfWeek;

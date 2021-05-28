@@ -1,26 +1,26 @@
-import React, { Component } from 'react'
-import { ifIphoneX } from 'react-native-iphone-x-helper'
-import { Text, View, Image, StyleSheet, Platform } from 'react-native'
-import { connect } from 'react-redux'
-import SplashScreen from 'react-native-splash-screen'
+import React, { Component } from 'react';
+import { ifIphoneX } from 'react-native-iphone-x-helper';
+import { Text, View, Image, StyleSheet, Platform } from 'react-native';
+import { connect } from 'react-redux';
+import SplashScreen from 'react-native-splash-screen';
 
-import NextButton from '../../Components/NextButton'
-import { Colors, Images } from '../../Themes/'
-import { normalize } from '../../Utils/Common'
-import I18n from '../../I18n/I18n'
-import MessageActions from '../../Redux/MessageRedux'
+import NextButton from '../../Components/NextButton';
+import { Colors, Images } from '../../Themes/';
+import { normalize } from '../../Utils/Common';
+import I18n from '../../I18n/I18n';
+import MessageActions from '../../Redux/MessageRedux';
 
 // Adjust to the appropriate next screen
-const nextScreen = 'ScreenLanguageSelection'
+const nextScreen = 'ScreenLanguageSelection';
 
 class ScreenStartWithLogo extends Component {
-  componentDidMount () {
-    SplashScreen.hide()
+  componentDidMount() {
+    SplashScreen.hide();
   }
 
-  render () {
-    const { sendPlatformIntention } = this.props
-    const { navigate } = this.props.navigation
+  render() {
+    const { sendPlatformIntention } = this.props;
+    const { navigate } = this.props.navigation;
     return (
       <View style={styles.container}>
         <View style={styles.imageContainer}>
@@ -40,39 +40,36 @@ class ScreenStartWithLogo extends Component {
           <NextButton
             text={I18n.t('Onboarding.next')}
             onPress={() => {
-              sendPlatformIntention(Platform.OS)
-              navigate(nextScreen)
+              sendPlatformIntention(Platform.OS);
+              navigate(nextScreen);
             }}
           />
         </View>
       </View>
-    )
+    );
   }
 }
 
 const mapStateToDispatch = (dispatch) => ({
   sendPlatformIntention: (platform) =>
-    dispatch(MessageActions.sendIntention(null, 'platform', platform))
-})
+    dispatch(MessageActions.sendIntention(null, 'platform', platform)),
+});
 
-export default connect(
-  null,
-  mapStateToDispatch
-)(ScreenStartWithLogo)
+export default connect(null, mapStateToDispatch)(ScreenStartWithLogo);
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
     flexDirection: 'column',
-    backgroundColor: Colors.onboarding.background
+    backgroundColor: Colors.onboarding.background,
   },
   imageContainer: {
     flex: 1,
     alignSelf: 'stretch',
     padding: 20,
     backgroundColor: '#fff',
-    ...ifIphoneX({ paddingTop: 40 })
+    ...ifIphoneX({ paddingTop: 40 }),
   },
   logoContainer: { flex: 1, flexDirection: 'row', alignItems: 'center' },
   poweredByContainer: { height: 40, alignItems: 'center' },
@@ -83,17 +80,17 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'space-around',
     marginHorizontal: 30,
-    alignSelf: 'stretch'
+    alignSelf: 'stretch',
   },
   title: {
     fontSize: normalize(25),
     fontWeight: 'bold',
     color: Colors.onboarding.text,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   subtitle: {
     color: Colors.onboarding.text,
     textAlign: 'center',
-    fontSize: normalize(18)
-  }
-})
+    fontSize: normalize(18),
+  },
+});

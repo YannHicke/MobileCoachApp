@@ -1,10 +1,10 @@
-import { createReducer, createActions } from 'reduxsauce'
-import Immutable from 'seamless-immutable'
+import { createReducer, createActions } from 'reduxsauce';
+import Immutable from 'seamless-immutable';
 
-import AppConfig from '../Config/AppConfig'
+import AppConfig from '../Config/AppConfig';
 
-import Log from '../Utils/Log'
-const log = new Log('Redux/ServerSyncRedux')
+import Log from '../Utils/Log';
+const log = new Log('Redux/ServerSyncRedux');
 
 /* ------------- Actions and Action Creators ------------- */
 
@@ -22,9 +22,9 @@ const { Types, Creators } = createActions({
   connectionStateChange: [
     'connectionState',
     'deepstreamUser',
-    'deepstreamSecret'
-  ]
-})
+    'deepstreamSecret',
+  ],
+});
 
 export const ConnectionStates = {
   INITIALIZING: 'INITIALIZING',
@@ -33,11 +33,11 @@ export const ConnectionStates = {
   RECONNECTING: 'RECONNECTING',
   CONNECTED: 'CONNECTED',
   SYNCHRONIZATION: 'SYNCHRONIZATION',
-  SYNCHRONIZED: 'SYNCHRONIZED'
-}
+  SYNCHRONIZED: 'SYNCHRONIZED',
+};
 
-export const ServerSyncActions = Types
-export default Creators
+export const ServerSyncActions = Types;
+export default Creators;
 
 /* ------------- Initial State ------------- */
 
@@ -66,99 +66,99 @@ export const SETTINGS_INITIAL_STATE = Immutable({
   pushRequested: false,
   pushShared: false,
   versionInfo: null,
-  serverSync: null
-})
+  serverSync: null,
+});
 
 // Status (not stored, current state)
 export const STATUS_INITIAL_STATE = Immutable({
-  connectionState: ConnectionStates.INITIALIZING
-})
+  connectionState: ConnectionStates.INITIALIZING,
+});
 
 /* ------------- Reducers ------------- */
 
 // Settings modification called by sagas
 export const rememberRegistration = (state, action) => {
-  log.debug('Remember registration')
+  log.debug('Remember registration');
 
-  const { deepstreamUser, deepstreamSecret } = action
+  const { deepstreamUser, deepstreamSecret } = action;
   return state.merge({
     registered: true,
     deepstreamUser,
     deepstreamSecret,
-    restUser: 'ds:' + deepstreamUser
-  })
-}
+    restUser: 'ds:' + deepstreamUser,
+  });
+};
 
 export const rememberLatestUserTimestamp = (state, action) => {
-  log.debug('Remember latest user timestamp:', action)
+  log.debug('Remember latest user timestamp:', action);
 
-  const { timestamp } = action
+  const { timestamp } = action;
   if (state.timestamp < timestamp) {
-    return state.merge({ timestamp })
+    return state.merge({ timestamp });
   } else {
-    return state
+    return state;
   }
-}
+};
 
 export const rememberLatestDashboardTimestamp = (state, action) => {
-  log.debug('Remember latest dashboard timestamp:', action)
+  log.debug('Remember latest dashboard timestamp:', action);
 
-  const { timestamp } = action
+  const { timestamp } = action;
   if (state.timestampDashboard < timestamp) {
-    return state.merge({ timestampDashboard: timestamp })
+    return state.merge({ timestampDashboard: timestamp });
   } else {
-    return state
+    return state;
   }
-}
+};
 
 export const rememberPushTokenRequested = (state) => {
-  log.debug('Remember push token requested')
+  log.debug('Remember push token requested');
 
-  return state.merge({ pushRequested: true })
-}
+  return state.merge({ pushRequested: true });
+};
 
 export const rememberPushTokenShared = (state) => {
-  log.debug('Remember push token shared')
+  log.debug('Remember push token shared');
 
-  return state.merge({ pushShared: true })
-}
+  return state.merge({ pushShared: true });
+};
 
 // Status modification called by sagas
 export const connectionStateChange = (state, action) => {
-  log.debug('Connection state change:', action.connectionState)
+  log.debug('Connection state change:', action.connectionState);
 
-  const { connectionState } = action
-  return state.merge({ connectionState })
-}
+  const { connectionState } = action;
+  return state.merge({ connectionState });
+};
 
 // Settings modification called by notification module
 export const rememberPushToken = (state, action) => {
-  log.debug('Remember push token:', action)
+  log.debug('Remember push token:', action);
 
-  const { platform, token } = action
+  const { platform, token } = action;
 
   if (state.pushToken !== null && state.pushToken !== token) {
     return state.merge({
       pushPlatform: platform,
       pushToken: token,
-      pushShared: false
-    })
+      pushShared: false,
+    });
   } else {
-    return state.merge({ pushPlatform: platform, pushToken: token })
+    return state.merge({ pushPlatform: platform, pushToken: token });
   }
-}
+};
 
 export const rememberServerSync = (state, action) => {
-  log.debug('Remember server sync settings')
+  log.debug('Remember server sync settings');
 
-  return state.merge({ serverSync: action.serverSync })
-}
+  return state.merge({ serverSync: action.serverSync });
+};
 
 export const rememberVersionInfo = (state, action) => {
-  log.debug('Remember server sync settings')
+  log.debug('Remember server sync settings');
 
-  return state.merge({ versionInfo: action.versionInfo })
-}
+  return state.merge({ versionInfo: action.versionInfo });
+};
 
 /* ------------- Hookup Reducers To Actions ------------- */
 
@@ -171,10 +171,10 @@ export const settingsReducer = createReducer(SETTINGS_INITIAL_STATE, {
   [Types.REMEMBER_LATEST_DASHBOARD_TIMESTAMP]: rememberLatestDashboardTimestamp,
   [Types.REMEMBER_PUSH_TOKEN]: rememberPushToken,
   [Types.REMEMBER_SERVER_SYNC]: rememberServerSync,
-  [Types.REMEMBER_VERSION_INFO]: rememberVersionInfo
-})
+  [Types.REMEMBER_VERSION_INFO]: rememberVersionInfo,
+});
 
 // Status
 export const statusReducer = createReducer(STATUS_INITIAL_STATE, {
-  [Types.CONNECTION_STATE_CHANGE]: connectionStateChange
-})
+  [Types.CONNECTION_STATE_CHANGE]: connectionStateChange,
+});

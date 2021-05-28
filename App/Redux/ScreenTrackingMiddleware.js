@@ -1,41 +1,44 @@
-import { NavigationActions } from 'react-navigation'
+import { NavigationActions } from 'react-navigation';
 
-import Log from '../Utils/Log'
-const log = new Log('Redux/ScreenTrackingMiddleware')
+import Log from '../Utils/Log';
+const log = new Log('Redux/ScreenTrackingMiddleware');
 
 // gets the current screen from navigation state
 const getCurrentRouteName = (navigationState) => {
   if (!navigationState) {
-    return null
+    return null;
   }
-  const route = navigationState.routes[navigationState.index]
+  const route = navigationState.routes[navigationState.index];
   // dive into nested navigators
   if (route.routes) {
-    return getCurrentRouteName(route)
+    return getCurrentRouteName(route);
   }
-  return route.routeName
-}
+  return route.routeName;
+};
 
-const screenTracking = ({ getState }) => (next) => (action) => {
-  if (
-    action.type !== NavigationActions.NAVIGATE &&
-    action.type !== NavigationActions.BACK
-  ) {
-    return next(action)
-  }
-
-  const currentScreen = getCurrentRouteName(getState().nav)
-  const result = next(action)
-  const nextScreen = getCurrentRouteName(getState().nav)
-  if (nextScreen !== currentScreen) {
-    try {
-      log.debug(`NAVIGATING ${currentScreen} to ${nextScreen}`)
-      log.action('GUI', 'ScreenChange', nextScreen)
-    } catch (e) {
-      log.warn(e)
+const screenTracking =
+  ({ getState }) =>
+  (next) =>
+  (action) => {
+    if (
+      action.type !== NavigationActions.NAVIGATE &&
+      action.type !== NavigationActions.BACK
+    ) {
+      return next(action);
     }
-  }
-  return result
-}
 
-export default screenTracking
+    const currentScreen = getCurrentRouteName(getState().nav);
+    const result = next(action);
+    const nextScreen = getCurrentRouteName(getState().nav);
+    if (nextScreen !== currentScreen) {
+      try {
+        log.debug(`NAVIGATING ${currentScreen} to ${nextScreen}`);
+        log.action('GUI', 'ScreenChange', nextScreen);
+      } catch (e) {
+        log.warn(e);
+      }
+    }
+    return result;
+  };
+
+export default screenTracking;

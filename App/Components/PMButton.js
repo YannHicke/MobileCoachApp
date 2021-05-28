@@ -1,11 +1,11 @@
-import React, { PureComponent } from 'react'
-import { Text, StyleSheet, ViewPropTypes } from 'react-native'
-import { Button } from 'react-native-elements'
-import PropTypes from 'prop-types'
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
+import React, { PureComponent } from 'react';
+import { Text, StyleSheet, ViewPropTypes } from 'react-native';
+import { Button } from 'react-native-elements';
+import PropTypes from 'prop-types';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 // import {CategoryDefinitions} from './TaskMetrics'
-import { ApplicationStyles, Colors } from '../Themes'
+import { ApplicationStyles, Colors } from '../Themes';
 
 class PMButton extends PureComponent {
   static propTypes = {
@@ -14,14 +14,14 @@ class PMButton extends PureComponent {
     title: PropTypes.string,
     containerStyle: ViewPropTypes.style,
     titleStyle: Text.propTypes.style,
-    disabled: PropTypes.bool
-  }
+    disabled: PropTypes.bool,
+  };
 
   static defaultProps = {
-    secondary: false
-  }
+    secondary: false,
+  };
 
-  render () {
+  render() {
     const {
       onPress,
       secondary,
@@ -30,9 +30,9 @@ class PMButton extends PureComponent {
       containerStyle,
       titleStyle,
       icon,
-      disabled
-    } = this.props
-    let iconComponent = icon
+      disabled,
+    } = this.props;
+    let iconComponent = icon;
     if (typeof icon === 'string' || icon instanceof String) {
       iconComponent = (
         <FontAwesome5
@@ -45,7 +45,7 @@ class PMButton extends PureComponent {
               : Colors.buttons.common.text
           }
         />
-      )
+      );
     }
     const viewStyle = [
       styles.container,
@@ -53,19 +53,19 @@ class PMButton extends PureComponent {
       {
         backgroundColor: secondary
           ? 'transparent'
-          : Colors.buttons.common.background
+          : Colors.buttons.common.background,
       },
-      containerStyle
-    ]
+      containerStyle,
+    ];
     const textStyle = [
       styles.title,
       {
         color: secondary
           ? Colors.buttons.common.background
-          : Colors.buttons.common.text
+          : Colors.buttons.common.text,
       },
-      titleStyle
-    ]
+      titleStyle,
+    ];
     return (
       <Button
         onPress={onPress}
@@ -78,13 +78,13 @@ class PMButton extends PureComponent {
         title={title.toUpperCase()}
         type={secondary ? 'clear' : 'solid'}
         disabledStyle={{
-          backgroundColor: Colors.buttons.common.disabled
+          backgroundColor: Colors.buttons.common.disabled,
         }}
         disabledTitleStyle={{
-          color: Colors.buttons.common.disabledText
+          color: Colors.buttons.common.disabledText,
         }}
       />
-    )
+    );
   }
 }
 
@@ -116,14 +116,14 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'red'
+    backgroundColor: 'red',
   },
   title: {
-    fontSize: 14
+    fontSize: 14,
   },
   disabled: {
-    backgroundColor: Colors.buttons.common.disabled
-  }
-})
+    backgroundColor: Colors.buttons.common.disabled,
+  },
+});
 
-export default PMButton
+export default PMButton;

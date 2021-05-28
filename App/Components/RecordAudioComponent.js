@@ -1,27 +1,27 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import {
   View,
   Text,
   Platform,
   PermissionsAndroid,
   TouchableWithoutFeedback,
-  Animated
-} from 'react-native'
-import { AudioRecorder, AudioUtils } from 'react-native-audio'
-import Sound from 'react-native-sound'
-import Icon from 'react-native-vector-icons/MaterialIcons'
-import RNFS from 'react-native-fs'
+  Animated,
+} from 'react-native';
+import { AudioRecorder, AudioUtils } from 'react-native-audio';
+import Sound from 'react-native-sound';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import RNFS from 'react-native-fs';
 
-import HeaderBar from './HeaderBar'
-import { Colors } from './../Themes'
-import I18n from '../I18n/I18n'
+import HeaderBar from './HeaderBar';
+import { Colors } from './../Themes';
+import I18n from '../I18n/I18n';
 
-import Log from './../Utils/Log'
-const log = new Log('RecordAudioComponent')
+import Log from './../Utils/Log';
+const log = new Log('RecordAudioComponent');
 
 class RecordAudioComponent extends Component {
-  constructor (props) {
-    super(props)
+  constructor(props) {
+    super(props);
 
     this.initialState = {
       audioPermissionsGranted: false,
@@ -32,56 +32,56 @@ class RecordAudioComponent extends Component {
       isRecording: false,
       isPlaying: false,
       isPaused: false,
-      blinkAnim: new Animated.Value(0)
-    }
-    this.state = this.initialState
+      blinkAnim: new Animated.Value(0),
+    };
+    this.state = this.initialState;
 
     // Define path to audio-file
-    this.audioFilePath = this.generateFileNameBasedOnTime()
+    this.audioFilePath = this.generateFileNameBasedOnTime();
 
     // Length of recording
-    this.recordingLength = 0.0
+    this.recordingLength = 0.0;
 
     // Define recording and timer interval
-    this.recording = null
-    this.timerInterval = null
+    this.recording = null;
+    this.timerInterval = null;
 
     // Define "Stop-Recording" animation
     this.blinkAnimationSequence = Animated.sequence([
       Animated.timing(this.state.blinkAnim, {
         toValue: 1,
-        duration: 800
+        duration: 800,
       }),
       Animated.timing(this.state.blinkAnim, {
         toValue: 0,
-        duration: 800
-      })
-    ])
+        duration: 800,
+      }),
+    ]);
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.checkAndRequestCameraPermisson().then((permissionsGranted) => {
-      this.setState({ audioPermissionsGranted: permissionsGranted })
+      this.setState({ audioPermissionsGranted: permissionsGranted });
       if (permissionsGranted) {
-        log.info('Audio permissions granted through user.')
+        log.info('Audio permissions granted through user.');
 
         AudioRecorder.onProgress = (data) => {
-          this.setState({ currentTime: Math.floor(data.currentTime) })
-        }
+          this.setState({ currentTime: Math.floor(data.currentTime) });
+        };
 
         AudioRecorder.onFinished = (data) => {
           if (Platform.OS === 'ios') {
-            this.finishRecording(data.status === 'OK', data.audioFileURL)
+            this.finishRecording(data.status === 'OK', data.audioFileURL);
           }
-        }
+        };
       } else {
-        log.info('User has not granted audio permissions.')
+        log.info('User has not granted audio permissions.');
       }
-    })
+    });
   }
 
-  generateFileNameBasedOnTime () {
-    const date = new Date()
+  generateFileNameBasedOnTime() {
+    const date = new Date();
     const timeStamp =
       date.getDate() +
       '' +
@@ -93,191 +93,190 @@ class RecordAudioComponent extends Component {
       '' +
       date.getMinutes() +
       '' +
-      date.getSeconds()
+      date.getSeconds();
 
-    return this.state.audioPath + timeStamp + '.aac'
+    return this.state.audioPath + timeStamp + '.aac';
   }
 
-  async checkAndRequestCameraPermisson () {
-    log.info('Checking permissions to access microphone.')
+  async checkAndRequestCameraPermisson() {
+    log.info('Checking permissions to access microphone.');
 
     if (Platform.OS === 'ios') {
-      return true
+      return true;
     }
 
     const audioPermissionsGranted = await PermissionsAndroid.check(
-      PermissionsAndroid.PERMISSIONS.RECORD_AUDIO
-    )
+      PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+    );
 
     if (!audioPermissionsGranted) {
       const audioRationale = {
         title: 'Microphone Permission',
-        message: 'We need to get permissions to your microphone to record audio'
-      }
+        message:
+          'We need to get permissions to your microphone to record audio',
+      };
 
-      log.debug('Requesting audio permissions.')
+      log.debug('Requesting audio permissions.');
       const audioPermissionUserChoice = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-        audioRationale
-      )
-      return audioPermissionUserChoice === PermissionsAndroid.RESULTS.GRANTED
+        audioRationale,
+      );
+      return audioPermissionUserChoice === PermissionsAndroid.RESULTS.GRANTED;
     }
 
-    return true
+    return true;
   }
 
-  finishRecording (recordingFinished, filePath) {
+  finishRecording(recordingFinished, filePath) {
     this.setState({
       recordingFinished,
       currentTime: 0.0,
-      recordingLength: this.state.currentTime
-    })
+      recordingLength: this.state.currentTime,
+    });
 
     if (recordingFinished) {
-      log.debug('Successfully stoped system from recording audio file.')
+      log.debug('Successfully stoped system from recording audio file.');
 
-      log.debug('Trying to prepare audio-file for playing...')
+      log.debug('Trying to prepare audio-file for playing...');
       try {
         this.recording = new Sound(filePath, '', (error) => {
           if (error) {
-            log.debug('Sound file could not be prepared: ', error)
-            return
+            log.debug('Sound file could not be prepared: ', error);
+            return;
           }
 
-          log.debug('Sound file successfully prepared.')
-        })
+          log.debug('Sound file successfully prepared.');
+        });
       } catch (err) {
-        log.debug('Error while trying to prepare audio-file for playing', err)
+        log.debug('Error while trying to prepare audio-file for playing', err);
       }
       log.info(
-        `Finished recording of duration ${
-          this.state.recordingLength
-        } seconds at path: ${filePath}`
-      )
+        `Finished recording of duration ${this.state.recordingLength} seconds at path: ${filePath}`,
+      );
     }
   }
 
-  async startRecord () {
+  async startRecord() {
     if (!this.state.isRecording) {
-      log.info('Starting to record audio-file...')
-      this.loopBlinkAnimation()
+      log.info('Starting to record audio-file...');
+      this.loopBlinkAnimation();
       this.setState({
         isRecording: true,
         recordingFinished: false,
-        currentTime: 0.0
-      })
-      this.prepareRecording()
+        currentTime: 0.0,
+      });
+      this.prepareRecording();
       try {
-        await AudioRecorder.startRecording()
+        await AudioRecorder.startRecording();
       } catch (err) {
-        log.debug('Error while trying to start record: ', err)
+        log.debug('Error while trying to start record: ', err);
       }
     }
   }
 
-  loopBlinkAnimation () {
-    Animated.loop(this.blinkAnimationSequence).start()
+  loopBlinkAnimation() {
+    Animated.loop(this.blinkAnimationSequence).start();
   }
 
-  prepareRecording () {
+  prepareRecording() {
     AudioRecorder.prepareRecordingAtPath(this.audioFilePath, {
       SampleRate: 22050,
       Channels: 1,
       AudioQuality: 'Medium',
-      AudioEncoding: 'aac'
-    })
+      AudioEncoding: 'aac',
+    });
   }
 
-  async stopRecord () {
+  async stopRecord() {
     if (this.state.isRecording) {
-      log.debug('Trying to stop system from recording audio file...')
-      this.blinkAnimationSequence.stop()
-      this.setState({ isRecording: false })
+      log.debug('Trying to stop system from recording audio file...');
+      this.blinkAnimationSequence.stop();
+      this.setState({ isRecording: false });
 
       try {
-        const filePath = await AudioRecorder.stopRecording()
+        const filePath = await AudioRecorder.stopRecording();
 
         if (Platform.OS === 'android') {
-          this.finishRecording(true, filePath)
+          this.finishRecording(true, filePath);
         }
-        return filePath
+        return filePath;
       } catch (err) {
-        log.debug('Error while trying to stop system from recording: ', err)
+        log.debug('Error while trying to stop system from recording: ', err);
       }
     }
 
-    log.debug('The system is not recording at the moment')
+    log.debug('The system is not recording at the moment');
   }
 
-  async eraseRecord () {
-    log.debug(`Trying to erase audio-file under: ${this.audioFilePath} ...`)
+  async eraseRecord() {
+    log.debug(`Trying to erase audio-file under: ${this.audioFilePath} ...`);
     try {
       if (await RNFS.exists(this.audioFilePath)) {
-        await RNFS.unlink(this.audioFilePath)
+        await RNFS.unlink(this.audioFilePath);
         log.debug(
-          `Successfully erased audio-file under: ${this.audioFilePaths}.`
-        )
+          `Successfully erased audio-file under: ${this.audioFilePaths}.`,
+        );
         this.recording.stop(() => {
           this.setState({
             recordingFinished: false,
             currentTime: 0.0,
             isPlaying: false,
-            isPaused: false
-          })
-          this.audioFilePath = this.generateFileNameBasedOnTime()
-        })
+            isPaused: false,
+          });
+          this.audioFilePath = this.generateFileNameBasedOnTime();
+        });
       } else {
-        log.debug('No audio-file recorded. Component will close now.')
+        log.debug('No audio-file recorded. Component will close now.');
       }
     } catch (err) {
       log.debug(
         `Error while trying to erase audio-file under ${this.audioFilePath}: `,
-        err
-      )
+        err,
+      );
     }
   }
 
-  playRecord () {
+  playRecord() {
     if (this.state.recordingFinished) {
-      this.setState({ isPlaying: true })
+      this.setState({ isPlaying: true });
 
       if (!this.state.isPaused) {
-        this.setState({ currentTime: 0.0 })
+        this.setState({ currentTime: 0.0 });
       }
 
-      this.timerInterval = setInterval(this.timer.bind(this), 100)
+      this.timerInterval = setInterval(this.timer.bind(this), 100);
 
-      log.debug('Starting to play audio file.')
+      log.debug('Starting to play audio file.');
       this.recording.play((success) => {
         if (success) {
-          this.setState({ isPlaying: false, isPaused: false })
-          clearInterval(this.timerInterval)
-          log.debug('Audio-File successfully played.')
+          this.setState({ isPlaying: false, isPaused: false });
+          clearInterval(this.timerInterval);
+          log.debug('Audio-File successfully played.');
         } else {
-          log.debug('Audio file could not be played.')
-          this.recording.reset()
+          log.debug('Audio file could not be played.');
+          this.recording.reset();
         }
-      })
+      });
     } else {
-      log.debug('There is no record available yet.')
+      log.debug('There is no record available yet.');
     }
   }
 
-  timer () {
+  timer() {
     this.recording.getCurrentTime((seconds, isPlaying) => {
-      this.setState({ currentTime: Math.floor(seconds) })
-    })
+      this.setState({ currentTime: Math.floor(seconds) });
+    });
   }
 
-  pauseRecord () {
-    log.debug('Audio-File paused from playing')
-    this.setState({ isPlaying: false, isPaused: true })
-    clearInterval(this.timerInterval)
-    this.recording.pause()
+  pauseRecord() {
+    log.debug('Audio-File paused from playing');
+    this.setState({ isPlaying: false, isPaused: true });
+    clearInterval(this.timerInterval);
+    this.recording.pause();
   }
 
-  renderRecordButton () {
-    const AnimatedIcon = Animated.createAnimatedComponent(Icon)
+  renderRecordButton() {
+    const AnimatedIcon = Animated.createAnimatedComponent(Icon);
 
     if (!this.state.isRecording) {
       return (
@@ -286,12 +285,11 @@ class RecordAudioComponent extends Component {
             <View
               style={{
                 alignItems: 'center',
-                justifyContent: 'center'
-              }}
-            >
+                justifyContent: 'center',
+              }}>
               <View>
                 <Icon
-                  name='radio-button-checked'
+                  name="radio-button-checked"
                   size={200}
                   style={{ color: '#ffffff' }}
                 />
@@ -301,9 +299,8 @@ class RecordAudioComponent extends Component {
                   style={{
                     fontWeight: 'bold',
                     fontSize: 18,
-                    color: 'black'
-                  }}
-                >
+                    color: 'black',
+                  }}>
                   {' '}
                   {this.state.currentTime} s{' '}
                 </Text>
@@ -314,16 +311,15 @@ class RecordAudioComponent extends Component {
                 style={{
                   fontWeight: 'bold',
                   fontSize: 14,
-                  color: 'white'
-                }}
-              >
+                  color: 'white',
+                }}>
                 {' '}
                 {I18n.t('Common.pressToRecord')}{' '}
               </Text>
             </View>
           </View>
         </TouchableWithoutFeedback>
-      )
+      );
     } else {
       return (
         <TouchableWithoutFeedback onPress={this.stopRecord.bind(this)}>
@@ -331,18 +327,17 @@ class RecordAudioComponent extends Component {
             <View
               style={{
                 alignItems: 'center',
-                justifyContent: 'center'
-              }}
-            >
+                justifyContent: 'center',
+              }}>
               <View>
                 <AnimatedIcon
-                  name='radio-button-checked'
+                  name="radio-button-checked"
                   size={200}
                   style={{
                     color: this.state.blinkAnim.interpolate({
                       inputRange: [0, 1],
-                      outputRange: ['rgb(255,255,255)', 'rgb(255,109,71)']
-                    })
+                      outputRange: ['rgb(255,255,255)', 'rgb(255,109,71)'],
+                    }),
                   }}
                 />
               </View>
@@ -351,9 +346,8 @@ class RecordAudioComponent extends Component {
                   style={{
                     fontWeight: 'bold',
                     fontSize: 18,
-                    color: 'black'
-                  }}
-                >
+                    color: 'black',
+                  }}>
                   {' '}
                   {this.state.currentTime} s{' '}
                 </Text>
@@ -364,20 +358,19 @@ class RecordAudioComponent extends Component {
                 style={{
                   fontWeight: 'bold',
                   fontSize: 14,
-                  color: 'white'
-                }}
-              >
+                  color: 'white',
+                }}>
                 {' '}
                 {I18n.t('Common.pressToStop')}{' '}
               </Text>
             </View>
           </View>
         </TouchableWithoutFeedback>
-      )
+      );
     }
   }
 
-  renderPlayButton () {
+  renderPlayButton() {
     return (
       <TouchableWithoutFeedback
         style={{ padding: 20 }}
@@ -385,8 +378,7 @@ class RecordAudioComponent extends Component {
           !this.state.isPlaying
             ? this.playRecord.bind(this)
             : this.pauseRecord.bind(this)
-        }
-      >
+        }>
         <View style={{ alignItems: 'center', justifyContent: 'center' }}>
           <View>
             <Icon
@@ -404,32 +396,29 @@ class RecordAudioComponent extends Component {
               style={{
                 fontWeight: 'bold',
                 fontSize: 14,
-                color: 'white'
-              }}
-            >
+                color: 'white',
+              }}>
               {' '}
               {this.state.currentTime} s{' '}
             </Text>
           </View>
         </View>
       </TouchableWithoutFeedback>
-    )
+    );
   }
 
-  renderFooterBar () {
+  renderFooterBar() {
     if (this.state.recordingFinished) {
       return (
         <View
           style={{
             flexDirection: 'row',
             position: 'absolute',
-            bottom: 0
-          }}
-        >
+            bottom: 0,
+          }}>
           <TouchableWithoutFeedback
             onPress={this.eraseRecord.bind(this)}
-            style={{}}
-          >
+            style={{}}>
             <View style={{ paddingHorizontal: 25 }}>
               <Icon
                 name={'cancel'}
@@ -448,21 +437,21 @@ class RecordAudioComponent extends Component {
             </View>
           </TouchableWithoutFeedback>
         </View>
-      )
+      );
     }
 
-    return null
+    return null;
   }
 
-  submitRecord () {
+  submitRecord() {
     this.props.onSubmitMedia(
       'file://' + this.audioFilePath,
-      this.state.recordingLength
-    )
-    this.props.onClose()
+      this.state.recordingLength,
+    );
+    this.props.onClose();
   }
 
-  renderContent () {
+  renderContent() {
     if (this.state.audioPermissionsGranted) {
       return (
         <View style={{ flex: 1, backgroundColor: Colors.main.grey1 }}>
@@ -472,9 +461,8 @@ class RecordAudioComponent extends Component {
               alignItems: 'center',
               justifyContent: 'center',
               position: 'relative',
-              padding: 20
-            }}
-          >
+              padding: 20,
+            }}>
             {!this.state.recordingFinished
               ? this.renderRecordButton()
               : this.renderPlayButton()}
@@ -483,52 +471,49 @@ class RecordAudioComponent extends Component {
             style={{
               alignItems: 'center',
               justifyContent: 'center',
-              marginBottom: 20
-            }}
-          >
+              marginBottom: 20,
+            }}>
             {this.renderFooterBar()}
           </View>
         </View>
-      )
+      );
     } else {
       return (
         <View
           style={{
             flex: 1,
             alignItems: 'center',
-            justifyContent: 'center'
-          }}
-        >
+            justifyContent: 'center',
+          }}>
           <Text
             style={{
               fontSize: 18,
               color: 'white',
               fontWeight: 'bold',
-              textAlign: 'center'
-            }}
-          >
+              textAlign: 'center',
+            }}>
             {' '}
             {I18n.t('Common.permissionsAudio')}{' '}
           </Text>
         </View>
-      )
+      );
     }
   }
 
-  render () {
+  render() {
     return (
       <View style={{ flex: 1 }}>
         <HeaderBar
           title={I18n.t('Common.recordAudio')}
           onBack={async () => {
-            await this.eraseRecord()
-            this.props.onClose()
+            await this.eraseRecord();
+            this.props.onClose();
           }}
         />
         {this.renderContent()}
       </View>
-    )
+    );
   }
 }
 
-export default RecordAudioComponent
+export default RecordAudioComponent;

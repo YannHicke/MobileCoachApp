@@ -1,73 +1,75 @@
-import React, { Component } from 'react'
-import { Text, StyleSheet, View } from 'react-native'
-import PropTypes from 'prop-types'
-import * as Animatable from 'react-native-animatable'
+import React, { Component } from 'react';
+import { Text, StyleSheet, View } from 'react-native';
+import PropTypes from 'prop-types';
+import * as Animatable from 'react-native-animatable';
 
-import LoadingOverlay from './LoadingOverlay'
-import { Colors } from '../Themes/'
+import LoadingOverlay from './LoadingOverlay';
+import { Colors } from '../Themes/';
 
 export default class EmptyChatIndicator extends Component {
   static propTypes = {
     active: PropTypes.bool.isRequired,
-    emptyChatMessage: PropTypes.string
-  }
+    emptyChatMessage: PropTypes.string,
+  };
 
   static defaultProps = {
-    emptyChatMessage: ''
-  }
+    emptyChatMessage: '',
+  };
 
-  constructor (props) {
-    super(props)
+  constructor(props) {
+    super(props);
     this.state = {
-      shouldRender: false
-    }
+      shouldRender: false,
+    };
   }
 
-  componentDidMount () {
+  componentDidMount() {
     if (this.props.active) {
-      this.startTimerToShow()
+      this.startTimerToShow();
     }
   }
 
-  componentWillUnmount () {
-    this.stopTimerAndHide()
+  componentWillUnmount() {
+    this.stopTimerAndHide();
   }
 
   // Always wait 500 ms before showing indicator to prevent indicator from flashing on startup
-  startTimerToShow () {
+  startTimerToShow() {
     // check for timeoutID to ensure only one timer is running
     if (!this.timeoutID) {
       this.timeoutID = setTimeout(() => {
-        this.timeoutID = null
-        this.setState({ shouldRender: true })
-      }, 500)
+        this.timeoutID = null;
+        this.setState({ shouldRender: true });
+      }, 500);
     }
   }
 
-  stopTimerAndHide () {
-    clearTimeout(this.timeoutID)
-    this.timeoutID = null
+  stopTimerAndHide() {
+    clearTimeout(this.timeoutID);
+    this.timeoutID = null;
     // Fade out Animation
     if (this.refs.view) {
       this.refs.view
         .fadeOut(300)
-        .then(() => this.setState({ shouldRender: false }))
-    } else this.setState({ shouldRender: false })
+        .then(() => this.setState({ shouldRender: false }));
+    } else {
+      this.setState({ shouldRender: false });
+    }
   }
 
   // TODO: Needs to be refactored
-  UNSAFE_componentWillReceiveProps (nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     // If active prop changed
     if (nextProps.active !== this.props.active) {
       if (nextProps.active) {
-        this.startTimerToShow()
+        this.startTimerToShow();
       } else {
-        this.stopTimerAndHide()
+        this.stopTimerAndHide();
       }
     }
   }
 
-  renderIndicator () {
+  renderIndicator() {
     // If a empty-message was specified, display the message
     if (this.props.emptyChatMessage && this.props.emptyChatMessage !== '') {
       return (
@@ -75,47 +77,47 @@ export default class EmptyChatIndicator extends Component {
           <Animatable.View
             useNativeDriver
             delay={600}
-            animation='flipInX'
+            animation="flipInX"
             duration={350}
-            style={styles.textWrapper}
-          >
+            style={styles.textWrapper}>
             <Text style={styles.text}>{this.props.emptyChatMessage}</Text>
           </Animatable.View>
         </View>
-      )
+      );
       // else return an activity indicator
     } else {
       return (
         <LoadingOverlay
-          type='Bounce'
+          type="Bounce"
           color={Colors.activityIndicator}
           size={60}
           backgroundOpacity={0}
         />
-      )
+      );
     }
   }
 
-  render () {
+  render() {
     if (this.state.shouldRender) {
       return (
         <Animatable.View
-          animation='fadeIn'
+          animation="fadeIn"
           duration={2000}
           useNativeDriver
-          ref='view'
+          ref="view"
           style={{
             position: 'absolute',
             top: 0,
             left: 0,
             bottom: 0,
-            right: 0
-          }}
-        >
+            right: 0,
+          }}>
           {this.renderIndicator()}
         </Animatable.View>
-      )
-    } else return null
+      );
+    } else {
+      return null;
+    }
   }
 }
 
@@ -125,7 +127,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flex: 1,
     marginTop: 5,
-    marginBottom: 10
+    marginBottom: 10,
   },
   textWrapper: {
     alignItems: 'center',
@@ -134,12 +136,12 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     minHeight: 30,
     maxWidth: 280,
-    padding: 10
+    padding: 10,
   },
   text: {
     backgroundColor: 'transparent',
     color: Colors.messageBubbles.system.text,
     fontSize: 16,
-    textAlign: 'center'
-  }
-})
+    textAlign: 'center',
+  },
+});

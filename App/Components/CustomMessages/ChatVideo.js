@@ -1,22 +1,22 @@
-import React, { Component } from 'react'
-import { View } from 'react-native'
+import React, { Component } from 'react';
+import { View } from 'react-native';
 
-import { inputMessageStyles } from './Styles/CommonStyles'
-import PropTypes from 'prop-types'
+import { inputMessageStyles } from './Styles/CommonStyles';
+import PropTypes from 'prop-types';
 
-import { Metrics } from '../../Themes/'
-import Video from '../Video/Video.js'
+import { Metrics } from '../../Themes/';
+import Video from '../Video/Video.js';
 // import Log from '../../Utils/Log'
 // const log = new Log('CustomMessages/ChatVideo')
 
 export default class ChatVideo extends Component {
   static propTypes = {
     source: PropTypes.string.isRequired,
-    showModal: PropTypes.func.isRequired
-  }
+    showModal: PropTypes.func.isRequired,
+  };
 
-  render () {
-    let width = Metrics.screenWidth - 135
+  render() {
+    let width = Metrics.screenWidth - 135;
     return (
       <View style={[inputMessageStyles.mediaContent, { overflow: 'hidden' }]}>
         <Video
@@ -30,17 +30,17 @@ export default class ChatVideo extends Component {
             source,
             currentTime,
             paused,
-            closeFullscreenCallback
+            closeFullscreenCallback,
           ) =>
             this.props.showModal('fullscreen-video', {
               source,
               initialPosition: currentTime,
               paused,
-              closeFullscreenCallback
+              closeFullscreenCallback,
             })
           }
         />
       </View>
-    )
+    );
   }
 }

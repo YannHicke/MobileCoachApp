@@ -1,19 +1,19 @@
-import React, { Component } from 'react'
-import { View, StyleSheet, Platform } from 'react-native'
-import KeyboardSpacer from 'react-native-keyboard-spacer'
+import React, { Component } from 'react';
+import { View, StyleSheet, Platform } from 'react-native';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 import { WebView } from 'react-native-webview';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
 
-import I18n from '../I18n/I18n'
-import HeaderBar from './HeaderBar'
-import ServerMessageActions from '../Redux/MessageRedux'
+import I18n from '../I18n/I18n';
+import HeaderBar from './HeaderBar';
+import ServerMessageActions from '../Redux/MessageRedux';
 
 // HTML Templates
-import PlainTextTemplate from './../../WebTemplates/PlainTextTemplate'
-import SliderPageTemplate from './../../WebTemplates/SliderPageTemplate'
+import PlainTextTemplate from './../../WebTemplates/PlainTextTemplate';
+import SliderPageTemplate from './../../WebTemplates/SliderPageTemplate';
 
-import Log from '../Utils/Log'
-const log = new Log('Components/WebRichContent')
+import Log from '../Utils/Log';
+const log = new Log('Components/WebRichContent');
 
 /*
  * Supported commands:
@@ -23,100 +23,100 @@ const log = new Log('Components/WebRichContent')
  */
 
 class WebRichContent extends Component {
-  static defaultProps = { withHeader: false }
+  static defaultProps = { withHeader: false };
 
-  constructor (props) {
-    super(props)
+  constructor(props) {
+    super(props);
 
     if (Platform.OS === 'ios') {
-      this.baseUrl = 'Web/'
+      this.baseUrl = 'Web/';
     } else if (Platform.OS === 'android') {
-      this.baseUrl = 'file:///android_asset/web/'
+      this.baseUrl = 'file:///android_asset/web/';
     }
 
     // Get Template-Content as JSON-Object
-    const template = this.getTemplateContent()
+    const template = this.getTemplateContent();
     // Create appropriate HTML content for view
-    this.htmlContent = this.generateHtmlContent(template)
+    this.htmlContent = this.generateHtmlContent(template);
   }
 
   /**
    * This function defines the contentType of the WebView
    * TODO: Type should be defined by the server and inside of the message-object
    */
-  getTemplateContent () {
-    const page = {}
-    let contentType = null
-    const html = this.props.children
+  getTemplateContent() {
+    const page = {};
+    let contentType = null;
+    const html = this.props.children;
 
     if (html.includes('<head id="force">')) {
       // Page with own additional headers
       page.pageHeader = html.substr(
         html.indexOf('<head id="force">') + 17,
-        html.indexOf('</head>') - html.indexOf('<head id="force">') - 17
-      )
+        html.indexOf('</head>') - html.indexOf('<head id="force">') - 17,
+      );
     } else {
       // Page without additional header
-      page.pageHeader = ''
+      page.pageHeader = '';
     }
 
     if (html.includes('<page>')) {
       // Page with slider pages
-      contentType = 'slider-page'
+      contentType = 'slider-page';
 
-      let cleanedPages = html.split('<page>')
+      let cleanedPages = html.split('<page>');
 
       // After split first element of the array is the meta-tag
       // We don't need this tag so we take it out of the array
-      cleanedPages.shift()
+      cleanedPages.shift();
 
       //  runs through each page-element and creates the object which will be used inside of the template
       cleanedPages = cleanedPages.map((element) => {
-        const newElement = element.substr(0, element.indexOf('</page>'))
+        const newElement = element.substr(0, element.indexOf('</page>'));
 
         const elementObject = {
-          content: newElement
-        }
-        return elementObject
-      })
+          content: newElement,
+        };
+        return elementObject;
+      });
 
-      page.pages = cleanedPages
+      page.pages = cleanedPages;
     } else if (html.includes('<body>')) {
       // Regular page
-      contentType = 'plain'
+      contentType = 'plain';
 
       page.pageContent = html.substr(
         html.indexOf('<body>') + 6,
-        html.indexOf('</body>') - html.indexOf('<body>') - 6
-      )
+        html.indexOf('</body>') - html.indexOf('<body>') - 6,
+      );
     } else {
       // Regular page content (without body)
-      contentType = 'plain'
+      contentType = 'plain';
 
-      page.pageContent = html
+      page.pageContent = html;
     }
 
-    return { contentType, templateContent: page }
+    return { contentType, templateContent: page };
   }
 
   // Templates will be generated with ES6 template-strings
   // Each Template is a single file which will be imported. It receives the templateContent
-  generateHtmlContent (template) {
-    let htmlContent = ''
+  generateHtmlContent(template) {
+    let htmlContent = '';
 
     switch (template.contentType) {
       case 'plain':
-        htmlContent = PlainTextTemplate(template.templateContent)
-        break
+        htmlContent = PlainTextTemplate(template.templateContent);
+        break;
       case 'slider-page':
-        htmlContent = SliderPageTemplate(template.templateContent)
-        break
+        htmlContent = SliderPageTemplate(template.templateContent);
+        break;
     }
 
-    return htmlContent
+    return htmlContent;
   }
 
-  render () {
+  render() {
     if (this.htmlContent != null) {
       if (this.props.withHeader) {
         return (
@@ -133,7 +133,7 @@ class WebRichContent extends Component {
               <WebView
                 source={{
                   html: this.htmlContent,
-                  baseUrl: this.baseUrl
+                  baseUrl: this.baseUrl,
                 }}
                 originWhitelist={['file://']}
                 useWebKit={true}
@@ -146,14 +146,14 @@ class WebRichContent extends Component {
               {Platform.OS === 'android' ? <KeyboardSpacer /> : null}
             </View>
           </View>
-        )
+        );
       } else {
         return (
           <View style={styles.webViewContainer}>
             <WebView
               source={{
                 html: this.htmlContent,
-                baseUrl: this.baseUrl
+                baseUrl: this.baseUrl,
               }}
               originWhitelist={['file://']}
               useWebKit={true}
@@ -165,63 +165,60 @@ class WebRichContent extends Component {
             />
             {Platform.OS === 'android' ? <KeyboardSpacer /> : null}
           </View>
-        )
+        );
       }
     } else {
-      return null
+      return null;
     }
   }
 
   onEvent = (event) => {
-    const { data } = event.nativeEvent
-    log.debug('Event:', data)
+    const { data } = event.nativeEvent;
+    log.debug('Event:', data);
 
     switch (data) {
       case 'close':
-        this.props.onClose(false)
-        break
+        this.props.onClose(false);
+        break;
       case 'complete':
-        this.props.onClose(true)
-        break
+        this.props.onClose(true);
+        break;
       default:
-        const jsonData = JSON.parse(data)
-        log.debug('Communicating value change to server:', jsonData)
-        this.props.sendVariableValue(jsonData.variable, jsonData.value)
-        break
+        const jsonData = JSON.parse(data);
+        log.debug('Communicating value change to server:', jsonData);
+        this.props.sendVariableValue(jsonData.variable, jsonData.value);
+        break;
     }
-  }
+  };
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
   webViewContainer: {
     flex: 1,
     paddingLeft: 0,
     paddingRight: 0,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
   },
   webView: {
     position: 'absolute',
     left: 0,
     top: 0,
     bottom: 0,
-    right: 0
-  }
-})
+    right: 0,
+  },
+});
 
 const mapStateToProps = (state) => {
-  return {}
-}
+  return {};
+};
 
 const mapStateToDispatch = (dispatch) => ({
   sendVariableValue: (variable, value) =>
-    dispatch(ServerMessageActions.sendVariableValue(variable, value))
-})
+    dispatch(ServerMessageActions.sendVariableValue(variable, value)),
+});
 
-export default connect(
-  mapStateToProps,
-  mapStateToDispatch
-)(WebRichContent)
+export default connect(mapStateToProps, mapStateToDispatch)(WebRichContent);

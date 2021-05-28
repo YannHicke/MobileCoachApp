@@ -1,36 +1,36 @@
-import React, { Component } from 'react'
-import { Platform, View, StyleSheet } from 'react-native'
-import { connect } from 'react-redux'
-import NavigationBar from 'react-native-navbar'
-import { ifIphoneX } from 'react-native-iphone-x-helper'
+import React, { Component } from 'react';
+import { Platform, View, StyleSheet } from 'react-native';
+import { connect } from 'react-redux';
+import NavigationBar from 'react-native-navbar';
+import { ifIphoneX } from 'react-native-iphone-x-helper';
 
-import { Metrics, Colors } from '../Themes/'
-import NavBarButton from './NavBarButton'
-import GUIActions from '../Redux/GUIRedux'
-import Badge from './Badge'
-import AppConfig from '../Config/AppConfig'
+import { Metrics, Colors } from '../Themes/';
+import NavBarButton from './NavBarButton';
+import GUIActions from '../Redux/GUIRedux';
+import Badge from './Badge';
+import AppConfig from '../Config/AppConfig';
 
 class PMNavigationBar extends Component {
-  constructor (props) {
-    super(props)
+  constructor(props) {
+    super(props);
     this.defaultLeftButton = (
       <NavBarButton
-        position='left'
-        icon='ios-menu'
+        position="left"
+        icon="ios-menu"
         onPress={() => this.props.toggleSideMenu()}
       />
-    )
+    );
   }
 
-  render () {
-    const { title, toggleSideMenu, rightButton, leftButton } = this.props
+  render() {
+    const { title, toggleSideMenu, rightButton, leftButton } = this.props;
     return (
       <View style={styles.wrapper}>
         <NavigationBar
           {...NavigationBarStyles}
           title={{
             title: title,
-            tintColor: NavigationBarStyles.title.tintColor
+            tintColor: NavigationBarStyles.title.tintColor,
           }}
           leftButton={leftButton || this.defaultLeftButton}
           rightButton={rightButton}
@@ -40,11 +40,11 @@ class PMNavigationBar extends Component {
           onPress={() => toggleSideMenu()}
         />
       </View>
-    )
+    );
   }
 }
 
-let badgeTopPosition = Metrics.navbarHeight / 2 - 19
+let badgeTopPosition = Metrics.navbarHeight / 2 - 19;
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -54,10 +54,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 2,
     shadowOffset: {
-      height: 2
+      height: 2,
     },
     // We don't need zIndex on Android, disable it since it's buggy
-    zIndex: Platform.OS === 'android' ? 0 : 1
+    zIndex: Platform.OS === 'android' ? 0 : 1,
   },
   badgeContainer: {
     position: 'absolute',
@@ -66,22 +66,22 @@ const styles = StyleSheet.create({
       ios: {
         ...ifIphoneX(
           {
-            top: badgeTopPosition + 40
+            top: badgeTopPosition + 40,
           },
           {
-            top: badgeTopPosition + 20
-          }
-        )
+            top: badgeTopPosition + 20,
+          },
+        ),
       },
       android: {
-        top: badgeTopPosition + Metrics.statusBarMargin
-      }
+        top: badgeTopPosition + Metrics.statusBarMargin,
+      },
     }),
     left: 24,
     justifyContent: 'center',
-    alignItems: 'flex-start'
-  }
-})
+    alignItems: 'flex-start',
+  },
+});
 
 const NavigationBarStyles = {
   containerStyle: {
@@ -90,40 +90,37 @@ const NavigationBarStyles = {
         height: Metrics.navbarHeight + 20,
         ...ifIphoneX({
           height: Metrics.navbarHeight + 41,
-          paddingTop: 20
-        })
+          paddingTop: 20,
+        }),
       },
       android: {
         marginTop: Metrics.statusBarMargin,
-        height: Metrics.navbarHeight
-      }
+        height: Metrics.navbarHeight,
+      },
     }),
     justifyContent: 'center',
-    backgroundColor: Colors.navigationBar.background
+    backgroundColor: Colors.navigationBar.background,
   },
   statusBar: {
     style: 'light-content',
-    hidden: false
+    hidden: false,
   },
   title: {
     tintColor: 'white',
-    height: 50
-  }
-}
+    height: 50,
+  },
+};
 
 const mapStateToProps = (state) => {
   return {
     language: state.settings.language,
     coach: state.settings.coach,
-    guistate: state.guistate
-  }
-}
+    guistate: state.guistate,
+  };
+};
 
 const mapStateToDispatch = (dispatch) => ({
-  toggleSideMenu: () => dispatch(GUIActions.toggleSideMenu())
-})
+  toggleSideMenu: () => dispatch(GUIActions.toggleSideMenu()),
+});
 
-export default connect(
-  mapStateToProps,
-  mapStateToDispatch
-)(PMNavigationBar)
+export default connect(mapStateToProps, mapStateToDispatch)(PMNavigationBar);

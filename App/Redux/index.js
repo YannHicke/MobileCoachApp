@@ -1,10 +1,10 @@
-import { resettableReducer } from 'reduxsauce'
-import { combineReducers } from 'redux'
-import configureStore from './CreateStore'
-import rootSaga from '../Sagas/'
+import { resettableReducer } from 'reduxsauce';
+import { combineReducers } from 'redux';
+import configureStore from './CreateStore';
+import rootSaga from '../Sagas/';
 
 // listen for the action type of 'RESET', you can change this.
-const resettable = resettableReducer('RESET')
+const resettable = resettableReducer('RESET');
 
 export default (encryptionKey) => {
   /* ------------- Assemble The Reducers ------------- */
@@ -16,7 +16,7 @@ export default (encryptionKey) => {
     dashboardMessages: resettable(require('./DashboardMessageRedux').reducer),
     storyProgress: resettable(require('./StoryProgressRedux').reducer),
     serverSyncSettings: resettable(
-      require('./ServerSyncRedux').settingsReducer
+      require('./ServerSyncRedux').settingsReducer,
     ),
 
     // Project-specific reducers
@@ -27,8 +27,8 @@ export default (encryptionKey) => {
     hydrationCompleted: require('./HydrateRedux').reducer,
     serverSyncStatus: require('./ServerSyncRedux').statusReducer,
     giftedchatmessages: require('./GiftedChatMessageRedux').reducer,
-    guistate: require('./GUIRedux').reducer
-  })
+    guistate: require('./GUIRedux').reducer,
+  });
 
-  return configureStore(rootReducer, rootSaga, encryptionKey)
-}
+  return configureStore(rootReducer, rootSaga, encryptionKey);
+};

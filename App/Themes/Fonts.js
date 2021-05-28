@@ -1,6 +1,6 @@
-import { Platform } from 'react-native'
+import { Platform } from 'react-native';
 
-let type
+let type;
 
 if (Platform.OS === 'ios') {
   type = {
@@ -8,16 +8,16 @@ if (Platform.OS === 'ios') {
     base: 'Roboto Regular',
     bold: 'Roboto Bold',
     italic: 'Roboto Italic',
-    boldItalic: 'Roboto Bold Italic'
-  }
+    boldItalic: 'Roboto Bold Italic',
+  };
 } else {
   type = {
     family: 'roboto',
     base: 'roboto_regular',
     bold: 'roboto_bold',
     italic: 'roboto_italic',
-    boldItalic: 'roboto_bold_italic'
-  }
+    boldItalic: 'roboto_bold_italic',
+  };
 }
 
 const size = {
@@ -31,56 +31,56 @@ const size = {
   regular: 17,
   medium: 14,
   small: 12,
-  tiny: 8.5
-}
+  tiny: 8.5,
+};
 
 const style = {
   h1: {
     fontFamily: type.bold,
-    fontSize: size.h1
+    fontSize: size.h1,
   },
   h2: {
     fontWeight: type.bold,
-    fontSize: size.h2
+    fontSize: size.h2,
   },
   h3: {
     fontFamily: type.bold,
-    fontSize: size.h3
+    fontSize: size.h3,
   },
   h4: {
     fontFamily: type.bold,
-    fontSize: size.h4
+    fontSize: size.h4,
   },
   h5: {
     fontFamily: type.bold,
-    fontSize: size.h5
+    fontSize: size.h5,
   },
   h6: {
     fontFamily: type.bold,
-    fontSize: size.h6
+    fontSize: size.h6,
   },
   p: {
     fontFamily: type.base,
-    fontSize: size.regular
+    fontSize: size.regular,
   },
   normal: {
     fontFamily: type.base,
-    fontSize: size.regular
+    fontSize: size.regular,
   },
   description: {
     fontFamily: type.base,
-    fontSize: size.medium
+    fontSize: size.medium,
   },
   italic: {
-    fontFamily: type.italic
+    fontFamily: type.italic,
   },
   bold: {
-    fontFamily: type.Bold
-  }
-}
+    fontFamily: type.Bold,
+  },
+};
 
 export default {
   type,
   size,
-  style
-}
+  style,
+};

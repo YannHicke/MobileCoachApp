@@ -1,43 +1,43 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native';
 
-import { Colors } from '../../Themes/'
+import { Colors } from '../../Themes/';
 
 export default StyleSheet.create({
   chatContainer: {
     backgroundColor: Colors.main.chatBackground,
-    flex: 1
+    flex: 1,
   },
   footerContainer: {
     paddingBottom: 85,
-    paddingRight: 8
+    paddingRight: 8,
   },
   coachImage: {
     position: 'absolute',
     width: 53, // 127 / 2,
     height: 53, // 121 / 2,
     top: -30,
-    resizeMode: 'contain'
-  }
-})
+    resizeMode: 'contain',
+  },
+});
 
 export const TextBubbleStyle = {
   wrapperStyle: {
     left: {
-      backgroundColor: Colors.messageBubbles.left.background
+      backgroundColor: Colors.messageBubbles.left.background,
     },
     right: {
-      backgroundColor: Colors.messageBubbles.right.background
-    }
+      backgroundColor: Colors.messageBubbles.right.background,
+    },
   },
   textStyle: {
     left: {
-      color: Colors.messageBubbles.left.text
+      color: Colors.messageBubbles.left.text,
     },
     right: {
-      color: Colors.messageBubbles.right.text
+      color: Colors.messageBubbles.right.text,
     },
     link: {
-      color: Colors.main.hyperlink
-    }
-  }
-}
+      color: Colors.main.hyperlink,
+    },
+  },
+};

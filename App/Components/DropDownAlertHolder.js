@@ -3,13 +3,13 @@
 // see: https://github.com/testshallpass/react-native-dropdownalert/issues/73#issuecomment-330469356
 
 export default class DropDownHolder {
-  static dropDown
+  static dropDown;
 
-  static setDropDown (dropDown) {
-    this.dropDown = dropDown
+  static setDropDown(dropDown) {
+    this.dropDown = dropDown;
   }
 
-  static getDropDown () {
-    return this.dropDown
+  static getDropDown() {
+    return this.dropDown;
   }
 }

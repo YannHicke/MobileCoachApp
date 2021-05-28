@@ -23,7 +23,7 @@ export default {
       allowDebugKeyboard: false,
       deepstreamUserForDebugging: null,
       deepstreamSecretForDebugging: null,
-      disableYellowbox: true
+      disableYellowbox: true,
     },
     storage: {
       encryptedReduxStorage: false,
@@ -33,8 +33,8 @@ export default {
         'hydrationCompleted',
         'serverSyncStatus',
         'giftedchatmessages',
-        'guistate'
-      ]
+        'guistate',
+      ],
     },
     logger: {
       // Levels: 'DEBUG', 'INFO', 'WARN', 'ERROR', 'OFF', 'CRASHLYTICS'
@@ -52,8 +52,8 @@ export default {
         'Sagas/GiftedChatMessageSaga': 'INFO',
         'Sagas/MessageSagas': 'INFO',
         'Sagas/ServerSyncSagas': 'INFO',
-        'Utils/PushNotifications': 'INFO'
-      }
+        'Utils/PushNotifications': 'INFO',
+      },
     },
     typingIndicator: {
       fastMode: false,
@@ -62,7 +62,7 @@ export default {
       // max delay for larger msgs (in ms)
       maxTypingDelay: 5000,
       // delay before active elements (in ms)
-      interactiveElementDelay: 300
+      interactiveElementDelay: 300,
     },
     messages: {
       initialNumberOfMinimalShownMessages: 10,
@@ -73,7 +73,7 @@ export default {
       // false: expired answers are being greyed out
       showAnswerExpiredMessage: false,
       // if true, alert text is displayed when user taps on expired message (text defined in i18n json)
-      showExpiryAlert: true
+      showExpiryAlert: true,
     },
     startup: {
       automaticallyRequestPushPermissions: false,
@@ -81,7 +81,7 @@ export default {
       automaticallyShareObserverAccessToken: false,
       automaticallyShareParticipantAccessToken: false,
       backButtonInOnboardingEnabled: false,
-      onboardingURL: '---'
+      onboardingURL: '---',
     },
     serverSync: {
       useLocalServer: false,
@@ -102,8 +102,8 @@ export default {
       remoteRestURL: 'https://workshop-cdhi.ethz.ch/PMCP/api/v02/',
       remoteMediaURL: 'https://workshop-cdhi.ethz.ch/PMCP/files/',
       // Whether or not user uploads are protected with auth-tokens
-      mediaUploadsWithAuthenticiation: true
+      mediaUploadsWithAuthenticiation: true,
     },
     supportedLanguages: ['de', 'en'],
-  }
-}
+  },
+};

@@ -1,25 +1,20 @@
-import React, { Component } from 'react'
-import {
-  StyleSheet,
-  View,
-  Platform,
-  ActivityIndicator
-} from 'react-native'
-import { ifIphoneX } from 'react-native-iphone-x-helper'
-import { connect } from 'react-redux'
-import KeyboardSpacer from 'react-native-keyboard-spacer'
+import React, { Component } from 'react';
+import { StyleSheet, View, Platform, ActivityIndicator } from 'react-native';
+import { ifIphoneX } from 'react-native-iphone-x-helper';
+import { connect } from 'react-redux';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 import { WebView } from 'react-native-webview';
 
-import AppConfig from '../../Config/AppConfig'
-import { Colors } from '../../Themes/'
-import ServerSyncActions from '../../Redux/ServerSyncRedux'
-import StartupActions from '../../Redux/StartupRedux'
+import AppConfig from '../../Config/AppConfig';
+import { Colors } from '../../Themes/';
+import ServerSyncActions from '../../Redux/ServerSyncRedux';
+import StartupActions from '../../Redux/StartupRedux';
 
-import Log from '../../Utils/Log'
-const log = new Log('Containers/Onboarding/ScreenScreeningSurvey')
+import Log from '../../Utils/Log';
+const log = new Log('Containers/Onboarding/ScreenScreeningSurvey');
 
 // Adjust to the appropriate next screen
-const nextScreen = 'ScreenCoachSelection'
+const nextScreen = 'ScreenCoachSelection';
 
 /*
  * Supported commands:
@@ -43,11 +38,11 @@ const nextScreen = 'ScreenCoachSelection'
  */
 
 class ScreenScreeningSurvey extends Component {
-  render () {
+  render() {
     return (
       <View style={Styles.container}>
         <WebView
-          ref='web'
+          ref="web"
           source={{ uri: AppConfig.config.startup.onboardingURL }}
           style={Styles.webView}
           scalesPageToFit={!(Platform.OS === 'ios')}
@@ -65,17 +60,16 @@ class ScreenScreeningSurvey extends Component {
                 style={{
                   flex: 1,
                   alignItems: 'center',
-                  justifyContent: 'center'
-                }}
-              >
+                  justifyContent: 'center',
+                }}>
                 <ActivityIndicator
                   animating
                   color={Colors.onboarding.loadingIndicator}
-                  size='large'
+                  size="large"
                   hidesWhenStopped
                 />
               </View>
-            )
+            );
           }}
           renderError={(e) => {
             return (
@@ -83,66 +77,65 @@ class ScreenScreeningSurvey extends Component {
                 style={{
                   flex: 1,
                   alignItems: 'center',
-                  justifyContent: 'center'
-                }}
-              >
+                  justifyContent: 'center',
+                }}>
                 <ActivityIndicator
                   animating
                   color={Colors.onboarding.loadingIndicator}
-                  size='large'
+                  size="large"
                   hidesWhenStopped
                 />
               </View>
-            )
+            );
           }}
         />
         {Platform.OS === 'android' ? <KeyboardSpacer /> : null}
       </View>
-    )
+    );
   }
 
   onError = (e) => {
     if (e) {
-      log.warn('Reloading...')
-      setTimeout(this.refs.web.reload, 5000)
+      log.warn('Reloading...');
+      setTimeout(this.refs.web.reload, 5000);
     }
-  }
+  };
 
   onEvent = (event) => {
-    const { data } = event.nativeEvent
-    log.debug('Event:', data)
+    const { data } = event.nativeEvent;
+    log.debug('Event:', data);
 
     switch (data) {
       case 'complete':
-        const { navigate } = this.props.navigation
-        navigate(nextScreen)
-        break
+        const { navigate } = this.props.navigation;
+        navigate(nextScreen);
+        break;
       default:
-        const jsonData = JSON.parse(data)
-        log.debug('Storing new communicaton data:', jsonData)
-        this.props.rememberRegistration(jsonData.id, jsonData.secret)
-        this.props.manuallyConnect()
-        break
+        const jsonData = JSON.parse(data);
+        log.debug('Storing new communicaton data:', jsonData);
+        this.props.rememberRegistration(jsonData.id, jsonData.secret);
+        this.props.manuallyConnect();
+        break;
     }
-  }
+  };
 }
 
 const mapStateToProps = (state) => {
-  return {}
-}
+  return {};
+};
 
 const mapStateToDispatch = (dispatch) => ({
   rememberRegistration: (deepstreamUser, deepstreamSecret) =>
     dispatch(
-      ServerSyncActions.rememberRegistration(deepstreamUser, deepstreamSecret)
+      ServerSyncActions.rememberRegistration(deepstreamUser, deepstreamSecret),
     ),
-  manuallyConnect: () => dispatch(StartupActions.manuallyConnect())
-})
+  manuallyConnect: () => dispatch(StartupActions.manuallyConnect()),
+});
 
 export default connect(
   mapStateToProps,
-  mapStateToDispatch
-)(ScreenScreeningSurvey)
+  mapStateToDispatch,
+)(ScreenScreeningSurvey);
 
 const Styles = StyleSheet.create({
   container: {
@@ -150,7 +143,7 @@ const Styles = StyleSheet.create({
     paddingLeft: 0,
     paddingRight: 0,
     backgroundColor: Colors.onboarding.background,
-    ...ifIphoneX({ paddingTop: 40 })
+    ...ifIphoneX({ paddingTop: 40 }),
   },
   webView: {
     position: 'absolute',
@@ -158,6 +151,6 @@ const Styles = StyleSheet.create({
     left: 0,
     top: 0,
     bottom: 0,
-    right: 0
-  }
-})
+    right: 0,
+  },
+});

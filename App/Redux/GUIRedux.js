@@ -1,9 +1,9 @@
-import { createReducer, createActions } from 'reduxsauce'
-import Immutable from 'seamless-immutable'
-import { NavigationActions } from 'react-navigation'
+import { createReducer, createActions } from 'reduxsauce';
+import Immutable from 'seamless-immutable';
+import { NavigationActions } from 'react-navigation';
 
-import Log from '../Utils/Log'
-const log = new Log('Redux/GUIRedux')
+import Log from '../Utils/Log';
+const log = new Log('Redux/GUIRedux');
 
 /* ------------- Actions and Action Creators ------------- */
 
@@ -30,10 +30,10 @@ const { Types, Creators } = createActions({
   enableSidemenuGestures: [],
   addUnreadMessage: ['count'],
   clearUnreadMessages: [],
-})
+});
 
-export const GUIActions = Types
-export default Creators
+export const GUIActions = Types;
+export default Creators;
 
 /* ------------- Initial State ------------- */
 
@@ -46,7 +46,7 @@ export const INITIAL_STATE = Immutable({
   unreadMessages: 0,
   // TODO: initial screen shoud not be hardcoded
   currentScreen: 'LoadingContainer',
-})
+});
 
 /* ------------- Reducers ------------- */
 
@@ -54,110 +54,112 @@ export const INITIAL_STATE = Immutable({
 export const showCoachIsTyping = (state) => {
   return {
     ...state,
-    coachIsTyping: true
-  }
-}
+    coachIsTyping: true,
+  };
+};
 
 // hide Coach is Typing message
 export const hideCoachIsTyping = (state) => {
   return {
     ...state,
-    coachIsTyping: false
-  }
-}
+    coachIsTyping: false,
+  };
+};
 
 // remember if further messages are in the pipeline to be shown
 export const setCurrentlyFurtherMessagesExpected = (
   state,
-  { currentlyFurtherMessagesExpected }
+  { currentlyFurtherMessagesExpected },
 ) => {
   return {
     ...state,
-    currentlyFurtherMessagesExpected
-  }
-}
+    currentlyFurtherMessagesExpected,
+  };
+};
 
 // toggle sidemenu
 export const toggleSideMenu = (state) => {
-  const currentSideMenuState = state.sideMenuOpen
-  log.action('GUI', 'ToggleMenu', !currentSideMenuState)
+  const currentSideMenuState = state.sideMenuOpen;
+  log.action('GUI', 'ToggleMenu', !currentSideMenuState);
   return {
     ...state,
-    sideMenuOpen: !currentSideMenuState
-  }
-}
+    sideMenuOpen: !currentSideMenuState,
+  };
+};
 
 export const closeSideMenu = (state, { isOpen }) => {
-  log.action('GUI', 'ToggleMenu', false)
+  log.action('GUI', 'ToggleMenu', false);
   return {
     ...state,
-    sideMenuOpen: false
-  }
-}
+    sideMenuOpen: false,
+  };
+};
 
 export const showLoadEarlier = (state) => {
   return {
     ...state,
-    showLoadEarlier: true
-  }
-}
+    showLoadEarlier: true,
+  };
+};
 
 export const hideLoadEarlier = (state) => {
   return {
     ...state,
-    showLoadEarlier: false
-  }
-}
+    showLoadEarlier: false,
+  };
+};
 
 export const enableSidemenuGestures = (state) => {
   return {
     ...state,
-    sideMenuGestures: true
-  }
-}
+    sideMenuGestures: true,
+  };
+};
 
 export const disableSidemenuGestures = (state) => {
   return {
     ...state,
-    sideMenuGestures: false
-  }
-}
+    sideMenuGestures: false,
+  };
+};
 
 export const addUnreadMessage = (state, { count }) => {
   // dont increment when in Chat
-  if (state.currentScreen === 'Chat') return state
-  else {
+  if (state.currentScreen === 'Chat') {
+    return state;
+  } else {
     if (count === undefined) {
-      count = 1
+      count = 1;
     }
-    let unreadMessages = state.unreadMessages + count
+    let unreadMessages = state.unreadMessages + count;
     return {
       ...state,
-      unreadMessages
-    }
+      unreadMessages,
+    };
   }
-}
+};
 
 export const clearUnreadMessages = (state) => {
   return {
     ...state,
-    unreadMessages: 0
-  }
-}
+    unreadMessages: 0,
+  };
+};
 
 export const setCurrentScreen = (state, { routeName }) => {
   return {
     ...state,
-    currentScreen: routeName
-  }
-}
+    currentScreen: routeName,
+  };
+};
 
 /* ------------- Hookup Reducers To Actions ------------- */
 
 export const reducer = createReducer(INITIAL_STATE, {
   [Types.SHOW_COACH_IS_TYPING]: showCoachIsTyping,
   [Types.HIDE_COACH_IS_TYPING]: hideCoachIsTyping,
-  [Types.SET_CURRENTLY_FURTHER_MESSAGES_EXPECTED]: setCurrentlyFurtherMessagesExpected,
+  [Types.SET_CURRENTLY_FURTHER_MESSAGES_EXPECTED]:
+    setCurrentlyFurtherMessagesExpected,
   [Types.SHOW_LOAD_EARLIER]: showLoadEarlier,
   [Types.HIDE_LOAD_EARLIER]: hideLoadEarlier,
   [Types.TOGGLE_SIDE_MENU]: toggleSideMenu,
@@ -166,5 +168,5 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.ENABLE_SIDEMENU_GESTURES]: enableSidemenuGestures,
   [Types.CLEAR_UNREAD_MESSAGES]: clearUnreadMessages,
   [Types.ADD_UNREAD_MESSAGE]: addUnreadMessage,
-  [NavigationActions.navigate]: setCurrentScreen
-})
+  [NavigationActions.navigate]: setCurrentScreen,
+});

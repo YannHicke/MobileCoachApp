@@ -1,38 +1,38 @@
 // based on https://github.com/ataomega/react-native-multiple-select-list
-import React, { Component } from 'react'
-import { Text, View, TouchableOpacity } from 'react-native'
+import React, { Component } from 'react';
+import { Text, View, TouchableOpacity } from 'react-native';
 
-import Icon from 'react-native-vector-icons/Ionicons'
+import Icon from 'react-native-vector-icons/Ionicons';
 
 export default class CustomMultiPicker extends Component {
-  constructor (props) {
-    super(props)
+  constructor(props) {
+    super(props);
     this.state = {
-      selected: []
-    }
+      selected: [],
+    };
   }
 
   componentDidMount = () => {
-    const selected = this.props.selected
+    const selected = this.props.selected;
     if (typeof selected === 'object') {
       selected.map((select) => {
-        this._onSelect(select)
-      })
+        this._onSelect(select);
+      });
     } else {
-      this._onSelect(selected)
+      this._onSelect(selected);
     }
-  }
+  };
 
   _onSelect = (item, options) => {
-    let selectedItems = this.state.selected
+    let selectedItems = this.state.selected;
     if (!selectedItems.includes(item)) {
       // add if not included
-      selectedItems.push(item)
+      selectedItems.push(item);
     } else {
       // remove if already included
       selectedItems = selectedItems.filter(
-        (currentItem) => currentItem !== item
-      )
+        (currentItem) => currentItem !== item,
+      );
     }
 
     // Adjust based on "non"-items
@@ -40,49 +40,52 @@ export default class CustomMultiPicker extends Component {
       options.forEach((option, index) => {
         if (selectedItems.includes(index) && !option.label.startsWith('! ')) {
           selectedItems = selectedItems.filter(
-            (currentItem) => currentItem !== index
-          )
+            (currentItem) => currentItem !== index,
+          );
         }
-      })
+      });
     } else {
       options.forEach((option, index) => {
         if (selectedItems.includes(index) && option.label.startsWith('! ')) {
           selectedItems = selectedItems.filter(
-            (currentItem) => currentItem !== index
-          )
+            (currentItem) => currentItem !== index,
+          );
         }
-      })
+      });
     }
 
-    this.setState({ selected: selectedItems })
+    this.setState({ selected: selectedItems });
 
     // gather selected in result
-    let result = []
+    let result = [];
     options.forEach((option, index) => {
-      if (selectedItems.includes(index)) result.push(option)
-      else result.push('')
-    })
+      if (selectedItems.includes(index)) {
+        result.push(option);
+      } else {
+        result.push('');
+      }
+    });
 
-    this.props.callback(result)
-  }
+    this.props.callback(result);
+  };
 
   _isSelected = (itemKey) => {
-    return this.state.selected.includes(itemKey)
+    return this.state.selected.includes(itemKey);
     // const selected = this.state.selected
     // if (selected.indexOf(item) === -1) {
     //   return false
     // }
     // return true
-  }
+  };
 
-  render () {
-    const { options, slim } = this.props
+  render() {
+    const { options, slim } = this.props;
     // const labels = Object.keys(options).map(i => options[i])
     // const values = Object.keys(options)
     return (
       <View>
         {options.map((option, index) => {
-          let itemKey = index
+          let itemKey = index;
           // if (returnValue === 'value') {
           //   itemKey = values[index]
           // } else if (returnValue === 'index') {
@@ -109,14 +112,13 @@ export default class CustomMultiPicker extends Component {
                   alignItems: 'center',
                   borderRadius: this.props.rowRadius,
                   borderColor: this.props.borderColor,
-                  borderWidth: 1
+                  borderWidth: 1,
                 },
-                this.props.itemStyle
+                this.props.itemStyle,
               ]}
               onPress={() => {
-                this._onSelect(itemKey, options)
-              }}
-            >
+                this._onSelect(itemKey, options);
+              }}>
               <View style={{ flexShrink: 1 }}>
                 <Text style={{ color: this.props.labelColor }}>
                   {option.label.startsWith('! ')
@@ -130,9 +132,9 @@ export default class CustomMultiPicker extends Component {
                   style={[
                     {
                       color: this.props.iconColor,
-                      fontSize: this.props.iconSize
+                      fontSize: this.props.iconSize,
                     },
-                    this.props.selectedIconStyle
+                    this.props.selectedIconStyle,
                   ]}
                 />
               ) : (
@@ -141,16 +143,16 @@ export default class CustomMultiPicker extends Component {
                   style={[
                     {
                       color: this.props.iconColor,
-                      fontSize: this.props.iconSize
+                      fontSize: this.props.iconSize,
                     },
-                    this.props.unselectedIconStyle
+                    this.props.unselectedIconStyle,
                   ]}
                 />
               )}
             </TouchableOpacity>
-          )
+          );
         })}
       </View>
-    )
+    );
   }
 }
