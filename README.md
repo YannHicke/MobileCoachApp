@@ -1,8 +1,12 @@
 # MobileCoach Client Template
 
-## Install Dependencies
+## Development Tools
 
-    yarn
+    As convention we always use yarn (you can also use npm, but just don't mix both and makes sure to never have both lockfiles).
+    Just install yarn as a global npm module (https://classic.yarnpkg.com/en/docs/install/#mac-stable))
+## Install Node Dependencies
+
+    yarn install or just yarn
 ## Run
 
     yarn android
@@ -18,13 +22,6 @@ or
 or
 
     yarn clean:ios
-## Customization
-
-```
-./repackage.sh
-./recolor.sh
-./reicon.sh
-```
 
 ### App Configuration:
 
@@ -35,12 +32,6 @@ Mainly in these files:
 - `App/Themes/Colors.js`
 - `App/Themes/Fonts.js`
 - `App/Themes/Images.js`
-
-### APIs:
-
-**Fabric Crashlytics:**  
-API Key in `android/app/src/main/AndroidManifest.xml` and in
-`ios/APP_FOLDER/Info.plist`
 
 ### Building keys (Android only):
 
@@ -87,5 +78,3 @@ Add the following snippet to your user settings:
         ]
     }
 ```
-
-**Version 2.0**
