@@ -93,10 +93,6 @@ const NavigationBarStyles = {
     ...Platform.select({
       ios: {
         height: Metrics.navbarHeight + 20,
-        ...ifIphoneX({
-          height: Metrics.navbarHeight + 41,
-          paddingTop: 20,
-        }),
       },
       android: {
         marginTop: Metrics.statusBarMargin,
