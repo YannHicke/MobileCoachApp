@@ -13,7 +13,7 @@ import ParsedText from 'react-native-parsed-text';
 import { connect } from 'react-redux';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 
-// import { NavigationActions } from 'react-navigation'
+// import { CommonActions as NavigationActions } from '@react-navigation/native';
 import { Colors } from '../../Themes/';
 import PMNavigationBar from '../../Components/Navbar';
 import I18n from '../../I18n/I18n';

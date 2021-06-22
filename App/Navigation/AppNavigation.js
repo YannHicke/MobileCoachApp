@@ -1,44 +1,288 @@
-import { Animated, Easing } from 'react-native';
+import React from 'react';
 
-import DrawerNavigation from './DrawerNavigation';
-import { createAppContainer } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
-import OnboardingNav from '../Containers/Onboarding/OnboardingNav';
+import { NavigationContainer } from '@react-navigation/native';
+import {
+  createDrawerNavigator,
+  DrawerContentScrollView,
+  DrawerItem,
+  DrawerItemList,
+} from '@react-navigation/drawer';
+import { createStackNavigator } from '@react-navigation/stack';
+import { View, Text, StyleSheet, Image } from 'react-native';
+import { Badge } from 'react-native-elements';
+import { Colors } from '../Themes';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { Images } from '../Themes';
+
 import LoadingContainer from '../Containers/LoadingContainer';
-const Navigation = DrawerNavigation;
 
-// https://github.com/react-community/react-navigation/issues/1254
-const noTransitionConfig = () => ({
-  transitionSpec: {
-    duration: 0,
-    timing: Animated.timing,
-    easing: Easing.step0,
+import Chat from '../Containers/Chat/Chat';
+import DashboardChat from '../Containers/Chat/DashboardChat';
+import InfoCardsLibrary from '../Containers/InfoCardsLibrary/InfoCardsLibrary';
+import MediaLibrary from '../Containers/MediaLibrary/MediaLibrary';
+import Settings from '../Containers/Settings/Settings';
+import Faq from '../Containers/FAQ/Faq';
+
+import ScreenStartWithLogo from '../Containers/Onboarding/ScreenStartWithLogo';
+import ScreenLanguageSelection from '../Containers/Onboarding/ScreenLanguageSelection';
+import ScreenCoachSelection from '../Containers/Onboarding/ScreenCoachSelection';
+import ScreenWelcomeByCoach from '../Containers/Onboarding/ScreenWelcomeByCoach';
+
+import I18n from '../I18n/I18n';
+import { connect } from 'react-redux';
+
+const StackOnboarding = createStackNavigator();
+
+export const initialRouteName = 'ScreenStartWithLogo';
+function Onboarding() {
+  return (
+    <StackOnboarding.Navigator
+      initialRouteName
+      headerMode="none"
+      screenOptions={{
+        gestureEnabled: false,
+      }}>
+      <StackOnboarding.Screen
+        name="ScreenStartWithLogo"
+        component={ScreenStartWithLogo}
+      />
+      <StackOnboarding.Screen
+        name="ScreenLanguageSelection"
+        component={ScreenLanguageSelection}
+      />
+      <StackOnboarding.Screen
+        name="ScreenCoachSelection"
+        component={ScreenCoachSelection}
+      />
+      <StackOnboarding.Screen
+        name="ScreenWelcomeByCoach"
+        component={ScreenWelcomeByCoach}
+      />
+    </StackOnboarding.Navigator>
+  );
+}
+
+const DrawerSideMenu = createDrawerNavigator();
+function SideMenu({
+  route,
+  navigation,
+  lang,
+  coach,
+  unreadMessages,
+  unreadDashboardMessages,
+}) {
+  const { screenProps } = route.params;
+  return (
+    <DrawerSideMenu.Navigator
+      initialRouteName={'Chat'}
+      screenOptions={{
+        gestureEnabled: false,
+      }}
+      drawerContent={(props) => <CustomDrawerContent {...props} />}>
+      <DrawerSideMenu.Screen
+        name="Menu.Chat"
+        component={Chat}
+        initialParams={{ screenProps }}
+        options={{
+          drawerIcon: ({ focused, size }) => (
+            <Icon
+              name="ios-chatbubbles"
+              size={size}
+              type="ionicon"
+              style={styles.actionButtonIcon}
+            />
+          ),
+          drawerLabel: () => (
+            <View style={styles.drawerLabel}>
+              <Text>
+                {I18n.t('Menu.Chat', { locale: lang, coach: 'Lumy' })}
+              </Text>
+              <Badge
+                badgeStyle={styles.badge}
+                textStyle={styles.badgeText}
+                value={unreadMessages}
+              />
+            </View>
+          ),
+        }}
+      />
+      <DrawerSideMenu.Screen
+        name="Menu.DashboardChat"
+        component={DashboardChat}
+        options={{
+          drawerIcon: ({ focused, size }) => (
+            <Icon
+              name="ios-chatbubbles"
+              size={size}
+              type="ionicon"
+              style={styles.actionButtonIcon}
+            />
+          ),
+          drawerLabel: () => (
+            <View style={styles.drawerLabel}>
+              <Text>{I18n.t('Menu.DashboardChat', { locale: lang })}</Text>
+              <Badge
+                badgeStyle={styles.badge}
+                textStyle={styles.badgeText}
+                value={unreadDashboardMessages}
+              />
+            </View>
+          ),
+        }}
+      />
+      <DrawerSideMenu.Screen
+        name={I18n.t('Menu.InfoCardsLibrary', { locale: lang })}
+        component={InfoCardsLibrary}
+        options={{
+          drawerIcon: ({ focused, size }) => (
+            <Icon
+              name="ios-information-circle"
+              size={size}
+              type="ionicon"
+              style={styles.actionButtonIcon}
+            />
+          ),
+        }}
+        initialParams={{ screenProps }}
+      />
+      <DrawerSideMenu.Screen
+        name={I18n.t('Menu.MediaLibrary', { locale: lang })}
+        component={MediaLibrary}
+        options={{
+          drawerIcon: ({ focused, size }) => (
+            <Icon
+              name="ios-play-circle"
+              size={size}
+              type="ionicon"
+              style={styles.actionButtonIcon}
+            />
+          ),
+        }}
+      />
+      <DrawerSideMenu.Screen
+        name={I18n.t('Menu.Faq', { locale: lang })}
+        component={Faq}
+        options={{
+          drawerIcon: ({ focused, size }) => (
+            <Icon
+              name="ios-help-circle"
+              size={size}
+              type="ionicon"
+              style={styles.actionButtonIcon}
+            />
+          ),
+        }}
+      />
+      <DrawerSideMenu.Screen
+        name={I18n.t('Menu.Settings', { locale: lang })}
+        component={Settings}
+        options={{
+          drawerIcon: ({ focused, size }) => (
+            <Icon
+              name="ios-settings"
+              size={size}
+              type="ionicon"
+              style={styles.actionButtonIcon}
+            />
+          ),
+        }}
+      />
+    </DrawerSideMenu.Navigator>
+  );
+}
+
+function CustomDrawerContent(props) {
+  return (
+    <DrawerContentScrollView {...props}>
+      {/* <View>
+        <Image style={styles.coachAvater} source={Images.coachGeneric} />
+        <Text style={styles.coachName}>Coach</Text>
+      </View> */}
+      <DrawerItemList {...props} />
+      {/* <View style={styles.versionInfo}>
+        <Text>This is a version number</Text>
+      </View> // TODO*/}
+    </DrawerContentScrollView>
+  );
+}
+
+const StackNavigatorRoot = createStackNavigator();
+function RootStack({ screenProps }) {
+  return (
+    <StackNavigatorRoot.Navigator
+      initialRouteName={LoadingContainer}
+      headerMode="none"
+      screenOptions={{
+        gestureEnabled: false,
+      }}>
+      <StackNavigatorRoot.Screen
+        name="LoadingContainer"
+        component={LoadingContainer}
+      />
+      <StackNavigatorRoot.Screen name="OnboardingNav" component={Onboarding} />
+      <StackNavigatorRoot.Screen
+        name="MainNavigation"
+        component={SideMenuContainer}
+        initialParams={{ screenProps }}
+      />
+    </StackNavigatorRoot.Navigator>
+  );
+}
+
+// Connecting Redux to Components in React-Navigation
+const SideMenuContainer = connect((state) => ({
+  lang: state.settings.language, // TODO(cslim): Language selection for "Francais" is defaulted to en. To fix
+  coach: state.settings.coach, // TODO(cslim): CanRelex did not set a default coach name after language selection. Must set
+  unreadMessages: state.guistate.unreadMessages,
+  unreadDashboardMessages: state.storyProgress.unreadDashboardMessages,
+}))(SideMenu);
+
+export default function App(props) {
+  return (
+    <NavigationContainer>
+      <RootStack screenProps={props.screenProps} />
+    </NavigationContainer>
+  );
+}
+
+const styles = StyleSheet.create({
+  actionButtonIcon: {
+    fontSize: 20,
+    height: 22,
+    color: Colors.sideMenu.actionButton,
+  },
+  bottom: {
+    flex: 0,
+  },
+  versionInfo: {
+    alignItems: 'center',
+    top: '45%',
+  },
+  coachAvater: {
+    height: 80,
+    width: 80,
+    alignSelf: 'center',
+    marginTop: 10,
+  },
+  coachName: {
+    fontWeight: 'bold',
+    fontSize: 20,
+    paddingTop: 5,
+    paddingBottom: 10,
+    alignSelf: 'center',
+  },
+  drawerLabel: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  badge: {
+    backgroundColor: Colors.sideMenu.actionButton,
+  },
+  badgeText: {
+    fontSize: 10,
+    fontWeight: 'bold',
+    paddingHorizontal: 10,
   },
 });
-
-const PrimaryNav = createStackNavigator(
-  {
-    LoadingContainer: {
-      path: '/loading',
-      screen: LoadingContainer,
-    },
-    OnboardingNav: {
-      path: '/intro',
-      screen: OnboardingNav,
-    },
-    MainNavigation: {
-      path: '/app',
-      screen: Navigation,
-    },
-  },
-  {
-    headerMode: 'none',
-    transitionConfig: noTransitionConfig,
-    initialRouteName: 'LoadingContainer',
-    navigationOptions: {
-      gesturesEnabled: false,
-    },
-  },
-);
-
-export default createAppContainer(PrimaryNav);

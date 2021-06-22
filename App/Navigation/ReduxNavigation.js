@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
 import { View, BackHandler, Linking, Animated } from 'react-native';
 import { connect } from 'react-redux';
-import Toast from 'react-native-easy-toast';
+import Toast, { DURATION } from 'react-native-easy-toast';
 import RNExitApp from 'react-native-exit-app';
 
 import AppConfig from '../Config/AppConfig';
-import AppNavigation from './AppNavigation';
+import AppNavigation, { initialRouteName } from './AppNavigation';
 import GUIActions from '../Redux/GUIRedux';
 import { Colors } from '../Themes';
 import ModalContent from '../Containers/ModalContent';
-import { initialRouteName } from '../Containers/Onboarding/OnboardingNav';
 import I18n from '../I18n/I18n';
 import LoadingOverlay from '../Components/LoadingOverlay';
 import StoryProgressActions from '../Redux/StoryProgressRedux';
@@ -208,8 +207,7 @@ class ReduxNavigation extends Component {
   }
 
   render() {
-    const { language } = this.props;
-    I18n.locale = language; // make sure that this is set before sidemenu is loaded
+    I18n.locale = this.props.language; // make sure that this is set before sidemenu is loaded
     const { modal } = this.state;
 
     return (
@@ -256,7 +254,6 @@ class ReduxNavigation extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  nav: state.nav,
   language: state.settings.language,
   sideMenuOpen: state.guistate.sideMenuOpen,
   sideMenuGestures: state.guistate.sideMenuGestures,

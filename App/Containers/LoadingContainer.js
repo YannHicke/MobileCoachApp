@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
 import { connect } from 'react-redux';
-import { NavigationActions } from 'react-navigation';
+import { CommonActions as NavigationActions } from '@react-navigation/native';
 
 // import LoadingOverlay from '../Components/LoadingOverlay'
 import { Colors } from '../Themes';
@@ -50,18 +50,14 @@ class LoadingContainer extends Component {
   }
 
   navigateToPrimaryNav() {
-    const navigateAction = NavigationActions.navigate({
-      routeName: 'Chat',
-      params: {},
-    });
+    const navigateAction = NavigationActions.navigate('MainNavigation'); // TODO fabian put this back
 
     this.props.navigation.dispatch(navigateAction);
   }
 
   navigateToOnboarding() {
     const navigateAction = NavigationActions.navigate({
-      routeName: 'OnboardingNav',
-      params: {},
+      name: 'OnboardingNav',
       // TODO: Make this configurable in App configuration
       action: null, // this.props.tutorialStep != null ? NavigationActions.navigate({ routeName: this.props.tutorialStep }) : null
     });

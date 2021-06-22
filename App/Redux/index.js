@@ -23,7 +23,6 @@ export default (encryptionKey) => {
     cachedText: resettable(require('./CachedTextRedux').reducer),
 
     // Blacklisted reducers (will not be stored persistent, so also reset it not necessary)
-    nav: require('./NavigationRedux').reducer,
     hydrationCompleted: require('./HydrateRedux').reducer,
     serverSyncStatus: require('./ServerSyncRedux').statusReducer,
     giftedchatmessages: require('./GiftedChatMessageRedux').reducer,

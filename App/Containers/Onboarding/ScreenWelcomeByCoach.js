@@ -23,7 +23,7 @@ class ScreenWelcomeByCoach extends Component {
     const redirect = this.props.navigation.navigate;
     sendGoIntention();
     enableSidemenuGestures();
-    redirect('Chat');
+    redirect('MainNavigation');
   };
 
   render() {

@@ -1,4 +1,4 @@
-import { NavigationActions } from 'react-navigation';
+import { CommonActions as NavigationActions } from '@react-navigation/native';
 
 import Log from '../Utils/Log';
 const log = new Log('Redux/ScreenTrackingMiddleware');

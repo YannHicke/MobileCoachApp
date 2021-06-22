@@ -19,17 +19,6 @@ jest
       createResizedImage: () => {}
     }
   })
-
-  .mock('react-navigation', () => {
-    return {
-      withNavigation: (component) => component,
-      createStackNavigator: () => {},
-      createDrawerNavigator: () => {},
-      NavigationActions: {
-        navigate: 'default'
-      }
-    }
-  })
   .mock('react-native-vector-icons/Ionicons', () => {
     return {
       Aspect: {}

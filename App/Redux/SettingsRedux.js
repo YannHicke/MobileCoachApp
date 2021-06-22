@@ -5,7 +5,6 @@ import moment from 'moment';
 
 import I18n from '../I18n/I18n';
 import AppConfig from '../Config/AppConfig';
-import { onboardingNav } from '../Containers/Onboarding/OnboardingNav';
 
 import Log from '../Utils/Log';
 const log = new Log('Redux/SettingsRedux');

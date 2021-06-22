@@ -9,6 +9,7 @@ import NavBarButton from './NavBarButton';
 import GUIActions from '../Redux/GUIRedux';
 import Badge from './Badge';
 import AppConfig from '../Config/AppConfig';
+import { DrawerActions } from '@react-navigation/native';
 
 class PMNavigationBar extends Component {
   constructor(props) {
@@ -17,13 +18,15 @@ class PMNavigationBar extends Component {
       <NavBarButton
         position="left"
         icon="ios-menu"
-        onPress={() => this.props.toggleSideMenu()}
+        onPress={() =>
+          this.props.props.navigation.dispatch(DrawerActions.toggleDrawer())
+        }
       />
     );
   }
 
   render() {
-    const { title, toggleSideMenu, rightButton, leftButton } = this.props;
+    const { title, rightButton, leftButton } = this.props;
     return (
       <View style={styles.wrapper}>
         <NavigationBar
@@ -37,7 +40,9 @@ class PMNavigationBar extends Component {
         />
         <Badge
           containerStyle={styles.badgeContainer}
-          onPress={() => toggleSideMenu()}
+          onPress={() =>
+            this.props.props.navigation.dispatch(DrawerActions.toggleDrawer())
+          }
         />
       </View>
     );
@@ -120,7 +125,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapStateToDispatch = (dispatch) => ({
-  toggleSideMenu: () => dispatch(GUIActions.toggleSideMenu()),
+  toggleSideMenu: () => dispatch(DrawerActions.toggleDrawer()),
 });
 
 export default connect(mapStateToProps, mapStateToDispatch)(PMNavigationBar);
