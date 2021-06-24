@@ -799,7 +799,7 @@ class Chat extends Component {
   // This function determines for each component type (e.g. set Rich Component) the
   // corresponding "openComponent"-Function (= Function which is called when user presses the openComponent Button)
   showModal(component, content, onClose) {
-    const { showModal } = this.props.screenProps;
+    const { showModal } = this.props.route.params.screenProps;
     showModal(component, content, onClose);
   }
 
