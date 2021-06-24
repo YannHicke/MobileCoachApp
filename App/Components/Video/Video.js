@@ -148,7 +148,7 @@ export default class Video extends Component {
           ref="player"
           bottomControlsBar={bottomControls}
           autoStart={this.props.autoStart}
-          source={this.state.source}
+          source={{uri: this.state.source}}
           initialPosition={this.props.initialPosition}
           middleControlsBarProps={controlProps}
           loader={renderLoader}
