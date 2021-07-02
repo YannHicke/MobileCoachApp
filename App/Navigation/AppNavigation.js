@@ -76,8 +76,9 @@ function SideMenu({
     <DrawerSideMenu.Navigator
       initialRouteName={'Chat'}
       screenOptions={{
-        gestureEnabled: false,
+        swipeEnabled: false,
       }}
+      drawerType="slide"
       drawerContent={(props) => <CustomDrawerContent {...props} />}>
       <DrawerSideMenu.Screen
         name="Menu.Chat"
