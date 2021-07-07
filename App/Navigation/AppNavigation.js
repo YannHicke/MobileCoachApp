@@ -96,7 +96,7 @@ function SideMenu({
           drawerLabel: () => (
             <View style={styles.drawerLabel}>
               <Text>
-                {I18n.t('Menu.Chat', { locale: lang, coach: 'Lumy' })}
+                {I18n.t('Menu.Chat', { locale: lang, coach: I18n.t('Coaches.' + coach )})}
               </Text>
               <Badge
                 badgeStyle={styles.badge}
@@ -233,7 +233,7 @@ function RootStack({ screenProps }) {
 // Connecting Redux to Components in React-Navigation
 const SideMenuContainer = connect((state) => ({
   lang: state.settings.language, // TODO(cslim): Language selection for "Francais" is defaulted to en. To fix
-  coach: state.settings.coach, // TODO(cslim): CanRelex did not set a default coach name after language selection. Must set
+  coach: state.settings.coach,
   unreadMessages: state.guistate.unreadMessages,
   unreadDashboardMessages: state.storyProgress.unreadDashboardMessages,
 }))(SideMenu);
