@@ -30,6 +30,8 @@ const { Types, Creators } = createActions({
   enableSidemenuGestures: [],
   addUnreadMessage: ['count'],
   clearUnreadMessages: [],
+  toggleChatScreenState: [],
+  toggleDashboardChatScreenState: [],
 });
 
 export const GUIActions = Types;
@@ -46,6 +48,8 @@ export const INITIAL_STATE = Immutable({
   unreadMessages: 0,
   // TODO: initial screen shoud not be hardcoded
   currentScreen: 'LoadingContainer',
+  chatScreenOpen: true,
+  dashboardChatScreenOpen: false,
 });
 
 /* ------------- Reducers ------------- */
@@ -125,7 +129,8 @@ export const disableSidemenuGestures = (state) => {
 
 export const addUnreadMessage = (state, { count }) => {
   // dont increment when in Chat
-  if (state.currentScreen === 'Chat') {
+  // if (state.currentScreen === 'Chat') { <-- Previously it was tracked using currentScreen variable
+  if (state.chatScreenOpen == true) {
     return state;
   } else {
     if (count === undefined) {
@@ -153,6 +158,23 @@ export const setCurrentScreen = (state, { routeName }) => {
   };
 };
 
+export const toggleChatScreenState = (state) => {
+  let isOpen = state.chatScreenOpen == true ? false : true;
+  return {
+    ...state,
+    chatScreenOpen: isOpen,
+  };
+};
+
+export const toggleDashboardChatScreenState = (state) => {
+  let isOpen = state.dashboardChatScreenOpen == true ? false : true;
+  return {
+    ...state,
+    dashboardChatScreenOpen: isOpen,
+  };
+};
+
+
 /* ------------- Hookup Reducers To Actions ------------- */
 
 export const reducer = createReducer(INITIAL_STATE, {
@@ -168,5 +190,7 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.ENABLE_SIDEMENU_GESTURES]: enableSidemenuGestures,
   [Types.CLEAR_UNREAD_MESSAGES]: clearUnreadMessages,
   [Types.ADD_UNREAD_MESSAGE]: addUnreadMessage,
+  [Types.TOGGLE_CHAT_SCREEN_STATE]: toggleChatScreenState,
+  [Types.TOGGLE_DASHBOARD_CHAT_SCREEN_STATE]: toggleDashboardChatScreenState,
   [NavigationActions.navigate]: setCurrentScreen,
 });

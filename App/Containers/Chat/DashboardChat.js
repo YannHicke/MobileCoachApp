@@ -22,6 +22,7 @@ import { ConnectionStates } from '../../Redux/ServerSyncRedux';
 import AppConfig from '../../Config/AppConfig';
 
 import Log from '../../Utils/Log';
+import GUIActions from '../../Redux/GUIRedux';
 const log = new Log('Containers/Chat/DashboardChat');
 
 const getGiftedChatMessages = (messages) => {
@@ -34,9 +35,41 @@ const getGiftedChatMessages = (messages) => {
 };
 
 class Chat extends Component {
+
   componentDidMount() {
+    this.setDashboardChatScreenState(true);
     // clear Unread-Messages badge
     this.props.clearUnreadDashboardMessages();
+    this.setOnFocusAndBlurListener();
+  }
+
+  componentWillUnmount() {
+    this.removeOnFocusAndBlurListener();
+  }
+
+  setOnFocusAndBlurListener = () => {
+    this._onFocusListener = this.props.navigation.addListener('focus', this.dashboardChatOnFocusHandler);
+    this._onBlurListener = this.props.navigation.addListener('blur', this.dashboardChatOnBlurHandler);
+  }
+
+  removeOnFocusAndBlurListener = () => {
+    this._onFocusListener();
+    this._onBlurListener();
+  }
+
+  dashboardChatOnFocusHandler = () => {
+    this.setDashboardChatScreenState(true)
+    this.props.clearUnreadDashboardMessages();
+  };
+
+  dashboardChatOnBlurHandler = () => {
+    this.setDashboardChatScreenState(false);
+  };
+
+  setDashboardChatScreenState = (screenState) => {
+    if (this.props.guistate.dashboardChatScreenOpen != screenState) {
+      this.props.toggleDashboardChatScreenState();
+    }
   }
 
   getChatProperties = () => {
@@ -50,7 +83,7 @@ class Chat extends Component {
       onLongPress: () => {
         return null;
       },
-      onPressAvatar: () => {}, // { this.showModal('image-lightbox', {source: Images.coaches[this.props.coach]}) },
+      onPressAvatar: () => { }, // { this.showModal('image-lightbox', {source: Images.coaches[this.props.coach]}) },
       keyboardShouldPersistTaps: 'always',
       renderAvatarOnTop: true,
       // Source of messages to display
@@ -215,6 +248,8 @@ const mapStateToDispatch = (dispatch) => ({
     dispatch(DashboardMessageRedux.sendDashboardMessage(id, text, timestamp)),
   clearUnreadDashboardMessages: (messageId) =>
     dispatch(StoryProgressRedux.clearUnreadDashboardMessages()),
+  toggleDashboardChatScreenState: () =>
+    dispatch(GUIActions.toggleDashboardChatScreenState()),
   // loadEarlier: () => dispatch(GUIActions.loadEarlier()),
   // markAnimationAsShown: (messageId) => clearUnreadMessages: (messageId) => dispatch(GUIActions.clearUnreadMessages())
 });

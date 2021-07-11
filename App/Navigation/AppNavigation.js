@@ -81,7 +81,7 @@ function SideMenu({
       drawerType="slide"
       drawerContent={(props) => <CustomDrawerContent {...props} />}>
       <DrawerSideMenu.Screen
-        name="Menu.Chat"
+        name="Chat"
         component={Chat}
         initialParams={{ screenProps }}
         options={{
@@ -108,7 +108,7 @@ function SideMenu({
         }}
       />
       <DrawerSideMenu.Screen
-        name="Menu.DashboardChat"
+        name="DashboardChat"
         component={DashboardChat}
         options={{
           drawerIcon: ({ focused, size }) => (
@@ -132,7 +132,7 @@ function SideMenu({
         }}
       />
       <DrawerSideMenu.Screen
-        name={I18n.t('Menu.InfoCardsLibrary', { locale: lang })}
+        name="InfoCardsLibrary"
         component={InfoCardsLibrary}
         options={{
           drawerIcon: ({ focused, size }) => (
@@ -143,11 +143,16 @@ function SideMenu({
               style={styles.actionButtonIcon}
             />
           ),
+          drawerLabel: () => (
+            <View style={styles.drawerLabel}>
+              <Text>{I18n.t('Menu.InfoCardsLibrary', { locale: lang })}</Text>
+            </View>
+          ),
         }}
         initialParams={{ screenProps }}
       />
       <DrawerSideMenu.Screen
-        name={I18n.t('Menu.MediaLibrary', { locale: lang })}
+        name="MediaLibrary"
         component={MediaLibrary}
         options={{
           drawerIcon: ({ focused, size }) => (
@@ -158,10 +163,15 @@ function SideMenu({
               style={styles.actionButtonIcon}
             />
           ),
+          drawerLabel: () => (
+            <View style={styles.drawerLabel}>
+              <Text>{I18n.t('Menu.MediaLibrary', { locale: lang })}</Text>
+            </View>
+          ),
         }}
       />
       <DrawerSideMenu.Screen
-        name={I18n.t('Menu.Faq', { locale: lang })}
+        name="Faq"
         component={Faq}
         options={{
           drawerIcon: ({ focused, size }) => (
@@ -172,10 +182,15 @@ function SideMenu({
               style={styles.actionButtonIcon}
             />
           ),
+          drawerLabel: () => (
+            <View style={styles.drawerLabel}>
+              <Text>{I18n.t('Menu.Faq', { locale: lang })}</Text>
+            </View>
+          ),
         }}
       />
       <DrawerSideMenu.Screen
-        name={I18n.t('Menu.Settings', { locale: lang })}
+        name="Settings"
         component={Settings}
         options={{
           drawerIcon: ({ focused, size }) => (
@@ -185,6 +200,11 @@ function SideMenu({
               type="ionicon"
               style={styles.actionButtonIcon}
             />
+          ),
+          drawerLabel: () => (
+            <View style={styles.drawerLabel}>
+              <Text>{I18n.t('Menu.Settings', { locale: lang })}</Text>
+            </View>
           ),
         }}
       />

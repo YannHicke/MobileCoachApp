@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
       ios: {
         ...ifIphoneX(
           {
-            top: badgeTopPosition + 40,
+            top: badgeTopPosition + 20,
           },
           {
             top: badgeTopPosition + 20,

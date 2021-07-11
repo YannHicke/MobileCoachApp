@@ -72,7 +72,11 @@ const mapStateToProps = (state) => {
   return {
     unreadMessages: state.guistate.unreadMessages,
     unreadDashboardMessages: state.storyProgress.unreadDashboardMessages,
+    currentScreen: state.guistate.currentScreen,
+    currentRoute: state.guistate.currentRoute,
   };
 };
+
+
 
 export default connect(mapStateToProps)(NewMessagesBadge);

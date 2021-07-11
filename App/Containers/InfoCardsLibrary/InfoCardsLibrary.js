@@ -65,7 +65,6 @@ class Item extends Component {
             name={'lightbulb'}
             size={ICON_SIZE}
           />
-          } />
         </View>
       );
     } else {

@@ -76,23 +76,44 @@ class Chat extends Component {
       });
       // clear visited screens again
       this.props.resetVisitedScreens();
+
     }
   }
 
   componentDidMount() {
     SplashScreen.hide();
-
     // clear Unread-Messages badge
+    this.setOnFocusAndBlurListener();
+    this.setChatScreenState(true);
     this.props.clearUnreadMessages();
   }
 
-  // TODO: Needs to be refactored
-  UNSAFE_componentWillReceiveProps(newProps) {
-    const oldScreen = this.props.guistate.currentScreen;
-    const newScreen = newProps.guistate.currentScreen;
-    if (oldScreen !== newScreen && newScreen === 'Chat') {
-      log.info('User navigated to Chat.');
-      this.props.clearUnreadMessages();
+  componentWillUnmount() {
+    this.removeOnFocusAndBlurListener();
+  }
+
+  setOnFocusAndBlurListener = () => {
+    this._onFocusListener = this.props.navigation.addListener('focus', this.chatOnFocusHandler);
+    this._onBlurListener = this.props.navigation.addListener('blur', this.chatOnBlurHandler);
+  }
+
+  removeOnFocusAndBlurListener = () => {
+    this._onFocusListener();
+    this._onBlurListener();
+  }
+
+  chatOnFocusHandler = () => {
+    this.setChatScreenState(true)
+    this.props.clearUnreadMessages();
+  };
+
+  chatOnBlurHandler = () => {
+    this.setChatScreenState(false);
+  };
+
+  setChatScreenState = (screenState) => {
+    if (this.props.guistate.chatScreenOpen != screenState) {
+      this.props.toggleChatScreenState();
     }
   }
 
@@ -582,9 +603,9 @@ class Chat extends Component {
       default: {
         log.warn(
           'No answer-action found for intentention of type: ' +
-            intention +
-            ' relatedMessageId (if set): ' +
-            relatedMessageId,
+          intention +
+          ' relatedMessageId (if set): ' +
+          relatedMessageId,
         );
         break;
       }
@@ -634,8 +655,8 @@ class Chat extends Component {
         } else {
           log.warn(
             'Cannot send info-closed-notification for message: ' +
-              currentMessage.text +
-              ', because "info-id" is undefined.',
+            currentMessage.text +
+            ', because "info-id" is undefined.',
           );
         }
         break;
@@ -658,8 +679,8 @@ class Chat extends Component {
         } else {
           log.warn(
             'Cannot send info-closed-notification for message: ' +
-              currentMessage.text +
-              ', because "info-id" is undefined.',
+            currentMessage.text +
+            ', because "info-id" is undefined.',
           );
         }
         break;
@@ -671,8 +692,8 @@ class Chat extends Component {
         } else {
           log.warn(
             'Cannot send infoCardsLibrary info-opened-notification for message: ' +
-              currentMessage.text +
-              ', because "content" is undefined.',
+            currentMessage.text +
+            ', because "content" is undefined.',
           );
         }
         break;
@@ -684,8 +705,8 @@ class Chat extends Component {
         } else {
           log.warn(
             'Cannot send infoCardsLibrary info-closed-notification for message: ' +
-              currentMessage.text +
-              ', because "content" is undefined.',
+            currentMessage.text +
+            ', because "content" is undefined.',
           );
         }
         break;
@@ -906,7 +927,7 @@ class Chat extends Component {
             extraData={this.props.guistate.coachIsTyping}
           />
           {this.props.versionInfo &&
-          this.props.versionInfo.level === 'orange' ? (
+            this.props.versionInfo.level === 'orange' ? (
             <InfoMessage
               message={
                 this.props.versionInfo.teaser[I18n.locale]
@@ -986,8 +1007,12 @@ const mapStateToDispatch = (dispatch) => ({
     dispatch(
       GiftedChatMessageActions.setMessageAnimationFlag(messageId, false),
     ),
-  clearUnreadMessages: (messageId) =>
-    dispatch(GUIActions.clearUnreadMessages()),
+  clearUnreadMessages: () =>
+    dispatch(GUIActions.clearUnreadMessages()
+    ),
+  toggleChatScreenState: () =>
+    dispatch(GUIActions.toggleChatScreenState()
+    ),
 });
 
 export default connect(mapStateToProps, mapStateToDispatch)(Chat);
