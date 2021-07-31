@@ -312,7 +312,7 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapStateToDispatch = (dispatch) => ({
+const mapDispatchToProps = (dispatch) => ({
   sendIntention: (text, intention, content) =>
     dispatch(ServerMessageActions.sendIntention(text, intention, content)),
   resetVisitedScreens: () =>
@@ -321,7 +321,7 @@ const mapStateToDispatch = (dispatch) => ({
     dispatch(StoryProgressActions.visitScreen(visitedScreen)),
 });
 
-export default connect(mapStateToProps, mapStateToDispatch)(Menu);
+export default connect(mapStateToProps, mapDispatchToProps)(Menu);
 
 Menu.propTypes = {
   onItemSelected: PropTypes.func.isRequired,

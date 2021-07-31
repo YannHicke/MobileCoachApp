@@ -89,9 +89,9 @@ class ScreenAuthorizeUser extends Component {
   }
 }
 
-const mapStateToDispatch = (dispatch) => ({
+const mapDispatchToProps = (dispatch) => ({
   sendCodingIntention: (coding) =>
     dispatch(MessageActions.sendIntention(null, 'coding', coding)),
 });
 
-export default connect(null, mapStateToDispatch)(ScreenAuthorizeUser);
+export default connect(null, mapDispatchToProps)(ScreenAuthorizeUser);

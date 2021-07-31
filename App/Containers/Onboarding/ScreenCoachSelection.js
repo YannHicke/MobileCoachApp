@@ -51,13 +51,13 @@ class ScreenCoachSelection extends Component {
   }
 }
 
-const mapStateToDispatch = (dispatch) => ({
+const mapDispatchToProps = (dispatch) => ({
   chooseCoach: (coach) => dispatch(SettingsActions.chooseCoach(coach)),
   sendCoachIntention: (coachName) =>
     dispatch(MessageActions.sendIntention(null, 'coach', coachName)),
 });
 
-export default connect(null, mapStateToDispatch)(ScreenCoachSelection);
+export default connect(null, mapDispatchToProps)(ScreenCoachSelection);
 
 const Styles = StyleSheet.create({
   container: {

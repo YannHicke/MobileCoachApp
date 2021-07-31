@@ -251,14 +251,14 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapStateToDispatch = (dispatch) => ({
+const mapDispatchToProps = (dispatch) => ({
   setAnimationShown: (info) =>
     dispatch(StoryProgressRedux.setInfoCardAnimationPlayed(info)),
   sendIntention: (text, intention, content) =>
     dispatch(ServerMessageActions.sendIntention(text, intention, content)),
 });
 
-export default connect(mapStateToProps, mapStateToDispatch)(InfoCardsLibrary);
+export default connect(mapStateToProps, mapDispatchToProps)(InfoCardsLibrary);
 
 const styles = StyleSheet.create({
   container: {

@@ -120,8 +120,8 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapStateToDispatch = (dispatch) => ({
+const mapDispatchToProps = (dispatch) => ({
   toggleSideMenu: () => dispatch(DrawerActions.toggleDrawer()),
 });
 
-export default connect(mapStateToProps, mapStateToDispatch)(PMNavigationBar);
+export default connect(mapStateToProps, mapDispatchToProps)(PMNavigationBar);

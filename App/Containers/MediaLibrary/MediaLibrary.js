@@ -288,14 +288,14 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapStateToDispatch = (dispatch) => ({
+const mapDispatchToProps = (dispatch) => ({
   setAnimationShown: (video) =>
     dispatch(StoryProgressRedux.setVideoCardAnimationPlayed(video)),
   sendIntention: (text, intention, content) =>
     dispatch(ServerMessageActions.sendIntention(text, intention, content)),
 });
 
-export default connect(mapStateToProps, mapStateToDispatch)(MediaLibrary);
+export default connect(mapStateToProps, mapDispatchToProps)(MediaLibrary);
 
 const styles = StyleSheet.create({
   container: {

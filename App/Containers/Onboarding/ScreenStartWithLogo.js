@@ -50,12 +50,12 @@ class ScreenStartWithLogo extends Component {
   }
 }
 
-const mapStateToDispatch = (dispatch) => ({
+const mapDispatchToProps = (dispatch) => ({
   sendPlatformIntention: (platform) =>
     dispatch(MessageActions.sendIntention(null, 'platform', platform)),
 });
 
-export default connect(null, mapStateToDispatch)(ScreenStartWithLogo);
+export default connect(null, mapDispatchToProps)(ScreenStartWithLogo);
 
 const styles = StyleSheet.create({
   container: {

@@ -218,11 +218,11 @@ const styles = {
     elevation: 10,
   },
 };
-const mapStateToDispatch = (dispatch) => ({
+const mapDispatchToProps = (dispatch) => ({
   sendMessageToServer: (text, value, relatedMessageId = null) =>
     dispatch(ServerMessageActions.sendMessage(text, value, relatedMessageId)),
   enableSidemenuGestures: () => dispatch(GUIActions.enableSidemenuGestures()),
   disableSidemenuGestures: () => dispatch(GUIActions.disableSidemenuGestures()),
 });
 
-export default connect(null, mapStateToDispatch)(ModalContent);
+export default connect(null, mapDispatchToProps)(ModalContent);

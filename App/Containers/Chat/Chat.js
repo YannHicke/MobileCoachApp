@@ -976,7 +976,7 @@ const mapStateToProps = (state) => {
 };
 
 // TODO: Do we still need messageAnsweredByGiftedChat?
-const mapStateToDispatch = (dispatch) => ({
+const mapDispatchToProps = (dispatch) => ({
   sendMessageToServer: (text, value, relatedMessageId = null, containsMedia) =>
     dispatch(
       ServerMessageActions.sendMessage(
@@ -1015,4 +1015,4 @@ const mapStateToDispatch = (dispatch) => ({
     ),
 });
 
-export default connect(mapStateToProps, mapStateToDispatch)(Chat);
+export default connect(mapStateToProps, mapDispatchToProps)(Chat);

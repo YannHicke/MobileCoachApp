@@ -70,9 +70,9 @@ const mapStateToProps = (state) => {
   return {};
 };
 
-const mapStateToDispatch = (dispatch) => ({
+const mapDispatchToProps = (dispatch) => ({
   sendVariableValue: (variable, value) =>
     dispatch(ServerMessageActions.sendVariableValue(variable, value)),
 });
 
-export default connect(mapStateToProps, mapStateToDispatch)(SelectManyModal);
+export default connect(mapStateToProps, mapDispatchToProps)(SelectManyModal);

@@ -65,7 +65,7 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapStateToDispatch = (dispatch) => ({
+const mapDispatchToProps = (dispatch) => ({
   completeTutorial: (tutorialCompleted) =>
     dispatch(SettingsActions.completeTutorial(tutorialCompleted)),
   sendGoIntention: () =>
@@ -75,7 +75,7 @@ const mapStateToDispatch = (dispatch) => ({
 
 export default connect(
   mapStateToProps,
-  mapStateToDispatch,
+  mapDispatchToProps,
 )(ScreenWelcomeByCoach);
 
 const Styles = StyleSheet.create({

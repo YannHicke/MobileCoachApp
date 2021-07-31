@@ -243,7 +243,7 @@ const mapStateToProps = (state) => {
 };
 
 // TODO: Do we still need messageAnsweredByGiftedChat?
-const mapStateToDispatch = (dispatch) => ({
+const mapDispatchToProps = (dispatch) => ({
   sendMessageToServer: (id, text, timestamp) =>
     dispatch(DashboardMessageRedux.sendDashboardMessage(id, text, timestamp)),
   clearUnreadDashboardMessages: (messageId) =>
@@ -254,4 +254,4 @@ const mapStateToDispatch = (dispatch) => ({
   // markAnimationAsShown: (messageId) => clearUnreadMessages: (messageId) => dispatch(GUIActions.clearUnreadMessages())
 });
 
-export default connect(mapStateToProps, mapStateToDispatch)(Chat);
+export default connect(mapStateToProps, mapDispatchToProps)(Chat);

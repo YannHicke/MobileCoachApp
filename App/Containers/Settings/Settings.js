@@ -155,14 +155,14 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapStateToDispatch = (dispatch) => ({
+const mapDispatchToProps = (dispatch) => ({
   sendFeedback: (content) =>
     dispatch(
       ServerMessageActions.sendIntention(null, 'send-app-feedback', content),
     ),
 });
 
-export default connect(mapStateToProps, mapStateToDispatch)(Settings);
+export default connect(mapStateToProps, mapDispatchToProps)(Settings);
 
 const styles = StyleSheet.create({
   url: {

@@ -124,7 +124,7 @@ const mapStateToProps = (state) => {
   return {};
 };
 
-const mapStateToDispatch = (dispatch) => ({
+const mapDispatchToProps = (dispatch) => ({
   rememberRegistration: (deepstreamUser, deepstreamSecret) =>
     dispatch(
       ServerSyncActions.rememberRegistration(deepstreamUser, deepstreamSecret),
@@ -134,7 +134,7 @@ const mapStateToDispatch = (dispatch) => ({
 
 export default connect(
   mapStateToProps,
-  mapStateToDispatch,
+  mapDispatchToProps,
 )(ScreenScreeningSurvey);
 
 const Styles = StyleSheet.create({

@@ -89,9 +89,9 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapStateToDispatch = (dispatch) => ({
+const mapDispatchToProps = (dispatch) => ({
   enableSidemenuGestures: () => dispatch(GUIActions.enableSidemenuGestures()),
   disableSidemenuGestures: () => dispatch(GUIActions.disableSidemenuGestures()),
 });
 
-export default connect(mapStateToProps, mapStateToDispatch)(LoadingContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(LoadingContainer);

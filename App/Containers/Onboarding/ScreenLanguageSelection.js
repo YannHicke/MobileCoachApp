@@ -51,14 +51,14 @@ class ScreenLanguageSelection extends Component {
   }
 }
 
-const mapStateToDispatch = (dispatch) => ({
+const mapDispatchToProps = (dispatch) => ({
   changeLanguage: (newLang) =>
     dispatch(SettingsActions.changeLanguage(newLang)),
   sendLanguageIntention: (language) =>
     dispatch(MessageActions.sendIntention(null, 'language', language)),
 });
 
-export default connect(null, mapStateToDispatch)(ScreenLanguageSelection);
+export default connect(null, mapDispatchToProps)(ScreenLanguageSelection);
 
 const Styles = StyleSheet.create({
   container: {

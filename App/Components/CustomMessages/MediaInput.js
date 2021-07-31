@@ -449,7 +449,7 @@ class MediaInput extends Component {
   }
 }
 
-const mapStateToDispatch = (dispatch) => ({
+const mapDispatchToProps = (dispatch) => ({
   messageMediaUploading: (relatedMessageId, uploadPath) =>
     dispatch(
       ServerMessageRedux.messageMediaUploading(relatedMessageId, uploadPath),
@@ -458,7 +458,7 @@ const mapStateToDispatch = (dispatch) => ({
     dispatch(ServerMessageRedux.sendVariableValue(variable, value)),
 });
 
-export default connect(null, mapStateToDispatch)(MediaInput);
+export default connect(null, mapDispatchToProps)(MediaInput);
 
 const styles = StyleSheet.create({
   inputBubble: {
