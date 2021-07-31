@@ -56,7 +56,7 @@ class Settings extends Component {
   }
 
   render() {
-    const { openURL } = this.props.screenProps;
+    const { openURL } = this.props.route.params.screenProps;
     return (
       <View style={styles.container}>
         {this.renderNavigationbar(this.props)}

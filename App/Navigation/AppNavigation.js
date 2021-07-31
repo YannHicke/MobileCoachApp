@@ -173,6 +173,7 @@ function SideMenu({
       <DrawerSideMenu.Screen
         name="Faq"
         component={Faq}
+        initialParams={{ screenProps }}
         options={{
           drawerIcon: ({ focused, size }) => (
             <Icon
@@ -192,6 +193,7 @@ function SideMenu({
       <DrawerSideMenu.Screen
         name="Settings"
         component={Settings}
+        initialParams={{ screenProps }}
         options={{
           drawerIcon: ({ focused, size }) => (
             <Icon

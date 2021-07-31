@@ -178,7 +178,7 @@ class InfoCardsLibrary extends Component {
   }
 
   renderContent() {
-    const { showModal } = this.props.screenProps;
+    const { showModal } = this.props.route.params.screenProps;
     return (
       <ScrollView style={styles.grid} indicatorStyle="white">
         <SuperGridSectionList

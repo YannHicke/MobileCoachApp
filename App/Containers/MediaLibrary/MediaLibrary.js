@@ -207,7 +207,7 @@ class MediaLibrary extends Component {
   }
 
   renderContent() {
-    const { showModal } = this.props.screenProps;
+    const { showModal } = this.props.route.params.screenProps;
     this.mount();
     return (
       <ScrollView style={styles.grid} indicatorStyle="white">
