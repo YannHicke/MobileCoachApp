@@ -154,6 +154,7 @@ function SideMenu({
       <DrawerSideMenu.Screen
         name="MediaLibrary"
         component={MediaLibrary}
+        initialParams={{ screenProps }}
         options={{
           drawerIcon: ({ focused, size }) => (
             <Icon

@@ -128,8 +128,8 @@ class MediaLibrary extends Component {
     let delay = INITIAL_DELAY;
 
     Object.keys(mediaLibrary).map((key, index) => {
+      const videoItem = mediaLibrary[key];
       if (!_.some(this.videoArray, videoItem)) {
-        const videoItem = mediaLibrary[key];
 
         let mediaInfo = MediaInfo.default;
         if (MediaInfo[videoItem.medianame]) {
