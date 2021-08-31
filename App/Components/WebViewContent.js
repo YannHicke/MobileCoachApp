@@ -33,7 +33,7 @@ class WebViewContent extends Component {
           <WebView
             ref="web"
             source={{
-              uri: this.props.children + '?' + Math.random(),
+              uri: this.props.children,
             }}
             style={styles.webView}
             scalesPageToFit={!(Platform.OS === 'ios')}
