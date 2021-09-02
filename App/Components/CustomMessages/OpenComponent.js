@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import Button from 'react-native-button';
 import PropTypes from 'prop-types';
 import { Colors } from '../../Themes/';
@@ -13,7 +13,6 @@ export default class OpenComponent extends Component {
     currentMessage: PropTypes.object,
     previousMessage: PropTypes.object,
     onPress: PropTypes.func,
-    onPressSecondButton: PropTypes.func,
     setAnimationShown: PropTypes.func,
     icon: PropTypes.string,
     iconType: PropTypes.string,
@@ -30,15 +29,11 @@ export default class OpenComponent extends Component {
       currentMessage,
       previousMessage,
       onPress,
-      onPressSecondButton,
       icon,
       iconType,
       iconPosition,
     } = this.props;
     const editable = CommonUtils.userCanEdit(currentMessage);
-    const secondButton = currentMessage.custom.secondButton;
-    console.log(previousMessage);
-    console.log(currentMessage);
     return (
       <Animatable.View
         useNativeDriver
@@ -51,14 +46,10 @@ export default class OpenComponent extends Component {
         onAnimationEnd={() => {
           this.shouldAnimate = false;
         }}>
-        <Button
-          containerStyle={[
-            styles.buttonContainer,
-            secondButton ? styles.buttonContainerSeveralButtons : null,
-          ]}
-          disabledContainerStyle={[styles.buttonDisabled]}
+        <TouchableOpacity
           disabled={!editable}
           style={[
+            styles.buttonContainer,
             styles.button,
             iconPosition === 'left' ? { paddingLeft: 30 } : null,
             iconPosition === 'right' ? { paddingRight: 30 } : null,
@@ -75,7 +66,12 @@ export default class OpenComponent extends Component {
               containerStyle={{ position: 'absolute', left: 0 }}
             />
           ) : null}
-          {currentMessage.custom.buttonTitle}
+          <Text style={{
+            textAlign: 'center',
+            fontSize: 16,
+            fontWeight: 'normal',
+            color: Colors.buttons.selectOne.text,
+          }}>{currentMessage.custom.buttonTitle}</Text>
           {icon && iconPosition === 'right' ? (
             <Icon
               name={icon}
@@ -86,47 +82,7 @@ export default class OpenComponent extends Component {
             />
           ) : null}
           {/* this.renderInteractionBadge() */}
-        </Button>
-        {secondButton ? (
-          <Button
-            containerStyle={[
-              styles.buttonContainer,
-              secondButton ? styles.buttonContainerSeveralButtons : null,
-            ]}
-            disabledContainerStyle={[styles.buttonDisabled]}
-            disabled={!editable}
-            style={[styles.button, icon ? { paddingLeft: 30 } : null]}
-            onPress={() => {
-              onPressSecondButton(currentMessage.custom.component);
-            }}>
-            {icon && iconPosition === 'left' ? (
-              <Icon
-                name={icon}
-                type={iconType}
-                size={20}
-                color={Colors.buttons.openComponent.text}
-                containerStyle={{
-                  position: 'absolute',
-                  left: 0,
-                }}
-              />
-            ) : null}
-            {currentMessage.custom.secondButtonTitle}
-            {icon && iconPosition === 'right' ? (
-              <Icon
-                name={icon}
-                type={iconType}
-                size={20}
-                color={Colors.buttons.openComponent.text}
-                containerStyle={{
-                  position: 'absolute',
-                  left: 0,
-                }}
-              />
-            ) : null}
-            {/* this.renderInteractionBadge() */}
-          </Button>
-        ) : null}
+        </TouchableOpacity>
       </Animatable.View>
     );
   }
@@ -177,9 +133,6 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     backgroundColor: Colors.buttons.openComponent.background,
     marginBottom: 2,
-  },
-  buttonContainerSeveralButtons: {
-    width: 250,
   },
   button: {
     fontSize: 16,

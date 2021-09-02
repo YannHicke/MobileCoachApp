@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, Alert } from 'react-native';
+import { StyleSheet, Alert, Text, TouchableOpacity } from 'react-native';
 import { Colors, Fonts } from '../../Themes/';
-import Button from 'react-native-button';
 import CustomMultiPicker from './CustomMultiPicker';
 import I18n from '../../I18n/I18n';
 import * as Animatable from 'react-native-animatable';
@@ -133,17 +132,19 @@ export default class SelectManyComponent extends Component {
           // selectedIconStyle={} // style object for the icon when selected
           // unselectedIconStyle={} // style object for the icon when unselected
         />
-        <Button
-          value={5} // {value} TODO: why value 5 ?
-          containerStyle={styles.buttonContainer}
-          disabledContainerStyle={styles.disabled}
-          style={styles.button}
+        <TouchableOpacity
+          style={[styles.button, styles.buttonContainer]}
           disabled={!CommonUtils.userCanEdit(currentMessage)}
           onPress={() => {
             this.onPressHandler();
           }}>
+            <Text style={{
+              fontSize: Fonts.size.regular,
+              color: Colors.buttons.selectMany.submitButton.text
+            }}>
           {confirmText}
-        </Button>
+          </Text>
+        </TouchableOpacity>
       </Animatable.View>
     );
   }
@@ -164,14 +165,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 5,
-    minHeight: 35,
+    paddingHorizontal: 10,
+    minHeight: 46,
     borderRadius: 16,
     backgroundColor: Colors.buttons.selectMany.submitButton.background,
     marginBottom: 4,
-  },
-  button: {
-    fontSize: Fonts.size.regular,
-    color: Colors.buttons.selectMany.submitButton.text,
   },
   disabled: {
     backgroundColor: Colors.buttons.selectMany.submitButton.disabled,

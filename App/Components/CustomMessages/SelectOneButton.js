@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
-import Button from 'react-native-button';
+import { StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 import PropTypes from 'prop-types';
 import * as Animatable from 'react-native-animatable';
 
@@ -39,16 +38,32 @@ class Option extends Component {
         onAnimationEnd={() => {
           this.shouldAnimate = false;
         }}>
-        <Button
+        <TouchableOpacity
           value={value}
-          containerStyle={[styles.buttonContainer, containerStyle]}
-          disabledContainerStyle={styles.buttonContainerDisabled}
-          disabled={!CommonUtils.userCanEdit(currentMessage)}
-          style={styles.button}
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: 250,
+            padding: 5,
+            paddingHorizontal: 10,
+            minHeight: 46,
+            overflow: 'hidden',
+            borderRadius: 16,
+            backgroundColor: Colors.buttons.selectOne.background,
+            marginBottom: 2,
+          }}
           title={title}
           onPress={() => this.props.onPress(this.props.optionKey)}>
-          {title}
-        </Button>
+          <Text
+            style={{
+              textAlign: 'center',
+              fontSize: 16,
+              fontWeight: 'normal',
+              color: Colors.buttons.selectOne.text,
+            }}>
+            {title}
+          </Text>
+        </TouchableOpacity>
       </Animatable.View>
     );
   }
@@ -89,36 +104,6 @@ export default class SelectOneButton extends Component {
         relatedMessageId,
       );
       this.tapped = true;
-
-      // Apparently, the "Animation-Finished" callback is called quite delayed,
-      // which causes a disruptive break between fadeOut-Animation of input-Option and fadeIn-Animation of answer message
-      // so for now, don't use the fade-Out animation
-
-      /*
-      if (this.props.fadeOutAnimation) {
-        let animationPromises = []
-        for (let key in this.animatableRefs) {
-          if (this.animatableRefs.hasOwnProperty(key)) {
-            let ref = this.animatableRefs[key]
-            if (key !== selectedOptionKey.toString()) animationPromises.push(ref.animatable()[this.props.fadeOutAnimation](100))
-          }
-        }
-        Promise.all(animationPromises).then(() => {
-          let relatedMessageId = message._id.substring(0, message._id.lastIndexOf('-'))
-          this.props.onPress(message.custom.intention, text, value, relatedMessageId)
-          // set tapped flag to prevent multiple submits
-          this.tapped = true
-        }, (err) => {
-          log.warn('An error accured while animating Input-Message:', err)
-        })
-      // if there is no fadeOut-Animation, sent answer immediately
-      } else {
-        let relatedMessageId = message._id.substring(0, message._id.lastIndexOf('-'))
-        this.props.onPress(message.custom.intention, text, value, relatedMessageId)
-        // set tapped flag to prevent multiple submits
-        this.tapped = true
-      }
-      */
     }
   }
 
@@ -137,36 +122,38 @@ export default class SelectOneButton extends Component {
       <View style={inputMessageStyles.container}>
         {options.map((item, index) => {
           return (
-            <Option
-              key={index}
-              optionKey={index}
-              title={item.button}
-              value={item.value}
-              currentMessage={this.props.currentMessage}
-              onPress={(optionKey) =>
-                this.onPressHandler(
-                  this.props.currentMessage,
-                  item.button,
-                  item.value,
-                  optionKey,
-                )
-              }
-              ref={(ref) => {
-                // Apparently, this callback is often called with "null"-values..
-                if (ref !== null) {
-                  this.animatableRefs[index] = ref;
+            <View>
+              <Option
+                key={index}
+                optionKey={index}
+                title={item.button}
+                value={item.value}
+                currentMessage={this.props.currentMessage}
+                onPress={(optionKey) =>
+                  this.onPressHandler(
+                    this.props.currentMessage,
+                    item.button,
+                    item.value,
+                    optionKey,
+                  )
                 }
-              }}
-              containerStyle={
-                options.length > 4 ? styles.buttonContainerSmall : undefined
-              }
-              fadeInAnimation={
-                this.shouldAnimate ? this.props.fadeInAnimation : null
-              }
-              fadeOutSelectedAnimation={this.props.fadeOutSelectedAnimation}
-              delay={index * this.props.delayOffset}
-              duration={this.props.duration}
-            />
+                ref={(ref) => {
+                  // Apparently, this callback is often called with "null"-values..
+                  if (ref !== null) {
+                    this.animatableRefs[index] = ref;
+                  }
+                }}
+                containerStyle={
+                  options.length > 4 ? styles.buttonContainerSmall : undefined
+                }
+                fadeInAnimation={
+                  this.shouldAnimate ? this.props.fadeInAnimation : null
+                }
+                fadeOutSelectedAnimation={this.props.fadeOutSelectedAnimation}
+                delay={index * this.props.delayOffset}
+                duration={this.props.duration}
+              />
+            </View>
           );
         })}
       </View>
@@ -174,27 +161,10 @@ export default class SelectOneButton extends Component {
   }
 }
 const styles = StyleSheet.create({
-  buttonContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: 250,
-    padding: 5,
-    paddingHorizontal: 10,
-    minHeight: 46,
-    overflow: 'hidden',
-    borderRadius: 16,
-    backgroundColor: Colors.buttons.selectOne.background,
-    marginBottom: 2,
-  },
   buttonContainerSmall: {
     minHeight: 40,
   },
   buttonContainerDisabled: {
     backgroundColor: Colors.buttons.selectOne.disabled,
-  },
-  button: {
-    fontSize: 16,
-    color: Colors.buttons.selectOne.text,
-    fontWeight: 'normal',
   },
 });
