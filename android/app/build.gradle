@@ -131,7 +131,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "org.c4dhi.mobilecoach.client"
+        applicationId "org.c4dhi.mobilecoach.mobileapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -225,6 +225,7 @@ dependencies {
     // ADDED FOR PUSH NOTIFICATIONS - START
     implementation 'com.google.android.gms:play-services-gcm:16.0.0'
     implementation "com.google.firebase:firebase-messaging:17.0.0"
+    implementation 'com.google.firebase:firebase-analytics:17.3.0'
     // ADDED FOR PUSH NOTIFICATIONS - END
 
     implementation 'com.android.support:multidex:1.0.1'

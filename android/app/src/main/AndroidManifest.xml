@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.c4dhi.mobilecoach.client">
+    package="org.c4dhi.mobilecoach.mobileapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -31,61 +31,38 @@
       android:roundIcon="@mipmap/ic_launcher_round"
       android:allowBackup="false"
       android:theme="@style/AppTheme">
-      <activity
-        android:name=".MainActivity"
-        android:label="@string/app_name"
-        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
-        android:launchMode="singleTask"
-        android:screenOrientation="portrait"
-        android:windowSoftInputMode="adjustPan">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
 
-        </intent-filter>
-      </activity>
-      <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
 
-      <!-- ADDED FOR PUSH NOTIFICATIONS - START -->
-      <meta-data  android:name="com.dieam.reactnativepushnotification.notification_channel_name"
-                  android:value="@string/app_name"/>
-      <meta-data  android:name="com.dieam.reactnativepushnotification.notification_channel_description"
-                  android:value="@string/app_name"/>
-      <!-- Change the resource name to your App's accent color - or any other color you want -->
-      <meta-data  android:name="com.dieam.reactnativepushnotification.notification_color"
-                  android:resource="@android:color/white"/>
+        <!-- ADDED FOR PUSH NOTIFICATIONS - START -->
+        <meta-data  android:name="com.dieam.reactnativepushnotification.notification_foreground"
+                    android:value="false"/>
+        <!-- Change the resource name to your App's accent color - or any other color you want -->
+        <meta-data  android:name="com.dieam.reactnativepushnotification.notification_color"
+                    android:resource="@color/white"/> <!-- or @android:color/{name} to use a standard color -->
 
-      <!-- < Only if you're using GCM or localNotificationSchedule() > -->
-      <!-- <receiver
-          android:name="com.google.android.gms.gcm.GcmReceiver"
-          android:exported="true"
-          android:permission="com.google.android.c2dm.permission.SEND" >
-          <intent-filter>
-              <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-              <category android:name="${applicationId}" />
-          </intent-filter>
-      </receiver> -->
-      <!-- < Only if you're using GCM or localNotificationSchedule() > -->
-
+        <receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationActions" />
         <receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationPublisher" />
         <receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationBootEventReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON"/>
             </intent-filter>
         </receiver>
-        <service android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationRegistrationService"/>
 
-        <!-- < Only if you're using GCM or localNotificationSchedule() > -->
-        <service
-            android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationListenerServiceGcm"
-            android:exported="false" >
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-            </intent-filter>
-        </service>
-        <!-- </ Only if you're using GCM or localNotificationSchedule() > -->
-
-        <!-- < Else > -->
         <service
             android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationListenerService"
             android:exported="false" >
@@ -93,7 +70,11 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <!-- </ Else > -->
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/default_notification_channel_id" />
+
       <!-- ADDED FOR PUSH NOTIFICATIONS - END -->
     </application>
 

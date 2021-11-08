@@ -14,24 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "2D2A28121D9B038B00D4039D"
-               BuildableName = "libReact.a"
-               BlueprintName = "React-tvOS"
-               ReferencedContainer = "container:../node_modules/react-native/React/React.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-               BuildableName = "MobileCoachClient-tvOS.app"
-               BlueprintName = "MobileCoachClient-tvOS"
-               ReferencedContainer = "container:MobileCoachClient.xcodeproj">
+               BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
+               BuildableName = "MCMobileApp.app"
+               BlueprintName = "MCMobileApp"
+               ReferencedContainer = "container:MCMobileApp.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -46,16 +32,16 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "2D02E48F1E0B4A5D006451C7"
-               BuildableName = "MobileCoachClient-tvOSTests.xctest"
-               BlueprintName = "MobileCoachClient-tvOSTests"
-               ReferencedContainer = "container:MobileCoachClient.xcodeproj">
+               BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
+               BuildableName = "MCMobileApp.app"
+               BlueprintName = "MCMobileApp"
+               ReferencedContainer = "container:MCMobileApp.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
-      buildConfiguration = "Debug"
+      buildConfiguration = "Release"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
@@ -68,10 +54,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "MobileCoachClient-tvOS.app"
-            BlueprintName = "MobileCoachClient-tvOS"
-            ReferencedContainer = "container:MobileCoachClient.xcodeproj">
+            BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
+            BuildableName = "MCMobileApp.app"
+            BlueprintName = "MCMobileApp"
+            ReferencedContainer = "container:MCMobileApp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -85,10 +71,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "MobileCoachClient-tvOS.app"
-            BlueprintName = "MobileCoachClient-tvOS"
-            ReferencedContainer = "container:MobileCoachClient.xcodeproj">
+            BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
+            BuildableName = "MCMobileApp.app"
+            BlueprintName = "MCMobileApp"
+            ReferencedContainer = "container:MCMobileApp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

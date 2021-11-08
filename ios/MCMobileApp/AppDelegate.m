@@ -36,7 +36,7 @@ static void InitializeFlipper(UIApplication *application) {
 #endif
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
-                                                   moduleName:@"MobileCoachClient"
+                                                   moduleName:@"MCMobileApp"
                                             initialProperties:nil];
   
   rootView.backgroundColor = [UIColor blackColor];
@@ -92,7 +92,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 }
 
 //Called when a notification is delivered to a foreground app.
--(void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler
+-(void)userNotificationCenter:(UNUserNotificationCenter *)center  :(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler
 {
   NSLog(@"Push at foreground... disabled...");
   //completionHandler(UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionBadge);

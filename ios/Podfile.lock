@@ -282,7 +282,7 @@ PODS:
     - React-Core
   - RNCMaskedView (0.1.11):
     - React
-  - RNCPushNotificationIOS (1.8.0):
+  - RNCPushNotificationIOS (1.10.1):
     - React-Core
   - RNExitApp (1.1.0):
     - React
@@ -503,7 +503,7 @@ SPEC CHECKSUMS:
   rn-fetch-blob: f525a73a78df9ed5d35e67ea65e79d53c15255bc
   RNCAsyncStorage: b03032fdbdb725bea0bd9e5ec5a7272865ae7398
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
-  RNCPushNotificationIOS: 61a7c72bd1ebad3568025957d001e0f0e7b32191
+  RNCPushNotificationIOS: 87b8d16d3ede4532745e05b03c42cff33a36cc45
   RNExitApp: c4e052df2568b43bec8a37c7cd61194d4cfee2c3
   RNFS: 3ab21fa6c56d65566d1fb26c2228e2b6132e5e32
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
@@ -514,6 +514,6 @@ SPEC CHECKSUMS:
   RNVectorIcons: 31cebfcf94e8cf8686eb5303ae0357da64d7a5a4
   Yoga: 4bd86afe9883422a7c4028c00e34790f560923d6
 
-PODFILE CHECKSUM: ae06480ee305a091b4897fa296e5e0e9063d8de4
+PODFILE CHECKSUM: 4ca1d31bcad0992611e8cb358fac82d73eef7ad7
 
 COCOAPODS: 1.10.1

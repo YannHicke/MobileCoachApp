@@ -1,4 +1,4 @@
-package org.c4dhi.mobilecoach.client;
+package org.c4dhi.mobilecoach.mobileapp;
 
 import android.app.Application;
 

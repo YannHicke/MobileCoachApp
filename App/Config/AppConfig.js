@@ -17,7 +17,7 @@ export default {
   // Configuration of the project
   config: {
     dev: {
-      purgeStoreAtStartup: true,
+      purgeStoreAtStartup: false,
       fakeDeviceAlwaysOnlineForOfflineDev: false,
       fakeQRCodeScanWithURL: null,
       allowDebugKeyboard: false,
@@ -47,12 +47,12 @@ export default {
         'Components/CustomMessages/MediaInput': 'INFO',
         'Navigation/ReduxNavigation': 'INFO',
         'Redux/MessageRedux': 'INFO',
-        'Redux/ServerSyncRedux': 'INFO',
+        'Redux/ServerSyncRedux': 'DEBUG',
         'Redux/StoryProgressRedux': 'INFO',
         'Sagas/GiftedChatMessageSaga': 'INFO',
         'Sagas/MessageSagas': 'INFO',
-        'Sagas/ServerSyncSagas': 'INFO',
-        'Utils/PushNotifications': 'INFO',
+        'Sagas/ServerSyncSagas': 'DEBUG',
+        'Utils/PushNotifications': 'DEBUG',
       },
     },
     typingIndicator: {
@@ -76,12 +76,17 @@ export default {
       showExpiryAlert: true,
     },
     startup: {
-      automaticallyRequestPushPermissions: false,
+      automaticallyRequestPushPermissions: true,
       automaticallyConnectOnFirstStartup: true,
       automaticallyShareObserverAccessToken: false,
       automaticallyShareParticipantAccessToken: false,
       backButtonInOnboardingEnabled: false,
       onboardingURL: '---',
+    },
+    pushNotification: {
+      maximumPushMessagesWhenInactive: 20,
+      androidChannelId: 'default',
+      androidChannelName: 'Default push channel'
     },
     serverSync: {
       useLocalServer: false,
@@ -92,15 +97,15 @@ export default {
       clientVersion: 1,
       role: 'participant', // Can be: participant, supervisor, observer, or team-manager
       defaultNickname: 'MobileCoach Client User',
-      interventionPattern: 'Test-components',
-      interventionPassword: 'tests',
-      androidSenderId: '1234567890',
+      interventionPattern: 'Test',
+      interventionPassword: 'test',
+      androidSenderId: '808193219358',
       localDeepstreamURL: 'ws://127.0.0.1:8082/deepstream',
       localRestURL: 'http://127.0.0.1:8080/PMCP/api/v02/',
       localMediaURL: 'http://127.0.0.1:8080/PMCP/files/',
-      remoteDeepstreamURL: 'wss://workshop-cdhi.ethz.ch/deepstream',
-      remoteRestURL: 'https://workshop-cdhi.ethz.ch/PMCP/api/v02/',
-      remoteMediaURL: 'https://workshop-cdhi.ethz.ch/PMCP/files/',
+      remoteDeepstreamURL: 'wss://temp.c4dhi.org/deepstream',
+      remoteRestURL: 'https://temp.c4dhi.org/PMCP/api/v02/',
+      remoteMediaURL: 'https://temp.c4dhi.org/PMCP/files/',
       // Whether or not user uploads are protected with auth-tokens
       mediaUploadsWithAuthenticiation: true,
     },

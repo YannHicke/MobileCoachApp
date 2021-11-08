@@ -4,7 +4,11 @@ import store from 'react-native-simple-store';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 
 import Log from './Log';
+import AppConfig from '../Config/AppConfig';
 const log = new Log('Utils/PushNotifications');
+
+let maximumPushMessagesWhenInactive = AppConfig.config.pushNotification.maximumPushMessagesWhenInactive
+let channelId = AppConfig.config.pushNotification.androidChannelId
 
 let instance = null;
 
@@ -58,33 +62,42 @@ export default class PushNotifications {
 
       // Function to be called for encrypted notifications
       var decryptIfNecessaryAndShow = function (data, message) {
+        log.debug('decryptIfNecessaryAndShow data: ' + data)
+        log.debug('decryptIfNecessaryAndShow message: ' + message)
         let messageToShow = '';
         if (message === null) {
-          log.debug('Decrypt and show notification');
+          log.debug('Decrypt and show notification - 1');
           const iv = CryptoJS.enc.Utf8.parse('4537823546456123');
+          log.debug('Decrypt and show notification parsedEncKey', parsedEncKey);
           const decrypted = CryptoJS.AES.decrypt(data, parsedEncKey, {
             iv: iv,
             padding: CryptoJS.pad.ZeroPadding,
           });
+          log.debug('Decrypt and show notification - 3', decrypted);
           messageToShow = decrypted.toString(CryptoJS.enc.Utf8);
+          log.debug('Decrypt and show notification - 4');
         } else {
           log.debug('Show notification');
           messageToShow = message;
         }
 
+        log.debug('Decrypt and show notification: messageToShow', messageToShow);        
+
         PushNotificationsHandler.localNotification({
+          channelId: AppConfig.config.pushNotification.androidChannelId,
           message: messageToShow,
           playSound: true,
           soundName: 'default',
         });
+
+        log.debug('Decrypt and show notification end');
       };
 
       var resetBadges = function () {
         badges = 0;
         PushNotificationsHandler.setApplicationIconBadgeNumber(badges);
 
-        // Commented out to not destroy local push-schedule (see: LocalNotifications.js)
-        // PushNotificationsHandler.cancelAllLocalNotifications()
+        PushNotificationsHandler.cancelAllLocalNotifications()
         log.debug('Reset badges to 0');
       };
 
@@ -103,6 +116,7 @@ export default class PushNotifications {
         // (required) Called when a remote or local notification is opened or received
         onNotification: function (notification) {
           log.debug('Push notification:', notification);
+          log.debug('Push notification badge:', notification.badge);
           log.debug('Current badges:', badges);
 
           // Only care for push notifications when app is active (and prevent inifinte loop)
@@ -112,13 +126,13 @@ export default class PushNotifications {
           if (
             notification.data !== undefined &&
             notification.data !== null &&
-            notification.data.blob !== undefined &&
-            notification.data.blob !== null &&
             notification.data.key !== undefined &&
-            notification.data.key !== null
+            notification.data.key !== null &&
+            notification.data.blob !== undefined &&
+            notification.data.blob !== null   
           ) {
-            data = notification.data.blob;
-            key = notification.data.key;
+            data = notification.data.blob
+            key = notification.data.key
           }
 
           if (
@@ -126,7 +140,7 @@ export default class PushNotifications {
             AppState.currentState !== 'active'
           ) {
             // Set badges for encrypted push notifications
-            if (data !== null && data.remote) {
+            if (data !== null) {
               badges++;
               PushNotificationsHandler.setApplicationIconBadgeNumber(badges);
               log.debug('Set badges (for encrypted notifications) to', badges);
@@ -148,14 +162,16 @@ export default class PushNotifications {
             }
 
             // Show local notification for encrypted push notifications
-            if (data !== null && data.remote) {
+            if (data !== null) {
               // Push only first message
-              if (badges === 1) {
+              if (badges <= maximumPushMessagesWhenInactive) {
                 if (parsedEncKey === null) {
                   if (encKey === null) {
                     store.get(STORE_NAME).then((res) => {
                       // Show notification after retrieving encKey and calculating parsedEncKey and confirm
                       const encKeyEncrypted = res.encKey;
+
+                      log.debug('encKeyEncrypted: ', encKeyEncrypted);
 
                       const iv = CryptoJS.enc.Utf8.parse('4537823546456123');
                       const decrypted = CryptoJS.AES.decrypt(
@@ -193,7 +209,7 @@ export default class PushNotifications {
                     notification.finish(PushNotificationIOS.FetchResult.NoData);
                   }
                 }
-              } else if (badges === 2) {
+              } else if (badges === maximumPushMessagesWhenInactive+1) {
                 // Show ... and confirm
                 decryptIfNecessaryAndShow(null, '...');
                 if (Platform.OS === 'ios') {
@@ -236,6 +252,27 @@ export default class PushNotifications {
          */
         requestPermissions: false,
       });
+
+      // create android channel
+      if (Platform.OS === 'android') {
+        log.debug("Creating notification channel if it does not exist");
+        
+        PushNotificationsHandler.channelExists(channelId, function (exists) {
+          if (!exists) {
+            log.debug("Creating notification channel as it does not exist");
+            PushNotificationsHandler.createChannel(
+              {
+                channelId: channelId,
+                channelName: AppConfig.config.pushNotification.androidChannelName
+              },
+              (created) => log.debug(`Create channel returned '${created}'`)
+            );
+          }
+          else {
+            log.debug("Notification channel exists");
+          }
+        });
+      }
 
       // automatically request permissions (if defined this way)
       if (requestPermissions) {
@@ -320,12 +357,13 @@ export default class PushNotifications {
 
     const iv = CryptoJS.enc.Utf8.parse('4537823546456123');
     const encrypted = CryptoJS.AES.encrypt(
-      encKeyToStore,
+      JSON.stringify({encKeyToStore}),
       CryptoJS.enc.Utf8.parse(passwordForKeyStore),
       { iv: iv, padding: CryptoJS.pad.ZeroPadding },
     );
     const encKeyEncrypted = encrypted.toString();
 
+    log.debug('setEncryptionKey encKeyEncrypted: ', encKeyEncrypted);
     store.update(STORE_NAME, { encKey: encKeyEncrypted });
   }
 
@@ -367,7 +405,7 @@ export default class PushNotifications {
 
   cancelLocalNotification(notificationId) {
     log.info(`Cancel notification (id: ${notificationId})`);
-    PushNotificationsHandler.cancelLocalNotifications({
+    PushNotificationsHandler.cancelLocalNotification({
       id: notificationId,
     });
   }

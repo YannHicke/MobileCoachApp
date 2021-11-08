@@ -1,4 +1,4 @@
-package org.c4dhi.mobilecoach.client;
+package org.c4dhi.mobilecoach.mobileapp;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
@@ -16,7 +16,7 @@ public class MainActivity extends ReactActivity {
     */
   @Override
   protected String getMainComponentName() {
-    return "MobileCoachClient";
+    return "MCMobileApp";
   }
 
   @Override
