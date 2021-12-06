@@ -14,11 +14,12 @@ export default class FullscreenVideo extends Component {
     this.state = {
       showIndicator: true,
     };
+    this.currentPosition = 0;
   }
 
   render() {
     const { showIndicator } = this.state;
-    const { source, closeFullscreenCallback, onClose } = this.props;
+    const { source, closeFullscreenCallback, onClose, initialPosition, paused } = this.props;
     return (
       <BlurView>
         <View
@@ -38,6 +39,7 @@ export default class FullscreenVideo extends Component {
               this.player = ref;
             }}
             fullscreen
+            paused={paused}
             onError={(e) => {
               log.warn(
                 'Error while trying to open fullscreen-video',
@@ -48,10 +50,14 @@ export default class FullscreenVideo extends Component {
             onLoad={() => {
               this.player.presentFullscreenPlayer();
               this.setState({ showIndicator: false });
+              this.player.seek(initialPosition);
             }}
             onFullscreenPlayerDidDismiss={() => {
-              closeFullscreenCallback();
+              closeFullscreenCallback(this.currentPosition, false); 
               onClose();
+            }}
+            onProgress={({currentTime, playableDuration, seekableDuration}) => {
+              this.currentPosition = currentTime;
             }}
           />
         </View>
