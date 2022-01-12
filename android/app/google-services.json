@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:000000000000:android:0fbad47444027455",
         "android_client_info": {
-          "package_name": "org.c4dhi.mobilecoach.client"
+          "package_name": "org.c4dhi.mobilecoach.mobileapp"
         }
       },
       "oauth_client": [
