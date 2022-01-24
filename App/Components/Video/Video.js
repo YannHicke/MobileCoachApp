@@ -41,8 +41,7 @@ export default class Video extends Component {
     this.state = {
       source: null,
     };
-    this.getCurrentTime = () => this.refs.player.getCurrentTime();
-    this.getPaused = () => this.refs.player.getPaused();
+    this.player = React.createRef();
   }
 
   // TODO: Needs to be refactored
@@ -112,40 +111,53 @@ export default class Video extends Component {
 
   // Callback to be handled when fullscreen is closed
   closeFullscreenCallback(currentTime, paused) {
-    this.refs.player.setPosition(currentTime);
+    this.player.current.setPosition(currentTime);
     if (!paused) {
-      this.refs.player.setPlaying();
+      this.setPlayerPlaying();
     }
+  }
+
+  getPlayerCurrentTime() {
+    return this.player.current.state.currentTime;
+  }
+
+  getPlayerPaused() {
+    return this.player.current.state.isPaused;
+  }
+
+  setPlayerPaused() {
+    this.player.current.setPaused();
+  }
+
+  setPlayerPlaying() {
+    this.player.current.setPlaying();
   }
 
   renderVideo() {
     if (this.state.source) {
-      const bottomControls = (props) => <BottomControls {...props} />;
+      const bottomControls = (props) => <BottomControls onToggleFullscreen={onToggleFullscreen} {...props} />;
       // TODO: Maybe we can pull things out of render for performance
       let onToggleFullscreen = () => {
-        let paused = this.refs.player.getPaused();
+        let paused = this.getPlayerPaused();
+        let currentTime = this.getPlayerCurrentTime();
         // Pause current player
-        this.refs.player.setPaused();
+        this.setPlayerPaused();
         // then call fullscreen callback with current time
         this.props.onToggleFullscreen(
-          this.state.source,
-          this.refs.player.getCurrentTime(),
+          this.props.source,
+          currentTime,
           paused,
           (currentTime, paused) =>
             this.closeFullscreenCallback(currentTime, paused),
         );
       };
-      // If useIOSNativeFullscreen is set, override fullscreen-callback with openplayer function
-      if (this.props.useIOSNativeFullscreen && Platform.OS === 'ios') {
-        onToggleFullscreen = () => this.refs.player.openIOSFullscreenPlayer();
-      }
       let controlProps = {
         onToggleFullscreen,
         inFullscreen: this.props.fullscreenMode,
       };
       return (
         <VideoPlayer
-          ref="player"
+          ref={this.player}
           bottomControlsBar={bottomControls}
           autoStart={this.props.autoStart}
           source={{uri: this.state.source}}

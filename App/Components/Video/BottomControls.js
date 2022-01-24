@@ -45,7 +45,7 @@ export default class BottomControlsBar extends React.PureComponent {
    *
    * @returns {string}
    */
-  secondsToMS(seconds: number): string {
+  secondsToMS(seconds) {
     const min = Math.floor(seconds / 60);
     const sec = seconds % 60;
     return `${min < 10 ? '0' + min : min}:${sec < 10 ? '0' + sec : sec}`;
@@ -88,6 +88,7 @@ export default class BottomControlsBar extends React.PureComponent {
         <Text style={styles.totalTime}>
           {this.secondsToMS(this.props.totalTime)}
         </Text>
+        {this.renderFullScreenButton()}
       </View>
     );
   }

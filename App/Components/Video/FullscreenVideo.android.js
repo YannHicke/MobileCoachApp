@@ -13,6 +13,11 @@ export default class FullscreenVideo extends Component {
     horizontalMode: false,
   };
 
+  constructor(props) {
+    super(props);
+    this.player = React.createRef();
+  }
+
   componentDidMount() {
     // unlock to all Orientations
     // Orientation.unlockAllOrientations()
@@ -46,15 +51,15 @@ export default class FullscreenVideo extends Component {
               justifyContent: 'center',
             }}>
             <Video
-              ref="player"
+              ref={this.player}
               orientation={'LANDSCAPE'}
               initialPosition={initialPosition}
               fullscreenMode
               autoStart={!paused}
               onToggleFullscreen={() => {
                 closeFullscreenCallback(
-                  this.refs.player.getCurrentTime() + 1,
-                  this.refs.player.getPaused(),
+                  this.player.current.getPlayerCurrentTime() + 1,
+                  this.player.current.getPlayerPaused(),
                 );
                 this.props.onClose();
               }}
@@ -99,8 +104,8 @@ export default class FullscreenVideo extends Component {
               title={I18n.t('Common.close')}
               onPress={() => {
                 closeFullscreenCallback(
-                  this.refs.player.getCurrentTime() + 1,
-                  this.refs.player.getPaused(),
+                  this.player.current.getPlayerCurrentTime() + 1,
+                  this.player.current.getPlayerPaused(),
                 );
                 this.props.onClose();
               }}
