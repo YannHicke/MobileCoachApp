@@ -5,16 +5,20 @@ import PushNotificationIOS from '@react-native-community/push-notification-ios';
 
 import Log from './Log';
 import AppConfig from '../Config/AppConfig';
+
 const log = new Log('Utils/PushNotifications');
 
 let maximumPushMessagesWhenInactive = AppConfig.config.pushNotification.maximumPushMessagesWhenInactive
 let channelId = AppConfig.config.pushNotification.androidChannelId
+let secret = AppConfig.config.pushNotification.secret
+let tokenURL = AppConfig.config.pushNotification.tokenURL
 
 let instance = null;
 
 let PushNotificationsHandler = null;
 
 const STORE_NAME = 'push-notification-store';
+const STORE_DEEPSTREAM_USER = 'deepstreamID';
 
 let handlers = [];
 
@@ -93,6 +97,34 @@ export default class PushNotifications {
         log.debug('Decrypt and show notification end');
       };
 
+
+      var sendRegsitrationToServerNotificationURL = function(token, platform) {
+        log.debug("sendRegsitrationToServerNotificationURL called")
+        // get the url from STORE
+        store.get(STORE_DEEPSTREAM_USER).then((result) => {
+          if (result !== null) {
+            deepstreamUser = result.deepstreamUser;
+            if (deepstreamUser !== null) {
+              let url = tokenURL + "?" + "secret=" + secret 
+                        + "&token=" + token
+                        + "&platform=" + platform
+                        + "&deepstreamID=" + deepstreamUser;
+              log.debug("Full url for token notifications:" + url);          
+              fetch(url, {
+                method: 'post'
+              }).then(response => log.debug(response));
+            }
+            else {
+              log.debug("deepstreamUser is null")
+            }
+          } else {
+            log.warn("The store is empty");
+          }
+        }).catch(error => {
+          log.warn(error);
+        });
+      }
+
       var resetBadges = function () {
         badges = 0;
         PushNotificationsHandler.setApplicationIconBadgeNumber(badges);
@@ -111,6 +143,13 @@ export default class PushNotifications {
           log.debug('Push token', data.token, 'on platform', data.os);
 
           PushNotifications.getInstance().rememberToken(data.token, data.os);
+
+          if (
+            AppState.currentState === null ||
+            AppState.currentState !== 'active'
+          ) {
+            sendRegsitrationToServerNotificationURL(data.token, data.os);
+          }
         },
 
         // (required) Called when a remote or local notification is opened or received
@@ -318,6 +357,7 @@ export default class PushNotifications {
   reset() {
     log.debug('Resetting store');
     store.delete(STORE_NAME);
+    store.delete(STORE_DEEPSTREAM_USER);
   }
 
   getToken() {
@@ -392,6 +432,11 @@ export default class PushNotifications {
     handlers.forEach(function (item) {
       item.call(this, token, platform);
     });
+  }
+
+  storeDeepstreamUser(deepstreamUserParam) {
+    log.debug('StoreDeepstreamUser function called with parameter: ' + deepstreamUserParam);
+    store.update(STORE_DEEPSTREAM_USER, { deepstreamUser: deepstreamUserParam });
   }
 
   localNotification(notification) {

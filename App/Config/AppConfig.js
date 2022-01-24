@@ -86,7 +86,9 @@ export default {
     pushNotification: {
       maximumPushMessagesWhenInactive: 20,
       androidChannelId: 'default',
-      androidChannelName: 'Default push channel'
+      androidChannelName: 'Default push channel',
+      secret: '12345abcd',
+      tokenURL: 'https://workshop-cdhi.ethz.ch/MC/push/notification/'
     },
     serverSync: {
       useLocalServer: false,
@@ -99,13 +101,13 @@ export default {
       defaultNickname: 'MobileCoach Client User',
       interventionPattern: 'Test',
       interventionPassword: 'test',
-      androidSenderId: '808193219358',
+      androidSenderId: '12345678',
       localDeepstreamURL: 'ws://127.0.0.1:8082/deepstream',
       localRestURL: 'http://127.0.0.1:8080/PMCP/api/v02/',
       localMediaURL: 'http://127.0.0.1:8080/PMCP/files/',
-      remoteDeepstreamURL: 'wss://temp.c4dhi.org/deepstream',
-      remoteRestURL: 'https://temp.c4dhi.org/PMCP/api/v02/',
-      remoteMediaURL: 'https://temp.c4dhi.org/PMCP/files/',
+      remoteDeepstreamURL: 'wss://workshop-cdhi.ethz.ch/deepstream',
+      remoteRestURL: 'https://workshop-cdhi.ethz.ch/PMCP/api/v02/',
+      remoteMediaURL: 'https://workshop-cdhi.ethz.ch/PMCP/files/',
       // Whether or not user uploads are protected with auth-tokens
       mediaUploadsWithAuthenticiation: true,
     },

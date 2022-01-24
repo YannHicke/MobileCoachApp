@@ -179,6 +179,17 @@ export function* handleCommands(action) {
       yield put({ type: ServerSyncActions.REMEMBER_PUSH_TOKEN_REQUESTED });
       PushNotifications.getInstance().requestPermissions();
       break;
+
+    case 'store-deepstream-userid':
+      let deepstreamIDLong = parsedCommand.value;   
+      try {
+        let deepstreamID = deepstreamIDLong.substring(3);
+        log.debug('Storing deepstream ID: ' + deepstreamID);
+        PushNotifications.getInstance().storeDeepstreamUser(deepstreamID);
+      } catch (error) {
+        log.warn('Could not process "store-deepstream-userid" input: ' + error);
+      }
+      break;  
   }
 }
 
@@ -449,6 +460,8 @@ function* reactBasedOnConnectionState(action) {
         yield delay(2000);
         onlineStatus = online;
       }
+      log.debug('Internet connection came up...');  
+      
       connectionStateChannel.put({
         type: ServerSyncActions.CONNECTION_STATE_CHANGE,
         connectionState: ConnectionStates.CONNECTING,

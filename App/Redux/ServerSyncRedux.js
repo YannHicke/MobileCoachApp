@@ -3,6 +3,8 @@ import Immutable from 'seamless-immutable';
 
 import AppConfig from '../Config/AppConfig';
 
+import PushNotifications from '../Utils/PushNotifications';
+
 import Log from '../Utils/Log';
 const log = new Log('Redux/ServerSyncRedux');
 
@@ -81,6 +83,9 @@ export const rememberRegistration = (state, action) => {
   log.debug('Remember registration');
 
   const { deepstreamUser, deepstreamSecret } = action;
+
+  PushNotifications.getInstance().storeDeepstreamUser(deepstreamUser);
+
   return state.merge({
     registered: true,
     deepstreamUser,
@@ -137,7 +142,7 @@ export const rememberPushToken = (state, action) => {
 
   const { platform, token } = action;
 
-  if (state.pushToken !== null && state.pushToken !== token) {
+  if (state.pushToken !== null) {
     return state.merge({
       pushPlatform: platform,
       pushToken: token,
