@@ -76,7 +76,7 @@ export default {
       showExpiryAlert: true,
     },
     startup: {
-      automaticallyRequestPushPermissions: true,
+      automaticallyRequestPushPermissions: false,
       automaticallyConnectOnFirstStartup: true,
       automaticallyShareObserverAccessToken: false,
       automaticallyShareParticipantAccessToken: false,
@@ -99,8 +99,8 @@ export default {
       clientVersion: 1,
       role: 'participant', // Can be: participant, supervisor, observer, or team-manager
       defaultNickname: 'MobileCoach Client User',
-      interventionPattern: 'Test',
-      interventionPassword: 'test',
+      interventionPattern: 'Test-components',
+      interventionPassword: 'tests',
       androidSenderId: '12345678',
       localDeepstreamURL: 'ws://127.0.0.1:8082/deepstream',
       localRestURL: 'http://127.0.0.1:8080/PMCP/api/v02/',
