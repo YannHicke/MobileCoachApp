@@ -1415,7 +1415,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.c4dhi.mobilecoach.mobileapp;
 				PRODUCT_NAME = MCMobileApp;
-				ROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "MCMobileApp-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
