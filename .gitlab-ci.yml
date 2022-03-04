@@ -1,9 +1,8 @@
 image: node:10
 
 stages:
-    - test
+    - yarn_install
 test:
-    stage: test
+    stage: yarn_install
     script:
         - yarn install
-        - yarn test
