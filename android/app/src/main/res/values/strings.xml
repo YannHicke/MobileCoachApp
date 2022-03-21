@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">MobileCoach Client</string>
+    <string name="app_name">CoachEra</string>
     <string name="default_notification_channel_id">default</string>
 </resources>

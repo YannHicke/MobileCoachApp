@@ -23,7 +23,7 @@ const log = new Log('Containers/Settings/Settings');
 
 const questions = [];
 
-for (let i = 1; i <= 4; i++) {
+for (let i = 1; i <= 1; i++) {
   questions.push({
     title: `Faq.questions.${i}.title`,
     answer: `Faq.questions.${i}.answer`,

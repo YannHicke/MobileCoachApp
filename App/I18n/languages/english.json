@@ -1,19 +1,18 @@
 {
   "Onboarding": {
-    "title": "MC Mobile App",
+    "title": "CoachEra",
     "subtitle": "A warm welcome!",
     "next": "Next",
     "chooseLanguage": "Please choose the language",
     "chooseCoach": "Please choose your coach",
-    "welcome": "Great choice!\n\nI am happy to accompany you as your digital coach.",
+    "welcome": "I am coach Jarvis!\n\nI am happy to accompany you as your digital coach.",
     "start": "Let's go",
     "checkQrUsageSubtitle": "How do you want to proceed?",
     "qrAvailable": "With QR-Code",
     "qrNotAvailable": "Without QR-Code"
   },
   "Coaches": {
-    "0": "Lukas",
-    "1": "Anna"
+    "0": "Jarvis"
   },
   "Chat": {
     "title": "Chat with {{coach}}",
@@ -124,23 +123,11 @@
   },
   "Faq": {
     "header": "FAQ",
-    "faqTitle": "Frequently asked questions to XY",
+    "faqTitle": "Frequently asked questions",
     "questions": {
       "1": {
-        "title": "Test question 1?",
-        "answer": "Test answer 1"
-      },
-      "2": {
-        "title": "Test question 2?",
-        "answer": "Test answer 2"
-      },
-      "3": {
-        "title": "Test question 3?",
-        "answer": "Test answer 3"
-      },
-      "4": {
-        "title": "Test question 4?",
-        "answer": "Test answer 4"
+        "title": "I don't know how to take care of the schedule, what should I do?",
+        "answer": "Have small goals, try to achieve them and move onto the next one :)"
       }
     }
   }
