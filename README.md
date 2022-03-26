@@ -36,14 +36,14 @@
 
 3. Running the current state of the application
 
-
+&nbsp;&nbsp;&nbsp;&nbsp;
 
 4. Changing the Conversational Flow in MobileCoach Web Designer
 
 *Currently, the client has been connected to the PROTOTYPE intervention. This intervention 
 is for the client to add their own conversational flow(s).*
 
-
+&nbsp;&nbsp;&nbsp;&nbsp;
 
 5. Changing the interventionPattern variable in  AppConfig.js  from PROTOTYPE
 
