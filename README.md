@@ -63,7 +63,8 @@ This ReadMe file contains the documentation for the setup of the Android and iOS
 
    (6.1) The iOS Application
    
-   ***![#c5f015](Prerequisites:)** For this step, you will need to have the XCode application installed and an emulator running iOS set up.*
+   ***![#c5f015](https://via.placeholder.com/15/c5f015/000000?text=Prerequisites:)** For this step, you will need to have the XCode application installed and an
+   emulator running iOS set up.*
 
    &nbsp;
    
