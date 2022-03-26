@@ -27,7 +27,7 @@
 
     &nbsp;
     
-    (1.2) Now, you should have a folder named mobilecoach-mobile-app in your home directory.
+    (1.2) Now, you should have a folder named `mobilecoach-mobile-app` in your home directory.
 
 &nbsp;&nbsp;&nbsp;
 
@@ -112,15 +112,15 @@ version of the app on Google Play Store and test the application on an Android d
 
   1. Generating an upload key; execute the following command:
   
-      keytool -genkeypair -v -storetype PKCS12 -keystore my-upload-key.keystore -alias my-key-alias -keyalg RSA -keysize 2048 -validity 10000
+      `keytool -genkeypair -v -storetype PKCS12 -keystore my-upload-key.keystore -alias my-key-alias -keyalg RSA -keysize 2048 -validity 10000 `
   
   &nbsp;&nbsp;&nbsp;
   
   2. Setting up gradle variables
 
-     (2.1) Place the my-upload-key.keystore in the android/app folder.
+     (2.1) Place the `my-upload-key.keystore` in the `android/app` folder.
 
-     (2.2) Edit the file ~/.gradle/gradle.properties or android/gradle.properties, and add the following:
+     (2.2) Edit the file `~/.gradle/gradle.properties` or `android/gradle.properties`, and add the following:
     
           MYAPP_UPLOAD_STORE_FILE=my-upload-key.keystore
           MYAPP_UPLOAD_KEY_ALIAS=my-key-alias
