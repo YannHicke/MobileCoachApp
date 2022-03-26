@@ -62,8 +62,6 @@ is for the client to add their own conversational flow(s).*
 
       (6.1.1) Once inside the mobilecoach-mobile-app repository, run yarn ios.
       
-      &nbsp;
-      
       (6.1.2) Run yarn start to allow the application to connect to the application Bundle.
 
       ***Warning:** If you do not perform this step correctly, you will run into a bundle error when opening the application.*
