@@ -69,8 +69,6 @@ is for the client to add their own conversational flow(s).*
    (6.1.1) Once inside the mobilecoach-mobile-app repository, run yarn ios.
    
    
-   ![Figure 2](https://media.github.coecis.cornell.edu/user/7644/files/c5c0c60d-ba8d-4242-b983-fd29fecd18f2/Fig_2.png)
-   
    <img width="723" alt="Fig_2" src="https://media.github.coecis.cornell.edu/user/7644/files/c5c0c60d-ba8d-4242-b983-fd29fecd18f2">
    
 
