@@ -61,7 +61,7 @@
 
    (6.1) The iOS Application
    
-   ***Prerequisites:** For this step, you will need to have the XCode application installed and an emulator running iOS set up.*
+   ***![#c5f015](Prerequisites:)** For this step, you will need to have the XCode application installed and an emulator running iOS set up.*
 
    &nbsp;
    
@@ -70,10 +70,11 @@
    
    <img width="723" alt="Fig_2" src="https://media.github.coecis.cornell.edu/user/7644/files/c5c0c60d-ba8d-4242-b983-fd29fecd18f2">
    
-
+   &nbsp;
+    
    (6.1.2) Run yarn start to allow the application to connect to the application Bundle.
 
-      ***Warning:** If you do not perform this step correctly, you will run into a bundle error when opening the application.*
+      ***![#f03c15](Warning:)** If you do not perform this step correctly, you will run into a bundle error when opening the application.*
 
 
    <img width="721" alt="Fig_3" src="https://media.github.coecis.cornell.edu/user/7644/files/7b917bed-3586-4490-a2cf-f98b95e025ec">
