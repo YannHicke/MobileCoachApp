@@ -1,4 +1,4 @@
-# MobileCoach Client & User Documentation
+# MobileCoach Client & Researcher Documentation
 
 ## Terminology
 
