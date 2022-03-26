@@ -66,13 +66,13 @@ This ReadMe file contains the documentation for the setup of the Android and iOS
 
    &nbsp;
    
-   (6.1.1) Once inside the mobilecoach-mobile-app repository, run yarn ios.
+      (6.1.1) Once inside the mobilecoach-mobile-app repository, run yarn ios.
    
-   <img width="723" alt="Fig_2" src="https://media.github.coecis.cornell.edu/user/7644/files/c5c0c60d-ba8d-4242-b983-fd29fecd18f2">
+      <img width="723" alt="Fig_2" src="https://media.github.coecis.cornell.edu/user/7644/files/c5c0c60d-ba8d-4242-b983-fd29fecd18f2">
    
-   &nbsp;
+      &nbsp;
     
-   (6.1.2) Run yarn start to allow the application to connect to the application Bundle.
+      (6.1.2) Run yarn start to allow the application to connect to the application Bundle.
 
       ***Warning:** If you do not perform this step correctly, you will run into a bundle error when opening the application.*
 
@@ -83,7 +83,7 @@ This ReadMe file contains the documentation for the setup of the Android and iOS
 
   (6.2) The Android Application
   
-  ***Prerequisites:**For this step, you will need to have the Android Studio application installed and an emulator running Android OS set up.*
+  ***Prerequisites:** For this step, you will need to have the Android Studio application installed and an emulator running Android OS set up.*
   
   &nbsp;
   
