@@ -15,6 +15,8 @@
 
 ## (A.1) Interacting with the Staging Environment [iOS & Android Apps via Emulator]
 
+&nbsp;&nbsp;&nbsp;
+
 1. Downloading the Repository
 
     (1.1) Clone the GitHub repository containing the MobileCoach application files by running the following command,
@@ -23,31 +25,34 @@
 
     in a Terminal window (MacOS) or in a Command Prompt window (Windows OS).
 
-
+    &nbsp;
+    
     (1.2) Now, you should have a folder named mobilecoach-mobile-app in your home directory.
 
-
+&nbsp;&nbsp;&nbsp;
 
 2. Installing all necessary dependencies
 
+   &nbsp;
+   
    (2.1) Navigate inside the repository, and execute yarn install to install the Node dependencies.
   
-  
+&nbsp;&nbsp;&nbsp;
 
 3. Running the current state of the application
 
-&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;
 
 4. Changing the Conversational Flow in MobileCoach Web Designer
 
 *Currently, the client has been connected to the PROTOTYPE intervention. This intervention 
 is for the client to add their own conversational flow(s).*
 
-&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;
 
 5. Changing the interventionPattern variable in  AppConfig.js  from PROTOTYPE
 
-
+&nbsp;&nbsp;&nbsp;
 
 6. Re-executing the iOS/Android application
 
@@ -57,29 +62,37 @@ is for the client to add their own conversational flow(s).*
 
       (6.1.1) Once inside the mobilecoach-mobile-app repository, run yarn ios.
       
+      &nbsp;
+      
       (6.1.2) Run yarn start to allow the application to connect to the application Bundle.
 
       ***Warning:** If you do not perform this step correctly, you will run into a bundle error when opening the application.*
 
+  &nbsp;
 
   (6.2) The Android Application
   
   For this step, you will need to have the Android Studio application installed and an emulator running Android OS set up.
   
+  &nbsp;
+  
       (6.2.1) Once inside the mobilecoach-mobile-app repository, run yarn android.
   
       (6.2.2) Run yarn start to allow the application to connect to the application bundle.
       
-      
+&nbsp;&nbsp;&nbsp;
 
 ## (A.2) Interacting with the Testing Environment [native Android application]
  
 *The testing environment, unlike the staging environment, does not require the client to install any dependencies. Rather, they can simply download the testing 
 version of the app on Google Play Store and test the application on an Android device.*
 
+&nbsp;
+
   1. Visit , which by clicking on, will download and install the MobileCoach application.
   2. Open the installed MobileCoach application and you may begin using it!
 
+&nbsp;&nbsp;&nbsp;
 
 ## (A.3) Releasing an Android app on the Google Play Store
 
@@ -87,7 +100,7 @@ version of the app on Google Play Store and test the application on an Android d
   
       keytool -genkeypair -v -storetype PKCS12 -keystore my-upload-key.keystore -alias my-key-alias -keyalg RSA -keysize 2048 -validity 10000
   
-  
+  &nbsp;&nbsp;&nbsp;
   
   2. Setting up gradle variables
 
@@ -100,7 +113,7 @@ version of the app on Google Play Store and test the application on an Android d
           MYAPP_UPLOAD_STORE_PASSWORD=*****
           MYAPP_UPLOAD_KEY_PASSWORD=*****
   
-  
+  &nbsp;&nbsp;&nbsp;
   
   3. Adding signing config to the app’s Gradle config
  
@@ -130,7 +143,7 @@ version of the app on Google Play Store and test the application on an Android d
           }
           ...
 
-
+  &nbsp;&nbsp;&nbsp;
 
   4. Generating the release AAB
 
@@ -141,7 +154,7 @@ version of the app on Google Play Store and test the application on an Android d
        
       (4.2) The  generated AAB can be found under android/app/build/outputs/bundle/release/app-release.aab and is ready to be uploaded to Google Play.
 
-  
+  &nbsp;&nbsp;&nbsp;
   
   5. Testing the release build of the app
 
@@ -149,18 +162,17 @@ version of the app on Google Play Store and test the application on an Android d
       
             npx react-native run-android --variant=release
   
-  
+  &nbsp;&nbsp;&nbsp;
   
   6. Creating a developer account on the Google Play console
 
      (6.1) Navigate to https://play.google.com/.
   
-  
-  
+  &nbsp;&nbsp;&nbsp;
+
   7. Creating the app and follow the steps on the Google Play console
 
      (7.1) Navigate to the "All Apps" tab.
-
 
 <hr>
  
