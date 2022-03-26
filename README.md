@@ -53,9 +53,9 @@
 
 &nbsp;&nbsp;&nbsp;
 
-
 <img width="392" alt="Fig_1" src="https://media.github.coecis.cornell.edu/user/7644/files/c218ba98-9f7b-48bb-bcb9-4b1351ad1609">
 
+&nbsp;&nbsp;
 
 6. Re-executing the iOS/Android application
 
@@ -78,8 +78,7 @@
 
    <img width="721" alt="Fig_3" src="https://media.github.coecis.cornell.edu/user/7644/files/7b917bed-3586-4490-a2cf-f98b95e025ec">
 
-
-  &nbsp;
+  &nbsp;&nbsp;
 
   (6.2) The Android Application
   
@@ -95,7 +94,6 @@
 
   <img width="636" alt="Fig_4" src="https://media.github.coecis.cornell.edu/user/7644/files/2dfc1b8b-09f3-4ed0-b0b7-5fb83261b394">
   
-
 &nbsp;&nbsp;&nbsp;
 
 ## (A.2) Interacting with the Testing Environment [native Android application]
@@ -105,7 +103,7 @@ version of the app on Google Play Store and test the application on an Android d
 
 &nbsp;
 
-  1. Visit , which by clicking on, will download and install the MobileCoach application.
+  1. Visit https://play.google.com/apps/internaltest/4701582881664393291, which when clicked on, will download and install the MobileCoach application.
   2. Open the installed MobileCoach application and you may begin using it!
 
 &nbsp;&nbsp;&nbsp;
