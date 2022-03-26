@@ -83,7 +83,7 @@ This ReadMe file contains the documentation for the setup of the Android and iOS
 
   (6.2) The Android Application
   
-  For this step, you will need to have the Android Studio application installed and an emulator running Android OS set up.
+  ***Prerequisites:**For this step, you will need to have the Android Studio application installed and an emulator running Android OS set up.*
   
   &nbsp;
   
