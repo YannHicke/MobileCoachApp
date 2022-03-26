@@ -27,12 +27,15 @@
     (1.2) Now, you should have a folder named mobilecoach-mobile-app in your home directory.
 
 
+
 2. Installing all necessary dependencies
 
    (2.1) Navigate inside the repository, and execute yarn install to install the Node dependencies.
   
+  
 
 3. Running the current state of the application
+
 
 
 4. Changing the Conversational Flow in MobileCoach Web Designer
@@ -41,7 +44,9 @@
 is for the client to add their own conversational flow(s).*
 
 
+
 5. Changing the interventionPattern variable in  AppConfig.js  from PROTOTYPE
+
 
 
 6. Re-executing the iOS/Android application
@@ -65,6 +70,7 @@ is for the client to add their own conversational flow(s).*
   
       (6.2.2) Run yarn start to allow the application to connect to the application bundle.
       
+      
 
 ## (A.2) Interacting with the Testing Environment [native Android application]
  
@@ -82,6 +88,7 @@ version of the app on Google Play Store and test the application on an Android d
       keytool -genkeypair -v -storetype PKCS12 -keystore my-upload-key.keystore -alias my-key-alias -keyalg RSA -keysize 2048 -validity 10000
   
   
+  
   2. Setting up gradle variables
 
      (2.1) Place the my-upload-key.keystore in the android/app folder.
@@ -92,6 +99,7 @@ version of the app on Google Play Store and test the application on an Android d
           MYAPP_UPLOAD_KEY_ALIAS=my-key-alias
           MYAPP_UPLOAD_STORE_PASSWORD=*****
           MYAPP_UPLOAD_KEY_PASSWORD=*****
+  
   
   
   3. Adding signing config to the app’s Gradle config
@@ -123,6 +131,7 @@ version of the app on Google Play Store and test the application on an Android d
           ...
 
 
+
   4. Generating the release AAB
 
       (4.1) Run the following commands in a Terminal window:
@@ -133,6 +142,7 @@ version of the app on Google Play Store and test the application on an Android d
       (4.2) The  generated AAB can be found under android/app/build/outputs/bundle/release/app-release.aab and is ready to be uploaded to Google Play.
 
   
+  
   5. Testing the release build of the app
 
       (5.1) Before uploading the release build to the Play Store, make sure you test it thoroughly. First uninstall any previous version of the app you already           have installed. Install it on the device using the following command in the project root:
@@ -140,9 +150,11 @@ version of the app on Google Play Store and test the application on an Android d
             npx react-native run-android --variant=release
   
   
+  
   6. Creating a developer account on the Google Play console
 
      (6.1) Navigate to https://play.google.com/.
+  
   
   
   7. Creating the app and follow the steps on the Google Play console
