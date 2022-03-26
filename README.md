@@ -34,11 +34,9 @@ This ReadMe file contains the documentation for the setup of the Android and iOS
 &nbsp;&nbsp;&nbsp;
 
 2. Installing all necessary dependencies
-
-   &nbsp;
    
    (2.1) Navigate inside the repository, and execute yarn install to install the Node dependencies.
-  
+
 &nbsp;&nbsp;&nbsp;
 
 3. Running the current state of the application
