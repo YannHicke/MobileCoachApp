@@ -80,21 +80,23 @@ version of the app on Google Play Store and test the application on an Android d
   1. Generating an upload key; execute the following command:
   
       keytool -genkeypair -v -storetype PKCS12 -keystore my-upload-key.keystore -alias my-key-alias -keyalg RSA -keysize 2048 -validity 10000
-      
+  
+  
   2. Setting up gradle variables
 
-    (2.1) Place the my-upload-key.keystore in the android/app folder.
+     (2.1) Place the my-upload-key.keystore in the android/app folder.
 
-    (2.2) Edit the file ~/.gradle/gradle.properties or android/gradle.properties, and add the following:
+     (2.2) Edit the file ~/.gradle/gradle.properties or android/gradle.properties, and add the following:
     
           MYAPP_UPLOAD_STORE_FILE=my-upload-key.keystore
           MYAPP_UPLOAD_KEY_ALIAS=my-key-alias
           MYAPP_UPLOAD_STORE_PASSWORD=*****
           MYAPP_UPLOAD_KEY_PASSWORD=*****
-          
+  
+  
   3. Adding signing config to the app’s Gradle config
  
-    (3.1) Edit the file android/app/build.gradle in your project folder, and add the signing config:
+     (3.1) Edit the file android/app/build.gradle in your project folder, and add the signing config:
     
     
           ...
@@ -136,12 +138,12 @@ version of the app on Google Play Store and test the application on an Android d
       (5.1) Before uploading the release build to the Play Store, make sure you test it thoroughly. First uninstall any previous version of the app you already           have installed. Install it on the device using the following command in the project root:
       
             npx react-native run-android --variant=release
-   
-   
+  
+  
   6. Creating a developer account on the Google Play console
 
      (6.1) Navigate to https://play.google.com/.
-    
+  
   
   7. Creating the app and follow the steps on the Google Play console
 
