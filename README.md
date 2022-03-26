@@ -69,6 +69,8 @@ is for the client to add their own conversational flow(s).*
    (6.1.1) Once inside the mobilecoach-mobile-app repository, run yarn ios.
    
    
+   ![Figure 2](https://media.github.coecis.cornell.edu/user/7644/files/c5c0c60d-ba8d-4242-b983-fd29fecd18f2/Fig_2.png)
+   
    <img width="723" alt="Fig_2" src="https://media.github.coecis.cornell.edu/user/7644/files/c5c0c60d-ba8d-4242-b983-fd29fecd18f2">
    
 
@@ -91,8 +93,9 @@ is for the client to add their own conversational flow(s).*
       (6.2.1) Once inside the mobilecoach-mobile-app repository, run yarn android.
   
       (6.2.2) Run yarn start to allow the application to connect to the application bundle.
-      
-  
+    
+  &nbsp;
+
   <img width="636" alt="Fig_4" src="https://media.github.coecis.cornell.edu/user/7644/files/2dfc1b8b-09f3-4ed0-b0b7-5fb83261b394">
   
 
