@@ -50,9 +50,13 @@ is for the client to add their own conversational flow(s).*
 
 &nbsp;&nbsp;&nbsp;
 
-5. Changing the interventionPattern variable in  AppConfig.js  from PROTOTYPE
+5. Changing the `interventionPattern` variable in `AppConfig.js` from `PROTOTYPE`
 
 &nbsp;&nbsp;&nbsp;
+
+
+<img width="392" alt="Fig_1" src="https://media.github.coecis.cornell.edu/user/7644/files/c218ba98-9f7b-48bb-bcb9-4b1351ad1609">
+
 
 6. Re-executing the iOS/Android application
 
@@ -60,11 +64,21 @@ is for the client to add their own conversational flow(s).*
    
    ***Prerequisites:** For this step, you will need to have the XCode application installed and an emulator running iOS set up.*
 
-      (6.1.1) Once inside the mobilecoach-mobile-app repository, run yarn ios.
-      
-      (6.1.2) Run yarn start to allow the application to connect to the application Bundle.
+   &nbsp;
+   
+   (6.1.1) Once inside the mobilecoach-mobile-app repository, run yarn ios.
+   
+   
+   <img width="723" alt="Fig_2" src="https://media.github.coecis.cornell.edu/user/7644/files/c5c0c60d-ba8d-4242-b983-fd29fecd18f2">
+   
+
+   (6.1.2) Run yarn start to allow the application to connect to the application Bundle.
 
       ***Warning:** If you do not perform this step correctly, you will run into a bundle error when opening the application.*
+
+
+   <img width="721" alt="Fig_3" src="https://media.github.coecis.cornell.edu/user/7644/files/7b917bed-3586-4490-a2cf-f98b95e025ec">
+
 
   &nbsp;
 
@@ -78,6 +92,10 @@ is for the client to add their own conversational flow(s).*
   
       (6.2.2) Run yarn start to allow the application to connect to the application bundle.
       
+  
+  <img width="636" alt="Fig_4" src="https://media.github.coecis.cornell.edu/user/7644/files/2dfc1b8b-09f3-4ed0-b0b7-5fb83261b394">
+  
+
 &nbsp;&nbsp;&nbsp;
 
 ## (A.2) Interacting with the Testing Environment [native Android application]
