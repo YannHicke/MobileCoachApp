@@ -1,4 +1,4 @@
-# MobileCoach Client Template
+# MobileCoach Client & User Documentation
 
 ## Terminology
 
