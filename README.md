@@ -45,8 +45,7 @@
 
 4. Changing the Conversational Flow in MobileCoach Web Designer
 
-*Currently, the client has been connected to the PROTOTYPE intervention. This intervention 
-is for the client to add their own conversational flow(s).*
+   *Currently, the client has been connected to the PROTOTYPE intervention. This intervention is for the client to add their own conversational flow(s).*
 
 &nbsp;&nbsp;&nbsp;
 
