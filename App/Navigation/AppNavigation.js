@@ -108,7 +108,7 @@ function SideMenu({
           ),
         }}
       />
-      <DrawerSideMenu.Screen
+      {/* <DrawerSideMenu.Screen
         name="DashboardChat"
         component={DashboardChat}
         options={{
@@ -131,8 +131,8 @@ function SideMenu({
             </View>
           ),
         }}
-      />
-      <DrawerSideMenu.Screen
+      /> */}
+      {/* <DrawerSideMenu.Screen
         name="InfoCardsLibrary"
         component={InfoCardsLibrary}
         options={{
@@ -151,8 +151,8 @@ function SideMenu({
           ),
         }}
         initialParams={{ screenProps }}
-      />
-      <DrawerSideMenu.Screen
+      /> */}
+      {/* <DrawerSideMenu.Screen
         name="MediaLibrary"
         component={MediaLibrary}
         initialParams={{ screenProps }}
@@ -171,7 +171,7 @@ function SideMenu({
             </View>
           ),
         }}
-      />
+      /> */}
       <DrawerSideMenu.Screen
         name="Faq"
         component={Faq}
@@ -212,7 +212,7 @@ function SideMenu({
           ),
         }}
       />
-      <DrawerSideMenu.Screen
+      {/* <DrawerSideMenu.Screen
         name="Settings"
         component={Settings}
         initialParams={{ screenProps }}
@@ -231,7 +231,7 @@ function SideMenu({
             </View>
           ),
         }}
-      />
+      /> */}
     </DrawerSideMenu.Navigator>
   );
 }
