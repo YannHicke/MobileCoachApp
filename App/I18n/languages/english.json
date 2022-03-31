@@ -83,7 +83,8 @@
     "MediaLibrary": "Media Library",
     "Faq": "Frequently Asked Questions",
     "Settings": "Settings",
-    "Disabled": "Disabled"
+    "Disabled": "Disabled",
+    "Dashboard": "Dashboard"
   },
   "Common": {
     "date": "date",
@@ -130,5 +131,9 @@
         "answer": "Have small goals, try to achieve them and move onto the next one :)"
       }
     }
+  },
+  "Dashboard": {
+    "header": "Dashboard",
+    "dashboardTitle": "Dashboard"
   }
 }

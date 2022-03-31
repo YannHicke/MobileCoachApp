@@ -22,6 +22,7 @@ import InfoCardsLibrary from '../Containers/InfoCardsLibrary/InfoCardsLibrary';
 import MediaLibrary from '../Containers/MediaLibrary/MediaLibrary';
 import Settings from '../Containers/Settings/Settings';
 import Faq from '../Containers/FAQ/Faq';
+import Dashboard from '../Containers/Dashboard/Dashboard';
 
 import ScreenStartWithLogo from '../Containers/Onboarding/ScreenStartWithLogo';
 import ScreenLanguageSelection from '../Containers/Onboarding/ScreenLanguageSelection';
@@ -187,6 +188,26 @@ function SideMenu({
           drawerLabel: () => (
             <View style={styles.drawerLabel}>
               <Text>{I18n.t('Menu.Faq', { locale: lang })}</Text>
+            </View>
+          ),
+        }}
+      />
+      <DrawerSideMenu.Screen
+        name="Dashboard"
+        component={Dashboard}
+        initialParams={{ screenProps }}
+        options={{
+          drawerIcon: ({ focused, size }) => (
+            <Icon
+              name="ios-analytics-outline"
+              size={size}
+              type="ionicon"
+              style={styles.actionButtonIcon}
+            />
+          ),
+          drawerLabel: () => (
+            <View style={styles.drawerLabel}>
+              <Text>{I18n.t('Menu.Dashboard', { locale: lang })}</Text>
             </View>
           ),
         }}
