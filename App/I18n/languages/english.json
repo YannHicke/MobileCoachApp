@@ -129,6 +129,14 @@
       "1": {
         "title": "I don't know how to take care of the schedule, what should I do?",
         "answer": "Have small goals, try to achieve them and move onto the next one :)"
+      },
+      "2": {
+        "title": "I can't handle time to complete all tasks on schedule, what should I do",
+        "answer": "Try to split your big goal into smaller one :)"
+      },
+      "3": {
+        "title": "Another question",
+        "answer": "Answer"
       }
     }
   },
