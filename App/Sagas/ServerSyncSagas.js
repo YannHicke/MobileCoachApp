@@ -62,6 +62,8 @@ let hasDashboardChatSendingPermission = false;
 
 const wait = (ms) => new Promise((resolve, reject) => setTimeout(resolve, ms));
 
+const user_message = "null";
+
 /* --- Set channels from outside --- */
 export function setChannels(
   newConnectionStateChannel,
@@ -441,6 +443,7 @@ function* handleOutgoingMessage(action) {
     log.warn('Error when sending message:', error);
     return false;
   }
+
 }
 
 /* --- React on each state change accordingly --- */
@@ -1284,3 +1287,7 @@ export function* performUpdate() {
       log.warn(error.toString());
     });
 }
+
+const get_user_msg = user_message;
+
+export default get_user_msg;
