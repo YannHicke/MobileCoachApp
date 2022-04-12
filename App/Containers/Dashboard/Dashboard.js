@@ -24,6 +24,9 @@ import PMNavigationBar from '../../Components/Navbar';
 import I18n from '../../I18n/I18n';
 
 import Log from '../../Utils/Log';
+import { autoRehydrate } from 'redux-persist';
+import { relativeTimeRounding } from 'moment';
+import { BorderlessButton } from 'react-native-gesture-handler';
 const log = new Log('Containers/Settings/Settings');
 
 /*
@@ -41,8 +44,9 @@ class Dashboard extends Component {
     activeSection: false,
     collapsed: true,
     rating: 0,
-    star_states: [1,1,0,0,0,0,0], // 1 represents filled-in star, 0 represents empty star
-    num_points: 0 // the total number of points an user collects
+    star_states: [1,1,1,0,0,0,0], // 1 represents filled-in star, 0 represents empty star
+    num_points: 0,
+    num_interactions: 79 // the total number of points an user collects
   };
 
   toggleExpanded = () => {
@@ -148,11 +152,21 @@ class Dashboard extends Component {
                 source={paths[6].value}
               />
           </View>
+          <View>
+            <Image
+             style={styles.circle}
+             source={require('./blue-circle.png')}
+            />
+            <Text style={styles.numInteraction}>
+              {this.state.num_interactions}
+            </Text>
+          </View>
         </View>
         <Text/>
-        <Text style={{textAlignVertical: "center", textAlign: "center", color: "blue"}}>
+        {/*<Text style={{textAlignVertical: "center", textAlign: "center", color: "blue"}}>
           You have a total of {this.state.num_points} points!
         </Text>
+    */}
       </ScrollView>
     )
   }
@@ -182,6 +196,21 @@ const styles = StyleSheet.create({
     height: 60,
     resizeMode: 'stretch',
   },
+  circle: {
+    width: 200,
+    height: 200,
+    left: 100,
+    marginTop: 20,
+    justifyContent: 'center'
+  },
+  numInteraction: {
+    textAlign: "center", 
+    color: "white",
+    fontWeight: 'bold',  
+    fontSize: 50,
+    left:0,
+    bottom: 130
+  },
   cardTitle: {
     textAlign: 'left',
     color: Colors.main.headline,
@@ -189,4 +218,5 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
   },
+
 });
