@@ -1,46 +1,7 @@
-// TODO for improvement check: https://github.com/idibidiart/react-native-responsive-grid/blob/master/UniversalTiles.md
-
 import React, { Component } from 'react';
-import get_user_msg from '../../../App/Sagas/ServerSyncSagas';
-import { connect } from 'react-redux';
-import {
-  Text,
-  View,
-  Image,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
-import ParsedText from 'react-native-parsed-text';
-import Collapsible from 'react-native-collapsible';
-import propTypes from 'prop-types';
-import { Icon, Card, Button } from 'react-native-elements';
-import Star from './Star';
-import EmptyStar from './empty-star.png';
+// import get_user_msg from '../../../App/Sagas/ServerSyncSagas';  // this is causing another error
 
-// import { CommonActions as NavigationActions } from '@react-navigation/native';
-import { Colors } from '../../Themes/';
-import PMNavigationBar from '../../Components/Navbar';
-import I18n from '../../I18n/I18n';
-
-import Log from '../../Utils/Log';
-import { autoRehydrate } from 'redux-persist';
-import { relativeTimeRounding } from 'moment';
-import { BorderlessButton } from 'react-native-gesture-handler';
-const log = new Log('Containers/Settings/Settings');
-
-/*
-const mapStateToProps = (state, ownProps) => ({})
-const mapDispatchToProps = {}
-
-const connectToStore = connect(mapStateToProps, mapDispatchToProps)
-const ConnectedComponent = connectToStore(Component)
-
-connect(mapStateToProps, mapDispatchToProps)(Component)
-*/
-
-export default class Dashboard extends Component {
-
+export default class TestD extends Component {
   constructor() {
     super();
     this.state = {
@@ -53,14 +14,9 @@ export default class Dashboard extends Component {
     };
   }
 
-  // state = {
-  //   activeSection: false,
-  //   collapsed: true,
-  //   rating: 0,
-  //   star_states: [1,1,1,0,0,0,0], // 1 represents filled-in star, 0 represents empty star
-  //   num_points: 0,
-  //   num_interactions: 79 // the total number of points an user collects
-  // };
+  greet() {
+    console.log('I am here.');
+  }
 
   toggleExpanded = () => {
     this.setState({ collapsed: !this.state.collapsed });
@@ -92,7 +48,6 @@ export default class Dashboard extends Component {
     }
   }
 
-  /** [is_on] checks whether the [pos+1]th star from the left is on or off. */
   is_on(pos) {
     if (this.state.star_states[pos] == 1) {
       return true;
@@ -157,58 +112,10 @@ export default class Dashboard extends Component {
         </View>
         <Text />
         {/*<Text style={{textAlignVertical: "center", textAlign: "center", color: "blue"}}>
-          You have a total of {this.state.num_points} points!
-        </Text>
-    */}
+            You have a total of {this.state.num_points} points!
+          </Text>
+      */}
       </ScrollView>
     );
   }
 }
-
-// export default Dashboard;
-
-/** the stylesheet of the Dashboard page */
-const styles = StyleSheet.create({
-  url: {
-    color: Colors.buttons.common.background,
-  },
-  headline: {
-    color: Colors.main.headline,
-    fontWeight: 'bold',
-    marginTop: 20,
-    marginBottom: 10,
-    flexWrap: 'wrap',
-  },
-  container: {
-    flex: 1,
-    backgroundColor: Colors.main.appBackground,
-    justifyContent: 'space-between',
-  },
-  stretch: {
-    width: 55,
-    height: 60,
-    resizeMode: 'stretch',
-  },
-  circle: {
-    width: 200,
-    height: 200,
-    left: 100,
-    marginTop: 20,
-    justifyContent: 'center',
-  },
-  numInteraction: {
-    textAlign: 'center',
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 50,
-    left: 0,
-    bottom: 130,
-  },
-  cardTitle: {
-    textAlign: 'left',
-    color: Colors.main.headline,
-  },
-  content: {
-    flex: 1,
-  },
-});
