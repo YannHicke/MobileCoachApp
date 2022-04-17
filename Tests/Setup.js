@@ -9,11 +9,6 @@ jest
       getState: () => { }
     }
   })
-  .mock('../App/Containers/Dashboard/Dashboard', () => {
-    return {
-      getState: () => { }
-    }
-  })
   .mock('react-native-fs', () => {
     return {
       fs: () => { }
