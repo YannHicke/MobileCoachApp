@@ -1311,9 +1311,6 @@ export async function requestStars(){
     await wait(2000);
   }
 
-  log.info('rest user', tempUser);
-  log.info('rest token', tempToken);
-
   const config = {
     baseURL: restURL,
     headers: {
