@@ -1,33 +1,19 @@
-// TODO for improvement check: https://github.com/idibidiart/react-native-responsive-grid/blob/master/UniversalTiles.md
-
 import React, { Component } from 'react';
-// import get_user_msg from '../../../App/Sagas/ServerSyncSagas'; -> This causes error in tests
-import { connect } from 'react-redux';
 import {
   Text,
   View,
   Image,
   StyleSheet,
   ScrollView,
-  TouchableOpacity,
 } from 'react-native';
-import ParsedText from 'react-native-parsed-text';
-import Collapsible from 'react-native-collapsible';
-import propTypes from 'prop-types';
-import { Icon, Card, Button } from 'react-native-elements';
-import Star from "./Star";
-import EmptyStar from './empty-star.png';
-
-// import { CommonActions as NavigationActions } from '@react-navigation/native';
+import { Card } from 'react-native-elements';
 import { Colors } from '../../Themes/';
 import PMNavigationBar from '../../Components/Navbar';
 import I18n from '../../I18n/I18n';
 
 import Log from '../../Utils/Log';
-import { autoRehydrate } from 'redux-persist';
-import { relativeTimeRounding } from 'moment';
-// import { BorderlessButton } from 'react-native-gesture-handler';
-const log = new Log('Containers/Settings/Settings');
+import { requestStars } from '../../Sagas/ServerSyncSagas';
+const log = new Log('Containers/Dashboard');
 
 /*
 const mapStateToProps = (state, ownProps) => ({})
@@ -44,10 +30,25 @@ class Dashboard extends Component {
     activeSection: false,
     collapsed: true,
     rating: 0,
-    star_states: [1, 1, 1, 0, 0, 0, 0], // 1 represents filled-in star, 0 represents empty star
+    star_states: [0, 0, 0, 0, 0, 0, 0], // 1 represents filled-in star, 0 represents empty star
+    stars: 0,
     num_points: 0,
     num_interactions: 79 // the total number of points an user collects
   };
+  
+  componentDidMount(){
+    requestStars()
+    .then(data => {
+      this.setState({'stars': data});
+    });
+  }
+
+  componentDidUpdate(){
+    requestStars()
+    .then(data => {
+      this.setState({'stars': data});
+    });
+  }
 
   toggleExpanded = () => {
     this.setState({ collapsed: !this.state.collapsed });
@@ -96,19 +97,6 @@ class Dashboard extends Component {
 
   /** [render] is the entry point of [Dashboard.js]. */
   render() {
-    // this.server_retrieve();
-    const { openURL } = this.props.route.params.screenProps;
-    var paths = [];
-
-    for (var i = 0; i < 7; i++) {
-      if (this.is_on(i)) {
-        paths.push({ key: i, value: require('./filled-star.png') });
-      }
-      else {
-        paths.push({ key: i, value: require('./empty-star.png') });
-      }
-    }
-
     return (
       <ScrollView style={styles.content} indicatorStyle="white">
         <View style={{ justifyContent: 'space-between' }}>
@@ -123,31 +111,31 @@ class Dashboard extends Component {
           <View style={{ flexDirection: 'row', flex: 2 }}>
             <Image
               style={styles.stretch}
-              source={paths[0].value}
+              source={(this.state.stars >= 1 ? require('./filled-star.png') : require('./empty-star.png'))}
             />
             <Image
               style={styles.stretch}
-              source={paths[1].value}
+              source={(this.state.stars >= 2 ? require('./filled-star.png') : require('./empty-star.png'))}
             />
             <Image
               style={styles.stretch}
-              source={paths[2].value}
+              source={(this.state.stars >= 3 ? require('./filled-star.png') : require('./empty-star.png'))}
             />
             <Image
               style={styles.stretch}
-              source={paths[3].value}
+              source={(this.state.stars >= 4 ? require('./filled-star.png') : require('./empty-star.png'))}
             />
             <Image
               style={styles.stretch}
-              source={paths[4].value}
+              source={(this.state.stars >= 5 ? require('./filled-star.png') : require('./empty-star.png'))}
             />
             <Image
               style={styles.stretch}
-              source={paths[5].value}
+              source={(this.state.stars >= 6 ? require('./filled-star.png') : require('./empty-star.png'))}
             />
             <Image
               style={styles.stretch}
-              source={paths[6].value}
+              source={(this.state.stars >= 7 ? require('./filled-star.png') : require('./empty-star.png'))}
             />
           </View>
           <View>
@@ -160,10 +148,6 @@ class Dashboard extends Component {
             </Text>
           </View>
         </View>
-        {/*<Text style={{textAlignVertical: "center", textAlign: "center", color: "blue"}}>
-          You have a total of {this.state.num_points} points!
-        </Text>
-        */}
       </ScrollView>
     );
   }

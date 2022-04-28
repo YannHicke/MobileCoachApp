@@ -50,6 +50,7 @@ let listenerTwoRegistered = false;
 let inSync = false;
 
 let serverSyncUser = null;
+let settings = null;
 let restUser = null;
 let restToken = null;
 
@@ -63,6 +64,11 @@ let hasDashboardChatSendingPermission = false;
 const wait = (ms) => new Promise((resolve, reject) => setTimeout(resolve, ms));
 
 const user_message = "null";
+
+
+export function* getSettings(action){
+  settings = yield select(selectServerSyncSettings);
+}
 
 /* --- Set channels from outside --- */
 export function setChannels(
@@ -183,7 +189,7 @@ export function* handleCommands(action) {
       break;
 
     case 'store-deepstream-userid':
-      let deepstreamIDLong = parsedCommand.value;   
+      let deepstreamIDLong = parsedCommand.value;
       try {
         let deepstreamID = deepstreamIDLong.substring(3);
         log.debug('Storing deepstream ID: ' + deepstreamID);
@@ -191,7 +197,7 @@ export function* handleCommands(action) {
       } catch (error) {
         log.warn('Could not process "store-deepstream-userid" input: ' + error);
       }
-      break;  
+      break;
   }
 }
 
@@ -463,8 +469,8 @@ function* reactBasedOnConnectionState(action) {
         yield delay(2000);
         onlineStatus = online;
       }
-      log.debug('Internet connection came up...');  
-      
+      log.debug('Internet connection came up...');
+
       connectionStateChannel.put({
         type: ServerSyncActions.CONNECTION_STATE_CHANGE,
         connectionState: ConnectionStates.CONNECTING,
@@ -1291,3 +1297,41 @@ export function* performUpdate() {
 const get_user_msg = user_message;
 
 export default get_user_msg;
+
+/* Start attempt to retrieve stars */
+export async function requestStars(){
+
+  const { useLocalServer, localRestURL, remoteRestURL } = serverSyncConfig;
+  const restURL = useLocalServer ? localRestURL : remoteRestURL;
+
+  const tempUser = settings.restUser;
+  let tempToken;
+  while ((tempToken = await retrieveRestToken(false)) === null) {
+    renew = true;
+    await wait(2000);
+  }
+
+  log.info('rest user', tempUser);
+  log.info('rest token', tempToken);
+
+  const config = {
+    baseURL: restURL,
+    headers: {
+      user: tempUser,
+      token: tempToken,
+      'Content-Type': 'multipart/form-data',
+    },
+    contentType: false,
+  };
+
+  const response = await axios.get(
+    'variable/read/star',
+    config,
+  );
+
+  if (response.status === 200) {
+    return response.data.value;
+  } else {
+    return 0;
+  }
+}
