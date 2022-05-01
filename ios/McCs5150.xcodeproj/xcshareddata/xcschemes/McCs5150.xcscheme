@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "MCMobileApp.app"
-               BlueprintName = "MCMobileApp"
-               ReferencedContainer = "container:MCMobileApp.xcodeproj">
+               BuildableName = "McCs5150.app"
+               BlueprintName = "McCs5150"
+               ReferencedContainer = "container:McCs5150.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "MCMobileApp.app"
-               BlueprintName = "MCMobileApp"
-               ReferencedContainer = "container:MCMobileApp.xcodeproj">
+               BuildableName = "McCs5150.app"
+               BlueprintName = "McCs5150"
+               ReferencedContainer = "container:McCs5150.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "MCMobileApp.app"
-            BlueprintName = "MCMobileApp"
-            ReferencedContainer = "container:MCMobileApp.xcodeproj">
+            BuildableName = "McCs5150.app"
+            BlueprintName = "McCs5150"
+            ReferencedContainer = "container:McCs5150.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "MCMobileApp.app"
-            BlueprintName = "MCMobileApp"
-            ReferencedContainer = "container:MCMobileApp.xcodeproj">
+            BuildableName = "McCs5150.app"
+            BlueprintName = "McCs5150"
+            ReferencedContainer = "container:McCs5150.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

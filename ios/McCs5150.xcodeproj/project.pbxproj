@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		00E356F31AD99517003FC87E /* MCMobileAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* MCMobileAppTests.m */; };
+		00E356F31AD99517003FC87E /* McCs5150Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* McCs5150Tests.m */; };
 		0FE44B3CC46040B08187A892 /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 94232A14BDA34927BB1CC62C /* Roboto-Bold.ttf */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -19,7 +19,7 @@
 		80EB48CA828B46ADB1926785 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E4E0BFF65EA143DEB759BCA4 /* Roboto-Regular.ttf */; };
 		891A06B525DAE00A007417AE /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 891A06B325DAE00A007417AE /* LaunchScreen.xib */; };
 		9898149DCF7E483FA9839E4B /* Roboto-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E89B09585BD644EFB0EBFA91 /* Roboto-BoldItalic.ttf */; };
-		CCF0B36455B239347361D278 /* libPods-MCMobileApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 77C77ACF5C4E2B264F0126AE /* libPods-MCMobileApp.a */; };
+		CCF0B36455B239347361D278 /* libPods-McCs5150.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 77C77ACF5C4E2B264F0126AE /* libPods-McCs5150.a */; };
 		ED297163215061F000B7C4FE /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED297162215061F000B7C4FE /* JavaScriptCore.framework */; };
 /* End PBXBuildFile section */
 
@@ -64,7 +64,7 @@
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
-			remoteInfo = MCMobileApp;
+			remoteInfo = McCs5150;
 		};
 		139105C01AF99BAD00B5F7CC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -298,20 +298,20 @@
 		00C302BB1ABCB91800DB3ED1 /* RCTImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTImage.xcodeproj; path = "../node_modules/react-native/Libraries/Image/RCTImage.xcodeproj"; sourceTree = "<group>"; };
 		00C302D31ABCB9D200DB3ED1 /* RCTNetwork.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTNetwork.xcodeproj; path = "../node_modules/react-native/Libraries/Network/RCTNetwork.xcodeproj"; sourceTree = "<group>"; };
 		00C302DF1ABCB9EE00DB3ED1 /* RCTVibration.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTVibration.xcodeproj; path = "../node_modules/react-native/Libraries/Vibration/RCTVibration.xcodeproj"; sourceTree = "<group>"; };
-		00E356EE1AD99517003FC87E /* MCMobileAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MCMobileAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		00E356EE1AD99517003FC87E /* McCs5150Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = McCs5150Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		00E356F21AD99517003FC87E /* MCMobileAppTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MCMobileAppTests.m; sourceTree = "<group>"; };
+		00E356F21AD99517003FC87E /* McCs5150Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = McCs5150Tests.m; sourceTree = "<group>"; };
 		0AD27D26BA224884B38338FE /* datepicker.app */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = wrapper.application; path = datepicker.app; sourceTree = "<group>"; };
 		139105B61AF99BAD00B5F7CC /* RCTSettings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTSettings.xcodeproj; path = "../node_modules/react-native/Libraries/Settings/RCTSettings.xcodeproj"; sourceTree = "<group>"; };
 		139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTWebSocket.xcodeproj; path = "../node_modules/react-native/Libraries/WebSocket/RCTWebSocket.xcodeproj"; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* MCMobileApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MCMobileApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = MCMobileApp/AppDelegate.h; sourceTree = "<group>"; };
-		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = MCMobileApp/AppDelegate.m; sourceTree = "<group>"; };
-		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = MCMobileApp/Images.xcassets; sourceTree = "<group>"; };
-		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = MCMobileApp/Info.plist; sourceTree = "<group>"; };
-		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = MCMobileApp/main.m; sourceTree = "<group>"; };
+		13B07F961A680F5B00A75B9A /* McCs5150.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = McCs5150.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = McCs5150/AppDelegate.h; sourceTree = "<group>"; };
+		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = McCs5150/AppDelegate.m; sourceTree = "<group>"; };
+		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = McCs5150/Images.xcassets; sourceTree = "<group>"; };
+		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = McCs5150/Info.plist; sourceTree = "<group>"; };
+		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = McCs5150/main.m; sourceTree = "<group>"; };
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
-		28BD62FD2EFB6169B0507DD9 /* Pods-MCMobileApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MCMobileApp.release.xcconfig"; path = "Target Support Files/Pods-MCMobileApp/Pods-MCMobileApp.release.xcconfig"; sourceTree = "<group>"; };
+		28BD62FD2EFB6169B0507DD9 /* Pods-McCs5150.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-McCs5150.release.xcconfig"; path = "Target Support Files/Pods-McCs5150/Pods-McCs5150.release.xcconfig"; sourceTree = "<group>"; };
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		59389B1D2227F1A300976FF3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		59389B202227F30000976FF3 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -320,19 +320,19 @@
 		599CF45E2227E7D9001BD50A /* Web */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Web; path = ../Web; sourceTree = "<group>"; };
 		59F4C8972226E8F800A7C795 /* RCTPushNotification.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTPushNotification.xcodeproj; path = "../node_modules/react-native/Libraries/PushNotificationIOS/RCTPushNotification.xcodeproj"; sourceTree = "<group>"; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
-		77C77ACF5C4E2B264F0126AE /* libPods-MCMobileApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MCMobileApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		77C77ACF5C4E2B264F0126AE /* libPods-McCs5150.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-McCs5150.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
-		891A06B425DAE00A007417AE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = MCMobileApp/Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		89B34B0C25D6FFA300AB2B56 /* MCMobileApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MCMobileApp-Bridging-Header.h"; sourceTree = "<group>"; };
-		8A215BBCF031847D97103388 /* Pods-MCMobileAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MCMobileAppTests.debug.xcconfig"; path = "Target Support Files/Pods-MCMobileAppTests/Pods-MCMobileAppTests.debug.xcconfig"; sourceTree = "<group>"; };
+		891A06B425DAE00A007417AE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = McCs5150/Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		89B34B0C25D6FFA300AB2B56 /* McCs5150-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "McCs5150-Bridging-Header.h"; sourceTree = "<group>"; };
+		8A215BBCF031847D97103388 /* Pods-McCs5150Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-McCs5150Tests.debug.xcconfig"; path = "Target Support Files/Pods-McCs5150Tests/Pods-McCs5150Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		94232A14BDA34927BB1CC62C /* Roboto-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Bold.ttf"; path = "../Web/fonts-also-app/Roboto-Bold.ttf"; sourceTree = "<group>"; };
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
-		B76A5DCEB260FB0A198ADBF5 /* Pods-MCMobileApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MCMobileApp.debug.xcconfig"; path = "Target Support Files/Pods-MCMobileApp/Pods-MCMobileApp.debug.xcconfig"; sourceTree = "<group>"; };
+		B76A5DCEB260FB0A198ADBF5 /* Pods-McCs5150.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-McCs5150.debug.xcconfig"; path = "Target Support Files/Pods-McCs5150/Pods-McCs5150.debug.xcconfig"; sourceTree = "<group>"; };
 		C87C1A940FBA48DAADA5D5B7 /* datepicker.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = datepicker.xcodeproj; path = "../node_modules/react-native-datepicker/ios/datepicker.xcodeproj"; sourceTree = "<group>"; };
 		CDCAC2A937A644AE805D77BC /* datepickerTests.xctest */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = datepickerTests.xctest; sourceTree = "<group>"; };
-		D15A7EAD78B982D9EE14C484 /* Pods-MCMobileAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MCMobileAppTests.release.xcconfig"; path = "Target Support Files/Pods-MCMobileAppTests/Pods-MCMobileAppTests.release.xcconfig"; sourceTree = "<group>"; };
-		E1AE847C2230238F00C4A3B3 /* MCMobileApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = MCMobileApp.entitlements; path = MCMobileApp/MCMobileApp.entitlements; sourceTree = "<group>"; };
+		D15A7EAD78B982D9EE14C484 /* Pods-McCs5150Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-McCs5150Tests.release.xcconfig"; path = "Target Support Files/Pods-McCs5150Tests/Pods-McCs5150Tests.release.xcconfig"; sourceTree = "<group>"; };
+		E1AE847C2230238F00C4A3B3 /* McCs5150.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = McCs5150.entitlements; path = McCs5150/McCs5150.entitlements; sourceTree = "<group>"; };
 		E4E0BFF65EA143DEB759BCA4 /* Roboto-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Regular.ttf"; path = "../Web/fonts-also-app/Roboto-Regular.ttf"; sourceTree = "<group>"; };
 		E89B09585BD644EFB0EBFA91 /* Roboto-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-BoldItalic.ttf"; path = "../Web/fonts-also-app/Roboto-BoldItalic.ttf"; sourceTree = "<group>"; };
 		EB4485EF24B5E9C600B690EC /* main.jsbundle */ = {isa = PBXFileReference; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
@@ -355,7 +355,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				ED297163215061F000B7C4FE /* JavaScriptCore.framework in Frameworks */,
-				CCF0B36455B239347361D278 /* libPods-MCMobileApp.a in Frameworks */,
+				CCF0B36455B239347361D278 /* libPods-McCs5150.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -404,13 +404,13 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		00E356EF1AD99517003FC87E /* MCMobileAppTests */ = {
+		00E356EF1AD99517003FC87E /* McCs5150Tests */ = {
 			isa = PBXGroup;
 			children = (
-				00E356F21AD99517003FC87E /* MCMobileAppTests.m */,
+				00E356F21AD99517003FC87E /* McCs5150Tests.m */,
 				00E356F01AD99517003FC87E /* Supporting Files */,
 			);
-			path = MCMobileAppTests;
+			path = McCs5150Tests;
 			sourceTree = "<group>";
 		};
 		00E356F01AD99517003FC87E /* Supporting Files */ = {
@@ -439,12 +439,12 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		13B07FAE1A68108700A75B9A /* MCMobileApp */ = {
+		13B07FAE1A68108700A75B9A /* McCs5150 */ = {
 			isa = PBXGroup;
 			children = (
 				891A06B325DAE00A007417AE /* LaunchScreen.xib */,
 				EBC5773D24B6399E00054326 /* Fonts */,
-				E1AE847C2230238F00C4A3B3 /* MCMobileApp.entitlements */,
+				E1AE847C2230238F00C4A3B3 /* McCs5150.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -452,9 +452,9 @@
 				13B07FB71A68108700A75B9A /* main.m */,
 				59389B1E2227F1A300976FF3 /* InfoPlist.strings */,
 				EB4485EF24B5E9C600B690EC /* main.jsbundle */,
-				89B34B0C25D6FFA300AB2B56 /* MCMobileApp-Bridging-Header.h */,
+				89B34B0C25D6FFA300AB2B56 /* McCs5150-Bridging-Header.h */,
 			);
-			name = MCMobileApp;
+			name = McCs5150;
 			sourceTree = "<group>";
 		};
 		146834001AC3E56700842450 /* Products */ = {
@@ -483,10 +483,10 @@
 		26E336F9EC842015E67E54D4 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				B76A5DCEB260FB0A198ADBF5 /* Pods-MCMobileApp.debug.xcconfig */,
-				28BD62FD2EFB6169B0507DD9 /* Pods-MCMobileApp.release.xcconfig */,
-				8A215BBCF031847D97103388 /* Pods-MCMobileAppTests.debug.xcconfig */,
-				D15A7EAD78B982D9EE14C484 /* Pods-MCMobileAppTests.release.xcconfig */,
+				B76A5DCEB260FB0A198ADBF5 /* Pods-McCs5150.debug.xcconfig */,
+				28BD62FD2EFB6169B0507DD9 /* Pods-McCs5150.release.xcconfig */,
+				8A215BBCF031847D97103388 /* Pods-McCs5150Tests.debug.xcconfig */,
+				D15A7EAD78B982D9EE14C484 /* Pods-McCs5150Tests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -497,7 +497,7 @@
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
 				2D16E6891FA4F8E400B85C8A /* libReact.a */,
-				77C77ACF5C4E2B264F0126AE /* libPods-MCMobileApp.a */,
+				77C77ACF5C4E2B264F0126AE /* libPods-McCs5150.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -572,9 +572,9 @@
 			isa = PBXGroup;
 			children = (
 				599CF45E2227E7D9001BD50A /* Web */,
-				13B07FAE1A68108700A75B9A /* MCMobileApp */,
+				13B07FAE1A68108700A75B9A /* McCs5150 */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
-				00E356EF1AD99517003FC87E /* MCMobileAppTests */,
+				00E356EF1AD99517003FC87E /* McCs5150Tests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				590BA2352226922D0050E09C /* Recovered References */,
@@ -589,8 +589,8 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* MCMobileApp.app */,
-				00E356EE1AD99517003FC87E /* MCMobileAppTests.xctest */,
+				13B07F961A680F5B00A75B9A /* McCs5150.app */,
+				00E356EE1AD99517003FC87E /* McCs5150Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -625,9 +625,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		00E356ED1AD99517003FC87E /* MCMobileAppTests */ = {
+		00E356ED1AD99517003FC87E /* McCs5150Tests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "MCMobileAppTests" */;
+			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "McCs5150Tests" */;
 			buildPhases = (
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
@@ -638,14 +638,14 @@
 			dependencies = (
 				00E356F51AD99517003FC87E /* PBXTargetDependency */,
 			);
-			name = MCMobileAppTests;
-			productName = MCMobileAppTests;
-			productReference = 00E356EE1AD99517003FC87E /* MCMobileAppTests.xctest */;
+			name = McCs5150Tests;
+			productName = McCs5150Tests;
+			productReference = 00E356EE1AD99517003FC87E /* McCs5150Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		13B07F861A680F5B00A75B9A /* MCMobileApp */ = {
+		13B07F861A680F5B00A75B9A /* McCs5150 */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "MCMobileApp" */;
+			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "McCs5150" */;
 			buildPhases = (
 				0BE229DB0E178F2F8552BEAA /* [CP] Check Pods Manifest.lock */,
 				13B07F871A680F5B00A75B9A /* Sources */,
@@ -658,9 +658,9 @@
 			);
 			dependencies = (
 			);
-			name = MCMobileApp;
+			name = McCs5150;
 			productName = "Hello World";
-			productReference = 13B07F961A680F5B00A75B9A /* MCMobileApp.app */;
+			productReference = 13B07F961A680F5B00A75B9A /* McCs5150.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -688,7 +688,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "MCMobileApp" */;
+			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "McCs5150" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -758,8 +758,8 @@
 			);
 			projectRoot = "";
 			targets = (
-				13B07F861A680F5B00A75B9A /* MCMobileApp */,
-				00E356ED1AD99517003FC87E /* MCMobileAppTests */,
+				13B07F861A680F5B00A75B9A /* McCs5150 */,
+				00E356ED1AD99517003FC87E /* McCs5150Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -1081,7 +1081,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-MCMobileApp-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-McCs5150-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1094,7 +1094,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MCMobileApp/Pods-MCMobileApp-resources.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-McCs5150/Pods-McCs5150-resources.sh",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf",
@@ -1135,7 +1135,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MCMobileApp/Pods-MCMobileApp-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-McCs5150/Pods-McCs5150-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1145,7 +1145,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00E356F31AD99517003FC87E /* MCMobileAppTests.m in Sources */,
+				00E356F31AD99517003FC87E /* McCs5150Tests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1163,7 +1163,7 @@
 /* Begin PBXTargetDependency section */
 		00E356F51AD99517003FC87E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 13B07F861A680F5B00A75B9A /* MCMobileApp */;
+			target = 13B07F861A680F5B00A75B9A /* McCs5150 */;
 			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -1207,7 +1207,7 @@
 					"$(SRCROOT)/../node_modules/@react-native-community/async-storage/ios",
 					"$(SRCROOT)/../node_modules/react-native-webview/ios/**",
 				);
-				INFOPLIST_FILE = MCMobileAppTests/Info.plist;
+				INFOPLIST_FILE = McCs5150Tests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -1220,7 +1220,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MCMobileApp.app/MCMobileApp";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/McCs5150.app/McCs5150";
 			};
 			name = Debug;
 		};
@@ -1237,7 +1237,7 @@
 					"$(SRCROOT)/../node_modules/@react-native-community/async-storage/ios",
 					"$(SRCROOT)/../node_modules/react-native-webview/ios/**",
 				);
-				INFOPLIST_FILE = MCMobileAppTests/Info.plist;
+				INFOPLIST_FILE = McCs5150Tests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -1250,18 +1250,18 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MCMobileApp.app/MCMobileApp";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/McCs5150.app/McCs5150";
 			};
 			name = Release;
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B76A5DCEB260FB0A198ADBF5 /* Pods-MCMobileApp.debug.xcconfig */;
+			baseConfigurationReference = B76A5DCEB260FB0A198ADBF5 /* Pods-McCs5150.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = MCMobileApp/MCMobileApp.entitlements;
+				CODE_SIGN_ENTITLEMENTS = McCs5150/McCs5150.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1279,7 +1279,7 @@
 					"$(SRCROOT)/../node_modules/@react-native-community/async-storage/ios",
 					"$(SRCROOT)/../node_modules/react-native-webview/ios/**",
 				);
-				INFOPLIST_FILE = MCMobileApp/Info.plist;
+				INFOPLIST_FILE = McCs5150/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -1288,9 +1288,9 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.c4dhi.mobilecoach.mobileapp;
-				PRODUCT_NAME = MCMobileApp;
+				PRODUCT_NAME = McCs5150;
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "MCMobileApp-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "McCs5150-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -1299,12 +1299,12 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 28BD62FD2EFB6169B0507DD9 /* Pods-MCMobileApp.release.xcconfig */;
+			baseConfigurationReference = 28BD62FD2EFB6169B0507DD9 /* Pods-McCs5150.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = MCMobileApp/MCMobileApp.entitlements;
+				CODE_SIGN_ENTITLEMENTS = McCs5150/McCs5150.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1321,7 +1321,7 @@
 					"$(SRCROOT)/../node_modules/@react-native-community/async-storage/ios",
 					"$(SRCROOT)/../node_modules/react-native-webview/ios/**",
 				);
-				INFOPLIST_FILE = MCMobileApp/Info.plist;
+				INFOPLIST_FILE = McCs5150/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -1330,9 +1330,9 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.c4dhi.mobilecoach.mobileapp;
-				PRODUCT_NAME = MCMobileApp;
+				PRODUCT_NAME = McCs5150;
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "MCMobileApp-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "McCs5150-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -1453,7 +1453,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "MCMobileAppTests" */ = {
+		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "McCs5150Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				00E356F61AD99517003FC87E /* Debug */,
@@ -1462,7 +1462,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "MCMobileApp" */ = {
+		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "McCs5150" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
@@ -1471,7 +1471,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "MCMobileApp" */ = {
+		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "McCs5150" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,

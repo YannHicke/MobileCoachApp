@@ -1,4 +1,4 @@
-package org.c4dhi.mobilecoach.mobileapp;
+package mc_cs5150.test.client;
 
 import android.app.Application;
 

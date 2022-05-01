@@ -14,7 +14,7 @@
 {
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
-                                                   moduleName:@"MCMobileApp"
+                                                   moduleName:@"McCs5150"
                                             initialProperties:nil];
   
   rootView.backgroundColor = [UIColor blackColor];

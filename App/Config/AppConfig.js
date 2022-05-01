@@ -76,7 +76,7 @@ export default {
       showExpiryAlert: true,
     },
     startup: {
-      automaticallyRequestPushPermissions: false,
+      automaticallyRequestPushPermissions: true,
       automaticallyConnectOnFirstStartup: true,
       automaticallyShareObserverAccessToken: false,
       automaticallyShareParticipantAccessToken: false,
@@ -101,7 +101,7 @@ export default {
       defaultNickname: 'MobileCoach Client User',
       interventionPattern: 'PROTOTYPE',
       interventionPassword: 'cs5150',
-      androidSenderId: '12345678',
+      androidSenderId: '145846605664',
       localDeepstreamURL: 'ws://10.0.2.2:6020/deepstream',
       localRestURL: 'http://10.0.2.2:8080/MC/api/v02/',
       localMediaURL: 'http://10.0.2.2:8080/MC/files/',

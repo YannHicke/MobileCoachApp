@@ -131,7 +131,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "org.c4dhi.mobilecoach.mobileapp"
+        applicationId "mc_cs5150.test.client"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

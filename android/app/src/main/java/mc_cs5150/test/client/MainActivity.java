@@ -1,4 +1,4 @@
-package org.c4dhi.mobilecoach.mobileapp;
+package mc_cs5150.test.client;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
@@ -16,7 +16,7 @@ public class MainActivity extends ReactActivity {
     */
   @Override
   protected String getMainComponentName() {
-    return "MCMobileApp";
+    return "McCs5150";
   }
 
   @Override
