@@ -139,6 +139,24 @@ class Dashboard extends Component {
     }
   }
 
+  /** [completion_indicator] returns a string with the name of the task and its status. */
+  completion_indicator(task, isComplete) {
+    task = task.replace(/\s/g, ''); // removes all spaces from string [task]
+    if (task === "") { //  if there is no task entered by user
+      return "";
+    }
+    else { // if there is a task entered by user
+      progress = "";
+      if (isComplete == 1) {
+        progress = "Complete";
+      }
+      else {
+        progress = "Incomplete";
+      }
+      return task + '  [' + progress + ']';
+    }
+  }
+
   /** [server_retrieve] is a sample function (for testing) that logs a user's response. */
   server_retrieve() {
     console.log(get_user_msg);
@@ -203,19 +221,19 @@ class Dashboard extends Component {
             Your Plan
         </Text>
         <Text style={styles.bullet}>
-          {this.state.task1}
+          {this.completion_indicator(this.state.task1, this.state.task1Complete)}
         </Text>
         <Text style={styles.bullet}>
-          {this.state.task2}
+          {this.completion_indicator(this.state.task2, this.state.task2Complete)}
         </Text>
         <Text style={styles.bullet}>
-          {this.state.task3}
+          {this.completion_indicator(this.state.task3, this.state.task3Complete)}
         </Text>
         <Text style={styles.bullet}>
-          {this.state.task4}
+          {this.completion_indicator(this.state.task4, this.state.task4Complete)}
         </Text>
         <Text style={styles.bullet}>
-          {this.state.task5}
+          {this.completion_indicator(this.state.task5, this.state.task5Complete)}
         </Text>
       </View>
 
