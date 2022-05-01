@@ -1299,7 +1299,7 @@ const get_user_msg = user_message;
 export default get_user_msg;
 
 
-/* Retrieve the stars, the maximum stars, and the previous week's stars */
+/* [request_data] retrieves the information dynamically displayed on the Dashboard. */
 export async function requestData() {
 
   let token;
@@ -1392,19 +1392,23 @@ export async function requestData() {
       'variable/read/task5',
       config
     );
+
+    const response15 = await axios.get(
+      'variable/read/courseName',
+      config
+    );
     
     if (response1.status === 200 && response2.status === 200 && response3.status === 200 && response4.status === 200 && response5.status === 200 && response6.status === 200 && response7.status === 200 
-      && response8.status === 200 && response9.status === 200 && response10.status === 200 && response11.status === 200 && response12.status === 200 && response13.status === 200 && response14.status === 200) {
-      // console.log('GET request successful');
+      && response8.status === 200 && response9.status === 200 && response10.status === 200 && response11.status === 200 && response12.status === 200 && response13.status === 200 && response14.status === 200 && response15.status === 200) {
       return {
         "numericData": [response1.data.value, response2.data.value, response3.data.value, response4.data.value, response5.data.value, response6.data.value, response7.data.value, response8.data.value, response9.data.value], 
-        "textData": [response10.data.value, response11.data.value, response12.data.value, response13.data.value, response14.data.value]
+        "textData": [response10.data.value, response11.data.value, response12.data.value, response13.data.value, response14.data.value, response15.data.value]
       };
     }
     else {
       return {
         "numericData": [0,0,0,0,0,0,0,0,0], 
-        "textData": ["","","","",""]
+        "textData": ["","","","","",""]
       };
     }
   } catch (exception) {
