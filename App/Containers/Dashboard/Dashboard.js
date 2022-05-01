@@ -1,19 +1,20 @@
 import React, { Component } from 'react';
 import {
-  Text,
+  Text ,
+  TextInput,
   View,
   Image,
   StyleSheet,
   ScrollView,
+  SafeAreaView, 
+  TouchableOpacity, 
+  ImageBackground
 } from 'react-native';
-// import { Card } from 'react-native-elements';
 import ParsedText from 'react-native-parsed-text';
 import Collapsible from 'react-native-collapsible';
 import propTypes from 'prop-types';
 import { Icon, Card, Button } from 'react-native-elements';
-import Star from "./Star";
-import EmptyStar from './empty-star.png';
-import { TextInput} from 'react-native';
+import { CircularProgressbar } from 'react-circular-progressbar';
 
 // import { CommonActions as NavigationActions } from '@react-navigation/native';
 import { Colors } from '../../Themes/';
@@ -21,7 +22,7 @@ import PMNavigationBar from '../../Components/Navbar';
 import I18n from '../../I18n/I18n';
 
 import Log from '../../Utils/Log';
-import { requestStars } from '../../Sagas/ServerSyncSagas';
+import { requestData } from '../../Sagas/ServerSyncSagas';
 const log = new Log('Containers/Dashboard');
 
 /*
@@ -43,25 +44,58 @@ class Dashboard extends Component {
     stars: 0,
     // num_points: 0,
     // num_interactions: 79 // the total number of points an user collects
-   //star_states: [1,1,1,0,0,0,0], // 1 represents filled-in star, 0 represents empty star
+    // star_states: [1,1,1,0,0,0,0], // 1 represents filled-in star, 0 represents empty star
     num_points: 0, // the total number of points an user collects
-    num_interactions: '80%',
-    last_week: 5,
-    highest: 7,
-    plans: ["Watch a lecture", "Reading 1", "completing quiz 1"] 
+    last_week: 0,
+    highest: 0,
+    totTasks: 0,
+    // plans: ["Watch a lecture", "Reading 1", "completing quiz 1"],
+    task1Complete: 0,
+    task2Complete: 0,
+    task3Complete: 0,
+    task4Complete: 0,
+    task5Complete: 0,
+    task1: "",
+    task2: "",
+    task3: "",
+    task4: "",
+    task5: "",
+    proportion_tasks_complete: 0
   };
-  
-  componentDidMount(){
-    requestStars()
+
+  componentDidMount() {
+    requestData()
     .then(data => {
-      this.setState({'stars': data});
+      if (parseInt(data.numericData[8]) != 0) {
+        this.setState({'stars': data.numericData[0], 'highest': data.numericData[1], 'last_week': data.numericData[2],
+          'task1Complete': data.numericData[3], 'task2Complete': data.numericData[4], 'task3Complete': data.numericData[5], 
+          'task4Complete': data.numericData[6], 'task5Complete': data.numericData[7], 'totTasks': data.numericData[8], 'task1': data.textData[0], 'task2': data.textData[1], 'task3': data.textData[2], 'task4': data.textData[3], 'task5': data.textData[4],
+          'proportion_tasks_complete': (parseInt(data.numericData[3]) + parseInt(data.numericData[4]) + parseInt(data.numericData[5]) + parseInt(data.numericData[6]) + parseInt(data.numericData[7])) / parseInt(data.numericData[8]) * 100});
+      }
+      else {
+        this.setState({'stars': data.numericData[0], 'highest': data.numericData[1], 'last_week': data.numericData[2],
+          'task1Complete': data.numericData[3], 'task2Complete': data.numericData[4], 'task3Complete': data.numericData[5], 
+          'task4Complete': data.numericData[6], 'task5Complete': data.numericData[7], 'totTasks': data.numericData[8], 'task1': data.textData[0], 'task2': data.textData[1], 'task3': data.textData[2], 'task4': data.textData[3], 'task5': data.textData[4],
+          'proportion_tasks_complete': 0});
+      }
     });
   }
 
-  componentDidUpdate(){
-    requestStars()
+  componentDidUpdate() {
+    requestData()
     .then(data => {
-      this.setState({'stars': data});
+      if (parseInt(data.numericData[8]) != 0) {
+        this.setState({'stars': data.numericData[0], 'highest': data.numericData[1], 'last_week': data.numericData[2],
+          'task1Complete': data.numericData[3], 'task2Complete': data.numericData[4], 'task3Complete': data.numericData[5], 
+          'task4Complete': data.numericData[6], 'task5Complete': data.numericData[7], 'totTasks': data.numericData[8], 'task1': data.textData[0], 'task2': data.textData[1], 'task3': data.textData[2], 'task4': data.textData[3], 'task5': data.textData[4],
+          'proportion_tasks_complete': (parseInt(data.numericData[3]) + parseInt(data.numericData[4]) + parseInt(data.numericData[5]) + parseInt(data.numericData[6]) + parseInt(data.numericData[7])) / parseInt(data.numericData[8]) * 100});
+      }
+      else {
+        this.setState({'stars': data.numericData[0], 'highest': data.numericData[1], 'last_week': data.numericData[2],
+          'task1Complete': data.numericData[3], 'task2Complete': data.numericData[4], 'task3Complete': data.numericData[5], 
+          'task4Complete': data.numericData[6], 'task5Complete': data.numericData[7], 'totTasks': data.numericData[8], 'task1': data.textData[0], 'task2': data.textData[1], 'task3': data.textData[2], 'task4': data.textData[3], 'task5': data.textData[4],
+          'proportion_tasks_complete': 0});
+      }
     });
   }
 
@@ -159,7 +193,7 @@ class Dashboard extends Component {
               source={require('./blue-circle.png')}
             />
             <Text style={styles.numInteraction}>
-              {this.state.num_interactions}
+              {this.state.proportion_tasks_complete + '%'}
             </Text>
           </View>
         </View>
@@ -169,13 +203,19 @@ class Dashboard extends Component {
             Your Plan
         </Text>
         <Text style={styles.bullet}>
-          {this.state.plans[0]}
+          {this.state.task1}
         </Text>
         <Text style={styles.bullet}>
-          {this.state.plans[1]}
+          {this.state.task2}
         </Text>
         <Text style={styles.bullet}>
-          {this.state.plans[2]}
+          {this.state.task3}
+        </Text>
+        <Text style={styles.bullet}>
+          {this.state.task4}
+        </Text>
+        <Text style={styles.bullet}>
+          {this.state.task5}
         </Text>
       </View>
 
