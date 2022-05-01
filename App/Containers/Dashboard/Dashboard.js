@@ -12,10 +12,8 @@ import {
 } from 'react-native';
 import ParsedText from 'react-native-parsed-text';
 import Collapsible from 'react-native-collapsible';
-import propTypes from 'prop-types';
 import { Icon, Card, Button } from 'react-native-elements';
-import { CircularProgressbar } from 'react-circular-progressbar';
-
+// import { CircularProgressbar } from 'react-circular-progressbar';
 // import { CommonActions as NavigationActions } from '@react-navigation/native';
 import { Colors } from '../../Themes/';
 import PMNavigationBar from '../../Components/Navbar';
@@ -42,14 +40,10 @@ class Dashboard extends Component {
     rating: 0,
     star_states: [0, 0, 0, 0, 0, 0, 0], // 1 represents filled-in star, 0 represents empty star
     stars: 0,
-    // num_points: 0,
-    // num_interactions: 79 // the total number of points an user collects
-    // star_states: [1,1,1,0,0,0,0], // 1 represents filled-in star, 0 represents empty star
     num_points: 0, // the total number of points an user collects
     last_week: 0,
     highest: 0,
     totTasks: 0,
-    // plans: ["Watch a lecture", "Reading 1", "completing quiz 1"],
     task1Complete: 0,
     task2Complete: 0,
     task3Complete: 0,
@@ -255,7 +249,7 @@ class Dashboard extends Component {
 
 export default Dashboard;
 
-/** the stylesheet of the Dashboard page */
+/** [styles] is the stylesheet of the Dashboard page. */
 const styles = StyleSheet.create({
   url: {
     color: Colors.buttons.common.background,
