@@ -1298,37 +1298,118 @@ const get_user_msg = user_message;
 
 export default get_user_msg;
 
-/* Start attempt to retrieve stars */
-export async function requestStars(){
 
-  const { useLocalServer, localRestURL, remoteRestURL } = serverSyncConfig;
-  const restURL = useLocalServer ? localRestURL : remoteRestURL;
+/* Retrieve the stars, the maximum stars, and the previous week's stars */
+export async function requestData() {
 
-  const tempUser = settings.restUser;
-  let tempToken;
-  while ((tempToken = await retrieveRestToken(false)) === null) {
+  let token;
+  let renew = false;
+
+  while ((token = await retrieveRestToken(renew)) === null) {
     renew = true;
     await wait(2000);
   }
 
-  const config = {
-    baseURL: restURL,
-    headers: {
-      user: tempUser,
-      token: tempToken,
-      'Content-Type': 'multipart/form-data',
-    },
-    contentType: false,
-  };
+  try {
+    const { useLocalServer, localRestURL, remoteRestURL } = serverSyncConfig;
+    const restURL = useLocalServer ? localRestURL : remoteRestURL;
 
-  const response = await axios.get(
-    'variable/read/star',
-    config,
-  );
+    const config = {
+      baseURL: restURL,
+      headers: {
+        user: restUser,
+        token: restToken,
+        data: {},
+      },
+    };
+    
+    const response1 = await axios.get(
+      'variable/read/star',
+      config
+    );
 
-  if (response.status === 200) {
-    return response.data.value;
-  } else {
-    return 0;
+    const response2 = await axios.get(
+      'variable/read/maxStar',
+      config
+    );
+
+    const response3 = await axios.get(
+      'variable/read/previousWeekStar',
+      config
+    );
+
+    const response4 = await axios.get(
+      'variable/read/task1IsComplete',
+      config
+    );
+
+    const response5 = await axios.get(
+      'variable/read/task2IsComplete',
+      config
+    );
+
+    const response6 = await axios.get(
+      'variable/read/task3IsComplete',
+      config
+    );
+
+    const response7 = await axios.get(
+      'variable/read/task4IsComplete',
+      config
+    );
+
+    const response8 = await axios.get(
+      'variable/read/task5IsComplete',
+      config
+    );
+
+    const response9 = await axios.get(
+      'variable/read/numTasks',
+      config
+    );
+
+    const response10 = await axios.get(
+      'variable/read/task1',
+      config
+    );
+
+    const response11 = await axios.get(
+      'variable/read/task2',
+      config
+    );
+
+    const response12 = await axios.get(
+      'variable/read/task3',
+      config
+    );
+
+    const response13 = await axios.get(
+      'variable/read/task4',
+      config
+    );
+
+    const response14 = await axios.get(
+      'variable/read/task5',
+      config
+    );
+    
+    if (response1.status === 200 && response2.status === 200 && response3.status === 200 && response4.status === 200 && response5.status === 200 && response6.status === 200 && response7.status === 200 
+      && response8.status === 200 && response9.status === 200 && response10.status === 200 && response11.status === 200 && response12.status === 200 && response13.status === 200 && response14.status === 200) {
+      // console.log('GET request successful');
+      return {
+        "numericData": [response1.data.value, response2.data.value, response3.data.value, response4.data.value, response5.data.value, response6.data.value, response7.data.value, response8.data.value, response9.data.value], 
+        "textData": [response10.data.value, response11.data.value, response12.data.value, response13.data.value, response14.data.value]
+      };
+    }
+    else {
+      return {
+        "numericData": [0,0,0,0,0,0,0,0,0], 
+        "textData": ["","","","",""]
+      };
+    }
+  } catch (exception) {
+      if (typeof exception.response !== 'undefined' && typeof exception.response.status !== 'undefined' && exception.response.status === 401) {
+        console.log('GET request failed due to timeout');
+      }
   }
 }
