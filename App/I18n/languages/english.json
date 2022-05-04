@@ -124,7 +124,7 @@
   },
   "Faq": {
     "header": "FAQ",
-    "faqTitle": "Frequently asked questions",
+    "faqTitle": "Frequently Asked Questions",
     "questions": {
       "1": {
         "title": "I don't know how to take care of the schedule, what should I do?",
@@ -152,8 +152,21 @@
       },
       "7": {
         "title": "I am motivated to do what I planned, but it is still hard to act on the plan. What should I do?",
-        "answer": "You can be strategic when making plans! There are ways of finishing your goals automatically, without struggling for willpower or procrastination. Psychologists have introduced a concept called implementation intention, which refers to a mental process that links a cue and an action [11]. For example, whenever I feed my dog, I've made it a point to watch one video lecture. In this situation, feeding the dog is my cue--an automatic way of reminding myself to do something. It's an instant habit. No need to debate, no need to think--the moment I do X, I also do Y. Scientists say this is much more likely to help me to get the task done.  It will be even more helpful to follow through with the plan if you choose an existing habit as a cue--something you do everyday anyways. Coupling a desired behavior to an already established routine or a habit increases the odds of the behavior becoming entrenched as a new habit [12]. For example, if you want to watch lecture videos regularly, find a daily activity such as feeding your dog, and plan to watch a lecture after your dog gets his bowl filled. In short, research tells us that the best strategy to overcome the motivation issue is to avoid it by automating the desired behaviors as if they are your habits. The trick is to pair your new plans with your old habits."
+        "answer": "You can be strategic when making plans! There are ways of finishing your goals automatically, without struggling for willpower or procrastination. Psychologists have introduced a concept called implementation intention, which refers to a mental process that links a cue and an action [11]. For example, whenever I feed my dog, I've made it a point to watch one video lecture. In this situation, feeding the dog is my cue--an automatic way of reminding myself to do something. It's an instant habit. No need to debate, no need to think--the moment I do X, I also do Y. Scientists say this is much more likely to help me to get the task done.  It will be even more helpful to follow through with the plan if you choose an existing habit as a cue--something you do everyday anyways. Coupling a desired behavior to an already established routine or a habit increases the odds of the behavior becoming entrenched as a new habit. For example, if you want to watch lecture videos regularly, find a daily activity such as feeding your dog, and plan to watch a lecture after your dog gets his bowl filled. In short, research tells us that the best strategy to overcome the motivation issue is to avoid it by automating the desired behaviors as if they are your habits. The trick is to pair your new plans with your old habits."
       }
+    },
+    "references": {
+      "1": "Rogers, T., Milkman, K., John, L. and Norton, M. 2015. Beyond good intentions: Prompting people to make plans improves follow-through on important tasks. Behavioral Science &amp; Policy. 1, 2 (2015), 33-41",
+      "2": "Nickerson, D. and Rogers, T. 2010. Do You Have a Voting Plan?. Psychological Science. 21, 2 (2010), 194-199",
+      "3": "Achtziger, A., Gollwitzer, P. and Sheeran, P. 2008. Implementation Intentions and Shielding Goal Striving From Unwanted Thoughts and Feelings. Personality and Social Psychology Bulletin. 34, 3 (2008), 381-393",
+      "4": "Duckworth, A., Grant, H., Loew, B., Oettingen, G. and Gollwitzer, P. 2011. Self‐regulation strategies improve self‐discipline in adolescents: benefits of mental contrasting and implementation intentions. Educational Psychology. 31, 1 (2011), 17-26",
+      "5": "Einstein, G., McDaniel, M., Williford, C., Pagan, J. and Dismukes, R. 2003. Forgetting of intentions in demanding situations is rapid. Journal of Experimental Psychology: Applied. 9, 3 (2003), 147-162",
+      "6": "Höchli, B., Brügger, A. and Messner, C. 2018. How Focusing on Superordinate Goals Motivates Broad, Long-Term Goal Pursuit: A Theoretical Perspective. Frontiers in Psychology. 9, (2018)",
+      "7": "Dalton, A. and Spiller, S. 2012. Too Much of a Good Thing: The Benefits of Implementation Intentions Depend on the Number of Goals. Journal of Consumer Research. 39, 3 (2012), 600-614",
+      "8": "Shnayder-Adams, M. and Sekhar, A. 2021. Micro-habits for life-long learning. Abdominal Radiology. 46, 12 (2021), 5509-5512",
+      "9": "Neal, D., Wood, W. and Drolet, A. 2013. How do people adhere to goals when willpower is low? The profits (and pitfalls) of strong habits. Journal of Personality and Social Psychology. 104, 6 (2013), 959-975",
+      "10": "Townsend, C. and Liu, W. 2012. Is Planning Good for You? The Differential Impact of Planning on Self-Regulation. Journal of Consumer Research. 39, 4 (2012), 688-703",
+      "11": "Gollwitzer, P. and Sheeran, P. 2006. Implementation Intentions and Goal Achievement: A Meta‐analysis of Effects and Processes. Advances in Experimental Social Psychology. (2006), 69-119"
     }
   },
   "Dashboard": {
