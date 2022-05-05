@@ -51,7 +51,7 @@ for (let i = 1; i <= 7; i++) {
 }
 
 /* adds the references to array [references] */
-for (let i = 1; i <= 11; i++) {
+for (let i = 1; i <= 12; i++) {
   references.push(I18n.t(`Faq.references.${i}`))
 }
 
