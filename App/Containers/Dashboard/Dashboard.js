@@ -1,3 +1,22 @@
+//
+//  Dashboard.js
+//
+//  Copyright (c) 2022 Rayan Wali, Yann Hicke, Jayesh Paunikar, Elena Stoeva, Ashley Yu, Yixin Zhang, Angela Lau. All rights reserved.
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
+//
+
+
 import React, { Component } from 'react';
 import {
   Text ,
@@ -45,7 +64,7 @@ class Dashboard extends Component {
     .then(data => {
       if (parseInt(data.numericData[8]) != 0) {
         this.setState({'stars': data.numericData[0], 'highest': data.numericData[1], 'lastWeek': data.numericData[2], 'totTasks': data.numericData[8], 'course': data.textData[5],
-          'proportionTasksComplete': (parseInt(data.numericData[3]) + parseInt(data.numericData[4]) + parseInt(data.numericData[5]) + parseInt(data.numericData[6]) + parseInt(data.numericData[7])) / parseInt(data.numericData[8]) * 100});
+          'proportionTasksComplete': Math.floor((parseInt(data.numericData[3]) + parseInt(data.numericData[4]) + parseInt(data.numericData[5]) + parseInt(data.numericData[6]) + parseInt(data.numericData[7])) / parseInt(data.numericData[8]) * 100)});
       }
       else {
         this.setState({'stars': data.numericData[0], 'highest': data.numericData[1], 'lastWeek': data.numericData[2], 'totTasks': data.numericData[8], 'course': data.textData[5],
@@ -64,7 +83,7 @@ class Dashboard extends Component {
     .then(data => {
       if (parseInt(data.numericData[8]) != 0) {
         this.setState({'stars': data.numericData[0], 'highest': data.numericData[1], 'lastWeek': data.numericData[2], 'totTasks': data.numericData[8], 'course': data.textData[5],
-          'proportionTasksComplete': (parseInt(data.numericData[3]) + parseInt(data.numericData[4]) + parseInt(data.numericData[5]) + parseInt(data.numericData[6]) + parseInt(data.numericData[7])) / parseInt(data.numericData[8]) * 100});
+          'proportionTasksComplete': Math.floor((parseInt(data.numericData[3]) + parseInt(data.numericData[4]) + parseInt(data.numericData[5]) + parseInt(data.numericData[6]) + parseInt(data.numericData[7])) / parseInt(data.numericData[8]) * 100)});
       }
       else {
         this.setState({'stars': data.numericData[0], 'highest': data.numericData[1], 'lastWeek': data.numericData[2], 'totTasks': data.numericData[8], 'course': data.textData[5],
@@ -249,7 +268,8 @@ const styles = StyleSheet.create({
     height: 175,
     left: 100,
     marginTop: 40,
-    justifyContent: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   numInteraction: {
     textAlign: "center",
