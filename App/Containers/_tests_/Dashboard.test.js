@@ -1,6 +1,11 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
-import Dashboard from "../Dashboard/Dashboard";
+import Dashboard from '../Dashboard/Dashboard';
+// import { shallow } from 'enzyme';
+// import Adapter from 'enzyme-adapter-react-16';
+// import { configure } from 'enzyme';
+// import { render } from '@testing-library/react-native/pure';
+import ShallowRenderer from 'react-test-renderer/shallow';
+// import TestRenderer from 'react-test-renderer';
 
 describe("Tests for is_on()", () => {
 
@@ -26,5 +31,24 @@ describe("Tests for is_on()", () => {
     expect(dashboard.is_on(5)).toBe(false);
     expect(dashboard.is_on(6)).toBe(false);
   });
-
 });
+
+// snapshot
+it('renders', () => {
+  const renderer = new ShallowRenderer();
+  const wrapper = renderer.render(<Dashboard />);
+
+  expect(wrapper).toMatchSnapshot();
+});
+
+
+//TODO: might need to custom renderer to fix redux store requirement for accessing function, currently using shallow copy
+// describe('Tests for count_on()', () => {
+//   it('should change the password value', () => {
+
+
+//     // const renderer = new ShallowRenderer();
+//     // const renderer = new TestRenderer();
+//     // let dashboard = renderer.create(<Dashboard />).getInstance();
+
+// });
