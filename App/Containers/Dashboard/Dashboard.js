@@ -32,13 +32,12 @@ import {
 import ParsedText from 'react-native-parsed-text';
 import Collapsible from 'react-native-collapsible';
 import { Icon, Card, Button } from 'react-native-elements';
-// import { CircularProgressbar } from 'react-circular-progressbar';
 import { Colors } from '../../Themes/';
-import PMNavigationBar from '../../Components/Navbar';
+import PMNavigationBar from '../../Components/Navbar.js';
 import I18n from '../../I18n/I18n';
 
-import Log from '../../Utils/Log';
-import { requestData } from '../../Sagas/ServerSyncSagas';
+import Log from '../../Utils/Log.js';
+import { requestData } from '../../Sagas/ServerSyncSagas.js';
 const log = new Log('Containers/Dashboard');
 
 
@@ -55,7 +54,7 @@ class Dashboard extends Component {
     totTasks: 0, // the total number of tasks an user enters
     dynamicTasks: [], // the total list of tasks an user enters
     dynamicTasksCompletion: [], // completion status for each task an user enters
-    proportionTasksComplete: 0 // the proportion of tasks an user enters that are complete
+    proportionTasksComplete: 0, // the proportion of tasks an user enters that are complete
   };
 
   /* first time data is requested */
@@ -111,23 +110,23 @@ class Dashboard extends Component {
     );
   }
 
-  /** [count_on] counts the number of stars that are filled in. */
-  count_on() {
-    var num_ones = 0;
-    this.state.starStates.forEach((v) => (v === 1 && num_ones++));
-    return num_ones;
+  /** Counts the number of stars that are filled in. */
+  countOn() {
+    const { numOnes } = 0;
+    this.state.starStates.forEach((v) => (v === 1 && numOnes++));
+    return numOnes;
   }
 
-  /** [switch] fills a new star in (is called when a user finishes all daily tasks). */
+  /** Fills in a new star (called when a user finishes all daily tasks). */
   switch() {
-    const { num_on } = this.count_on();
-    if (num_on < this.state.starStates.length) {
-      this.state.starStates[num_on] = 1;
+    const { numOn } = this.countOn();
+    if (numOn < this.state.starStates.length) {
+      this.state.starStates[numOn] = 1;
     }
   }
 
-  /** [is_on] checks whether the [pos+1]th star from the left is on or off. */
-  is_on(pos) {
+  /** Checks whether the [pos+1]th star from the left is on or off. */
+  isOn(pos) {
     if (this.state.starStates[pos] == 1) {
       return true;
     }
@@ -136,8 +135,8 @@ class Dashboard extends Component {
     }
   }
 
-  /** [completion_indicator] returns a string with the name of the task and its status. */
-  completion_indicator(task, isComplete) {
+  /** Returns a string with the name of the task and its status. */
+  completionIndicator(task, isComplete) {
     progress = "";
     if (isComplete == 1) {
       progress = "Complete";
@@ -148,12 +147,7 @@ class Dashboard extends Component {
     return task + '  [' + progress + ']';
   }
 
-  /** [server_retrieve] is a sample function (for testing) that logs a user's response. */
-  server_retrieve() {
-    console.log(get_user_msg);
-  }
-
-  /** [render] is the entry point of [Dashboard.js]. */
+  /** Displays components on application dashboard. */
   render() {
     return (
       <ScrollView style={styles.content} indicatorStyle="white">
@@ -214,7 +208,7 @@ class Dashboard extends Component {
           <View>
             {
               this.state.dynamicTasks.map((item,index) => {
-                return <Text style={styles.bullet}>{this.completion_indicator(item, this.state.dynamicTasksCompletion[index])}</Text>
+                return <Text style={styles.bullet}>{this.completionIndicator(item, this.state.dynamicTasksCompletion[index])}</Text>
               })
             }
           </View>
@@ -241,7 +235,7 @@ class Dashboard extends Component {
 
 export default Dashboard;
 
-/** [styles] is the stylesheet of the Dashboard page. */
+/** Generates the stylesheet of the Dashboard page. */
 const styles = StyleSheet.create({
   url: {
     color: Colors.buttons.common.background,
@@ -288,7 +282,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   textElement: {
-    fontSize: 16
+    fontSize: 16,
   },
   input: {
     height: 40,
@@ -297,22 +291,22 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   label: {
-    marginLeft: 12
+    marginLeft: 12,
   },
   heading: {
     marginTop: 5,
     marginLeft: 12,
     textAlign: "left",
     fontSize: 25,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   bullet: {
     marginTop: 5,
     marginLeft: 12,
     textAlign: "left",
-    fontSize: 16
+    fontSize: 16,
   },
   subsection: {
-    marginBottom: 20
+    marginBottom: 20,
   }
 });
