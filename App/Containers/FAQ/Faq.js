@@ -1,3 +1,21 @@
+//
+//  Faq.js
+//
+//  Copyright (c) 2022 Rayan Wali, Yann Hicke, Jayesh Paunikar, Elena Stoeva, Ashley Yu, Yixin Zhang, Angela Lau. All rights reserved.
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
+//
+
 // TODO for improvement check: https://github.com/idibidiart/react-native-responsive-grid/blob/master/UniversalTiles.md
 
 import React, { Component } from 'react';
@@ -22,12 +40,19 @@ import Log from '../../Utils/Log';
 const log = new Log('Containers/Settings/Settings');
 
 const questions = [];
+const references = [];
 
+/* adds the FAQ questions and answers to array [questions] */
 for (let i = 1; i <= 7; i++) {
   questions.push({
     title: `Faq.questions.${i}.title`,
     answer: `Faq.questions.${i}.answer`,
   });
+}
+
+/* adds the references to array [references] */
+for (let i = 1; i <= 12; i++) {
+  references.push(I18n.t(`Faq.references.${i}`))
 }
 
 class CollapsibleView extends Component {
@@ -86,6 +111,7 @@ class Faq extends Component {
     );
   }
 
+  /** [render] is the entry point of [Faq.js]. */
   render() {
     const { openURL } = this.props.route.params.screenProps;
     return (
@@ -117,6 +143,16 @@ class Faq extends Component {
                 </CollapsibleView>
               ))}
             </View>
+            <Text></Text><Text></Text>
+            <Text style={styles.referenceHeading}>References</Text>
+            <Text></Text>
+            <View>
+              {
+                  references.map((item,index) => {
+                  return <Text style={styles.referenceText}>{'[' + (index+1) + '] ' + item + '\n'}</Text>
+                })
+              }
+            </View>
           </Card>
         </ScrollView>
       </View>
@@ -126,6 +162,7 @@ class Faq extends Component {
 
 export default Faq;
 
+/** [styles] is the stylesheet of the FAQ page. */
 const styles = StyleSheet.create({
   url: {
     color: Colors.buttons.common.background,
@@ -136,6 +173,16 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 10,
     flexWrap: 'wrap',
+  },
+  referenceHeading: {
+    marginTop: 5,
+    marginLeft: 0,
+    textAlign: "left",
+    fontSize: 18,
+    fontWeight: 'bold'
+  },
+  referenceText: {
+    fontSize: 12,
   },
   container: {
     flex: 1,

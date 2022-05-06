@@ -1,67 +1,98 @@
+//
+//  Dashboard.js
+//
+//  Copyright (c) 2022 Rayan Wali, Yann Hicke, Jayesh Paunikar, Elena Stoeva, Ashley Yu, Yixin Zhang, Angela Lau. All rights reserved.
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
+//
+
+
 import React, { Component } from 'react';
 import {
-  Text,
+  Text ,
+  TextInput,
   View,
   Image,
   StyleSheet,
   ScrollView,
+  SafeAreaView, 
+  TouchableOpacity, 
+  ImageBackground
 } from 'react-native';
-// import { Card } from 'react-native-elements';
 import ParsedText from 'react-native-parsed-text';
 import Collapsible from 'react-native-collapsible';
-import propTypes from 'prop-types';
 import { Icon, Card, Button } from 'react-native-elements';
-import Star from "./Star";
-import EmptyStar from './empty-star.png';
-import { TextInput} from 'react-native';
-
-// import { CommonActions as NavigationActions } from '@react-navigation/native';
+// import { CircularProgressbar } from 'react-circular-progressbar';
 import { Colors } from '../../Themes/';
 import PMNavigationBar from '../../Components/Navbar';
 import I18n from '../../I18n/I18n';
 
 import Log from '../../Utils/Log';
-import { requestStars } from '../../Sagas/ServerSyncSagas';
+import { requestData } from '../../Sagas/ServerSyncSagas';
 const log = new Log('Containers/Dashboard');
 
-/*
-const mapStateToProps = (state, ownProps) => ({})
-const mapDispatchToProps = {}
-
-const connectToStore = connect(mapStateToProps, mapDispatchToProps)
-const ConnectedComponent = connectToStore(Component)
-
-connect(mapStateToProps, mapDispatchToProps)(Component)
-*/
 
 class Dashboard extends Component {
   state = {
     activeSection: false,
     collapsed: true,
-    rating: 0,
-    star_states: [0, 0, 0, 0, 0, 0, 0], // 1 represents filled-in star, 0 represents empty star
-    stars: 0,
-    // num_points: 0,
-    // num_interactions: 79 // the total number of points an user collects
-   //star_states: [1,1,1,0,0,0,0], // 1 represents filled-in star, 0 represents empty star
-    num_points: 0, // the total number of points an user collects
-    num_interactions: '80%',
-    last_week: 5,
-    highest: 7,
-    plans: ["Watch a lecture", "Reading 1", "completing quiz 1"] 
+    starStates: [0,0,0,0,0,0,0], // 1 represents filled-in star, 0 represents empty star
+    stars: 0, // the number of stars from the current week
+    numPoints: 0, // the total number of points an user collects
+    lastWeek: 0, // the number of stars from the last week
+    highest: 0, // the maximum stars from all weeks
+    course: "", // the course name the user enters
+    totTasks: 0, // the total number of tasks an user enters
+    dynamicTasks: [], // the total list of tasks an user enters
+    dynamicTasksCompletion: [], // completion status for each task an user enters
+    proportionTasksComplete: 0 // the proportion of tasks an user enters that are complete
   };
-  
-  componentDidMount(){
-    requestStars()
+
+  /* first time data is requested */
+  componentDidMount() {
+    requestData()
     .then(data => {
-      this.setState({'stars': data});
+      if (parseInt(data.numericData[8]) != 0) {
+        this.setState({'stars': data.numericData[0], 'highest': data.numericData[1], 'lastWeek': data.numericData[2], 'totTasks': data.numericData[8], 'course': data.textData[5],
+          'proportionTasksComplete': Math.round((parseInt(data.numericData[3]) + parseInt(data.numericData[4]) + parseInt(data.numericData[5]) + parseInt(data.numericData[6]) + parseInt(data.numericData[7])) / parseInt(data.numericData[8]) * 100)});
+      }
+      else {
+        this.setState({'stars': data.numericData[0], 'highest': data.numericData[1], 'lastWeek': data.numericData[2], 'totTasks': data.numericData[8], 'course': data.textData[5],
+          'proportionTasksComplete': 0});
+      }
+      for (let i = 0; i < data.numericData[8]; i++) {
+        this.state.dynamicTasks[i] = data.textData[i];
+        this.state.dynamicTasksCompletion[i] = data.numericData[i+3];
+      }
     });
   }
 
-  componentDidUpdate(){
-    requestStars()
+  /* automatically updates state as data changes */
+  componentDidUpdate() {
+    requestData()
     .then(data => {
-      this.setState({'stars': data});
+      if (parseInt(data.numericData[8]) != 0) {
+        this.setState({'stars': data.numericData[0], 'highest': data.numericData[1], 'lastWeek': data.numericData[2], 'totTasks': data.numericData[8], 'course': data.textData[5],
+          'proportionTasksComplete': Math.round((parseInt(data.numericData[3]) + parseInt(data.numericData[4]) + parseInt(data.numericData[5]) + parseInt(data.numericData[6]) + parseInt(data.numericData[7])) / parseInt(data.numericData[8]) * 100)});
+      }
+      else {
+        this.setState({'stars': data.numericData[0], 'highest': data.numericData[1], 'lastWeek': data.numericData[2], 'totTasks': data.numericData[8], 'course': data.textData[5],
+          'proportionTasksComplete': 0});
+      }
+      for (let i = 0; i < data.numericData[8]; i++) {
+        this.state.dynamicTasks[i] = data.textData[i];
+        this.state.dynamicTasksCompletion[i] = data.numericData[i+3];
+      }
     });
   }
 
@@ -83,26 +114,38 @@ class Dashboard extends Component {
   /** [count_on] counts the number of stars that are filled in. */
   count_on() {
     var num_ones = 0;
-    this.state.star_states.forEach((v) => (v === 1 && num_ones++));
+    this.state.starStates.forEach((v) => (v === 1 && num_ones++));
     return num_ones;
   }
 
   /** [switch] fills a new star in (is called when a user finishes all daily tasks). */
   switch() {
     const { num_on } = this.count_on();
-    if (num_on < this.state.star_states.length) {
-      this.state.star_states[num_on] = 1;
+    if (num_on < this.state.starStates.length) {
+      this.state.starStates[num_on] = 1;
     }
   }
 
   /** [is_on] checks whether the [pos+1]th star from the left is on or off. */
   is_on(pos) {
-    if (this.state.star_states[pos] == 1) {
+    if (this.state.starStates[pos] == 1) {
       return true;
     }
     else {
       return false;
     }
+  }
+
+  /** [completion_indicator] returns a string with the name of the task and its status. */
+  completion_indicator(task, isComplete) {
+    progress = "";
+    if (isComplete == 1) {
+      progress = "Complete";
+    }
+    else {
+      progress = "Incomplete";
+    }
+    return task + '  [' + progress + ']';
   }
 
   /** [server_retrieve] is a sample function (for testing) that logs a user's response. */
@@ -117,13 +160,13 @@ class Dashboard extends Component {
         <View style={{ justifyContent: 'space-between' }}>
           {this.renderNavigationbar(this.props)}
           <Card
-            title={I18n.t('Dashboard.dashboardTitle')}
+            title={'Course: ' + this.state.course}
             titleStyle={styles.cardTitle}
             containerStyle={{ marginBottom: 15 }}>
-            <Text>Welcome to MobileCoach!</Text>
-            <Text>Below, you will find your progress. Each star corresponds to task completion for a single day.</Text>
-          </Card>
-          <View style={{ flexDirection: 'row', flex: 2 }}>
+            <Text style={styles.TextElement}>Below, you will find your progress. Each star corresponds to task completion for a single day.</Text>
+            <Text></Text><Text></Text>
+
+            <View style={{ flexDirection: 'row', flex: 2 }}>
             <Image
               style={styles.stretch}
               source={(this.state.stars >= 1 ? require('./filled-star.png') : require('./empty-star.png'))}
@@ -153,51 +196,52 @@ class Dashboard extends Component {
               source={(this.state.stars >= 7 ? require('./filled-star.png') : require('./empty-star.png'))}
             />
           </View>
+
           <View>
             <Image
               style={styles.circle}
               source={require('./blue-circle.png')}
             />
             <Text style={styles.numInteraction}>
-              {this.state.num_interactions}
+              {this.state.proportionTasksComplete + '%'}
             </Text>
           </View>
-        </View>
-        <Text/>
-      <View style={styles.subsection}>
-        <Text style={styles.heading}>
+          
+          <View style={styles.subsection}>
+            <Text style={styles.heading}>
             Your Plan
-        </Text>
-        <Text style={styles.bullet}>
-          {this.state.plans[0]}
-        </Text>
-        <Text style={styles.bullet}>
-          {this.state.plans[1]}
-        </Text>
-        <Text style={styles.bullet}>
-          {this.state.plans[2]}
-        </Text>
-      </View>
+            </Text>
+          <View>
+            {
+              this.state.dynamicTasks.map((item,index) => {
+                return <Text style={styles.bullet}>{this.completion_indicator(item, this.state.dynamicTasksCompletion[index])}</Text>
+              })
+            }
+          </View>
+        </View>
 
-      <View style={styles.subsection}>
+        <View style={styles.subsection}>
         <Text style={styles.heading}>
             Your Past Accomplishments
         </Text>
         <Text style={styles.bullet}>
-          Last week: {this.state.last_week} stars
+          Last week: {this.state.lastWeek} stars
         </Text>
         <Text  style={styles.bullet}>
           Highest: {this.state.highest} stars
         </Text>
+        </View>
+
+        </Card>
       </View>
-      </ScrollView>
+    </ScrollView>
     );
   }
 }
 
 export default Dashboard;
 
-/** the stylesheet of the Dashboard page */
+/** [styles] is the stylesheet of the Dashboard page. */
 const styles = StyleSheet.create({
   url: {
     color: Colors.buttons.common.background,
@@ -215,24 +259,25 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   stretch: {
-    width: 55,
-    height: 60,
+    width: 48,
+    height: 50,
     resizeMode: 'stretch',
   },
   circle: {
-    width: 200,
-    height: 200,
+    width: 175,
+    height: 175,
     left: 100,
-    marginTop: 20,
-    justifyContent: 'center',
+    marginTop: 40,
+    justifyContent: "center",
+    alignItems: "center",
   },
   numInteraction: {
     textAlign: "center",
     color: "white",
     fontWeight: 'bold',
     fontSize: 50,
-    left: 0,
-    bottom: 130,
+    left: 15,
+    bottom: 120,
   },
   cardTitle: {
     textAlign: 'left',
@@ -240,6 +285,10 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
+    backgroundColor: "white",
+  },
+  textElement: {
+    fontSize: 16
   },
   input: {
     height: 40,
@@ -254,14 +303,14 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginLeft: 12,
     textAlign: "left",
-    fontSize: 28,
+    fontSize: 25,
     fontWeight: 'bold'
   },
   bullet: {
     marginTop: 5,
     marginLeft: 12,
     textAlign: "left",
-    fontSize: 18
+    fontSize: 16
   },
   subsection: {
     marginBottom: 20
