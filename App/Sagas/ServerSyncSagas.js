@@ -1312,12 +1312,7 @@ export function* performUpdate() {
     });
 }
 
-const get_user_msg = user_message;
-
-export default get_user_msg;
-
-
-/* [request_data] retrieves the information dynamically displayed on the Dashboard. */
+/** Retrieves the information dynamically displayed on the Dashboard. */
 export async function requestData() {
 
   let token;
@@ -1341,86 +1336,89 @@ export async function requestData() {
       },
     };
     
-    const response1 = await axios.get(
+    const star = await axios.get(
       'variable/read/star',
       config
     );
 
-    const response2 = await axios.get(
+    const maxStar = await axios.get(
       'variable/read/maxStar',
       config
     );
 
-    const response3 = await axios.get(
+    const previousWeekStar = await axios.get(
       'variable/read/previousWeekStar',
       config
     );
 
-    const response4 = await axios.get(
+    const task1IsComplete = await axios.get(
       'variable/read/task1IsComplete',
       config
     );
 
-    const response5 = await axios.get(
+    const task2IsComplete = await axios.get(
       'variable/read/task2IsComplete',
       config
     );
 
-    const response6 = await axios.get(
+    const task3IsComplete = await axios.get(
       'variable/read/task3IsComplete',
       config
     );
 
-    const response7 = await axios.get(
+    const task4IsComplete = await axios.get(
       'variable/read/task4IsComplete',
       config
     );
 
-    const response8 = await axios.get(
+    const task5IsComplete = await axios.get(
       'variable/read/task5IsComplete',
       config
     );
 
-    const response9 = await axios.get(
+    const numTasks = await axios.get(
       'variable/read/numTasks',
       config
     );
 
-    const response10 = await axios.get(
+    const task1 = await axios.get(
       'variable/read/task1',
       config
     );
 
-    const response11 = await axios.get(
+    const task2 = await axios.get(
       'variable/read/task2',
       config
     );
 
-    const response12 = await axios.get(
+    const task3 = await axios.get(
       'variable/read/task3',
       config
     );
 
-    const response13 = await axios.get(
+    const task4 = await axios.get(
       'variable/read/task4',
       config
     );
 
-    const response14 = await axios.get(
+    const task5 = await axios.get(
       'variable/read/task5',
       config
     );
 
-    const response15 = await axios.get(
+    const courseName = await axios.get(
       'variable/read/courseName',
       config
     );
     
-    if (response1.status === 200 && response2.status === 200 && response3.status === 200 && response4.status === 200 && response5.status === 200 && response6.status === 200 && response7.status === 200 
-      && response8.status === 200 && response9.status === 200 && response10.status === 200 && response11.status === 200 && response12.status === 200 && response13.status === 200 && response14.status === 200 && response15.status === 200) {
+    if (star.status === 200 && maxStar.status === 200 && previousWeekStar.status === 200 && task1IsComplete.status === 200 && 
+      task2IsComplete.status === 200 && task3IsComplete.status === 200 && task4IsComplete.status === 200 && 
+      task5IsComplete.status === 200 && numTasks.status === 200 && task1.status === 200 && task2.status === 200 && task3.status === 200 && 
+      task4.status === 200 && task5.status === 200 && courseName.status === 200) {
       return {
-        "numericData": [response1.data.value, response2.data.value, response3.data.value, response4.data.value, response5.data.value, response6.data.value, response7.data.value, response8.data.value, response9.data.value], 
-        "textData": [response10.data.value, response11.data.value, response12.data.value, response13.data.value, response14.data.value, response15.data.value]
+        "numericData": [star.data.value, maxStar.data.value, previousWeekStar.data.value, task1IsComplete.data.value, task2IsComplete.data.value, 
+          task3IsComplete.data.value, task4IsComplete.data.value, task5IsComplete.data.value, numTasks.data.value], 
+        "textData": [task1.data.value, task2.data.value, task3.data.value, task4.data.value, task5.data.value, courseName.data.value]
       };
     }
     else {
