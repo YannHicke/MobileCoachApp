@@ -95,13 +95,13 @@ class Dashboard extends Component {
     });
   }
 
-  toggleExpanded = () => {
-    this.setState({ collapsed: !this.state.collapsed });
-  };
+  // toggleExpanded = () => {
+  //   this.setState({ collapsed: !this.state.collapsed });
+  // };
 
-  setSection = (section) => {
-    this.setState({ activeSection: section });
-  };
+  // setSection = (section) => {
+  //   this.setState({ activeSection: section });
+  // };
 
   renderNavigationbar(props) {
     let title = I18n.t('Dashboard.dashboardTitle');
@@ -111,19 +111,19 @@ class Dashboard extends Component {
   }
 
   /** Counts the number of stars that are filled in. */
-  countOn() {
-    const { numOnes } = 0;
-    this.state.starStates.forEach((v) => (v === 1 && numOnes++));
-    return numOnes;
-  }
+  // countOn() {
+  //   const { numOnes } = 0;
+  //   this.state.starStates.forEach((v) => (v === 1 && numOnes++));
+  //   return numOnes;
+  // }
 
   /** Fills in a new star (called when a user finishes all daily tasks). */
-  switch() {
-    const { numOn } = this.countOn();
-    if (numOn < this.state.starStates.length) {
-      this.state.starStates[numOn] = 1;
-    }
-  }
+  // switch() {
+  //   const { numOn } = this.countOn();
+  //   if (numOn < this.state.starStates.length) {
+  //     this.state.starStates[numOn] = 1;
+  //   }
+  // }
 
   /** Checks whether the [pos+1]th star from the left is on or off. */
   isOn(pos) {

@@ -1,37 +1,45 @@
 import React from 'react';
 import Dashboard from '../Dashboard/Dashboard';
-// import { shallow } from 'enzyme';
-// import Adapter from 'enzyme-adapter-react-16';
-// import { configure } from 'enzyme';
 // import { render } from '@testing-library/react-native/pure';
 import ShallowRenderer from 'react-test-renderer/shallow';
 // import TestRenderer from 'react-test-renderer';
 
-describe("Tests for is_on()", () => {
+describe("Dynamic Tasks", ()=>{
 
-  const dashboard = new Dashboard();
+  // display current task correctly
 
-  test('define is_on', () => {
-    expect(typeof dashboard.is_on).toBe("function");
-  });
+  // display change correctly
 
-  // This test is for statically filled stars
-  // To be changed once the stars are filled dynamically
-  test('test True output', () => {
-    expect(dashboard.is_on(0)).toBe(true);
-    expect(dashboard.is_on(1)).toBe(true);
-    expect(dashboard.is_on(2)).toBe(true);
-  });
 
-  // This test is for statically filled stars
-  // To be changed once the stars are filled dynamically
-  test('test False output', () => {
-    expect(dashboard.is_on(3)).toBe(false);
-    expect(dashboard.is_on(4)).toBe(false);
-    expect(dashboard.is_on(5)).toBe(false);
-    expect(dashboard.is_on(6)).toBe(false);
-  });
 });
+
+
+
+// describe("Tests for is_on()", () => {
+
+//   const dashboard = new Dashboard();
+
+//   test('define is_on', () => {
+//     expect(typeof dashboard.is_on).toBe("function");
+//   });
+
+//   // This test is for statically filled stars
+//   // To be changed once the stars are filled dynamically
+//   test('test True output', () => {
+//     expect(dashboard.is_on(0)).toBe(true);
+//     expect(dashboard.is_on(1)).toBe(true);
+//     expect(dashboard.is_on(2)).toBe(true);
+//   });
+
+//   // This test is for statically filled stars
+//   // To be changed once the stars are filled dynamically
+//   test('test False output', () => {
+//     expect(dashboard.is_on(3)).toBe(false);
+//     expect(dashboard.is_on(4)).toBe(false);
+//     expect(dashboard.is_on(5)).toBe(false);
+//     expect(dashboard.is_on(6)).toBe(false);
+//   });
+// });
 
 // snapshot
 it('renders', () => {

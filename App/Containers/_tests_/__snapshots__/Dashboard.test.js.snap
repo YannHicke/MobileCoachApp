@@ -1,0 +1,258 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders 1`] = `
+<ScrollView
+  indicatorStyle="white"
+  style={
+    Object {
+      "backgroundColor": "white",
+      "flex": 1,
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "justifyContent": "space-between",
+      }
+    }
+  >
+    <Connect(PMNavigationBar)
+      props={Object {}}
+      rightButton={<View />}
+      title="Dashboard.dashboardTitle"
+    />
+    <Themed.Card
+      containerStyle={
+        Object {
+          "marginBottom": 15,
+        }
+      }
+      title="Course: "
+      titleStyle={
+        Object {
+          "color": "#3c3c3c",
+          "textAlign": "left",
+        }
+      }
+    >
+      <Text>
+        Below, you will find your progress. Each star corresponds to task completion for a single day.
+      </Text>
+      <Text />
+      <Text />
+      <View
+        style={
+          Object {
+            "flex": 2,
+            "flexDirection": "row",
+          }
+        }
+      >
+        <Image
+          source={
+            Object {
+              "process": [Function],
+            }
+          }
+          style={
+            Object {
+              "height": 50,
+              "resizeMode": "stretch",
+              "width": 48,
+            }
+          }
+        />
+        <Image
+          source={
+            Object {
+              "process": [Function],
+            }
+          }
+          style={
+            Object {
+              "height": 50,
+              "resizeMode": "stretch",
+              "width": 48,
+            }
+          }
+        />
+        <Image
+          source={
+            Object {
+              "process": [Function],
+            }
+          }
+          style={
+            Object {
+              "height": 50,
+              "resizeMode": "stretch",
+              "width": 48,
+            }
+          }
+        />
+        <Image
+          source={
+            Object {
+              "process": [Function],
+            }
+          }
+          style={
+            Object {
+              "height": 50,
+              "resizeMode": "stretch",
+              "width": 48,
+            }
+          }
+        />
+        <Image
+          source={
+            Object {
+              "process": [Function],
+            }
+          }
+          style={
+            Object {
+              "height": 50,
+              "resizeMode": "stretch",
+              "width": 48,
+            }
+          }
+        />
+        <Image
+          source={
+            Object {
+              "process": [Function],
+            }
+          }
+          style={
+            Object {
+              "height": 50,
+              "resizeMode": "stretch",
+              "width": 48,
+            }
+          }
+        />
+        <Image
+          source={
+            Object {
+              "process": [Function],
+            }
+          }
+          style={
+            Object {
+              "height": 50,
+              "resizeMode": "stretch",
+              "width": 48,
+            }
+          }
+        />
+      </View>
+      <View>
+        <Image
+          source={
+            Object {
+              "process": [Function],
+            }
+          }
+          style={
+            Object {
+              "alignItems": "center",
+              "height": 175,
+              "justifyContent": "center",
+              "left": 100,
+              "marginTop": 40,
+              "width": 175,
+            }
+          }
+        />
+        <Text
+          style={
+            Object {
+              "bottom": 120,
+              "color": "white",
+              "fontSize": 50,
+              "fontWeight": "bold",
+              "left": 15,
+              "textAlign": "center",
+            }
+          }
+        >
+          0%
+        </Text>
+      </View>
+      <View
+        style={
+          Object {
+            "marginBottom": 20,
+          }
+        }
+      >
+        <Text
+          style={
+            Object {
+              "fontSize": 25,
+              "fontWeight": "bold",
+              "marginLeft": 12,
+              "marginTop": 5,
+              "textAlign": "left",
+            }
+          }
+        >
+          Your Plan
+        </Text>
+        <View />
+      </View>
+      <View
+        style={
+          Object {
+            "marginBottom": 20,
+          }
+        }
+      >
+        <Text
+          style={
+            Object {
+              "fontSize": 25,
+              "fontWeight": "bold",
+              "marginLeft": 12,
+              "marginTop": 5,
+              "textAlign": "left",
+            }
+          }
+        >
+          Your Past Accomplishments
+        </Text>
+        <Text
+          style={
+            Object {
+              "fontSize": 16,
+              "marginLeft": 12,
+              "marginTop": 5,
+              "textAlign": "left",
+            }
+          }
+        >
+          Last week: 
+          0
+           stars
+        </Text>
+        <Text
+          style={
+            Object {
+              "fontSize": 16,
+              "marginLeft": 12,
+              "marginTop": 5,
+              "textAlign": "left",
+            }
+          }
+        >
+          Highest: 
+          0
+           stars
+        </Text>
+      </View>
+    </Themed.Card>
+  </View>
+</ScrollView>
+`;
