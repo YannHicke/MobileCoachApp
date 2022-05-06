@@ -30,12 +30,9 @@ import ParsedText from 'react-native-parsed-text';
 import Collapsible from 'react-native-collapsible';
 import propTypes from 'prop-types';
 import { Icon, Card } from 'react-native-elements';
-
-// import { CommonActions as NavigationActions } from '@react-navigation/native';
 import { Colors } from '../../Themes/';
-import PMNavigationBar from '../../Components/Navbar';
+import PMNavigationBar from '../../Components/Navbar.js';
 import I18n from '../../I18n/I18n';
-
 import Log from '../../Utils/Log';
 const log = new Log('Containers/Settings/Settings');
 
@@ -111,9 +108,9 @@ class Faq extends Component {
     );
   }
 
-  /** [render] is the entry point of [Faq.js]. */
+  /** Displays components on application FAQ page. */
   render() {
-    const { openURL } = this.props.route.params.screenProps;
+    const { open_url } = this.props.route.params.screenProps;
     return (
       <View style={styles.container}>
         {this.renderNavigationbar(this.props)}
@@ -134,7 +131,7 @@ class Faq extends Component {
                         {
                           type: 'email',
                           style: styles.url,
-                          onPress: (mail) => openURL('mailto:' + mail),
+                          onPress: (mail) => open_url('mailto:' + mail),
                         },
                       ]}>
                       {I18n.t(question.answer)}
@@ -162,7 +159,7 @@ class Faq extends Component {
 
 export default Faq;
 
-/** [styles] is the stylesheet of the FAQ page. */
+/** Generates the stylesheet of the FAQ page. */
 const styles = StyleSheet.create({
   url: {
     color: Colors.buttons.common.background,
@@ -179,7 +176,7 @@ const styles = StyleSheet.create({
     marginLeft: 0,
     textAlign: "left",
     fontSize: 18,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   referenceText: {
     fontSize: 12,
