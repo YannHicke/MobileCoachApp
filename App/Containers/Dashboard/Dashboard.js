@@ -35,6 +35,7 @@ import { Icon, Card, Button } from 'react-native-elements';
 import { Colors } from '../../Themes/';
 import PMNavigationBar from '../../Components/Navbar.js';
 import I18n from '../../I18n/I18n';
+import ProgressCircle from 'react-native-progress-circle';
 
 import Log from '../../Utils/Log.js';
 import { requestData } from '../../Sagas/ServerSyncSagas.js';
@@ -191,6 +192,14 @@ class Dashboard extends Component {
             />
           </View>
 
+          <View style={styles.circle}>
+            <ProgressCircle 
+            percent={Number(this.state.proportionTasksComplete)} radius={100} borderWidth={18}
+            color="#154c79" shadowColor='#999' bgColor='#fff'>
+              <Text style={{fontSize: 38, fontWeight: 'bold'}}>{this.state.proportionTasksComplete + '%'}</Text>
+            </ProgressCircle>
+          </View>
+          {/**
           <View>
             <Image
               style={styles.circle}
@@ -200,6 +209,7 @@ class Dashboard extends Component {
               {this.state.proportionTasksComplete + '%'}
             </Text>
           </View>
+    */}
           
           <View style={styles.subsection}>
             <Text style={styles.heading}>
@@ -260,8 +270,9 @@ const styles = StyleSheet.create({
   circle: {
     width: 175,
     height: 175,
-    left: 100,
+    left: 85,
     marginTop: 40,
+    marginBottom: 40,
     justifyContent: "center",
     alignItems: "center",
   },
