@@ -148,38 +148,39 @@ exports[`renders 1`] = `
           }
         />
       </View>
-      <View>
-        <Image
-          source={
-            Object {
-              "process": [Function],
-            }
+      <View
+        style={
+          Object {
+            "alignItems": "center",
+            "height": 175,
+            "justifyContent": "center",
+            "left": 85,
+            "marginBottom": 40,
+            "marginTop": 40,
+            "width": 175,
           }
-          style={
-            Object {
-              "alignItems": "center",
-              "height": 175,
-              "justifyContent": "center",
-              "left": 100,
-              "marginTop": 40,
-              "width": 175,
-            }
-          }
-        />
-        <Text
-          style={
-            Object {
-              "bottom": 120,
-              "color": "white",
-              "fontSize": 50,
-              "fontWeight": "bold",
-              "left": 15,
-              "textAlign": "center",
-            }
-          }
+        }
+      >
+        <PercentageCircle
+          bgColor="#fff"
+          borderWidth={18}
+          color="#154c79"
+          containerStyle={null}
+          percent={0}
+          radius={100}
+          shadowColor="#999"
         >
-          0%
-        </Text>
+          <Text
+            style={
+              Object {
+                "fontSize": 38,
+                "fontWeight": "bold",
+              }
+            }
+          >
+            0%
+          </Text>
+        </PercentageCircle>
       </View>
       <View
         style={
