@@ -199,17 +199,8 @@ class Dashboard extends Component {
               <Text style={{fontSize: 38, fontWeight: 'bold'}}>{this.state.proportionTasksComplete + '%'}</Text>
             </ProgressCircle>
           </View>
-          {/**
-          <View>
-            <Image
-              style={styles.circle}
-              source={require('./blue-circle.png')}
-            />
-            <Text style={styles.numInteraction}>
-              {this.state.proportionTasksComplete + '%'}
-            </Text>
-          </View>
-    */}
+
+          <Text></Text>
           
           <View style={styles.subsection}>
             <Text style={styles.heading}>
