@@ -182,6 +182,7 @@ exports[`renders 1`] = `
           </Text>
         </PercentageCircle>
       </View>
+      <Text />
       <View
         style={
           Object {
