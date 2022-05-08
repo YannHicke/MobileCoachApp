@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:145846605664:android:7168c57cb0f117d588f005",
+        "mobilesdk_app_id": "1:145846605664:android:bb9be0763bd3ba3888f005",
         "android_client_info": {
-          "package_name": "mc_cs5150.test.client"
+          "package_name": "mccs5150.test.client"
         }
       },
       "oauth_client": [
