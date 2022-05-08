@@ -1,4 +1,4 @@
-package mc_cs5150.test.client;
+package mccs5150.test.client;
 
 import android.app.Application;
 
