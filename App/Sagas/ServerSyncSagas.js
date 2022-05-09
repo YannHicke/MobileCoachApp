@@ -1428,7 +1428,7 @@ export async function requestData() {
     }
     else {
       return {
-        "numericData": [0,0,0,0,0,0,0,0,0], 
+        "numericData": [0,0,0,0,0,0,0,0,0,0], 
         "textData": ["","","","","",""]
       };
     }
