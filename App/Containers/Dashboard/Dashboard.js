@@ -66,14 +66,16 @@ class Dashboard extends Component {
       if (parseInt(data.numericData[8]) != 0) {
         this.setState({'stars': data.numericData[0], 'highest': data.numericData[1], 'lastWeek': data.numericData[2], 'totTasks': data.numericData[8], 'course': data.textData[5],
           'proportionTasksComplete': Math.round((parseInt(data.numericData[3]) + parseInt(data.numericData[4]) + parseInt(data.numericData[5]) + parseInt(data.numericData[6]) + parseInt(data.numericData[7])) / parseInt(data.numericData[8]) * 100)});
+        for (let i = 0; i < data.numericData[8]; i++) {
+          this.state.dynamicTasks[i] = data.textData[i];
+          this.state.dynamicTasksCompletion[i] = data.numericData[i+3];
+        }
       }
       else {
         this.setState({'stars': data.numericData[0], 'highest': data.numericData[1], 'lastWeek': data.numericData[2], 'totTasks': data.numericData[8], 'course': data.textData[5],
           'proportionTasksComplete': 0, 'currentWeek': data.numericData[9]-1});
-      }
-      for (let i = 0; i < data.numericData[8]; i++) {
-        this.state.dynamicTasks[i] = data.textData[i];
-        this.state.dynamicTasksCompletion[i] = data.numericData[i+3];
+          this.state.dynamicTasks = [];
+          this.state.dynamicTasksCompletion = [];
       }
     });
   }
@@ -85,14 +87,16 @@ class Dashboard extends Component {
       if (parseInt(data.numericData[8]) != 0) {
         this.setState({'stars': data.numericData[0], 'highest': data.numericData[1], 'lastWeek': data.numericData[2], 'totTasks': data.numericData[8], 'course': data.textData[5],
           'proportionTasksComplete': Math.round((parseInt(data.numericData[3]) + parseInt(data.numericData[4]) + parseInt(data.numericData[5]) + parseInt(data.numericData[6]) + parseInt(data.numericData[7])) / parseInt(data.numericData[8]) * 100)});
+        for (let i = 0; i < data.numericData[8]; i++) {
+          this.state.dynamicTasks[i] = data.textData[i];
+          this.state.dynamicTasksCompletion[i] = data.numericData[i+3];
+        }
       }
       else {
         this.setState({'stars': data.numericData[0], 'highest': data.numericData[1], 'lastWeek': data.numericData[2], 'totTasks': data.numericData[8], 'course': data.textData[5],
           'proportionTasksComplete': 0, 'currentWeek': data.numericData[9]-1});
-      }
-      for (let i = 0; i < data.numericData[8]; i++) {
-        this.state.dynamicTasks[i] = data.textData[i];
-        this.state.dynamicTasksCompletion[i] = data.numericData[i+3];
+          this.state.dynamicTasks = [];
+          this.state.dynamicTasksCompletion = [];
       }
     });
   }
