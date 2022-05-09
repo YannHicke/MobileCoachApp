@@ -1410,14 +1410,19 @@ export async function requestData() {
       'variable/read/courseName',
       config
     );
+
+    const currentWeek = await axios.get(
+      'variable/read/week',
+      config
+    );
     
     if (star.status === 200 && maxStar.status === 200 && previousWeekStar.status === 200 && task1IsComplete.status === 200 && 
       task2IsComplete.status === 200 && task3IsComplete.status === 200 && task4IsComplete.status === 200 && 
       task5IsComplete.status === 200 && numTasks.status === 200 && task1.status === 200 && task2.status === 200 && task3.status === 200 && 
-      task4.status === 200 && task5.status === 200 && courseName.status === 200) {
+      task4.status === 200 && task5.status === 200 && courseName.status === 200 && currentWeek.status === 200) {
       return {
         "numericData": [star.data.value, maxStar.data.value, previousWeekStar.data.value, task1IsComplete.data.value, task2IsComplete.data.value, 
-          task3IsComplete.data.value, task4IsComplete.data.value, task5IsComplete.data.value, numTasks.data.value], 
+          task3IsComplete.data.value, task4IsComplete.data.value, task5IsComplete.data.value, numTasks.data.value, currentWeek.data.value], 
         "textData": [task1.data.value, task2.data.value, task3.data.value, task4.data.value, task5.data.value, courseName.data.value]
       };
     }
