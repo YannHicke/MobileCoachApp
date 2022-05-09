@@ -49,6 +49,7 @@ class Dashboard extends Component {
     starStates: [0,0,0,0,0,0,0], // 1 represents filled-in star, 0 represents empty star
     stars: 0, // the number of stars from the current week
     numPoints: 0, // the total number of points an user collects
+    currentWeek: 1, // the current week
     lastWeek: 0, // the number of stars from the last week
     highest: 0, // the maximum stars from all weeks
     course: "", // the course name the user enters
@@ -68,7 +69,7 @@ class Dashboard extends Component {
       }
       else {
         this.setState({'stars': data.numericData[0], 'highest': data.numericData[1], 'lastWeek': data.numericData[2], 'totTasks': data.numericData[8], 'course': data.textData[5],
-          'proportionTasksComplete': 0});
+          'proportionTasksComplete': 0, 'currentWeek': data.numericData[9]-1});
       }
       for (let i = 0; i < data.numericData[8]; i++) {
         this.state.dynamicTasks[i] = data.textData[i];
@@ -87,7 +88,7 @@ class Dashboard extends Component {
       }
       else {
         this.setState({'stars': data.numericData[0], 'highest': data.numericData[1], 'lastWeek': data.numericData[2], 'totTasks': data.numericData[8], 'course': data.textData[5],
-          'proportionTasksComplete': 0});
+          'proportionTasksComplete': 0, 'currentWeek': data.numericData[9]-1});
       }
       for (let i = 0; i < data.numericData[8]; i++) {
         this.state.dynamicTasks[i] = data.textData[i];
@@ -155,7 +156,7 @@ class Dashboard extends Component {
         <View style={{ justifyContent: 'space-between' }}>
           {this.renderNavigationbar(this.props)}
           <Card
-            title={'Course: ' + this.state.course}
+            title={'Course: ' + this.state.course + ' '.repeat(35) + 'Week ' + this.state.currentWeek}
             titleStyle={styles.cardTitle}
             containerStyle={{ marginBottom: 15 }}>
             <Text style={styles.TextElement}>Below, you will find your progress. Each star corresponds to task completion for a single day.</Text>
@@ -201,7 +202,7 @@ class Dashboard extends Component {
           </View>
 
           <Text></Text>
-          
+
           <View style={styles.subsection}>
             <Text style={styles.heading}>
             Your Plan
