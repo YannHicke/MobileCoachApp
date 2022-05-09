@@ -28,7 +28,7 @@ exports[`renders 1`] = `
           "marginBottom": 15,
         }
       }
-      title="Course: "
+      title="Course:                                    Week 1"
       titleStyle={
         Object {
           "color": "#3c3c3c",
