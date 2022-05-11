@@ -22,6 +22,7 @@ import InfoCardsLibrary from '../Containers/InfoCardsLibrary/InfoCardsLibrary';
 import MediaLibrary from '../Containers/MediaLibrary/MediaLibrary';
 import Settings from '../Containers/Settings/Settings';
 import Faq from '../Containers/FAQ/Faq';
+import Dashboard from '../Containers/Dashboard/Dashboard';
 
 import ScreenStartWithLogo from '../Containers/Onboarding/ScreenStartWithLogo';
 import ScreenLanguageSelection from '../Containers/Onboarding/ScreenLanguageSelection';
@@ -107,7 +108,7 @@ function SideMenu({
           ),
         }}
       />
-      <DrawerSideMenu.Screen
+      {/* <DrawerSideMenu.Screen
         name="DashboardChat"
         component={DashboardChat}
         options={{
@@ -130,8 +131,8 @@ function SideMenu({
             </View>
           ),
         }}
-      />
-      <DrawerSideMenu.Screen
+      /> */}
+      {/* <DrawerSideMenu.Screen
         name="InfoCardsLibrary"
         component={InfoCardsLibrary}
         options={{
@@ -150,8 +151,8 @@ function SideMenu({
           ),
         }}
         initialParams={{ screenProps }}
-      />
-      <DrawerSideMenu.Screen
+      /> */}
+      {/* <DrawerSideMenu.Screen
         name="MediaLibrary"
         component={MediaLibrary}
         initialParams={{ screenProps }}
@@ -170,7 +171,7 @@ function SideMenu({
             </View>
           ),
         }}
-      />
+      /> */}
       <DrawerSideMenu.Screen
         name="Faq"
         component={Faq}
@@ -192,6 +193,26 @@ function SideMenu({
         }}
       />
       <DrawerSideMenu.Screen
+        name="Dashboard"
+        component={Dashboard}
+        initialParams={{ screenProps }}
+        options={{
+          drawerIcon: ({ focused, size }) => (
+            <Icon
+              name="ios-analytics-outline"
+              size={size}
+              type="ionicon"
+              style={styles.actionButtonIcon}
+            />
+          ),
+          drawerLabel: () => (
+            <View style={styles.drawerLabel}>
+              <Text>{I18n.t('Menu.Dashboard', { locale: lang })}</Text>
+            </View>
+          ),
+        }}
+      />
+      {/* <DrawerSideMenu.Screen
         name="Settings"
         component={Settings}
         initialParams={{ screenProps }}
@@ -210,7 +231,7 @@ function SideMenu({
             </View>
           ),
         }}
-      />
+      /> */}
     </DrawerSideMenu.Navigator>
   );
 }

@@ -34,6 +34,7 @@ import {
   watchConnectionStateChannel,
   watchIncomingMessageChannel,
   watchOutgoingMessageChannel,
+  getSettings,
 } from './ServerSyncSagas';
 import { updateLanguage } from './SettingsSagas';
 import { watchAddDashboardMessages } from './StoryProgressSagas';
@@ -99,6 +100,7 @@ export default function* root() {
 
     // Server Sync (bottom layer)
     takeEvery(StartupActions.STARTUP, initializeServerSync),
+    takeEvery(StartupActions.STARTUP, getSettings),
     takeEvery(StartupActions.MANUALLY_CONNECT, initializeServerSync),
     takeEvery(MessageActions.COMMAND_TO_EXECUTE, handleCommands),
     takeEvery(

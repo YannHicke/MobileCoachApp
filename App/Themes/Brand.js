@@ -18,8 +18,8 @@ const brand = {
     grey3: '#F8F8F8',
   },
   images: {
-    logo: require('../Images/app_logo.png'),
-    poweredBy: require('../Images/powered_by.png'),
+    logo: require('../Images/chatbot.jpg'),
+    poweredBy: require('../Images/powered_by_team_native_learners.png'),
     chatBackground: require('../Images/Chat/bg.png'),
   },
 };

@@ -1,19 +1,18 @@
 {
   "Onboarding": {
-    "title": "MC Mobile App",
+    "title": "CoachEra",
     "subtitle": "A warm welcome!",
     "next": "Next",
     "chooseLanguage": "Please choose the language",
     "chooseCoach": "Please choose your coach",
-    "welcome": "Great choice!\n\nI am happy to accompany you as your digital coach.",
+    "welcome": "I am coach Jarvis!\n\nI am happy to accompany you as your digital coach.",
     "start": "Let's go",
     "checkQrUsageSubtitle": "How do you want to proceed?",
     "qrAvailable": "With QR-Code",
     "qrNotAvailable": "Without QR-Code"
   },
   "Coaches": {
-    "0": "Lukas",
-    "1": "Anna"
+    "0": "Jarvis"
   },
   "Chat": {
     "title": "Chat with {{coach}}",
@@ -84,7 +83,8 @@
     "MediaLibrary": "Media Library",
     "Faq": "Frequently Asked Questions",
     "Settings": "Settings",
-    "Disabled": "Disabled"
+    "Disabled": "Disabled",
+    "Dashboard": "Dashboard"
   },
   "Common": {
     "date": "date",
@@ -124,24 +124,54 @@
   },
   "Faq": {
     "header": "FAQ",
-    "faqTitle": "Frequently asked questions to XY",
+    "faqTitle": "Frequently Asked Questions",
     "questions": {
       "1": {
-        "title": "Test question 1?",
-        "answer": "Test answer 1"
+        "title": "I don't know how to take care of the schedule, what should I do?",
+        "answer": "Have small goals, try to achieve them and move onto the next one :)"
       },
       "2": {
-        "title": "Test question 2?",
-        "answer": "Test answer 2"
+        "title": "I can't handle time to complete all tasks on schedule, what should I do",
+        "answer": "Try to split your big goal into smaller one :)"
       },
       "3": {
-        "title": "Test question 3?",
-        "answer": "Test answer 3"
+        "title": "Why do we need to make plans?",
+        "answer": "Lots of studies suggest that making plans can help you achieve your goal. By making plans, we force ourselves to think about which actions we will take in what manner ahead of time. Having this process increases the likelihood of acting on the plan [1]. For example, a study found that people who made a plan to vote, including how to get to the voting site at the right time, were 1.3 times more likely to vote than people who did not make any plans [2]. The same goes for other goals, like losing weight or getting better grades on exams [3, 4]."
       },
       "4": {
-        "title": "Test question 4?",
-        "answer": "Test answer 4"
+        "title": "Which one is recommended, planning for the short-term or the long-term?",
+        "answer": "To successfully act on your plan, short-term planning can be more effective. Due to our limited working memory, we can successfully plan up to about a week or two [5]. Of course, it is still definitely helpful to have a longer-term goal and write it down, in addition to the short-term plans. This can motivate you even more [6]. In a learning context, a long-term goal can be something like completing a course. Or it can be an even longer ‘be-goal,’ like becoming a software engineer. Basically, short-term planning comes first, but you can have a long-term goal written to motivate you further."
+      },
+      "5": {
+        "title": "How many action items do we need for an effective plan?",
+        "answer": "Research suggests that the more action items (subordinate goals) you have, the less likely you will accomplish all of them and so complete your grand goal [7]. We recommend starting with one action item first. After you finish that one, you can increase the number of action items. This is a lot like building a micro-habit; committing to one activity for two minutes every day, for example, can compound over time, increasing your capacity to do other desired behaviors that move you closer to the ultimate goal [8]."
+      },
+      "6": {
+        "title": "How specific should my action items be?",
+        "answer": "That depends on how confident you are that you will be able to complete them. Having concrete plans can be more beneficial because they are readily actionable. Often, we have to take actions that we don’t want to do, and so we procrastinate. Take regular exercise, for example. You can just plan, I will jog sometime in the evening (not specific), or you can plan to jog for 2 miles after work on Wednesdays (specific). Instead of relying on your willpower to self-regulate, automating behaviors is the best strategy to make yourself actually do such actions, letting your body act on them without thinking too much [9]. Basically, having them in your routine or building a habit to the extent you don’t need to plan anymore is helpful! As the very first step, writing specific action items can reduce the chance that your mind gets involved and increase the likelihood of doing them. On the other hand, if you feel a bit less confident, it’s okay to have loose plans. Making concrete plans when you don’t feel confident about doing them may end up with you not accomplishing your goals and even reverse your progress [10]. So if you don’t feel like you can make it to work, keep your plans loose first, and then, once you have more confidence, start making a list of specific action items."
+      },
+      "7": {
+        "title": "I am motivated to do what I planned, but it is still hard to act on the plan. What should I do?",
+        "answer": "You can be strategic when making plans! There are ways of finishing your goals automatically, without struggling for willpower or procrastination. Psychologists have introduced a concept called implementation intention, which refers to a mental process that links a cue and an action [11]. For example, whenever I feed my dog, I've made it a point to watch one video lecture. In this situation, feeding the dog is my cue--an automatic way of reminding myself to do something. It's an instant habit. No need to debate, no need to think--the moment I do X, I also do Y. Scientists say this is much more likely to help me to get the task done.  It will be even more helpful to follow through with the plan if you choose an existing habit as a cue--something you do everyday anyways. Coupling a desired behavior to an already established routine or a habit increases the odds of the behavior becoming entrenched as a new habit [12]. For example, if you want to watch lecture videos regularly, find a daily activity such as feeding your dog, and plan to watch a lecture after your dog gets his bowl filled. In short, research tells us that the best strategy to overcome the motivation issue is to avoid it by automating the desired behaviors as if they are your habits. The trick is to pair your new plans with your old habits."
       }
+    },
+    "references": {
+      "1": "Rogers, T., Milkman, K., John, L. and Norton, M. 2015. Beyond good intentions: Prompting people to make plans improves follow-through on important tasks. Behavioral Science &amp; Policy. 1, 2 (2015), 33-41",
+      "2": "Nickerson, D. and Rogers, T. 2010. Do You Have a Voting Plan?. Psychological Science. 21, 2 (2010), 194-199",
+      "3": "Achtziger, A., Gollwitzer, P. and Sheeran, P. 2008. Implementation Intentions and Shielding Goal Striving From Unwanted Thoughts and Feelings. Personality and Social Psychology Bulletin. 34, 3 (2008), 381-393",
+      "4": "Duckworth, A., Grant, H., Loew, B., Oettingen, G. and Gollwitzer, P. 2011. Self‐regulation strategies improve self‐discipline in adolescents: benefits of mental contrasting and implementation intentions. Educational Psychology. 31, 1 (2011), 17-26",
+      "5": "Einstein, G., McDaniel, M., Williford, C., Pagan, J. and Dismukes, R. 2003. Forgetting of intentions in demanding situations is rapid. Journal of Experimental Psychology: Applied. 9, 3 (2003), 147-162",
+      "6": "Höchli, B., Brügger, A. and Messner, C. 2018. How Focusing on Superordinate Goals Motivates Broad, Long-Term Goal Pursuit: A Theoretical Perspective. Frontiers in Psychology. 9, (2018)",
+      "7": "Dalton, A. and Spiller, S. 2012. Too Much of a Good Thing: The Benefits of Implementation Intentions Depend on the Number of Goals. Journal of Consumer Research. 39, 3 (2012), 600-614",
+      "8": "Shnayder-Adams, M. and Sekhar, A. 2021. Micro-habits for life-long learning. Abdominal Radiology. 46, 12 (2021), 5509-5512",
+      "9": "Neal, D., Wood, W. and Drolet, A. 2013. How do people adhere to goals when willpower is low? The profits (and pitfalls) of strong habits. Journal of Personality and Social Psychology. 104, 6 (2013), 959-975",
+      "10": "Townsend, C. and Liu, W. 2012. Is Planning Good for You? The Differential Impact of Planning on Self-Regulation. Journal of Consumer Research. 39, 4 (2012), 688-703",
+      "11": "Gollwitzer, P. and Sheeran, P. 2006. Implementation Intentions and Goal Achievement: A Meta‐analysis of Effects and Processes. Advances in Experimental Social Psychology. (2006), 69-119",
+      "12": "Neal, D., Wood, W., Labrecque, J. and Lally, P. 2012. How do habits guide behavior? Perceived and actual triggers of habits in daily life. Journal of Experimental Social Psychology. 48, 2 (2012), 492-498"
     }
+  },
+  "Dashboard": {
+    "header": "Dashboard",
+    "dashboardTitle": "Dashboard"
   }
 }

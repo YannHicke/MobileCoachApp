@@ -1,3 +1,21 @@
+//
+//  ServerSyncSagas.js
+//
+//  Copyright (c) 2022 Rayan Wali, Yann Hicke, Jayesh Paunikar, Elena Stoeva, Ashley Yu, Yixin Zhang, Angela Lau. All rights reserved.
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
+//
+
 import { Platform } from 'react-native';
 import { call, select, put, take } from 'redux-saga/effects';
 import { delay } from 'redux-saga';
@@ -50,6 +68,7 @@ let listenerTwoRegistered = false;
 let inSync = false;
 
 let serverSyncUser = null;
+let settings = null;
 let restUser = null;
 let restToken = null;
 
@@ -61,6 +80,13 @@ let hasUserChatSendingPermission = false;
 let hasDashboardChatSendingPermission = false;
 
 const wait = (ms) => new Promise((resolve, reject) => setTimeout(resolve, ms));
+
+const user_message = "null";
+
+
+export function* getSettings(action){
+  settings = yield select(selectServerSyncSettings);
+}
 
 /* --- Set channels from outside --- */
 export function setChannels(
@@ -181,7 +207,7 @@ export function* handleCommands(action) {
       break;
 
     case 'store-deepstream-userid':
-      let deepstreamIDLong = parsedCommand.value;   
+      let deepstreamIDLong = parsedCommand.value;
       try {
         let deepstreamID = deepstreamIDLong.substring(3);
         log.debug('Storing deepstream ID: ' + deepstreamID);
@@ -189,7 +215,7 @@ export function* handleCommands(action) {
       } catch (error) {
         log.warn('Could not process "store-deepstream-userid" input: ' + error);
       }
-      break;  
+      break;
   }
 }
 
@@ -441,6 +467,7 @@ function* handleOutgoingMessage(action) {
     log.warn('Error when sending message:', error);
     return false;
   }
+
 }
 
 /* --- React on each state change accordingly --- */
@@ -460,8 +487,8 @@ function* reactBasedOnConnectionState(action) {
         yield delay(2000);
         onlineStatus = online;
       }
-      log.debug('Internet connection came up...');  
-      
+      log.debug('Internet connection came up...');
+
       connectionStateChannel.put({
         type: ServerSyncActions.CONNECTION_STATE_CHANGE,
         connectionState: ConnectionStates.CONNECTING,
@@ -1283,4 +1310,131 @@ export function* performUpdate() {
       log.warn('Could not write perform update flag to AsyncStorage.');
       log.warn(error.toString());
     });
+}
+
+/** Retrieves the information dynamically displayed on the Dashboard. */
+export async function requestData() {
+
+  let token;
+  let renew = false;
+
+  while ((token = await retrieveRestToken(renew)) === null) {
+    renew = true;
+    await wait(2000);
+  }
+
+  try {
+    const { useLocalServer, localRestURL, remoteRestURL } = serverSyncConfig;
+    const restURL = useLocalServer ? localRestURL : remoteRestURL;
+
+    const config = {
+      baseURL: restURL,
+      headers: {
+        user: restUser,
+        token: restToken,
+        data: {},
+      },
+    };
+    
+    const star = await axios.get(
+      'variable/read/star',
+      config
+    );
+
+    const maxStar = await axios.get(
+      'variable/read/maxStar',
+      config
+    );
+
+    const previousWeekStar = await axios.get(
+      'variable/read/previousWeekStar',
+      config
+    );
+
+    const task1IsComplete = await axios.get(
+      'variable/read/task1IsComplete',
+      config
+    );
+
+    const task2IsComplete = await axios.get(
+      'variable/read/task2IsComplete',
+      config
+    );
+
+    const task3IsComplete = await axios.get(
+      'variable/read/task3IsComplete',
+      config
+    );
+
+    const task4IsComplete = await axios.get(
+      'variable/read/task4IsComplete',
+      config
+    );
+
+    const task5IsComplete = await axios.get(
+      'variable/read/task5IsComplete',
+      config
+    );
+
+    const numTasks = await axios.get(
+      'variable/read/numTasks',
+      config
+    );
+
+    const task1 = await axios.get(
+      'variable/read/task1',
+      config
+    );
+
+    const task2 = await axios.get(
+      'variable/read/task2',
+      config
+    );
+
+    const task3 = await axios.get(
+      'variable/read/task3',
+      config
+    );
+
+    const task4 = await axios.get(
+      'variable/read/task4',
+      config
+    );
+
+    const task5 = await axios.get(
+      'variable/read/task5',
+      config
+    );
+
+    const courseName = await axios.get(
+      'variable/read/courseName',
+      config
+    );
+
+    const currentWeek = await axios.get(
+      'variable/read/week',
+      config
+    );
+    
+    if (star.status === 200 && maxStar.status === 200 && previousWeekStar.status === 200 && task1IsComplete.status === 200 && 
+      task2IsComplete.status === 200 && task3IsComplete.status === 200 && task4IsComplete.status === 200 && 
+      task5IsComplete.status === 200 && numTasks.status === 200 && task1.status === 200 && task2.status === 200 && task3.status === 200 && 
+      task4.status === 200 && task5.status === 200 && courseName.status === 200 && currentWeek.status === 200) {
+      return {
+        "numericData": [star.data.value, maxStar.data.value, previousWeekStar.data.value, task1IsComplete.data.value, task2IsComplete.data.value, 
+          task3IsComplete.data.value, task4IsComplete.data.value, task5IsComplete.data.value, numTasks.data.value, currentWeek.data.value], 
+        "textData": [task1.data.value, task2.data.value, task3.data.value, task4.data.value, task5.data.value, courseName.data.value]
+      };
+    }
+    else {
+      return {
+        "numericData": [0,0,0,0,0,0,0,0,0,0], 
+        "textData": ["","","","","",""]
+      };
+    }
+  } catch (exception) {
+      if (typeof exception.response !== 'undefined' && typeof exception.response.status !== 'undefined' && exception.response.status === 401) {
+        console.log('GET request failed due to timeout');
+      }
+  }
 }
