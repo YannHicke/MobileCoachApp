@@ -1,4 +1,6 @@
-# MobileCoach Client & Researcher Documentation
+# MobileCoach User, Client, and Researcher Documentation
+
+The user and maintainer's manuals can be accessed at https://pages.github.coecis.cornell.edu/cs5150-sp22/coachera-documentation.github.io/, describing how users can use the application and how future maintainers can take the current state of the system and build on it respectively.
 
 This ReadMe file contains the documentation for the setup of the Android and iOS mobile applications for reproducibility. In section (A.1), the steps for setting up the staged applications (from which you can run both Android and iOS apps) are detailed, and in section (A.2), the steps for installing the native Android application reserved for testing purposes are detailed. The documentation starts by defining the appropriate terminology in order to introduce clients, users, or researchers of the MobileCoach system to the necessary background before they begin the system installation phase.
 
