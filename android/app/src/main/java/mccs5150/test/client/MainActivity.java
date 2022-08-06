@@ -16,7 +16,7 @@ public class MainActivity extends ReactActivity {
     */
   @Override
   protected String getMainComponentName() {
-    return "McCs5150";
+    return "MCCS5150";
   }
 
   @Override

@@ -29,9 +29,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-               BuildableName = "McCs5150-tvOS.app"
-               BlueprintName = "McCs5150-tvOS"
-               ReferencedContainer = "container:McCs5150.xcodeproj">
+               BuildableName = "MCCS5150-tvOS.app"
+               BlueprintName = "MCCS5150-tvOS"
+               ReferencedContainer = "container:MCCS5150.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -47,9 +47,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D02E48F1E0B4A5D006451C7"
-               BuildableName = "McCs5150-tvOSTests.xctest"
-               BlueprintName = "McCs5150-tvOSTests"
-               ReferencedContainer = "container:McCs5150.xcodeproj">
+               BuildableName = "MCCS5150-tvOSTests.xctest"
+               BlueprintName = "MCCS5150-tvOSTests"
+               ReferencedContainer = "container:MCCS5150.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -69,9 +69,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "McCs5150-tvOS.app"
-            BlueprintName = "McCs5150-tvOS"
-            ReferencedContainer = "container:McCs5150.xcodeproj">
+            BuildableName = "MCCS5150-tvOS.app"
+            BlueprintName = "MCCS5150-tvOS"
+            ReferencedContainer = "container:MCCS5150.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -86,9 +86,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "McCs5150-tvOS.app"
-            BlueprintName = "McCs5150-tvOS"
-            ReferencedContainer = "container:McCs5150.xcodeproj">
+            BuildableName = "MCCS5150-tvOS.app"
+            BlueprintName = "MCCS5150-tvOS"
+            ReferencedContainer = "container:MCCS5150.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
