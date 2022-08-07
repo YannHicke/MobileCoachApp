@@ -18,7 +18,7 @@ const button = {
 const colors = {
   brand: Brand,
   main: {
-    appBackground: Brand.colors.grey3,
+    appBackground: Brand.colors.backgroundMain,
     chatBackground: Brand.colors.backgroundMain,
     headline: Brand.colors.textMain,
     paragraph: Brand.colors.textMain,
@@ -38,7 +38,7 @@ const colors = {
     loadingIndicator: Brand.colors.buttonBackground,
   },
   statusBar: {
-    background: Platform.OS === 'ios' ? 'transparent' : '#000',
+    background: Platform.OS === 'ios' ? 'transparent' : '#031036',
   },
   navigationBar: {
     background: Brand.colors.primary,

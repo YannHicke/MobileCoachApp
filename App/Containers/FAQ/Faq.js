@@ -68,13 +68,14 @@ class CollapsibleView extends Component {
           onPress={() => this.setState({ collapsed: !this.state.collapsed })}
           style={{
             flexDirection: 'row',
-            alignItems: 'flex-start',
-            marginRight: 15,
+            alignItems: 'center',
+            marginRight: '3%',
+            marginLeft: '3%',
           }}>
           <Icon
             name={this.state.collapsed ? 'chevron-right' : 'chevron-down'}
             type="font-awesome"
-            containerStyle={{ marginTop: 3, width: 15, marginRight: 5 }}
+            containerStyle={{ width: 15, marginRight: 10 }}
             iconStyle={[styles.headline, { fontSize: 14 }]}
           />
           <Text style={[styles.headline, { marginRight: 15 }]}>{title}</Text>
@@ -118,7 +119,7 @@ class Faq extends Component {
           <Card
             title={I18n.t('Faq.faqTitle')}
             titleStyle={styles.cardTitle}
-            containerStyle={{ marginBottom: 15 }}>
+            containerStyle={{ marginBottom: 15, borderRadius: 15 }}>
             <View key={1}>
               {questions.map((question, i) => (
                 <CollapsibleView
@@ -140,9 +141,7 @@ class Faq extends Component {
                 </CollapsibleView>
               ))}
             </View>
-            <Text></Text><Text></Text>
             <Text style={styles.referenceHeading}>References</Text>
-            <Text></Text>
             <View>
               {
                   references.map((item,index) => {
@@ -172,24 +171,35 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   referenceHeading: {
-    marginTop: 5,
-    marginLeft: 0,
+    marginLeft: '3%',
+    marginRight: '3%',
+    marginTop: '8%',
+    marginBottom: '4%',
     textAlign: "left",
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
   },
   referenceText: {
     fontSize: 12,
+    marginLeft: '3%',
+    marginRight: '3%',
   },
   container: {
     flex: 1,
-    backgroundColor: Colors.main.appBackground,
+    backgroundColor: Colors.appBackground,
   },
   cardTitle: {
     textAlign: 'left',
     color: Colors.main.headline,
+    marginLeft: '3%',
+    marginTop: 5,
+    fontSize: 22,
   },
   content: {
     flex: 1,
   },
+  paragraph: {
+    marginLeft: '11%',
+    marginRight: '5%',
+  }
 });

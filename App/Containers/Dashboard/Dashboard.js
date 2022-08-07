@@ -31,14 +31,16 @@ import {
 } from 'react-native';
 import ParsedText from 'react-native-parsed-text';
 import Collapsible from 'react-native-collapsible';
-import { Icon, Card, Button } from 'react-native-elements';
+import { Icon, Card, Button, withTheme, colors } from 'react-native-elements';
 import { Colors } from '../../Themes/';
+import { Fonts } from '../../Themes/';
 import PMNavigationBar from '../../Components/Navbar.js';
 import I18n from '../../I18n/I18n';
 import ProgressCircle from 'react-native-progress-circle';
 
 import Log from '../../Utils/Log.js';
 import { requestData } from '../../Sagas/ServerSyncSagas.js';
+import { capitalize } from 'lodash';
 const log = new Log('Containers/Dashboard');
 
 
@@ -48,11 +50,11 @@ class Dashboard extends Component {
     collapsed: true,
     starStates: [0,0,0,0,0,0,0], // 1 represents filled-in star, 0 represents empty star
     stars: 0, // the number of stars from the current week
-    numPoints: 0, // the total number of points an user collects
+    numPoints: 500, // the total number of points an user collects
     currentWeek: 1, // the current week
     lastWeek: 0, // the number of stars from the last week
     highest: 0, // the maximum stars from all weeks
-    course: "", // the course name the user enters
+    course: "INFO 1260", // the course name the user enters
     totTasks: 0, // the total number of tasks an user enters
     dynamicTasks: [], // the total list of tasks an user enters
     dynamicTasksCompletion: [], // completion status for each task an user enters
@@ -157,16 +159,25 @@ class Dashboard extends Component {
   render() {
     return (
       <ScrollView style={styles.content} indicatorStyle="white">
-        <View style={{ justifyContent: 'space-between' }}>
+        <View style={{ justifyContent: 'space-between', fontFamily: Fonts.type.family, marginBottom: 20}}>
           {this.renderNavigationbar(this.props)}
           <Card
-            title={'Course: ' + this.state.course + ' '.repeat(35) + 'Week ' + this.state.currentWeek}
+            title={this.state.course}
             titleStyle={styles.cardTitle}
-            containerStyle={{ marginBottom: 15 }}>
-            <Text style={styles.TextElement}>Below, you will find your progress. Each star corresponds to task completion for a single day.</Text>
-            <Text></Text><Text></Text>
+            borderRadius={15}
+            backgroundColor={"#fff"}
+            // for iOS
+            shadowColor={'#000'}
+            shadowRadius={2}
+            shadowOpacity={0.25}
+            // for Android
+            elevation={5}
+            >
+            <Text style={styles.week}>{'Week ' + this.state.currentWeek}</Text>
+            <Text></Text>
 
-            <View style={{ flexDirection: 'row', flex: 2 }}>
+            <View style={{flexDirection: 'column', flex: 2, justifyContent: 'center', alignItems: 'center'}}>
+              <View style={{flexDirection: 'row'}}>
             <Image
               style={styles.stretch}
               source={(this.state.stars >= 1 ? require('./filled-star.png') : require('./empty-star.png'))}
@@ -183,6 +194,9 @@ class Dashboard extends Component {
               style={styles.stretch}
               source={(this.state.stars >= 4 ? require('./filled-star.png') : require('./empty-star.png'))}
             />
+            </View>
+
+            <View style={{flexDirection: 'row'}}>
             <Image
               style={styles.stretch}
               source={(this.state.stars >= 5 ? require('./filled-star.png') : require('./empty-star.png'))}
@@ -195,21 +209,30 @@ class Dashboard extends Component {
               style={styles.stretch}
               source={(this.state.stars >= 7 ? require('./filled-star.png') : require('./empty-star.png'))}
             />
+            </View>
           </View>
 
           <View style={styles.circle}>
             <ProgressCircle 
-            percent={Number(this.state.proportionTasksComplete)} radius={100} borderWidth={18}
-            color="#154c79" shadowColor='#999' bgColor='#fff'>
-              <Text style={{fontSize: 38, fontWeight: 'bold'}}>{this.state.proportionTasksComplete + '%'}</Text>
+            percent={Number(this.state.proportionTasksComplete)} radius={80} borderWidth={15}
+            color="#00A7BF" shadowColor='#EEF1F5' bgColor='#fff'>
             </ProgressCircle>
           </View>
 
-          <Text></Text>
+          <View> 
+            <TouchableOpacity style={styles.infobutton}
+            onPress={() => {
+              alert('Each star corresponds to task completion for a single day!');
+            }}  
+            title='i'
+            >
+              <Text style={{color: '#fff', fontWeight: 'bold', alignSelf: 'center'}}>i</Text>
+            </TouchableOpacity>
+          </View>
 
           <View style={styles.subsection}>
             <Text style={styles.heading}>
-            Your Plan
+            YOUR PLAN
             </Text>
           <View>
             {
@@ -222,14 +245,39 @@ class Dashboard extends Component {
 
         <View style={styles.subsection}>
         <Text style={styles.heading}>
-            Your Past Accomplishments
+            PAST ACCOMPLISHMENTS
         </Text>
-        <Text style={styles.bullet}>
-          Last week: {this.state.lastWeek} stars
-        </Text>
-        <Text  style={styles.bullet}>
-          Highest: {this.state.highest} stars
-        </Text>
+        <View style={styles.subsection2}>
+        <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginRight: '8%'}}>
+        <Text style={{color: '#031036'}}>
+          Last week
+          </Text>
+          <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+          <Text style={styles.bullet}>
+          {this.state.lastWeek}
+          </Text>
+        <Image
+              style={styles.stretch2}
+              source={require('./filled-star.png')}
+            />
+            </View>
+            </View>
+        
+        <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginLeft: '8%'}}>
+        <Text style={{color: '#031036'}}>
+          Highest
+          </Text>
+          <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+          <Text style={styles.bullet}>
+          {this.state.highest}
+          </Text>
+          <Image
+              style={styles.stretch2}
+              source={require('./filled-star.png')}
+            />
+            </View>
+            </View>
+        </View>
         </View>
 
         </Card>
@@ -243,6 +291,7 @@ export default Dashboard;
 
 /** Generates the stylesheet of the Dashboard page. */
 const styles = StyleSheet.create({
+
   url: {
     color: Colors.buttons.common.background,
   },
@@ -252,6 +301,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 10,
     flexWrap: 'wrap',
+    textTransform: 'capitalize',
   },
   container: {
     flex: 1,
@@ -260,15 +310,21 @@ const styles = StyleSheet.create({
   },
   stretch: {
     width: 48,
-    height: 50,
+    height: 48,
     resizeMode: 'stretch',
+    margin: '1%',
+  },
+  stretch2: {
+    width: 42,
+    height: 42,
+    resizeMode: 'stretch',
+    marginLeft: 3,
   },
   circle: {
-    width: 175,
-    height: 175,
-    left: 85,
-    marginTop: 40,
-    marginBottom: 40,
+    width: '50%',
+    left: '25%',
+    right: '25%',
+    marginTop: '5%',
     justifyContent: "center",
     alignItems: "center",
   },
@@ -283,10 +339,12 @@ const styles = StyleSheet.create({
   cardTitle: {
     textAlign: 'left',
     color: Colors.main.headline,
+    fontWeight: 'bold',
+    fontSize: 28,
   },
   content: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: Colors.appBackground,
   },
   textElement: {
     fontSize: 16,
@@ -304,16 +362,38 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginLeft: 12,
     textAlign: "left",
-    fontSize: 25,
-    fontWeight: 'bold',
+    fontSize: 22,
+    fontWeight: "bold",
+    color: "#031036",
   },
   bullet: {
-    marginTop: 5,
-    marginLeft: 12,
-    textAlign: "left",
-    fontSize: 16,
+    fontSize: 48,
+    color: "#E7C039",
+    fontWeight: 'bold',
+    marginRight: 3,
   },
   subsection: {
     marginBottom: 20,
+  },
+  subsection2: {
+    marginTop: 20,
+    marginBottom: 20,
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    alignContent: "center",
+  },
+  week: {
+    color: '#286BCF',
+    fontWeight: 'bold',
+    fontFamily: 'nunito',
+  },
+  infobutton: {
+    width: 20,
+    height: 20,
+    backgroundColor: '#ACADAE',
+    borderRadius: 15,
+    alignSelf: 'flex-end',
+    right: '25%',
+    marginBottom: '5%',
   }
 });
