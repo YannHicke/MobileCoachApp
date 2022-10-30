@@ -6,7 +6,7 @@
     "start": "react-native start",
     "start:resetcache": "react-native start --reset-cache",
     "android": "react-native run-android",
-    "ios": "react-native run-ios",
+    "ios": "react-native run-ios --simulator='iPhone 14'",
     "react-devtools": "react-devtools",
     "test": "jest",
     "clean": "rm -rf $TMPDIR/react-* && watchman watch-del-all && yarn cache clean",
