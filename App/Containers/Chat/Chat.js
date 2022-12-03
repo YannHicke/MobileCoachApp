@@ -924,7 +924,6 @@ class Chat extends Component {
           {this.renderNavigationbar()}
           <GiftedChat
             {...this.getChatProperties()}
-            extraData={this.props.guistate.coachIsTyping}
           />
           {this.props.versionInfo &&
             this.props.versionInfo.level === 'orange' ? (
