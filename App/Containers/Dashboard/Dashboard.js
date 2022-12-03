@@ -19,14 +19,14 @@
 
 import React, { Component } from 'react';
 import {
-  Text ,
+  Text,
   TextInput,
   View,
   Image,
   StyleSheet,
   ScrollView,
-  SafeAreaView, 
-  TouchableOpacity, 
+  SafeAreaView,
+  TouchableOpacity,
   ImageBackground
 } from 'react-native';
 import ParsedText from 'react-native-parsed-text';
@@ -48,7 +48,7 @@ class Dashboard extends Component {
   state = {
     activeSection: false,
     collapsed: true,
-    starStates: [0,0,0,0,0,0,0], // 1 represents filled-in star, 0 represents empty star
+    starStates: [0, 0, 0, 0, 0, 0, 0], // 1 represents filled-in star, 0 represents empty star
     stars: 0, // the number of stars from the current week
     numPoints: 500, // the total number of points an user collects
     currentWeek: 1, // the current week
@@ -64,43 +64,51 @@ class Dashboard extends Component {
   /* first time data is requested */
   componentDidMount() {
     requestData()
-    .then(data => {
-      if (parseInt(data.numericData[8]) != 0) {
-        this.setState({'stars': data.numericData[0], 'highest': data.numericData[1], 'lastWeek': data.numericData[2], 'totTasks': data.numericData[8], 'course': data.textData[5],
-          'proportionTasksComplete': Math.round((parseInt(data.numericData[3]) + parseInt(data.numericData[4]) + parseInt(data.numericData[5]) + parseInt(data.numericData[6]) + parseInt(data.numericData[7])) / parseInt(data.numericData[8]) * 100)});
-        for (let i = 0; i < data.numericData[8]; i++) {
-          this.state.dynamicTasks[i] = data.textData[i];
-          this.state.dynamicTasksCompletion[i] = data.numericData[i+3];
+      .then(data => {
+        if (parseInt(data.numericData[8]) != 0) {
+          this.setState({
+            'stars': data.numericData[0], 'highest': data.numericData[1], 'lastWeek': data.numericData[2], 'totTasks': data.numericData[8], 'course': data.textData[5],
+            'proportionTasksComplete': Math.round((parseInt(data.numericData[3]) + parseInt(data.numericData[4]) + parseInt(data.numericData[5]) + parseInt(data.numericData[6]) + parseInt(data.numericData[7])) / parseInt(data.numericData[8]) * 100)
+          });
+          for (let i = 0; i < data.numericData[8]; i++) {
+            this.state.dynamicTasks[i] = data.textData[i];
+            this.state.dynamicTasksCompletion[i] = data.numericData[i + 3];
+          }
         }
-      }
-      else {
-        this.setState({'stars': data.numericData[0], 'highest': data.numericData[1], 'lastWeek': data.numericData[2], 'totTasks': data.numericData[8], 'course': data.textData[5],
-          'proportionTasksComplete': 0, 'currentWeek': data.numericData[9]-1});
+        else {
+          this.setState({
+            'stars': data.numericData[0], 'highest': data.numericData[1], 'lastWeek': data.numericData[2], 'totTasks': data.numericData[8], 'course': data.textData[5],
+            'proportionTasksComplete': 0, 'currentWeek': data.numericData[9] - 1
+          });
           this.state.dynamicTasks = [];
           this.state.dynamicTasksCompletion = [];
-      }
-    });
+        }
+      });
   }
 
   /* automatically updates state as data changes */
   componentDidUpdate() {
     requestData()
-    .then(data => {
-      if (parseInt(data.numericData[8]) != 0) {
-        this.setState({'stars': data.numericData[0], 'highest': data.numericData[1], 'lastWeek': data.numericData[2], 'totTasks': data.numericData[8], 'course': data.textData[5],
-          'proportionTasksComplete': Math.round((parseInt(data.numericData[3]) + parseInt(data.numericData[4]) + parseInt(data.numericData[5]) + parseInt(data.numericData[6]) + parseInt(data.numericData[7])) / parseInt(data.numericData[8]) * 100)});
-        for (let i = 0; i < data.numericData[8]; i++) {
-          this.state.dynamicTasks[i] = data.textData[i];
-          this.state.dynamicTasksCompletion[i] = data.numericData[i+3];
+      .then(data => {
+        if (parseInt(data.numericData[8]) != 0) {
+          this.setState({
+            'stars': data.numericData[0], 'highest': data.numericData[1], 'lastWeek': data.numericData[2], 'totTasks': data.numericData[8], 'course': data.textData[5],
+            'proportionTasksComplete': Math.round((parseInt(data.numericData[3]) + parseInt(data.numericData[4]) + parseInt(data.numericData[5]) + parseInt(data.numericData[6]) + parseInt(data.numericData[7])) / parseInt(data.numericData[8]) * 100)
+          });
+          for (let i = 0; i < data.numericData[8]; i++) {
+            this.state.dynamicTasks[i] = data.textData[i];
+            this.state.dynamicTasksCompletion[i] = data.numericData[i + 3];
+          }
         }
-      }
-      else {
-        this.setState({'stars': data.numericData[0], 'highest': data.numericData[1], 'lastWeek': data.numericData[2], 'totTasks': data.numericData[8], 'course': data.textData[5],
-          'proportionTasksComplete': 0, 'currentWeek': data.numericData[9]-1});
+        else {
+          this.setState({
+            'stars': data.numericData[0], 'highest': data.numericData[1], 'lastWeek': data.numericData[2], 'totTasks': data.numericData[8], 'course': data.textData[5],
+            'proportionTasksComplete': 0, 'currentWeek': data.numericData[9] - 1
+          });
           this.state.dynamicTasks = [];
           this.state.dynamicTasksCompletion = [];
-      }
-    });
+        }
+      });
   }
 
   // toggleExpanded = () => {
@@ -159,7 +167,7 @@ class Dashboard extends Component {
   render() {
     return (
       <ScrollView style={styles.content} indicatorStyle="white">
-        <View style={{ justifyContent: 'space-between', fontFamily: Fonts.type.family, marginBottom: 20}}>
+        <View style={{ justifyContent: 'space-between', fontFamily: Fonts.type.family, marginBottom: 20 }}>
           {this.renderNavigationbar(this.props)}
           <Card
             title={this.state.course}
@@ -172,117 +180,117 @@ class Dashboard extends Component {
             shadowOpacity={0.25}
             // for Android
             elevation={5}
-            >
+          >
             <Text style={styles.week}>{'Week ' + this.state.currentWeek}</Text>
             <Text></Text>
 
-            <View style={{flexDirection: 'column', flex: 2, justifyContent: 'center', alignItems: 'center'}}>
-              <View style={{flexDirection: 'row'}}>
-            <Image
-              style={styles.stretch}
-              source={(this.state.stars >= 1 ? require('./filled-star.png') : require('./empty-star.png'))}
-            />
-            <Image
-              style={styles.stretch}
-              source={(this.state.stars >= 2 ? require('./filled-star.png') : require('./empty-star.png'))}
-            />
-            <Image
-              style={styles.stretch}
-              source={(this.state.stars >= 3 ? require('./filled-star.png') : require('./empty-star.png'))}
-            />
-            <Image
-              style={styles.stretch}
-              source={(this.state.stars >= 4 ? require('./filled-star.png') : require('./empty-star.png'))}
-            />
+            <View style={{ flexDirection: 'column', flex: 2, justifyContent: 'center', alignItems: 'center' }}>
+              <View style={{ flexDirection: 'row' }}>
+                <Image
+                  style={styles.stretch}
+                  source={(this.state.stars >= 1 ? require('./filled-star.png') : require('./empty-star.png'))}
+                />
+                <Image
+                  style={styles.stretch}
+                  source={(this.state.stars >= 2 ? require('./filled-star.png') : require('./empty-star.png'))}
+                />
+                <Image
+                  style={styles.stretch}
+                  source={(this.state.stars >= 3 ? require('./filled-star.png') : require('./empty-star.png'))}
+                />
+                <Image
+                  style={styles.stretch}
+                  source={(this.state.stars >= 4 ? require('./filled-star.png') : require('./empty-star.png'))}
+                />
+              </View>
+
+              <View style={{ flexDirection: 'row' }}>
+                <Image
+                  style={styles.stretch}
+                  source={(this.state.stars >= 5 ? require('./filled-star.png') : require('./empty-star.png'))}
+                />
+                <Image
+                  style={styles.stretch}
+                  source={(this.state.stars >= 6 ? require('./filled-star.png') : require('./empty-star.png'))}
+                />
+                <Image
+                  style={styles.stretch}
+                  source={(this.state.stars >= 7 ? require('./filled-star.png') : require('./empty-star.png'))}
+                />
+              </View>
             </View>
 
-            <View style={{flexDirection: 'row'}}>
-            <Image
-              style={styles.stretch}
-              source={(this.state.stars >= 5 ? require('./filled-star.png') : require('./empty-star.png'))}
-            />
-            <Image
-              style={styles.stretch}
-              source={(this.state.stars >= 6 ? require('./filled-star.png') : require('./empty-star.png'))}
-            />
-            <Image
-              style={styles.stretch}
-              source={(this.state.stars >= 7 ? require('./filled-star.png') : require('./empty-star.png'))}
-            />
+            <View style={styles.circle}>
+              <ProgressCircle
+                percent={Number(this.state.proportionTasksComplete)} radius={80} borderWidth={15}
+                color="#00A7BF" shadowColor='#EEF1F5' bgColor='#fff'>
+              </ProgressCircle>
             </View>
-          </View>
 
-          <View style={styles.circle}>
-            <ProgressCircle 
-            percent={Number(this.state.proportionTasksComplete)} radius={80} borderWidth={15}
-            color="#00A7BF" shadowColor='#EEF1F5' bgColor='#fff'>
-            </ProgressCircle>
-          </View>
+            <View>
+              <TouchableOpacity style={styles.infobutton}
+                onPress={() => {
+                  alert('Each star corresponds to task completion for a single day!');
+                }}
+                title='i'
+              >
+                <Text style={{ color: '#fff', fontWeight: 'bold', alignSelf: 'center' }}>i</Text>
+              </TouchableOpacity>
+            </View>
 
-          <View> 
-            <TouchableOpacity style={styles.infobutton}
-            onPress={() => {
-              alert('Each star corresponds to task completion for a single day!');
-            }}  
-            title='i'
-            >
-              <Text style={{color: '#fff', fontWeight: 'bold', alignSelf: 'center'}}>i</Text>
-            </TouchableOpacity>
-          </View>
+            <View style={styles.subsection}>
+              <Text style={styles.heading}>
+                YOUR PLAN
+              </Text>
+              <View>
+                {
+                  this.state.dynamicTasks.map((item, index) => {
+                    return <Text key={index} style={styles.bullet}>{this.completionIndicator(item, this.state.dynamicTasksCompletion[index])}</Text>
+                  })
+                }
+              </View>
+            </View>
 
-          <View style={styles.subsection}>
-            <Text style={styles.heading}>
-            YOUR PLAN
-            </Text>
-          <View>
-            {
-              this.state.dynamicTasks.map((item,index) => {
-                return <Text style={styles.bullet}>{this.completionIndicator(item, this.state.dynamicTasksCompletion[index])}</Text>
-              })
-            }
-          </View>
+            <View style={styles.subsection}>
+              <Text style={styles.heading}>
+                PAST ACCOMPLISHMENTS
+              </Text>
+              <View style={styles.subsection2}>
+                <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginRight: '8%' }}>
+                  <Text style={{ color: '#031036' }}>
+                    Last week
+                  </Text>
+                  <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                    <Text style={styles.bullet}>
+                      {this.state.lastWeek}
+                    </Text>
+                    <Image
+                      style={styles.stretch2}
+                      source={require('./filled-star.png')}
+                    />
+                  </View>
+                </View>
+
+                <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginLeft: '8%' }}>
+                  <Text style={{ color: '#031036' }}>
+                    Highest
+                  </Text>
+                  <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                    <Text style={styles.bullet}>
+                      {this.state.highest}
+                    </Text>
+                    <Image
+                      style={styles.stretch2}
+                      source={require('./filled-star.png')}
+                    />
+                  </View>
+                </View>
+              </View>
+            </View>
+
+          </Card>
         </View>
-
-        <View style={styles.subsection}>
-        <Text style={styles.heading}>
-            PAST ACCOMPLISHMENTS
-        </Text>
-        <View style={styles.subsection2}>
-        <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginRight: '8%'}}>
-        <Text style={{color: '#031036'}}>
-          Last week
-          </Text>
-          <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-          <Text style={styles.bullet}>
-          {this.state.lastWeek}
-          </Text>
-        <Image
-              style={styles.stretch2}
-              source={require('./filled-star.png')}
-            />
-            </View>
-            </View>
-        
-        <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginLeft: '8%'}}>
-        <Text style={{color: '#031036'}}>
-          Highest
-          </Text>
-          <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-          <Text style={styles.bullet}>
-          {this.state.highest}
-          </Text>
-          <Image
-              style={styles.stretch2}
-              source={require('./filled-star.png')}
-            />
-            </View>
-            </View>
-        </View>
-        </View>
-
-        </Card>
-      </View>
-    </ScrollView>
+      </ScrollView>
     );
   }
 }
