@@ -65,23 +65,18 @@ class Dashboard extends Component {
   componentDidMount() {
     requestData()
       .then(data => {
-        if (parseInt(data.numericData[8]) != 0) {
-          this.setState({
-            'stars': data.numericData[0], 'highest': data.numericData[1], 'lastWeek': data.numericData[2], 'totTasks': data.numericData[8], 'course': data.textData[5],
-            'proportionTasksComplete': Math.round((parseInt(data.numericData[3]) + parseInt(data.numericData[4]) + parseInt(data.numericData[5]) + parseInt(data.numericData[6]) + parseInt(data.numericData[7])) / parseInt(data.numericData[8]) * 100)
-          });
-          for (let i = 0; i < data.numericData[8]; i++) {
-            this.state.dynamicTasks[i] = data.textData[i];
-            this.state.dynamicTasksCompletion[i] = data.numericData[i + 3];
-          }
-        }
-        else {
-          this.setState({
-            'stars': data.numericData[0], 'highest': data.numericData[1], 'lastWeek': data.numericData[2], 'totTasks': data.numericData[8], 'course': data.textData[5],
-            'proportionTasksComplete': 0, 'currentWeek': data.numericData[9] - 1
-          });
-          this.state.dynamicTasks = [];
-          this.state.dynamicTasksCompletion = [];
+        let completePercentage = Math.round(parseInt(data.numericData['star']) / parseInt(data.numericData['totTasks']) * 100);
+        this.setState({
+          'stars': data.numericData['star'], 'totTasks': data.numericData['totTasks'], 'course': data.textData['courseName'],
+          'proportionTasksComplete': completePercentage, 'currentWeek': parseInt(data.numericData['currentWeek']) + 1,
+          'highest': data.numericData['starHighest'], 'lastWeek': data.numericData['starLastWeek']
+        });
+
+        for (let i = 0; i < data.numericData['totTasks']; i++) {
+          this.state.dynamicTasks[i] = data.textData[i + 1];
+          // TODO: check if each task is complete in the intervention
+          // Default: set to false
+          this.state.dynamicTasksCompletion[i] = 0;
         }
       });
   }
@@ -90,23 +85,18 @@ class Dashboard extends Component {
   componentDidUpdate() {
     requestData()
       .then(data => {
-        if (parseInt(data.numericData[8]) != 0) {
-          this.setState({
-            'stars': data.numericData[0], 'highest': data.numericData[1], 'lastWeek': data.numericData[2], 'totTasks': data.numericData[8], 'course': data.textData[5],
-            'proportionTasksComplete': Math.round((parseInt(data.numericData[3]) + parseInt(data.numericData[4]) + parseInt(data.numericData[5]) + parseInt(data.numericData[6]) + parseInt(data.numericData[7])) / parseInt(data.numericData[8]) * 100)
-          });
-          for (let i = 0; i < data.numericData[8]; i++) {
-            this.state.dynamicTasks[i] = data.textData[i];
-            this.state.dynamicTasksCompletion[i] = data.numericData[i + 3];
-          }
-        }
-        else {
-          this.setState({
-            'stars': data.numericData[0], 'highest': data.numericData[1], 'lastWeek': data.numericData[2], 'totTasks': data.numericData[8], 'course': data.textData[5],
-            'proportionTasksComplete': 0, 'currentWeek': data.numericData[9] - 1
-          });
-          this.state.dynamicTasks = [];
-          this.state.dynamicTasksCompletion = [];
+        let completePercentage = Math.round(parseInt(data.numericData['star']) / parseInt(data.numericData['totTasks']) * 100);
+        this.setState({
+          'stars': data.numericData['star'], 'totTasks': data.numericData['totTasks'], 'course': data.textData['courseName'],
+          'proportionTasksComplete': completePercentage, 'currentWeek': parseInt(data.numericData['currentWeek']) + 1,
+          'highest': data.numericData['starHighest'], 'lastWeek': data.numericData['starLastWeek']
+        });
+
+        for (let i = 0; i < data.numericData['totTasks']; i++) {
+          this.state.dynamicTasks[i] = data.textData[i + 1];
+          // TODO: check if each task is complete in the intervention
+          // Default: set to false
+          this.state.dynamicTasksCompletion[i] = 0;
         }
       });
   }
@@ -170,7 +160,7 @@ class Dashboard extends Component {
         <View style={{ justifyContent: 'space-between', fontFamily: Fonts.type.family, marginBottom: 20 }}>
           {this.renderNavigationbar(this.props)}
           <Card
-            title={this.state.course}
+            title={this.state.course.toUpperCase()}
             titleStyle={styles.cardTitle}
             borderRadius={15}
             backgroundColor={"#fff"}
@@ -245,7 +235,7 @@ class Dashboard extends Component {
               <View>
                 {
                   this.state.dynamicTasks.map((item, index) => {
-                    return <Text key={index} style={styles.bullet}>{this.completionIndicator(item, this.state.dynamicTasksCompletion[index])}</Text>
+                    return <Text key={index} style={styles.subBullet}>{this.completionIndicator(item, this.state.dynamicTasksCompletion[index])}</Text>
                   })
                 }
               </View>
@@ -379,6 +369,12 @@ const styles = StyleSheet.create({
     color: "#E7C039",
     fontWeight: 'bold',
     marginRight: 3,
+  },
+  subBullet: {
+    fontSize: 16,
+    color: "#E7C039",
+    fontWeight: 'bold',
+    marginLeft: 12,
   },
   subsection: {
     marginBottom: 20,

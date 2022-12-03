@@ -84,7 +84,7 @@ const wait = (ms) => new Promise((resolve, reject) => setTimeout(resolve, ms));
 const user_message = "null";
 
 
-export function* getSettings(action){
+export function* getSettings(action) {
   settings = yield select(selectServerSyncSettings);
 }
 
@@ -1055,8 +1055,8 @@ const rpcPromise = (name, data, requiresSync = false) =>
                 firstTry = false;
                 log.debug(
                   'rpcPromise TRACE ' +
-                    id +
-                    ' - E2 (EXPECTING RETRY S7 or E2) - method:',
+                  id +
+                  ' - E2 (EXPECTING RETRY S7 or E2) - method:',
                   name,
                 );
                 return;
@@ -1335,49 +1335,24 @@ export async function requestData() {
         data: {},
       },
     };
-    
+
     const star = await axios.get(
       'variable/read/star',
       config
     );
 
-    const maxStar = await axios.get(
-      'variable/read/maxStar',
+    const starHighest = await axios.get(
+      'variable/read/starHighest',
       config
     );
 
-    const previousWeekStar = await axios.get(
-      'variable/read/previousWeekStar',
+    const starLastWeek = await axios.get(
+      'variable/read/starLastWeek',
       config
     );
 
-    const task1IsComplete = await axios.get(
-      'variable/read/task1IsComplete',
-      config
-    );
-
-    const task2IsComplete = await axios.get(
-      'variable/read/task2IsComplete',
-      config
-    );
-
-    const task3IsComplete = await axios.get(
-      'variable/read/task3IsComplete',
-      config
-    );
-
-    const task4IsComplete = await axios.get(
-      'variable/read/task4IsComplete',
-      config
-    );
-
-    const task5IsComplete = await axios.get(
-      'variable/read/task5IsComplete',
-      config
-    );
-
-    const numTasks = await axios.get(
-      'variable/read/numTasks',
+    const totTasks = await axios.get(
+      'variable/read/totTasks',
       config
     );
 
@@ -1412,29 +1387,37 @@ export async function requestData() {
     );
 
     const currentWeek = await axios.get(
-      'variable/read/week',
+      'variable/read/currentWeek',
       config
     );
-    
-    if (star.status === 200 && maxStar.status === 200 && previousWeekStar.status === 200 && task1IsComplete.status === 200 && 
-      task2IsComplete.status === 200 && task3IsComplete.status === 200 && task4IsComplete.status === 200 && 
-      task5IsComplete.status === 200 && numTasks.status === 200 && task1.status === 200 && task2.status === 200 && task3.status === 200 && 
-      task4.status === 200 && task5.status === 200 && courseName.status === 200 && currentWeek.status === 200) {
+
+    if (star.status === 200 && totTasks.status === 200 && currentWeek.status === 200 && starHighest.status === 200 &&
+      starLastWeek.status === 200 && task1.status === 200 && task2.status === 200 && task3.status === 200 &&
+      task4.status === 200 && task5.status === 200 && courseName.status === 200) {
       return {
-        "numericData": [star.data.value, maxStar.data.value, previousWeekStar.data.value, task1IsComplete.data.value, task2IsComplete.data.value, 
-          task3IsComplete.data.value, task4IsComplete.data.value, task5IsComplete.data.value, numTasks.data.value, currentWeek.data.value], 
-        "textData": [task1.data.value, task2.data.value, task3.data.value, task4.data.value, task5.data.value, courseName.data.value]
-      };
+        "numericData": {
+          'star': star.data.value, 'totTasks': totTasks.data.value, 'currentWeek': currentWeek.data.value,
+          'starHighest': starHighest.data.value, 'starLastWeek': starLastWeek.data.value
+        },
+        "textData": {
+          1: task1.data.value, 2: task2.data.value, 3: task3.data.value, 4: task4.data.value, 5: task5.data.value,
+          'courseName': courseName.data.value
+        }
+      }
     }
     else {
       return {
-        "numericData": [0,0,0,0,0,0,0,0,0,0], 
-        "textData": ["","","","","",""]
+        "numericData": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        "textData": ["", "", "", "", "", ""]
       };
     }
+
   } catch (exception) {
-      if (typeof exception.response !== 'undefined' && typeof exception.response.status !== 'undefined' && exception.response.status === 401) {
-        console.log('GET request failed due to timeout');
-      }
+    if (typeof exception.response !== 'undefined' && typeof exception.response.status !== 'undefined' && exception.response.status === 401) {
+      console.log('GET request failed due to timeout');
+    }
+    else {
+      console.log('undefined error')
+    }
   }
 }
