@@ -122,7 +122,7 @@ export default class SelectOneButton extends Component {
       <View style={inputMessageStyles.container}>
         {options.map((item, index) => {
           return (
-            <View>
+            <View key={index}>
               <Option
                 key={index}
                 optionKey={index}
