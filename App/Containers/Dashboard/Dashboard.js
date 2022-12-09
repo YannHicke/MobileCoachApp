@@ -65,13 +65,6 @@ class Dashboard extends Component {
   componentDidMount() {
     requestData()
       .then(data => {
-        let completePercentage = Math.round(parseInt(data.numericData['star']) / parseInt(data.numericData['totTasks']) * 100);
-        this.setState({
-          'stars': data.numericData['star'], 'totTasks': data.numericData['totTasks'], 'course': data.textData['courseName'],
-          'proportionTasksComplete': completePercentage, 'currentWeek': parseInt(data.numericData['currentWeek']) + 1,
-          'highest': data.numericData['starHighest'], 'lastWeek': data.numericData['starLastWeek']
-        });
-
         for (let i = 0; i < data.numericData['totTasks']; i++) {
           this.state.dynamicTasks[i] = data.textData[i + 1];
         }
@@ -83,6 +76,14 @@ class Dashboard extends Component {
             this.state.dynamicTasksCompletion[taskID - 1] = 1;
           }
         }
+
+        let numTasksCompleted = this.state.dynamicTasksCompletion.reduce((a, b) => a + b);
+        this.setState({
+          'currentWeek': parseInt(data.numericData['currentWeek']) + 1,
+          'stars': data.numericData['star'], 'totTasks': data.numericData['totTasks'], 'course': data.textData['courseName'],
+          'proportionTasksComplete': Math.round(numTasksCompleted / data.numericData['totTasks'] * 100),
+          'highest': data.numericData['starHighest'], 'lastWeek': data.numericData['starLastWeek']
+        });
       });
   }
 
@@ -90,13 +91,6 @@ class Dashboard extends Component {
   componentDidUpdate() {
     requestData()
       .then(data => {
-        let completePercentage = Math.round(parseInt(data.numericData['star']) / parseInt(data.numericData['totTasks']) * 100);
-        this.setState({
-          'stars': data.numericData['star'], 'totTasks': data.numericData['totTasks'], 'course': data.textData['courseName'],
-          'proportionTasksComplete': completePercentage, 'currentWeek': parseInt(data.numericData['currentWeek']) + 1,
-          'highest': data.numericData['starHighest'], 'lastWeek': data.numericData['starLastWeek']
-        });
-
         for (let i = 0; i < data.numericData['totTasks']; i++) {
           this.state.dynamicTasks[i] = data.textData[i + 1];
         }
@@ -108,6 +102,14 @@ class Dashboard extends Component {
             this.state.dynamicTasksCompletion[taskID - 1] = 1;
           }
         }
+
+        let numTasksCompleted = this.state.dynamicTasksCompletion.reduce((a, b) => a + b);
+        this.setState({
+          'currentWeek': parseInt(data.numericData['currentWeek']) + 1,
+          'stars': data.numericData['star'], 'totTasks': data.numericData['totTasks'], 'course': data.textData['courseName'],
+          'proportionTasksComplete': Math.round(numTasksCompleted / data.numericData['totTasks'] * 100),
+          'highest': data.numericData['starHighest'], 'lastWeek': data.numericData['starLastWeek']
+        });
       });
   }
 
