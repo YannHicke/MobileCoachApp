@@ -74,9 +74,14 @@ class Dashboard extends Component {
 
         for (let i = 0; i < data.numericData['totTasks']; i++) {
           this.state.dynamicTasks[i] = data.textData[i + 1];
-          // TODO: check if each task is complete in the intervention
-          // Default: set to false
-          this.state.dynamicTasksCompletion[i] = 0;
+        }
+
+        tasks = data.textData['learningActivity'].split(",");
+        for (const i in tasks) {
+          if (tasks[i].length > 0) {
+            taskID = parseInt(tasks[i].slice(-1));
+            this.state.dynamicTasksCompletion[taskID - 1] = 1;
+          }
         }
       });
   }
@@ -94,9 +99,14 @@ class Dashboard extends Component {
 
         for (let i = 0; i < data.numericData['totTasks']; i++) {
           this.state.dynamicTasks[i] = data.textData[i + 1];
-          // TODO: check if each task is complete in the intervention
-          // Default: set to false
-          this.state.dynamicTasksCompletion[i] = 0;
+        }
+
+        tasks = data.textData['learningActivity'].split(",");
+        for (const i in tasks) {
+          if (tasks[i].length > 0) {
+            taskID = parseInt(tasks[i].slice(-1));
+            this.state.dynamicTasksCompletion[taskID - 1] = 1;
+          }
         }
       });
   }
@@ -214,6 +224,7 @@ class Dashboard extends Component {
               <ProgressCircle
                 percent={Number(this.state.proportionTasksComplete)} radius={80} borderWidth={15}
                 color="#00A7BF" shadowColor='#EEF1F5' bgColor='#fff'>
+                <Text style={styles.percentage}>{this.state.proportionTasksComplete + '%'}</Text>
               </ProgressCircle>
             </View>
 
@@ -399,5 +410,10 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     right: '25%',
     marginBottom: '5%',
+  },
+  percentage: {
+    fontSize: 22,
+    fontWeight: "bold",
+    color: "#00A7BF",
   }
 });

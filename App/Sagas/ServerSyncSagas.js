@@ -1391,9 +1391,14 @@ export async function requestData() {
       config
     );
 
+    const learningActivity = await axios.get(
+      'variable/read/learningActivity',
+      config
+    );
+
     if (star.status === 200 && totTasks.status === 200 && currentWeek.status === 200 && starHighest.status === 200 &&
       starLastWeek.status === 200 && task1.status === 200 && task2.status === 200 && task3.status === 200 &&
-      task4.status === 200 && task5.status === 200 && courseName.status === 200) {
+      task4.status === 200 && task5.status === 200 && courseName.status === 200 && learningActivity.status === 200) {
       return {
         "numericData": {
           'star': star.data.value, 'totTasks': totTasks.data.value, 'currentWeek': currentWeek.data.value,
@@ -1401,14 +1406,20 @@ export async function requestData() {
         },
         "textData": {
           1: task1.data.value, 2: task2.data.value, 3: task3.data.value, 4: task4.data.value, 5: task5.data.value,
-          'courseName': courseName.data.value
+          'courseName': courseName.data.value, "learningActivity": learningActivity.data.value
         }
       }
     }
     else {
       return {
-        "numericData": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        "textData": ["", "", "", "", "", ""]
+        "numericData": {
+          'star': 0, 'totTasks': 0, 'currentWeek': 0,
+          'starHighest': 0, 'starLastWeek': 0
+        },
+        "textData": {
+          1: "", 2: "", 3: "", 4: "", 5: "",
+          'courseName': "", "learningActivity": ""
+        }
       };
     }
 
