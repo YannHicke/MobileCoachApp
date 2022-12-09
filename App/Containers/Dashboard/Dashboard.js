@@ -77,7 +77,7 @@ class Dashboard extends Component {
           }
         }
 
-        let numTasksCompleted = this.state.dynamicTasksCompletion.reduce((a, b) => a + b);
+        let numTasksCompleted = this.state.dynamicTasksCompletion.length > 0 ? this.state.dynamicTasksCompletion.reduce((a, b) => a + b) : 0;
         this.setState({
           'currentWeek': parseInt(data.numericData['currentWeek']) + 1,
           'stars': data.numericData['star'], 'totTasks': data.numericData['totTasks'], 'course': data.textData['courseName'],
@@ -103,7 +103,7 @@ class Dashboard extends Component {
           }
         }
 
-        let numTasksCompleted = this.state.dynamicTasksCompletion.reduce((a, b) => a + b);
+        let numTasksCompleted = this.state.dynamicTasksCompletion.length > 0 ? this.state.dynamicTasksCompletion.reduce((a, b) => a + b) : 0;
         this.setState({
           'currentWeek': parseInt(data.numericData['currentWeek']) + 1,
           'stars': data.numericData['star'], 'totTasks': data.numericData['totTasks'], 'course': data.textData['courseName'],
@@ -162,7 +162,7 @@ class Dashboard extends Component {
     else {
       progress = "Incomplete";
     }
-    return task + '  [' + progress + ']';
+    return '- ' + task + '  [' + progress + ']';
   }
 
   /** Displays components on application dashboard. */
@@ -414,7 +414,7 @@ const styles = StyleSheet.create({
     marginBottom: '5%',
   },
   percentage: {
-    fontSize: 22,
+    fontSize: 28,
     fontWeight: "bold",
     color: "#00A7BF",
   }
