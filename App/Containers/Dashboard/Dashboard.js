@@ -65,6 +65,15 @@ class Dashboard extends Component {
   componentDidMount() {
     requestData()
       .then(data => {
+        let week = parseInt(data.numericData['currentWeek']) + 1;
+        if (this.state.currentWeek != week) {
+          this.setState({
+            'dynamicTasks': [], 'lastWeek': data.numericData['starLastWeek'],
+            'highest': Math.max(this.state.highest, data.numericData['starLastWeek']),
+            'dynamicTasksCompletion': [], 'currentWeek': week
+          });
+        }
+
         for (let i = 0; i < data.numericData['totTasks']; i++) {
           this.state.dynamicTasks[i] = data.textData[i + 1];
         }
@@ -79,10 +88,9 @@ class Dashboard extends Component {
 
         let numTasksCompleted = this.state.dynamicTasksCompletion.length > 0 ? this.state.dynamicTasksCompletion.reduce((a, b) => a + b) : 0;
         this.setState({
-          'currentWeek': parseInt(data.numericData['currentWeek']) + 1,
-          'stars': data.numericData['star'], 'totTasks': data.numericData['totTasks'], 'course': data.textData['courseName'],
+          'stars': data.numericData['star'], 'totTasks': data.numericData['totTasks'],
           'proportionTasksComplete': Math.round(numTasksCompleted / data.numericData['totTasks'] * 100),
-          'highest': data.numericData['starHighest'], 'lastWeek': data.numericData['starLastWeek']
+          'course': data.textData['courseName']
         });
       });
   }
@@ -91,6 +99,15 @@ class Dashboard extends Component {
   componentDidUpdate() {
     requestData()
       .then(data => {
+        let week = parseInt(data.numericData['currentWeek']) + 1;
+        if (this.state.currentWeek != week || week == 0) {
+          this.setState({
+            'dynamicTasks': [], 'lastWeek': data.numericData['starLastWeek'],
+            'highest': Math.max(this.state.highest, data.numericData['starLastWeek']),
+            'dynamicTasksCompletion': [], 'currentWeek': week
+          });
+        }
+
         for (let i = 0; i < data.numericData['totTasks']; i++) {
           this.state.dynamicTasks[i] = data.textData[i + 1];
         }
@@ -105,10 +122,9 @@ class Dashboard extends Component {
 
         let numTasksCompleted = this.state.dynamicTasksCompletion.length > 0 ? this.state.dynamicTasksCompletion.reduce((a, b) => a + b) : 0;
         this.setState({
-          'currentWeek': parseInt(data.numericData['currentWeek']) + 1,
-          'stars': data.numericData['star'], 'totTasks': data.numericData['totTasks'], 'course': data.textData['courseName'],
+          'stars': data.numericData['star'], 'totTasks': data.numericData['totTasks'],
           'proportionTasksComplete': Math.round(numTasksCompleted / data.numericData['totTasks'] * 100),
-          'highest': data.numericData['starHighest'], 'lastWeek': data.numericData['starLastWeek']
+          'course': data.textData['courseName']
         });
       });
   }
@@ -162,7 +178,12 @@ class Dashboard extends Component {
     else {
       progress = "Incomplete";
     }
-    return '- ' + task + '  [' + progress + ']';
+    return '- ' + this.initialCase(task) + '  [' + progress + ']';
+  }
+
+  /** Returns the input string with the first letter capitalized. */
+  initialCase(string) {
+    return string[0].toUpperCase() + string.slice(1)
   }
 
   /** Displays components on application dashboard. */
@@ -172,7 +193,7 @@ class Dashboard extends Component {
         <View style={{ justifyContent: 'space-between', fontFamily: Fonts.type.family, marginBottom: 20 }}>
           {this.renderNavigationbar(this.props)}
           <Card
-            title={this.state.course.toUpperCase()}
+            title={this.initialCase(this.state.course)}
             titleStyle={styles.cardTitle}
             borderRadius={15}
             backgroundColor={"#fff"}
@@ -226,7 +247,7 @@ class Dashboard extends Component {
               <ProgressCircle
                 percent={Number(this.state.proportionTasksComplete)} radius={80} borderWidth={15}
                 color="#00A7BF" shadowColor='#EEF1F5' bgColor='#fff'>
-                <Text style={styles.percentage}>{this.state.proportionTasksComplete + '%'}</Text>
+                {this.state.proportionTasksComplete ? <Text style={styles.percentage}>{this.state.proportionTasksComplete + '%'}</Text> : null}
               </ProgressCircle>
             </View>
 
